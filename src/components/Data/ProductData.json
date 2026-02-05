@@ -1,0 +1,34 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 14",
+      "condition": "New",
+      "badge": "Best Selling",
+      "originalPrice": "7,920,000 GNF",
+      "currentPrice": "6,336,000 GNF",
+      "monthlyPrice": "$720",
+      "monthlyOriginal": "$900"
+    },
+    {
+      "id": 2,
+      "name": "MacBook Pro M2",
+      "condition": "New",
+      "badge": "Best Selling",
+      "originalPrice": "13,200,000 GNF",
+      "currentPrice": "10,560,000 GNF",
+      "monthlyPrice": "$1200",
+      "monthlyOriginal": "$1500"
+    },
+    {
+      "id": 3,
+      "name": "Samsung Galaxy S23",
+      "condition": "Used",
+      "badge": null,
+      "originalPrice": "6,160,000 GNF",
+      "currentPrice": "4,928,000 GNF",
+      "monthlyPrice": "$560",
+      "monthlyOriginal": "$700"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Avatars: Public read, Authenticated write
+    // Fixed: Cannot match partial segments like {userId}_{fileName}. 
+    // Using simple {fileName} match instead.
+    match /avatars/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    // Profile Images: Public read, Owner write
+    match /profile_images/{userId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Ads: Public read, Authenticated write
+    match /ads/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Company Avatars: Public read, Owner write
+    match /company-avatars/{companyId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == companyId;
+    }
+
+    // Client Avatars: Public read, Owner write
+    match /client-avatars/{clientId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == clientId;
+    }
+  }
+}
