@@ -7,9 +7,11 @@ import FreelanceImage from "../assets/HireFreelanceImage.png";
 import EmilyImage from "../assets/Emily.jpg";
 import DefaultAvatar from "../assets/profile-image.jpg";
 
-export default function FreelancerInfo () {
-  const navigate = useNavigate();
+import { useAuth } from "../contexts/AuthContext";
 
+export default function FreelancerInfo() {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth(); // Get authenticated user
 
   const [showChat, setShowChat] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -17,6 +19,7 @@ export default function FreelancerInfo () {
   const [bidsWon] = useState(0);
 
   const [profile, setProfile] = useState({
+    ownerId: "freelancer123", // Mock Owner ID
     avatarUrl: "",
     name: "John Doe",
     nickname: "Mamadou Dev",
@@ -55,7 +58,7 @@ export default function FreelancerInfo () {
   const handleAvatarChange = (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    const validTypes = ["image/jpeg", "image/webp"]; 
+    const validTypes = ["image/jpeg", "image/webp"];
     const maxBytes = 100 * 1024;
     if (!validTypes.includes(file.type)) {
       alert("Format non pris en charge. Utilisez JPEG ou WebP.");
@@ -69,7 +72,8 @@ export default function FreelancerInfo () {
     setProfile((p) => ({ ...p, avatarUrl: localUrl }));
   };
 
-  
+  const isOwner = currentUser?.uid === profile.ownerId; // Check ownership
+
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
@@ -98,28 +102,32 @@ export default function FreelancerInfo () {
                   alt="Avatar"
                   className="w-24 h-24 rounded-full object-cover border border-gray-200"
                 />
-                <label className="absolute -bottom-2 -right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-full cursor-pointer">
-                  Upload
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/webp"
-                    className="hidden"
-                    onChange={handleAvatarChange}
-                  />
-                </label>
+
+                {/* Only show upload button to owner */}
+                {isOwner && (
+                  <label className="absolute -bottom-2 -right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-full cursor-pointer">
+                    Upload
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/webp"
+                      className="hidden"
+                      onChange={handleAvatarChange}
+                    />
+                  </label>
+                )}
               </div>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold text-black mb-1">{profile.name}</h1>
                 <div className="text-black mb-2">{profile.city || ""}</div>
                 <div className="text-sm text-gray-600">{profile.bio}</div>
-                
+
               </div>
               <div>
-               
+
               </div>
             </div>
 
-            
+
             {/* Rating */}
             <div>
               <h2 className="text-xl font-semibold mb-3">Rating</h2>
@@ -145,13 +153,13 @@ export default function FreelancerInfo () {
                       </div>
                     </div>
                     <p className="text-sm text-gray-600 italic mt-2">{profile.review.comment}</p>
-                    
+
                   </div>
                 </div>
               </div>
             </div>
 
-           
+
           </div>
 
           {/* Right Column */}
@@ -165,7 +173,7 @@ export default function FreelancerInfo () {
                 />
               </div>
 
-              
+
             </div>
 
             {/* Badges + Progress */}
@@ -182,7 +190,7 @@ export default function FreelancerInfo () {
               <div>
                 <div className="flex justify-between text-xs text-gray-600 mb-1">
                   <span>Profile {completionChecks.percent}% complete</span>
-                 
+
                 </div>
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                   <div
@@ -195,7 +203,7 @@ export default function FreelancerInfo () {
 
           </div>
         </div>
-      </div> 
+      </div>
 
       {/* Edit Profile Modal */}
       {showEdit && (

@@ -257,6 +257,18 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((u) => {
+      if (!u) {
+        navigate('/login');
+      } else {
+        // User is authenticated, we can optionally fetch data here if it depends on user
+        // But fetchDashboardData currently doesn't depend on 'user' variable, it uses global db
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     fetchDashboardData();
   }, []);
 

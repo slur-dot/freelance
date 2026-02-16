@@ -56,14 +56,14 @@ const TrainingSection = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full px-2">
-            <Link to="/training-modules" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 sm:px-8 text-base sm:text-lg font-semibold rounded-lg transition-colors duration-300 flex items-center justify-center w-full sm:w-auto">
+            <Link to="/training-modules" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 sm:px-8 text-base sm:text-lg font-semibold rounded-full transition-colors duration-300 flex items-center justify-center w-full sm:w-auto">
               Start Learning Now
               <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </Link>
 
-            <button className="border-2 border-white text-white hover:bg-white hover:text-black px-6 py-3 sm:px-8 text-base sm:text-lg rounded-lg transition-colors duration-300 flex items-center justify-center w-full sm:w-auto">
+            <button className="border-2 border-white text-white hover:bg-white hover:text-black px-6 py-3 sm:px-8 text-base sm:text-lg rounded-full transition-colors duration-300 flex items-center justify-center w-full sm:w-auto">
               <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"

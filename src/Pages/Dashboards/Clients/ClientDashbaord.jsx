@@ -449,7 +449,11 @@ export default function ClientDashbaord() {
   }, []);
 
   const fetchDashboardData = async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      navigate('/login');
+      return;
+    }
     try {
       setLoading(true);
       const [profileData, statsData, notificationsData] = await Promise.all([

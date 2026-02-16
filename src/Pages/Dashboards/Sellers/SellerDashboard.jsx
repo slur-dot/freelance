@@ -556,6 +556,7 @@ export default function SellerDashboard() {
     if (!user) {
       if (!auth.currentUser) setError("User not authenticated");
       setLoading(false);
+      navigate('/login');
       return;
     }
 

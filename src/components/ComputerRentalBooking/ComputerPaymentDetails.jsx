@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PaymentMethodSelector from "../Payment/PaymentMethodSelector";
 import PriceDisplay from "../PriceDisplay";
 
-export default function ComputerPaymentDetails({ onContinue }) {
+export default function ComputerPaymentDetails({ onContinue, bookingData }) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('orange-money');
   const [paymentDetails, setPaymentDetails] = useState({});
   const [formData, setFormData] = useState({
@@ -12,6 +12,20 @@ export default function ComputerPaymentDetails({ onContinue }) {
     confirmAccurate: true,
     agreeTerms: false,
   });
+
+  // Calculate Totals
+  const device = bookingData?.deviceData || {};
+  const addons = bookingData?.addonsData || [];
+
+  const quantity = parseInt(device.quantity) || 1;
+  const duration = parseInt(device.rentalDuration) || 1;
+  const baseRate = 50000; // Mock base rate per device per day
+  const rentalCost = quantity * duration * baseRate;
+
+  const addonsCost = addons.reduce((sum, item) => sum + (item.cost || 0), 0);
+  const deliveryCost = bookingData?.deliveryData?.deliveryType === 'delivery' ? 25000 : 0; // Mock delivery fee
+
+  const totalCost = rentalCost + addonsCost + deliveryCost;
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
@@ -34,7 +48,8 @@ export default function ComputerPaymentDetails({ onContinue }) {
       onContinue({
         ...formData,
         paymentMethod: selectedPaymentMethod,
-        paymentDetails: paymentDetails
+        paymentDetails: paymentDetails,
+        totalCost: totalCost // Pass calculated cost
       });
     }
   };
@@ -50,6 +65,36 @@ export default function ComputerPaymentDetails({ onContinue }) {
           </p>
         </div>
 
+        {/* Order Summary */}
+        <div className="mb-8 bg-gray-50 p-6 rounded-lg border border-gray-200">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
+          <div className="space-y-2 text-sm text-gray-700">
+            <div className="flex justify-between">
+              <span>Device Rental ({quantity}x for {duration} days)</span>
+              <span>{rentalCost.toLocaleString()} GNF</span>
+            </div>
+
+            {addons.filter(a => a.cost > 0).map((addon, idx) => (
+              <div key={idx} className="flex justify-between text-gray-600">
+                <span>+ {addon.name}</span>
+                <span>{addon.cost.toLocaleString()} GNF</span>
+              </div>
+            ))}
+
+            {deliveryCost > 0 && (
+              <div className="flex justify-between text-gray-600">
+                <span>Delivery Fee</span>
+                <span>{deliveryCost.toLocaleString()} GNF</span>
+              </div>
+            )}
+
+            <div className="border-t border-gray-300 my-2 pt-2 flex justify-between font-bold text-lg text-gray-900">
+              <span>Total</span>
+              <span>{totalCost.toLocaleString()} GNF</span>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           {/* Payment Method Selection */}
           <div className="mb-8">
@@ -59,7 +104,7 @@ export default function ComputerPaymentDetails({ onContinue }) {
             <PaymentMethodSelector
               selectedMethod={selectedPaymentMethod}
               onMethodChange={handlePaymentMethodChange}
-              amount={50920} // Example rental amount
+              amount={totalCost} // Use dynamic total
               currency="GNF"
               showAmount={true}
             />

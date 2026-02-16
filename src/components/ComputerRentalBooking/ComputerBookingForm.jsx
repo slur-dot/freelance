@@ -5,7 +5,7 @@ import ComputerDeliveryDetails from "./ComputerDeliveryDetails";
 import AddonsSelectionForm from "./AddonsSelectionForm";
 import ComputerPaymentDetails from "./ComputerPaymentDetails";
 import EnhancedBookingStep from "./EnhancedBookingStep";
-import RentalAgreementStep from "./RentalAgreementStep"; 
+import RentalAgreementStep from "./RentalAgreementStep";
 
 export default function ComputerBookingForm() {
   const [step, setStep] = useState(1);
@@ -75,10 +75,19 @@ export default function ComputerBookingForm() {
       {step === 2 && <DeviceDetailsForm onContinue={handleDeviceContinue} />}
       {step === 3 && <ComputerDeliveryDetails onContinue={handleDeliveryContinue} />}
       {step === 4 && <AddonsSelectionForm onContinue={handleAddonsContinue} />}
-      {step === 5 && <ComputerPaymentDetails onContinue={handlePaymentContinue} />}
+      {step === 5 && (
+        <ComputerPaymentDetails
+          onContinue={handlePaymentContinue}
+          bookingData={{
+            deviceData,
+            deliveryData,
+            addonsData
+          }}
+        />
+      )}
       {step === 6 && (
-        <EnhancedBookingStep 
-          onContinue={handleIdVerificationContinue} 
+        <EnhancedBookingStep
+          onContinue={handleIdVerificationContinue}
           formData={{
             organizationData,
             deviceData,
@@ -89,8 +98,8 @@ export default function ComputerBookingForm() {
         />
       )}
       {step === 7 && (
-        <RentalAgreementStep 
-          onContinue={handleAgreementContinue} 
+        <RentalAgreementStep
+          onContinue={handleAgreementContinue}
           formData={{
             organizationData,
             deviceData,

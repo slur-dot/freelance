@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaFire } from 'react-icons/fa';
 import { ProductService } from '../../services/productService';
 import { useCart } from '../../contexts/CartContext';
+import ShopProductCard from '../../components/ShopProductCard';
 
 const SmartphoneStore = () => {
   const { addToCart } = useCart();
@@ -283,79 +284,11 @@ const SmartphoneStore = () => {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredSmartphones.map((phone) => (
-            <Link
+            <ShopProductCard
               key={phone.id}
-              to={`/shop/product/${phone.id}`}
-              className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 group"
-            >
-              <div className="p-4">
-                <div className="relative mb-4">
-                  <div className="w-full h-48 overflow-hidden rounded-lg">
-                    <img
-                      src={ShopAppleImage}
-                      alt={phone.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  {/* Sale Badge */}
-                  {phone.isOnSale && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center">
-                      <FaFire className="mr-1" />
-                      -{phone.discountPercent}%
-                    </div>
-                  )}
-
-                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
-                    {phone.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className={`px-2 py-1 text-xs rounded-full ${tag === 'New' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                          }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-base sm:text-lg text-gray-900">{phone.name}</h3>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex items-center">{renderStars(phone.rating)}</div>
-                    <span className="text-xs sm:text-sm text-gray-600">({phone.reviews})</span>
-                  </div>
-                  <div className="space-y-1">
-                    {phone.isOnSale && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs sm:text-sm text-gray-500 line-through">
-                          <PriceDisplay amount={phone.originalPrice} size="small" variant="muted" />
-                        </span>
-                        <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                          Save {Math.round((phone.originalPrice - phone.currentPrice) / 100000) / 10}M GNF
-                        </span>
-                      </div>
-                    )}
-                    <div className="text-lg sm:text-xl font-bold text-gray-900">
-                      <PriceDisplay amount={phone.currentPrice} size="xl" variant="bold" />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <div className="text-xs sm:text-sm text-gray-600">
-                        Rent: <span className="font-medium"><PriceDisplay amount={phone.rentPrice} size="small" showSecondary={false} /></span> /month
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          addToCart(phone);
-                          alert("Added to cart!");
-                        }}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors text-sm sm:text-base"
-                      >
-                        Add to Cart
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Link>
+              product={phone}
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 

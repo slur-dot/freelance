@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import profileImage from "../assets/profile-image.jpg"; 
+import profileImage from "../assets/profile-image.jpg";
 
 const ProfileCarousel = ({ profiles }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -65,7 +65,7 @@ const ProfileCarousel = ({ profiles }) => {
               className="px-2 flex-shrink-0"
               style={{ width: `${100 / profiles.length}%` }}
             >
-              <div className="bg-white rounded-xl p-4 sm:p-6 text-center text-black shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-white rounded-xl p-4 sm:p-6 text-center text-black shadow-lg hover:shadow-xl transition-shadow duration-300 h-full flex flex-col justify-center">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden bg-gray-200">
                   <img
                     src={profileImage}
@@ -105,9 +105,8 @@ const ProfileCarousel = ({ profiles }) => {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
-              index === currentSlide ? "bg-blue-600" : "bg-gray-600"
-            }`}
+            className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${index === currentSlide ? "bg-blue-600" : "bg-gray-600"
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}

@@ -55,7 +55,7 @@ export default function OrganizationForm({ onContinue }) {
             {
               id: "organization-name",
               label: "Organization Name",
-              placeholder: "John Doe",
+              placeholder: "e.g., Amara Cissé",
               field: "organizationName",
               type: "text",
               required: true,
@@ -71,7 +71,7 @@ export default function OrganizationForm({ onContinue }) {
             {
               id: "business-address",
               label: "Business Address",
-              placeholder: "123 Street",
+              placeholder: "e.g., 001 BP 457, Conakry",
               field: "businessAddress",
               type: "text",
               required: true,
@@ -79,7 +79,7 @@ export default function OrganizationForm({ onContinue }) {
             {
               id: "city-region",
               label: "City / Region",
-              placeholder: "New York",
+              placeholder: "e.g., 100 BP 75, Kindia / Labé / Kankan / N’Zérékoré",
               field: "cityRegion",
               type: "text",
               required: true,
@@ -87,7 +87,7 @@ export default function OrganizationForm({ onContinue }) {
             {
               id: "phone-number",
               label: "Phone Number",
-              placeholder: "+1 123 1234567",
+              placeholder: "+224 641 14 22",
               field: "phoneNumber",
               type: "tel",
               required: true,

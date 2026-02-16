@@ -19,7 +19,7 @@ const ServiceCard = ({ icon, title, description, buttonText, additionalContent }
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className="text-gray-400 mb-4">{description}</p>
         {additionalContent && <div className="mb-4">{additionalContent}</div>}
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors duration-300">
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-colors duration-300">
           {buttonText}
         </button>
       </div>

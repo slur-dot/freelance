@@ -13,7 +13,9 @@ export default function CartPage() {
   const deliveryFee = 15000; // Example delivery fee
   const total = subtotal - discount + deliveryFee;
 
-  const formatPrice = (price) => price.toLocaleString() + " GNF";
+  const formatPrice = (price) => {
+    return (price || 0).toLocaleString() + " GNF";
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 sm:py-8">

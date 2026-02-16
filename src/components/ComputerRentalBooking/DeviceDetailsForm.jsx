@@ -108,15 +108,23 @@ export default function DeviceDetailsForm({ onContinue }) {
             {/* Preferred Brands */}
             <div className="flex items-center gap-8">
               <label className="w-40 text-sm font-medium">
-                Preferred Brands/Models
+                Preferred Brand*
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.preferredBrands}
                 onChange={(e) => handleChange("preferredBrands", e.target.value)}
-                placeholder="e.g. Dell, HP"
                 className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
-              />
+                required
+              >
+                <option value="">Select a Brand</option>
+                <option value="Apple">Apple</option>
+                <option value="Dell">Dell</option>
+                <option value="HP">HP</option>
+                <option value="Lenovo">Lenovo</option>
+                <option value="Samsung">Samsung</option>
+                <option value="Acer">Acer</option>
+                <option value="Asus">Asus</option>
+              </select>
             </div>
 
             {/* Purpose of Rental */}

@@ -723,7 +723,11 @@ export default function CompanyDashboard() {
 
   // Fetch company data for the logged-in user
   const fetchMyCompany = async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      navigate('/login');
+      return;
+    }
 
     try {
       setLoading(true);

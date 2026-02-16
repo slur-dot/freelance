@@ -46,6 +46,14 @@ export default function VendorProfile() {
     ],
   });
 
+  const [hasPurchased, setHasPurchased] = useState(false);
+
+  const handleBuy = () => {
+    // Simulate purchase logic
+    alert("Purchase successful! Vendor contact info verified.");
+    setHasPurchased(true);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Vendor Header */}
@@ -80,14 +88,28 @@ export default function VendorProfile() {
 
             {/* Contact Vendor */}
             <div className="mt-4">
-              <a
-                href={`https://wa.me/${vendor.whatsapp.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-full shadow transition"
-              >
-                <Phone className="w-4 h-4" /> Contact on WhatsApp
-              </a>
+              {hasPurchased ? (
+                <div className="flex flex-col gap-2">
+                  <span className="text-green-600 font-medium">Verified Customer Access</span>
+                  <a
+                    href={`https://wa.me/${vendor.whatsapp.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-full shadow transition w-fit"
+                  >
+                    <Phone className="w-4 h-4" /> {vendor.whatsapp} (WhatsApp)
+                  </a>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <div className="inline-flex items-center gap-2 bg-gray-300 text-gray-600 px-5 py-2 rounded-full shadow cursor-not-allowed w-fit">
+                    <Phone className="w-4 h-4" /> {vendor.whatsapp.slice(0, 4)} **** ****
+                  </div>
+                  <p className="text-xs text-red-500 font-medium">
+                    * Contact info hidden. Purchase a device to reveal.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -122,7 +144,7 @@ export default function VendorProfile() {
                 </p>
 
                 {/* Tags */}
-                <div className="flex gap-2 mt-3">
+                <div className="flex gap-2 mt-3 mb-4">
                   <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
                     {device.condition}
                   </span>
@@ -130,6 +152,14 @@ export default function VendorProfile() {
                     Warranty: {device.warranty}
                   </span>
                 </div>
+
+                {/* Buy Button */}
+                <button
+                  onClick={handleBuy}
+                  className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors mt-auto"
+                >
+                  Buy Now
+                </button>
               </div>
             </div>
           ))}

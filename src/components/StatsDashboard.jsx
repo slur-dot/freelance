@@ -38,7 +38,7 @@ const StatsDashboard = () => {
                 </div>
                 <h4 className="text-sm font-semibold text-gray-800">Illustration</h4>
                 <img src={illustrationImage} alt="Illustration" className="w-10 h-10 mt-1" />
-                <button className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-md transition-colors mt-2">
+                <button className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors mt-2">
                   View All
                 </button>
               </div>

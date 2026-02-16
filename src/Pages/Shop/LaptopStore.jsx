@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFire } from 'react-icons/fa';
-import PriceDisplay from '../../components/PriceDisplay'; 
+import PriceDisplay from '../../components/PriceDisplay';
 import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import LaptopImage from '../../assets/Laptop.jpg';
+import { useCart } from '../../contexts/CartContext';
+import ShopProductCard from '../../components/ShopProductCard';
 
 const LaptopStore = () => {
+  const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
     conditions: [],
@@ -131,7 +134,7 @@ const LaptopStore = () => {
 
   useEffect(() => {
     let filtered = [...laptops];
-    
+
     if (filters.conditions.length > 0) {
       filtered = filtered.filter((laptop) =>
         filters.conditions.includes(laptop.condition)
@@ -149,13 +152,13 @@ const LaptopStore = () => {
     if (filters.storage.length > 0) {
       filtered = filtered.filter((laptop) => filters.storage.includes(laptop.storage));
     }
-    
+
     filtered = filtered.filter(
       (laptop) =>
         laptop.currentPrice >= filters.priceRange[0] &&
         laptop.currentPrice <= filters.priceRange[1]
     );
-    
+
     switch (sortBy) {
       case 'Price: Low to High':
         filtered.sort((a, b) => a.currentPrice - b.currentPrice);
@@ -197,9 +200,8 @@ const LaptopStore = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
-          i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-        }`}
+        className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
       />
     ));
   };
@@ -329,7 +331,7 @@ const LaptopStore = () => {
             <h2 className="text-2xl font-bold text-gray-900">Laptops</h2>
             <p className="text-gray-600">{filteredLaptops.length} laptops found</p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsFilterOpen(true)}
@@ -338,7 +340,7 @@ const LaptopStore = () => {
               <Filter className="h-4 w-4" />
               Filters
             </button>
-            
+
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="h-4 w-4 text-gray-500" />
               <select
@@ -359,71 +361,11 @@ const LaptopStore = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredLaptops.map((laptop) => (
-            <Link
+            <ShopProductCard
               key={laptop.id}
-              to={`/shop/product/${laptop.id}`}
-              className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 group"
-            >
-              <div className="p-4">
-                <div className="relative mb-4">
-                  <div className="w-full h-48 overflow-hidden rounded-lg">
-                    <img
-                      src={LaptopImage}
-                      alt={laptop.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  {/* Sale Badge */}
-                  {laptop.isOnSale && (
-                    <div className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold flex items-center">
-                      <FaFire className="mr-1" />
-                      -{laptop.discountPercent}%
-                    </div>
-                  )}
-                  
-                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
-                    {laptop.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          tag === 'New' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-base sm:text-lg text-gray-900">{laptop.name}</h3>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex items-center">{renderStars(laptop.rating)}</div>
-                    <span className="text-xs sm:text-sm text-gray-600">({laptop.reviews})</span>
-                  </div>
-                  <div className="space-y-1">
-                    {laptop.isOnSale && (
-                      <div className="flex items-center space-x-2">
-                        <span className="text-xs sm:text-sm text-gray-500 line-through">
-                          <PriceDisplay amount={laptop.originalPrice} size="small" variant="muted" />
-                        </span>
-                        <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
-                          Save {Math.round((laptop.originalPrice - laptop.currentPrice) / 100000) / 10}M GNF
-                        </span>
-                      </div>
-                    )}
-                    <div className="text-lg sm:text-xl font-bold text-gray-900">
-                      <PriceDisplay amount={laptop.currentPrice} size="xl" variant="bold" />
-                    </div>
-                    <div className="text-xs sm:text-sm text-gray-600">
-                      Rent: <span className="font-medium"><PriceDisplay amount={laptop.rentPrice} size="small" showSecondary={false} /></span> /month
-                    </div>
-                  </div>
-                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </Link>
+              product={{ ...laptop, image: LaptopImage }}
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 

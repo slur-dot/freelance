@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Info, Upload, Loader2 } from "lucide-react";
+import { Info, Upload, Loader2, Landmark, DollarSign, Lock } from "lucide-react";
 import { storage, auth } from "../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AlexandraImg from "../../../assets/Alexandra.png";
@@ -103,7 +103,14 @@ export default function FreelancerDashboard() {
     coursesUnderReview: "Courses Under Review",
     viewRequested: "View Requested"
   };
-  const [form, setForm] = useState({ name: '', skills: '', experience: '', email: '', phone: '', paymentType: 'MoMo', paymentNumber: '' });
+  const [form, setForm] = useState({
+    name: '', skills: '', experience: '', email: '', phone: '',
+    paymentType: 'MoMo', paymentNumber: '',
+    bankName: '', accountNumber: '', swiftCode: '', accountHolder: ''
+  });
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawProcessing, setWithdrawProcessing] = useState(false);
   const [plans, setPlans] = useState([]);
 
   useEffect(() => {
@@ -115,7 +122,11 @@ export default function FreelancerDashboard() {
 
   useEffect(() => {
     async function loadData() {
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        navigate('/login');
+        return;
+      }
       setLoading(true);
       try {
         // 1. Fetch User Profile
@@ -134,7 +145,11 @@ export default function FreelancerDashboard() {
             email: profile.email || '',
             phone: profile.phone || '',
             paymentType: profile.paymentMethod?.type || 'MoMo',
-            paymentNumber: profile.paymentMethod?.number || ''
+            paymentNumber: profile.paymentMethod?.number || '',
+            bankName: profile.paymentMethod?.swift?.bankName || '',
+            accountNumber: profile.paymentMethod?.swift?.accountNumber || '',
+            swiftCode: profile.paymentMethod?.swift?.swiftCode || '',
+            accountHolder: profile.paymentMethod?.swift?.accountHolder || ''
           });
 
           // Fetch other data in parallel
@@ -267,7 +282,7 @@ export default function FreelancerDashboard() {
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{loading ? '...' : `${(netEarnings || 0).toLocaleString()} GNF`}</div>
-              <Button variant="outline" className="mt-4 w-fit" disabled>
+              <Button variant="outline" className="mt-4 w-fit" onClick={() => setShowWithdrawModal(true)}>
                 {text.withdraw}
               </Button>
             </CardContent>
@@ -425,7 +440,6 @@ export default function FreelancerDashboard() {
                 {[
                   { method: "Orange Money", ref: "OM-2024-0912", amount: "350,000 GNF", status: "Completed" },
                   { method: "MTN Mobile Money", ref: "MTN-2024-0910", amount: "120,000 GNF", status: "Escrow" },
-                  { method: "Gumroad", ref: "GR-2024-0908", amount: "$25", status: "Completed" },
                 ].map((p, i) => (
                   <div key={i} className="border rounded-md p-3 bg-gray-50">
                     <p className="font-medium">{p.method}</p>
@@ -741,17 +755,46 @@ export default function FreelancerDashboard() {
                   >
                     <option value="OM">OM</option>
                     <option value="MoMo">MoMo</option>
+                    <option value="SWIFT">Bank Transfer (SWIFT)</option>
                   </select>
                 </div>
-                <div>
-                  <label className="text-sm text-gray-600">Payment Number</label>
-                  <input
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.paymentNumber}
-                    onChange={(e) => setForm({ ...form, paymentNumber: e.target.value })}
-                    placeholder="+224-123-45-67-89"
-                  />
-                </div>
+
+                {form.paymentType === 'SWIFT' ? (
+                  <>
+                    <div className="md:col-span-2">
+                      <div className="bg-blue-50 p-3 rounded-md text-sm text-blue-700 mb-2 flex items-center gap-2">
+                        <Lock className="h-4 w-4" />
+                        <span>Your bank details are encrypted and secure.</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">Bank Name</label>
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.bankName} onChange={(e) => setForm({ ...form, bankName: e.target.value })} placeholder="e.g. Ecobank" />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">Account Holder Name</label>
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountHolder} onChange={(e) => setForm({ ...form, accountHolder: e.target.value })} placeholder="Name on account" />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">IBAN / Account Number</label>
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountNumber} onChange={(e) => setForm({ ...form, accountNumber: e.target.value })} placeholder="GN..." />
+                    </div>
+                    <div>
+                      <label className="text-sm text-gray-600">SWIFT / BIC Code</label>
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.swiftCode} onChange={(e) => setForm({ ...form, swiftCode: e.target.value })} placeholder="ECOBGN..." />
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <label className="text-sm text-gray-600">Payment Number</label>
+                    <input
+                      className="w-full border rounded-md px-3 py-2 mt-1"
+                      value={form.paymentNumber}
+                      onChange={(e) => setForm({ ...form, paymentNumber: e.target.value })}
+                      placeholder="+224-123-45-67-89"
+                    />
+                  </div>
+                )}
               </div>
               <div className="mt-6 flex items-center justify-end gap-2">
                 <Button variant="outline" onClick={() => setShowEdit(false)}>Cancel</Button>
@@ -771,7 +814,13 @@ export default function FreelancerDashboard() {
                         phone: form.phone,
                         paymentMethod: {
                           type: form.paymentType,
-                          number: form.paymentNumber
+                          number: form.paymentType !== 'SWIFT' ? form.paymentNumber : null,
+                          swift: form.paymentType === 'SWIFT' ? {
+                            bankName: form.bankName,
+                            accountNumber: form.accountNumber,
+                            swiftCode: form.swiftCode,
+                            accountHolder: form.accountHolder
+                          } : null
                         }
                       };
 
@@ -796,6 +845,83 @@ export default function FreelancerDashboard() {
           </div>
         )
       }
-    </div>
+      {/* Withdrawal Modal */}
+      {
+        showWithdrawModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Request Withdrawal</h3>
+
+              {freelancer?.paymentMethod?.type === 'SWIFT' ? (
+                <div className="mb-4 space-y-3">
+                  <div className="bg-gray-50 p-3 rounded text-sm">
+                    <p className="font-semibold text-gray-700">Receiving Bank:</p>
+                    <p>{freelancer.paymentMethod.swift.bankName} ••• {freelancer.paymentMethod.swift.accountNumber.slice(-4)}</p>
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-gray-600">Amount to Withdraw (GNF)</label>
+                    <input
+                      type="number"
+                      className="w-full border rounded-md px-3 py-2 mt-1"
+                      value={withdrawAmount}
+                      onChange={(e) => setWithdrawAmount(e.target.value)}
+                      placeholder="Min. 500,000 GNF"
+                    />
+                  </div>
+
+                  {withdrawAmount && !isNaN(withdrawAmount) && (
+                    <div className="bg-green-50 p-3 rounded border border-green-100 space-y-1 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Requested:</span>
+                        <span className="font-medium">{Number(withdrawAmount).toLocaleString()} GNF</span>
+                      </div>
+                      <div className="flex justify-between text-red-600">
+                        <span>Bank Fee:</span>
+                        <span>- 150,000 GNF</span>
+                      </div>
+                      <div className="border-t pt-1 mt-1 flex justify-between font-bold text-gray-800">
+                        <span>Net Receipt:</span>
+                        <span>{(Math.max(0, Number(withdrawAmount) - 150000)).toLocaleString()} GNF</span>
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1 text-right">
+                        Est. ~${(Math.max(0, Number(withdrawAmount) - 150000) / 8600).toFixed(2)} USD
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="mb-4 text-center py-4">
+                  <p className="text-gray-600 mb-4">Please set up a SWIFT bank account in your profile to withdraw large amounts.</p>
+                  <Button variant="outline" onClick={() => { setShowWithdrawModal(false); setShowEdit(true); }}>
+                    Update Profile
+                  </Button>
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2 mt-2">
+                <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>Cancel</Button>
+                {freelancer?.paymentMethod?.type === 'SWIFT' && (
+                  <Button
+                    disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000}
+                    onClick={() => {
+                      setWithdrawProcessing(true);
+                      setTimeout(() => {
+                        setWithdrawProcessing(false);
+                        setShowWithdrawModal(false);
+                        alert("Withdrawal request submitted successfully! It will be processed within 3-5 business days.");
+                        setWithdrawAmount('');
+                      }, 2000);
+                    }}
+                  >
+                    {withdrawProcessing ? 'Processing...' : 'Confirm Withdrawal'}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 }

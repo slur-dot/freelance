@@ -30,6 +30,32 @@ export const VendorService = {
         }
     },
 
+    async getAllVendors() {
+        try {
+            const usersRef = collection(db, "users");
+            const q = query(usersRef, where("role", "==", "Vendor"));
+            const querySnapshot = await getDocs(q);
+
+            return querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    ...data,
+                    businessName: data.businessName || data.displayName || "Vendor",
+                    city: data.city || "Conakry, Guinea", // Default for demo
+                    // Mock coordinates roughly around Conakry if not present
+                    coordinates: data.coordinates || {
+                        lat: 9.5092 + (Math.random() - 0.5) * 0.1,
+                        lng: -13.7123 + (Math.random() - 0.5) * 0.1
+                    }
+                };
+            });
+        } catch (error) {
+            console.error("Error fetching all vendors:", error);
+            return [];
+        }
+    },
+
     async updateVendorProfile(vendorId, updates) {
         try {
             const docRef = doc(db, "users", vendorId);

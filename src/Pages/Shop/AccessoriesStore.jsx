@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import { Star, Filter, SlidersHorizontal } from 'lucide-react';
+import { useCart } from '../../contexts/CartContext';
+import ShopProductCard from '../../components/ShopProductCard';
 
 const AccessoriesStore = () => {
+  const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
     categories: [],
@@ -138,7 +141,7 @@ const AccessoriesStore = () => {
 
   useEffect(() => {
     let filtered = [...accessories];
-    
+
     if (filters.categories.length > 0) {
       filtered = filtered.filter((accessory) =>
         filters.categories.includes(accessory.category)
@@ -148,17 +151,17 @@ const AccessoriesStore = () => {
       filtered = filtered.filter((accessory) => filters.brands.includes(accessory.brand));
     }
     if (filters.compatibility.length > 0) {
-      filtered = filtered.filter((accessory) => 
+      filtered = filtered.filter((accessory) =>
         filters.compatibility.some(comp => accessory.compatibility.includes(comp))
       );
     }
-    
+
     filtered = filtered.filter(
       (accessory) =>
         accessory.currentPrice >= filters.priceRange[0] &&
         accessory.currentPrice <= filters.priceRange[1]
     );
-    
+
     switch (sortBy) {
       case 'Price: Low to High':
         filtered.sort((a, b) => a.currentPrice - b.currentPrice);
@@ -200,9 +203,8 @@ const AccessoriesStore = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`h-4 w-4 ${
-          i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-        }`}
+        className={`h-4 w-4 ${i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
       />
     ));
   };
@@ -302,7 +304,7 @@ const AccessoriesStore = () => {
             <h2 className="text-2xl font-bold text-gray-900">Accessories</h2>
             <p className="text-gray-600">{filteredAccessories.length} accessories found</p>
           </div>
-          
+
           <div className="flex items-center gap-4">
             <button
               onClick={() => setIsFilterOpen(true)}
@@ -311,7 +313,7 @@ const AccessoriesStore = () => {
               <Filter className="h-4 w-4" />
               Filters
             </button>
-            
+
             <div className="flex items-center gap-2">
               <SlidersHorizontal className="h-4 w-4 text-gray-500" />
               <select
@@ -370,53 +372,11 @@ const AccessoriesStore = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {filteredAccessories.map((accessory) => (
-            <Link
+            <ShopProductCard
               key={accessory.id}
-              to={`/shop/product/${accessory.id}`}
-              className="bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-300 group"
-            >
-              <div className="p-4">
-                <div className="relative mb-4">
-                  <div className="w-full h-48 overflow-hidden rounded-lg">
-                    <img
-                      src={`https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop&auto=format`}
-                      alt={accessory.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute top-2 left-2 flex flex-wrap gap-1">
-                    {accessory.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          tag === 'New' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h3 className="font-semibold text-base sm:text-lg text-gray-900">{accessory.name}</h3>
-                  <div className="flex items-center space-x-1">
-                    <div className="flex items-center">{renderStars(accessory.rating)}</div>
-                    <span className="text-xs sm:text-sm text-gray-600">({accessory.reviews})</span>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="text-lg sm:text-xl font-bold text-gray-900">
-                      {formatPrice(accessory.currentPrice)}
-                    </div>
-                    <div className="text-xs sm:text-sm text-gray-600">
-                      Rent: <span className="font-medium">{formatPrice(accessory.rentPrice)}</span> /month
-                    </div>
-                  </div>
-                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors text-sm sm:text-base">
-                    Add to Cart
-                  </button>
-                </div>
-              </div>
-            </Link>
+              product={{ ...accessory, image: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop&auto=format' }}
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 

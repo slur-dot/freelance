@@ -429,6 +429,7 @@ export default function VendorDashbaord() {
       try {
         if (!user) {
           if (!auth.currentUser) setLoading(false);
+          navigate('/login');
           return;
         }
         setLoading(true);

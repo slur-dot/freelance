@@ -1,27 +1,38 @@
 import React, { useState } from "react";
 
 export default function AddonsSelectionForm({ onContinue }) {
-  const [selectedAddons, setSelectedAddons] = useState(["Charger"]);
-
-  const addons = [
-    "Charger",
-    "Carrying Bag",
-    "Sim / Data Plan",
-    "Insurance",
-    "On Site Technical Support",
-    "Replacement Guarantee",
+  // Paid Services with costs
+  const paidServices = [
+    { name: "Sim / Data Plan", cost: 50000 },
+    { name: "Insurance", cost: 200000 },
+    { name: "On Site Technical Support", cost: 150000 },
+    { name: "Replacement Guarantee", cost: 100000 },
   ];
 
-  const toggleAddon = (addon) => {
-    setSelectedAddons((prevSelected) =>
-      prevSelected.includes(addon)
-        ? prevSelected.filter((item) => item !== addon)
-        : [...prevSelected, addon]
-    );
+  const includedItems = ["Charger", "Carrying Bag"];
+
+  const [selectedServices, setSelectedServices] = useState([]);
+
+  const toggleService = (service) => {
+    setSelectedServices((prev) => {
+      const exists = prev.find((item) => item.name === service.name);
+      if (exists) {
+        return prev.filter((item) => item.name !== service.name);
+      } else {
+        return [...prev, service];
+      }
+    });
   };
 
   const handleSubmit = () => {
-    if (onContinue) onContinue(selectedAddons);
+    if (onContinue) {
+      // Combine included items (cost 0) with selected paid services
+      const allAddons = [
+        ...includedItems.map(item => ({ name: item, cost: 0, type: 'included' })),
+        ...selectedServices.map(item => ({ ...item, type: 'service' }))
+      ];
+      onContinue(allAddons);
+    }
   };
 
   return (
@@ -39,54 +50,53 @@ export default function AddonsSelectionForm({ onContinue }) {
           </div>
         </div>
 
-        {/* Add-ons Section */}
+        {/* Included Items Section */}
         <div className="mb-8">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">Included Accessories</h2>
+          <div className="flex flex-wrap gap-4">
+            {includedItems.map((item) => (
+              <div
+                key={item}
+                className="px-6 py-2 rounded-lg bg-gray-100 text-gray-500 font-medium border border-gray-200 cursor-not-allowed flex items-center gap-2"
+              >
+                <span>✓</span>
+                {item}
+                <span className="text-xs ml-1">(Included)</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Paid Services Section */}
+        <div className="mb-8">
+          <h2 className="text-xl sm:text-2xl font-bold mb-2">
             Add-ons & Services
           </h2>
-          <p className="text-black text-sm sm:text-base md:text-lg mb-4">
-            Select Multiple
+          <p className="text-gray-600 text-sm mb-4">
+            Select additional services to add to your purchase
           </p>
 
-          {/* Add-ons Buttons */}
-          <div className="flex flex-col items-center gap-4">
-            {/* First Row */}
-            <div className="flex flex-wrap justify-center gap-4">
-              {addons.slice(0, 4).map((addon) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+            {paidServices.map((service) => {
+              const isSelected = selectedServices.some(s => s.name === service.name);
+              return (
                 <button
-                  key={addon}
-                  onClick={() => toggleAddon(addon)}
-                  className={`px-6 sm:px-10 md:px-12 py-2 rounded-lg text-xs sm:text-sm md:text-base font-medium transition-colors duration-200
-                    ${
-                      selectedAddons.includes(addon)
-                        ? "bg-[#2E8B57] text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  key={service.name}
+                  onClick={() => toggleService(service)}
+                  className={`flex justify-between items-center px-6 py-4 rounded-lg font-medium transition-all duration-200 border
+                    ${isSelected
+                      ? "bg-green-50 border-green-500 text-green-700 shadow-sm"
+                      : "bg-white border-gray-200 text-gray-700 hover:border-green-300 hover:bg-gray-50"
                     }
                   `}
                 >
-                  {addon}
+                  <span>{service.name}</span>
+                  <span className={`text-sm ${isSelected ? 'font-bold' : ''}`}>
+                    {service.cost.toLocaleString()} GNF
+                  </span>
                 </button>
-              ))}
-            </div>
-
-            {/* Second Row */}
-            <div className="flex flex-wrap justify-center gap-4">
-              {addons.slice(4).map((addon) => (
-                <button
-                  key={addon}
-                  onClick={() => toggleAddon(addon)}
-                  className={`px-6 sm:px-10 md:px-12 py-2 rounded-lg text-xs sm:text-sm md:text-base font-medium transition-colors duration-200
-                    ${
-                      selectedAddons.includes(addon)
-                        ? "bg-[#2E8B57] text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }
-                  `}
-                >
-                  {addon}
-                </button>
-              ))}
-            </div>
+              )
+            })}
           </div>
         </div>
 
@@ -94,7 +104,7 @@ export default function AddonsSelectionForm({ onContinue }) {
         <div className="flex justify-center mt-10">
           <button
             onClick={handleSubmit}
-            className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg sm:relative sm:left-[-40px]"
+            className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg"
           >
             Continue
           </button>
