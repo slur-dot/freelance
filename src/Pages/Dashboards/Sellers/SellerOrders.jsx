@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Trash2, Edit, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { OrderService } from "../../../services/orderService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 export default function SellerOrders() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("buyerName");
@@ -193,7 +195,7 @@ export default function SellerOrders() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Orders List</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">{t('seller_dashboard.orders.title')}</h1>
 
           {error && (
             <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
@@ -208,7 +210,7 @@ export default function SellerOrders() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search orders..."
+              placeholder={t('seller_dashboard.orders.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -227,29 +229,29 @@ export default function SellerOrders() {
                     onClick={() => handleSort("buyerName")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Buyer Name</span>
+                      <span>{t('seller_dashboard.orders.table.buyer')}</span>
                       {sortField === "buyerName" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Product
+                    {t('seller_dashboard.orders.table.product')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Quantity
+                    {t('seller_dashboard.orders.table.quantity')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Price
+                    {t('seller_dashboard.orders.table.price')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Delivery Date
+                    {t('seller_dashboard.orders.table.date')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                    {t('seller_dashboard.orders.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
+                    {t('seller_dashboard.orders.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -259,13 +261,13 @@ export default function SellerOrders() {
                     <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                       {orders.length === 0 ? (
                         <div>
-                          <p className="text-lg font-medium mb-2">No orders found</p>
-                          <p className="text-sm">Orders will appear here once customers start purchasing your products.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.orders.empty.title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.orders.empty.desc')}</p>
                         </div>
                       ) : (
                         <div>
-                          <p className="text-lg font-medium mb-2">No orders match your search</p>
-                          <p className="text-sm">Try adjusting your search terms.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.orders.empty.search_title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.orders.empty.search_desc')}</p>
                         </div>
                       )}
                     </td>
@@ -351,11 +353,11 @@ export default function SellerOrders() {
         {showEditModal && editingOrder && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <h3 className="text-lg font-semibold mb-4">Edit Order</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.orders.modal.title')}</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Order ID</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.id')}</label>
                   <input
                     type="text"
                     value={editingOrder.id || ''}
@@ -365,7 +367,7 @@ export default function SellerOrders() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Buyer Name</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.buyer')}</label>
                   <input
                     type="text"
                     value={editingOrder.buyerName || ''}
@@ -375,7 +377,7 @@ export default function SellerOrders() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Product</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.product')}</label>
                   <input
                     type="text"
                     value={editingOrder.product || ''}
@@ -386,7 +388,7 @@ export default function SellerOrders() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.quantity')}</label>
                     <input
                       type="number"
                       value={editingOrder.quantity || ''}
@@ -396,7 +398,7 @@ export default function SellerOrders() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Total Amount (GNF)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.total')}</label>
                     <input
                       type="number"
                       value={editingOrder.totalAmount || ''}
@@ -407,7 +409,7 @@ export default function SellerOrders() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.status')}</label>
                   <select
                     value={editingOrder.status || ''}
                     onChange={(e) => setEditingOrder({ ...editingOrder, status: e.target.value })}
@@ -421,7 +423,7 @@ export default function SellerOrders() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Date (Read Only)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.date')}</label>
                   <input
                     type="text"
                     value={formatDate(editingOrder.deliveryDate)}
@@ -436,13 +438,13 @@ export default function SellerOrders() {
                   onClick={handleUpdateSubmit}
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                 >
-                  Update Order
+                  {t('seller_dashboard.orders.modal.update')}
                 </button>
                 <button
                   onClick={handleCloseEditModal}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
                 >
-                  Cancel
+                  {t('seller_dashboard.orders.modal.cancel')}
                 </button>
               </div>
             </div>

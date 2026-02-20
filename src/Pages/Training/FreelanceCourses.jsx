@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";   
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SubscriptionPlan from "./SubscriptionPlan";
 import coursesImg from "../../assets/Courses_image.png";
 
@@ -8,33 +9,24 @@ const defaultFreelanceCourses = [
   {
     id: 1,
     image: coursesImg,
-    title: "Web Development Basics",
-    description:
-      "Master the foundational skills of web development. Learn HTML, CSS, and JavaScript from scratch with hands-on projects and real-world applications.",
-    videos: "10 Videos",
-    hours: "5 hours",
+    videos: "10",
+    hours: "5",
     price: "176,000 GNF",
     priceUSD: "$20",
   },
   {
     id: 2,
     image: coursesImg,
-    title: "Graphic Design for Beginners",
-    description:
-      "Learn the fundamentals of graphic design, including typography, color theory, and layout principles using industry-standard tools.",
-    videos: "8 Videos",
-    hours: "4 hours",
+    videos: "8",
+    hours: "4",
     price: "132,000 GNF",
     priceUSD: "$15",
   },
   {
     id: 3,
     image: coursesImg,
-    title: "Social Media Marketing",
-    description:
-      "Master social media marketing strategies, content creation, and analytics to grow your personal brand or business online.",
-    videos: "12 Videos",
-    hours: "6 hours",
+    videos: "12",
+    hours: "6",
     price: "220,000 GNF",
     priceUSD: "$25",
   },
@@ -43,10 +35,11 @@ const defaultFreelanceCourses = [
 export default function FreelanceCourses({ courses = defaultFreelanceCourses }) {
   const [sortOption, setSortOption] = useState("popular");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const goToCourse = (course) => {
     navigate(`/training-modules/course/${course.id}`, {
-      state: { course },                                 // ✅ pass data
+      state: { course: { ...course, title: t(`training.courses.freelance.course_${course.id}.title`) } },                                 // ✅ pass data
     });
   };
 
@@ -66,15 +59,17 @@ export default function FreelanceCourses({ courses = defaultFreelanceCourses }) 
 
   return (
     <section className="w-full py-10">
-      <h2 className="text-2xl font-bold mb-6">Courses</h2>
+      <h2 className="text-2xl font-bold mb-6">{t('training.modules.title_freelance')}</h2>
 
       {/* Header Section */}
       <div className="flex justify-end items-center mb-6 gap-6">
-        <p className="text-gray-600 text-sm">Showing 1-3 of 100 Courses</p>
+        <p className="text-gray-600 text-sm">
+          {t('training.modules.showing', { start: 1, end: 3, total: 100 })}
+        </p>
 
         <div className="flex items-center gap-2">
           <label htmlFor="sort" className="text-gray-700 text-sm">
-            Sort by:
+            {t('training.modules.sort.label')}
           </label>
           <select
             id="sort"
@@ -82,10 +77,10 @@ export default function FreelanceCourses({ courses = defaultFreelanceCourses }) 
             onChange={handleSortChange}
             className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="popular">Most Popular</option>
-            <option value="newest">Newest</option>
-            <option value="priceLow">Price: Low to High</option>
-            <option value="priceHigh">Price: High to Low</option>
+            <option value="popular">{t('training.modules.sort.popular')}</option>
+            <option value="newest">{t('training.modules.sort.newest')}</option>
+            <option value="priceLow">{t('training.modules.sort.price_low')}</option>
+            <option value="priceHigh">{t('training.modules.sort.price_high')}</option>
           </select>
         </div>
       </div>
@@ -104,24 +99,26 @@ export default function FreelanceCourses({ courses = defaultFreelanceCourses }) 
             {/* Image */}
             <img
               src={course.image}
-              alt={course.title}
+              alt={t(`training.courses.freelance.course_${course.id}.title`)}
               className="w-full h-48 object-cover"
             />
 
             {/* Content */}
             <div className="p-4">
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                {course.title}
+                {t(`training.courses.freelance.course_${course.id}.title`)}
               </h3>
-              <p className="text-sm text-gray-600 mb-4">{course.description}</p>
+              <p className="text-sm text-gray-600 mb-4">
+                {t(`training.courses.freelance.course_${course.id}.description`)}
+              </p>
 
               {/* Info */}
               <div className="flex items-center space-x-4 text-xs text-gray-500 mb-4">
                 <span className="bg-white border border-gray-300 px-2 py-1 rounded-md">
-                  {course.videos}
+                  {t('training.modules.card.videos', { count: course.videos })}
                 </span>
                 <span className="bg-white border border-gray-300 px-2 py-1 rounded-md">
-                  {course.hours}
+                  {t('training.modules.card.hours', { count: course.hours })}
                 </span>
               </div>
 
@@ -142,7 +139,7 @@ export default function FreelanceCourses({ courses = defaultFreelanceCourses }) 
                   onClick={() => handleEnroll(course)}
                   className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-2xl -ml-2"
                 >
-                  Enroll Now
+                  {t('training.modules.card.enroll_now')}
                 </button>
               </div>
             </div>
@@ -151,8 +148,8 @@ export default function FreelanceCourses({ courses = defaultFreelanceCourses }) 
       </div>
 
       {/* Subscription Plan */}
-      <SubscriptionPlan 
-        planType="freelancer" 
+      <SubscriptionPlan
+        planType="freelancer"
         onPaymentSuccess={handlePaymentSuccess}
       />
     </section>

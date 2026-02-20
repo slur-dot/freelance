@@ -13,6 +13,7 @@ import 'leaflet/dist/leaflet.css';
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { OrderService } from "../../services/orderService";
+import { useTranslation } from "react-i18next";
 
 import CashOnDelivery from "../../assets/CashOnDelivery.png";
 import Conakry from "../../assets/conakry.png";
@@ -60,6 +61,7 @@ const RecenterMap = ({ center }) => {
 };
 
 export default function ShippingDetailsPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('orange-money');
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -170,7 +172,7 @@ export default function ShippingDetailsPage() {
 
     try {
       if (!currentUser) {
-        alert("Please login to complete your order");
+        alert(t('shipping.login_alert'));
         navigate("/login");
         return;
       }
@@ -231,28 +233,28 @@ export default function ShippingDetailsPage() {
     <div className="px-4 sm:px-6 lg:px-40 py-6 lg:py-12 bg-gray-50 min-h-screen">
       {/* Breadcrumb */}
       <div className="mb-6 text-sm text-gray-500">
-        <Link to="/" className="hover:underline">Home</Link> {">"}{" "}
-        <Link to="/cart" className="hover:underline">Cart</Link> {">"}{" "}
-        <span className="font-medium text-gray-800">Details</span>
+        <Link to="/" className="hover:underline">{t('home.title')}</Link> {">"}{" "}
+        <Link to="/cart" className="hover:underline">{t('cart.breadcrumb')}</Link> {">"}{" "}
+        <span className="font-medium text-gray-800">{t('shipping.breadcrumb')}</span>
       </div>
 
-      <h1 className="mb-8 text-2xl sm:text-3xl font-bold text-gray-900">Checkout & Shipping</h1>
+      <h1 className="mb-8 text-2xl sm:text-3xl font-bold text-gray-900">{t('shipping.title')}</h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Left Column */}
         <div className="lg:col-span-2 grid gap-8">
           {/* Shipping Method */}
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Shipping Method</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">{t('shipping.method_title')}</h2>
 
             {/* Free Delivery Notice */}
             <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
               <div className="flex items-center gap-2 text-green-800 mb-2">
                 <CheckCircle className="h-5 w-5" />
-                <span className="font-semibold">Free Delivery in Conakry or Pick Up</span>
+                <span className="font-semibold">{t('shipping.free_notice_title')}</span>
               </div>
               <p className="text-sm text-green-700">
-                Choose between free delivery within Conakry or picking up your order from a verified vendor.
+                {t('shipping.free_notice_desc')}
               </p>
             </div>
 
@@ -260,15 +262,15 @@ export default function ShippingDetailsPage() {
               {[
                 {
                   id: "deliver",
-                  label: "Free Delivery",
-                  desc: "Deliver to your address in Conakry",
+                  label: t('shipping.delivery_label'),
+                  desc: t('shipping.delivery_desc'),
                   icon: Conakry,
                   defaultChecked: true,
                 },
                 {
                   id: "pickup",
-                  label: "Pick Up",
-                  desc: "Pick Up from vendor location",
+                  label: t('shipping.pickup_label'),
+                  desc: t('shipping.pickup_desc'),
                   icon: Conakry, // Could use specific icon
                   defaultChecked: false,
                 },
@@ -301,7 +303,7 @@ export default function ShippingDetailsPage() {
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-900">
               <MapPin className="h-5 w-5 text-blue-600" />
-              Select Pickup Location
+              {t('shipping.pickup_location_title')}
             </h2>
 
             {/* Map Controls */}
@@ -311,7 +313,7 @@ export default function ShippingDetailsPage() {
                 className="flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-2 rounded-lg transition-colors"
               >
                 <Navigation className="h-4 w-4" />
-                Use My Location (Sort by Proximity)
+                {t('shipping.use_location_btn')}
               </button>
             </div>
 
@@ -333,7 +335,7 @@ export default function ShippingDetailsPage() {
                 {userLocation && (
                   <Marker position={[userLocation.lat, userLocation.lng]} icon={userIcon}>
                     <Popup>
-                      <div className="font-semibold text-center">You are here</div>
+                      <div className="font-semibold text-center">{t('shipping.you_are_here')}</div>
                     </Popup>
                   </Marker>
                 )}
@@ -356,13 +358,13 @@ export default function ShippingDetailsPage() {
                         <h3 className="font-bold text-gray-900 mb-1">{vendor.businessName}</h3>
                         <p className="text-sm text-gray-600 mb-1">{vendor.city}</p>
                         <p className="text-xs text-gray-500 mb-2 flex items-center gap-1">
-                          <Clock className="h-3 w-3" /> Mon-Fri, 9AM - 6PM
+                          <Clock className="h-3 w-3" /> {t('shipping.mon_fri')}
                         </p>
                         <button
                           onClick={() => handlePickupLocationSelect(vendor)}
                           className="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 px-3 rounded text-xs font-bold transition-colors"
                         >
-                          Select Location
+                          {t('shipping.select_location_btn')}
                         </button>
                       </div>
                     </Popup>
@@ -376,18 +378,18 @@ export default function ShippingDetailsPage() {
               <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fade-in">
                 <div className="flex items-center gap-2 mb-2">
                   <CheckCircle className="h-5 w-5 text-blue-600" />
-                  <span className="font-bold text-blue-800">Selected Pickup Point</span>
+                  <span className="font-bold text-blue-800">{t('shipping.selected_point')}</span>
                 </div>
                 <div className="pl-7">
                   <p className="text-gray-900 font-semibold text-lg">{selectedPickupLocation.businessName}</p>
                   <p className="text-sm text-gray-600">{selectedPickupLocation.city}</p>
-                  <p className="text-sm text-gray-500 mt-1">Vendor ID: {selectedPickupLocation.id.substring(0, 8)}...</p>
+                  <p className="text-sm text-gray-500 mt-1">{t('shipping.vendor_id')} {selectedPickupLocation.id.substring(0, 8)}...</p>
                 </div>
               </div>
             )}
 
             {/* Location List */}
-            <h3 className="font-semibold text-gray-700 mb-3">Available Locations {userLocation ? '(Nearest to You)' : ''}</h3>
+            <h3 className="font-semibold text-gray-700 mb-3">{t('shipping.available_locations')} {userLocation ? t('shipping.nearest_to_you') : ''}</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-96 overflow-y-auto pr-1 custom-scrollbar">
               {sortedVendors.length > 0 ? (
                 sortedVendors.map((vendor) => (
@@ -417,7 +419,7 @@ export default function ShippingDetailsPage() {
                 ))
               ) : (
                 <div className="col-span-full text-center py-8 text-gray-500">
-                  No pickup locations available currently.
+                  {t('shipping.no_locations')}
                 </div>
               )}
             </div>
@@ -425,7 +427,7 @@ export default function ShippingDetailsPage() {
 
           {/* Payment Method */}
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">Payment Method</h2>
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">{t('shipping.payment_method_title')}</h2>
             <div className="grid gap-4">
               {[
                 {
@@ -435,32 +437,32 @@ export default function ShippingDetailsPage() {
                       Orange<br />Money
                     </>
                   ),
-                  desc: "You will be redirected to the Orange Money website",
+                  desc: t('shipping.redirect_orange'),
                   icon: OrangeMoneyIcon,
                 },
                 {
                   id: "mtn",
                   label: "MTN",
-                  desc: "You will be redirected to the MTN website",
+                  desc: t('shipping.redirect_mtn'),
                   icon: MTNIcon,
                 },
                 {
                   id: "paypal",
                   label: "PayPal",
-                  desc: "You will be redirected to the PayPal website",
+                  desc: t('shipping.redirect_paypal'),
                   icon: PayPalIcon,
                 },
                 {
                   id: "stripe",
                   label: "Stripe",
-                  desc: "Pay securely with your credit or debit card",
+                  desc: t('shipping.pay_card'),
                   icon: null,
                   iconComponent: SiStripe,
                 },
                 {
                   id: "bank-transfer",
                   label: "Bank Transfer",
-                  desc: "Transfer directly to our bank account",
+                  desc: t('shipping.bank_transfer_desc'),
                   icon: null,
                   iconComponent: FaUniversity,
                 },
@@ -471,7 +473,7 @@ export default function ShippingDetailsPage() {
                       Cash on<br />Delivery
                     </>
                   ),
-                  desc: "Pay when you receive your order",
+                  desc: t('shipping.cod_desc'),
                   icon: CashOnDelivery,
                 },
               ].map((method) => (
@@ -522,7 +524,7 @@ export default function ShippingDetailsPage() {
                 {(selectedPaymentMethod === 'orange-money' || selectedPaymentMethod === 'mtn') && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number *
+                      {t('shipping.phone_label')}
                     </label>
                     <input
                       type="tel"
@@ -539,7 +541,7 @@ export default function ShippingDetailsPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Card Number *
+                        {t('shipping.card_number')}
                       </label>
                       <input
                         type="text"
@@ -552,7 +554,7 @@ export default function ShippingDetailsPage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Expiry Date *
+                          {t('shipping.expiry_date')}
                         </label>
                         <input
                           type="text"
@@ -564,7 +566,7 @@ export default function ShippingDetailsPage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          CVV *
+                          {t('shipping.cvv')}
                         </label>
                         <input
                           type="text"
@@ -577,7 +579,7 @@ export default function ShippingDetailsPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Cardholder Name *
+                        {t('shipping.cardholder_name')}
                       </label>
                       <input
                         type="text"
@@ -595,14 +597,14 @@ export default function ShippingDetailsPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Bank Name *
+                        {t('shipping.bank_name')}
                       </label>
                       <select
                         value={paymentDetails.bankName || ''}
                         onChange={(e) => handlePaymentDetailsChange('bankName', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
                       >
-                        <option value="">Select Bank</option>
+                        <option value="">{t('shipping.select_bank')}</option>
                         <option value="bicig">BICIG (Banque Internationale pour le Commerce et l'Industrie de Guinée)</option>
                         <option value="sgbg">SGBG (Société Générale de Banques en Guinée)</option>
                         <option value="ecobank">Ecobank Guinée</option>
@@ -612,11 +614,11 @@ export default function ShippingDetailsPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Account Number *
+                        {t('shipping.account_number')}
                       </label>
                       <input
                         type="text"
-                        placeholder="Enter your account number"
+                        placeholder={t('shipping.enter_account')}
                         value={paymentDetails.bankAccount || ''}
                         onChange={(e) => handlePaymentDetailsChange('bankAccount', e.target.value)}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white"
@@ -629,10 +631,10 @@ export default function ShippingDetailsPage() {
                 {selectedPaymentMethod === 'cash-on-delivery' && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Delivery Address *
+                      {t('shipping.delivery_address')}
                     </label>
                     <textarea
-                      placeholder="Enter your complete delivery address"
+                      placeholder={t('shipping.enter_address')}
                       value={paymentDetails.deliveryAddress || ''}
                       onChange={(e) => handlePaymentDetailsChange('deliveryAddress', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
@@ -646,9 +648,9 @@ export default function ShippingDetailsPage() {
                   <div className="bg-yellow-50 p-4 rounded-lg flex items-start gap-3">
                     <Info className="h-5 w-5 text-yellow-700 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold text-yellow-800">PayPal Integration</p>
+                      <p className="font-semibold text-yellow-800">{t('shipping.paypal_integration')}</p>
                       <p className="text-sm text-yellow-700 mt-1">
-                        You will be redirected to PayPal's secure portal to complete your payment.
+                        {t('shipping.paypal_desc')}
                       </p>
                     </div>
                   </div>
@@ -670,7 +672,7 @@ export default function ShippingDetailsPage() {
                   )}
                   <span className={`font-medium ${paymentResult.success ? 'text-green-800' : 'text-red-800'
                     }`}>
-                    {paymentResult.success ? 'Success!' : 'Error'}
+                    {paymentResult.success ? t('shipping.success') : t('shipping.error')}
                   </span>
                 </div>
                 <p className={`text-sm mt-1 ${paymentResult.success ? 'text-green-700' : 'text-red-700'
@@ -679,7 +681,7 @@ export default function ShippingDetailsPage() {
                 </p>
                 {paymentResult.referenceNumber && (
                   <p className="text-sm mt-1 text-green-700">
-                    Reference: {paymentResult.referenceNumber}
+                    {t('shipping.reference')} {paymentResult.referenceNumber}
                   </p>
                 )}
               </div>
@@ -687,43 +689,43 @@ export default function ShippingDetailsPage() {
 
             <div className="mt-6 flex items-center gap-2 text-sm text-gray-500 justify-center">
               <Info className="h-4 w-4" />
-              <span>Secure encrypted transaction. Your data is safe.</span>
+              <span>{t('shipping.secure_msg')}</span>
             </div>
           </div>
         </div>
 
         {/* Right Column - Order Summary */}
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 h-fit sticky top-6">
-          <h2 className="text-xl font-semibold mb-6 text-gray-900 border-b pb-4">Order Summary</h2>
+          <h2 className="text-xl font-semibold mb-6 text-gray-900 border-b pb-4">{t('cart.summary_title')}</h2>
           <div className="space-y-4">
             <div className="flex justify-between">
-              <span className="text-gray-600">Subtotal</span>
+              <span className="text-gray-600">{t('cart.subtotal')}</span>
               <PriceDisplay amount={subtotal} size="normal" />
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Discount</span>
+              <span className="text-gray-600">{t('cart.discount')}</span>
               {/* Fixed 0 discount for now, can be dynamic */}
               <span className="font-medium text-gray-900">0 GNF</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">Delivery Fee</span>
+              <span className="text-gray-600">{t('cart.delivery_fee')}</span>
               {/* Only show delivery fee if 'deliver' is selected, or make it dynamic.
                   Current logic in code adds it regardless, but text says Free Delivery?
                   Updating to 0 for free delivery as per text claim */}
-              <span className="font-medium text-green-600">Free</span>
+              <span className="font-medium text-green-600">{t('shipping.free')}</span>
             </div>
 
             {/* Show Selected Pickup Location in Summary */}
             {selectedPickupLocation && (
               <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                <span className="text-xs text-blue-600 uppercase font-bold tracking-wider">Pickup At</span>
+                <span className="text-xs text-blue-600 uppercase font-bold tracking-wider">{t('shipping.pickup_at')}</span>
                 <p className="font-medium text-gray-900 mt-1">{selectedPickupLocation.businessName}</p>
                 <p className="text-xs text-gray-600">{selectedPickupLocation.city}</p>
               </div>
             )}
 
             <div className="border-t border-dashed pt-4 flex justify-between text-xl font-bold text-gray-900">
-              <span>Total</span>
+              <span>{t('cart.total')}</span>
               <PriceDisplay amount={subtotal} size="xl" variant="bold" />
             </div>
 
@@ -738,17 +740,17 @@ export default function ShippingDetailsPage() {
               {isProcessing ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                  Processing...
+                  {t('shipping.processing')}
                 </>
               ) : (
                 <>
-                  Confirm Payment <ArrowRight className="ml-2 h-5 w-5" />
+                  {t('shipping.confirm_payment')} <ArrowRight className="ml-2 h-5 w-5" />
                 </>
               )}
             </button>
 
             <div className="text-center mt-4">
-              <span className="text-xs text-gray-400">By paying, you agree to our Terms & Conditions</span>
+              <span className="text-xs text-gray-400">{t('shipping.terms_agree')}</span>
             </div>
           </div>
         </div>

@@ -6,12 +6,14 @@ import ChatPopup from "../components/ChatPopup";
 import FreelanceImage from "../assets/HireFreelanceImage.png";
 import EmilyImage from "../assets/Emily.jpg";
 import DefaultAvatar from "../assets/profile-image.jpg";
+import { useTranslation } from "react-i18next";
 
 import { useAuth } from "../contexts/AuthContext";
 
 export default function FreelancerInfo() {
   const navigate = useNavigate();
   const { currentUser } = useAuth(); // Get authenticated user
+  const { t } = useTranslation();
 
   const [showChat, setShowChat] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -80,9 +82,9 @@ export default function FreelancerInfo() {
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex text-sm text-gray-500">
-            <span className="hover:text-gray-700 cursor-pointer">Home</span>
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>{t('freelancer.profile.breadcrumbs.home')}</span>
             <span className="mx-2">›</span>
-            <span className="hover:text-gray-700 cursor-pointer">Hire Freelancers</span>
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/hire-freelancers')}>{t('freelancer.profile.breadcrumbs.hire')}</span>
             <span className="mx-2">›</span>
             <span className="text-blue-500">{profile.name}</span>
           </nav>
@@ -106,7 +108,7 @@ export default function FreelancerInfo() {
                 {/* Only show upload button to owner */}
                 {isOwner && (
                   <label className="absolute -bottom-2 -right-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded-full cursor-pointer">
-                    Upload
+                    {t('freelancer.profile.upload')}
                     <input
                       type="file"
                       accept="image/jpeg,image/webp"
@@ -130,7 +132,7 @@ export default function FreelancerInfo() {
 
             {/* Rating */}
             <div>
-              <h2 className="text-xl font-semibold mb-3">Rating</h2>
+              <h2 className="text-xl font-semibold mb-3">{t('freelancer.profile.rating')}</h2>
               <div className="flex items-center gap-2 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <FaStar key={i} className="w-5 h-5 text-yellow-600" />
@@ -178,18 +180,18 @@ export default function FreelancerInfo() {
 
             {/* Badges + Progress */}
             <div className="bg-white border border-gray-200 rounded-lg p-4">
-              <h3 className="font-semibold mb-3">Badges</h3>
+              <h3 className="font-semibold mb-3">{t('freelancer.profile.badges.title')}</h3>
               <div className="flex flex-wrap gap-2 mb-4">
                 {completionChecks.percent === 100 && (
-                  <span className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full">Profil complet</span>
+                  <span className="bg-yellow-100 text-yellow-800 text-xs px-3 py-1 rounded-full">{t('freelancer.profile.badges.complete')}</span>
                 )}
                 {bidsWon >= 5 && (
-                  <span className="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full">Top Freelancer</span>
+                  <span className="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full">{t('freelancer.profile.badges.top')}</span>
                 )}
               </div>
               <div>
                 <div className="flex justify-between text-xs text-gray-600 mb-1">
-                  <span>Profile {completionChecks.percent}% complete</span>
+                  <span>{t('freelancer.profile.progress', { percent: completionChecks.percent })}</span>
 
                 </div>
                 <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -210,7 +212,7 @@ export default function FreelancerInfo() {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white w-full max-w-2xl rounded-lg p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Modifier le profil</h3>
+              <h3 className="text-lg font-semibold">{t('freelancer.profile.edit.title')}</h3>
               <button onClick={() => setShowEdit(false)} className="text-gray-500 hover:text-gray-700">✕</button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -273,8 +275,8 @@ export default function FreelancerInfo() {
               </div>
             </div>
             <div className="flex items-center justify-end gap-3 pt-2">
-              <button onClick={() => setShowEdit(false)} className="px-4 py-2 rounded-full border text-gray-700">Annuler</button>
-              <button onClick={() => setShowEdit(false)} className="px-4 py-2 rounded-full bg-blue-600 text-white">Enregistrer</button>
+              <button onClick={() => setShowEdit(false)} className="px-4 py-2 rounded-full border text-gray-700">{t('freelancer.profile.edit.cancel')}</button>
+              <button onClick={() => setShowEdit(false)} className="px-4 py-2 rounded-full bg-blue-600 text-white">{t('freelancer.profile.edit.save')}</button>
             </div>
             <div className="text-xs text-gray-500">Web ID: 9 · Validation en temps réel</div>
           </div>

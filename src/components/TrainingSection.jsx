@@ -2,21 +2,24 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import freelanceImage from "../assets/FreelanceImage.jpg";
 
+import { useTranslation } from "react-i18next";
+
 const TrainingSection = () => {
+  const { t } = useTranslation();
   const trainingCourses = [
     {
-      title: "Web Development Basics",
-      description: "Learn HTML, CSS, and JavaScript fundamentals",
+      title: t('home.training.c1_title'),
+      description: t('home.training.c1_desc'),
       duration: "4 weeks"
     },
     {
-      title: "SAP ERP Implementation",
-      description: "Master SAP systems for enterprise solutions",
+      title: t('home.training.c2_title'),
+      description: t('home.training.c2_desc'),
       duration: "6 weeks"
     },
     {
-      title: "Digital Marketing Strategy",
-      description: "Build effective online marketing campaigns",
+      title: t('home.training.c3_title'),
+      description: t('home.training.c3_desc'),
       duration: "3 weeks"
     }
   ];
@@ -31,15 +34,15 @@ const TrainingSection = () => {
       >
         <div className="w-full max-w-6xl mx-auto text-center text-white py-16 sm:py-20 md:py-28">
           <div className="inline-block px-4 py-2 bg-blue-600 rounded-full text-sm font-medium mb-6">
-            For Freelancers & Companies
+            {t('home.training.for_freelancers')}
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-snug sm:leading-tight">
-            Grow Your Skills or Customize Training for Your Team
+            {t('home.training.title')}
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-gray-200 mb-12 max-w-2xl mx-auto">
-            Request custom training for your company or new courses as a freelancer!
+            {t('home.training.subtitle')}
           </p>
 
           {/* Training Courses Preview */}
@@ -57,7 +60,7 @@ const TrainingSection = () => {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full px-2">
             <Link to="/training-modules" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 sm:px-8 text-base sm:text-lg font-semibold rounded-full transition-colors duration-300 flex items-center justify-center w-full sm:w-auto">
-              Start Learning Now
+              {t('home.training.btn_start')}
               <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -72,7 +75,7 @@ const TrainingSection = () => {
                   d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              Watch Demo
+              {t('home.training.btn_demo')}
             </button>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, ArrowUpDown, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ProductService } from "../../../services/productService";
@@ -64,6 +65,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function Listings() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -111,7 +113,7 @@ export default function Listings() {
   };
 
   const handleDelete = async (listingId) => {
-    if (!window.confirm('Delete this listing?')) return;
+    if (!window.confirm(t('vendor_dashboard.listings.delete_confirm'))) return;
     try {
       await ProductService.deleteProduct(listingId);
       setProducts(prev => prev.filter(p => p.id !== listingId));
@@ -154,15 +156,15 @@ export default function Listings() {
     <div className="p-4 md:p-6 lg:p-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">Product Listing</h1>
-        <RCButton className="w-full sm:w-auto" onClick={() => setShowCreate(true)}>Add New Product</RCButton>
+        <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">{t('vendor_dashboard.listings.title')}</h1>
+        <RCButton className="w-full sm:w-auto" onClick={() => setShowCreate(true)}>{t('vendor_dashboard.listings.add_btn')}</RCButton>
       </div>
 
       <RCCard className="p-4 md:p-6">
         {/* Search - Placeholder for now as client filtering logic is duplicated */}
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search product..." onChange={() => { }} disabled />
+          <RCInput placeholder={t('vendor_dashboard.listings.search_placeholder')} onChange={() => { }} disabled />
         </div>
 
         {/* Table (desktop/tablet) */}
@@ -170,24 +172,24 @@ export default function Listings() {
           <RCTable>
             <RCTableHeader>
               <RCTableRow>
-                <RCTableHead>S.No</RCTableHead>
+                <RCTableHead>{t('vendor_dashboard.listings.table.sno')}</RCTableHead>
                 <RCTableHead>
                   <div className="flex items-center gap-1">
-                    Product Name <ArrowUpDown className="h-4 w-4" />
+                    {t('vendor_dashboard.listings.table.name')} <ArrowUpDown className="h-4 w-4" />
                   </div>
                 </RCTableHead>
                 <RCTableHead>
                   <div className="flex items-center gap-1">
-                    Product Description <ArrowUpDown className="h-4 w-4" />
+                    {t('vendor_dashboard.listings.table.desc')} <ArrowUpDown className="h-4 w-4" />
                   </div>
                 </RCTableHead>
                 <RCTableHead>
                   <div className="flex items-center gap-1">
-                    Price <ArrowUpDown className="h-4 w-4" />
+                    {t('vendor_dashboard.listings.table.price')} <ArrowUpDown className="h-4 w-4" />
                   </div>
                 </RCTableHead>
-                <RCTableHead>Status</RCTableHead>
-                <RCTableHead>Actions</RCTableHead>
+                <RCTableHead>{t('vendor_dashboard.listings.table.status')}</RCTableHead>
+                <RCTableHead>{t('vendor_dashboard.listings.table.actions')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -202,7 +204,7 @@ export default function Listings() {
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${p.status === "Active" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
                         }`}
                     >
-                      {p.status || 'Pending Review'}
+                      {p.status || t('vendor_dashboard.listings.pending')}
                     </span>
                   </RCTableCell>
                   <RCTableCell>
@@ -221,14 +223,14 @@ export default function Listings() {
                           className="bg-green-600 hover:bg-green-700 text-white w-full sm:w-auto"
                           onClick={() => toggleStatus(p.id, "Active")}
                         >
-                          Activate
+                          {t('vendor_dashboard.listings.activate')}
                         </RCButton>
                       ) : (
                         <RCButton
                           className="bg-red-600 hover:bg-red-700 text-white w-full sm:w-auto"
                           onClick={() => toggleStatus(p.id, "Inactive")}
                         >
-                          Deactivate
+                          {t('vendor_dashboard.listings.deactivate')}
                         </RCButton>
                       )}
                     </div>
@@ -238,7 +240,7 @@ export default function Listings() {
               ))}
               {paginatedProducts.length === 0 && (
                 <RCTableRow>
-                  <RCTableCell className="text-center" colSpan={6}>No products found.</RCTableCell>
+                  <RCTableCell className="text-center" colSpan={6}>{t('vendor_dashboard.listings.no_products')}</RCTableCell>
                 </RCTableRow>
               )}
             </RCTableBody>
@@ -304,14 +306,14 @@ export default function Listings() {
       {showCreate && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('vendor_dashboard.listings.create_modal.title')}</h2>
             <form onSubmit={handleCreate} className="space-y-4">
-              <input className="w-full border rounded px-3 py-2" placeholder="Title" value={newProduct.title} onChange={e => setNewProduct({ ...newProduct, title: e.target.value })} required />
-              <textarea className="w-full border rounded px-3 py-2" placeholder="Description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} required />
-              <input type="number" className="w-full border rounded px-3 py-2" placeholder="Price (GNF)" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} required />
+              <input className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.product_title')} value={newProduct.title} onChange={e => setNewProduct({ ...newProduct, title: e.target.value })} required />
+              <textarea className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.desc')} value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} required />
+              <input type="number" className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.price')} value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} required />
               <div className="flex justify-end gap-2">
-                <RCButton variant="outline" type="button" onClick={() => setShowCreate(false)}>Cancel</RCButton>
-                <RCButton type="submit">Create</RCButton>
+                <RCButton variant="outline" type="button" onClick={() => setShowCreate(false)}>{t('vendor_dashboard.listings.create_modal.cancel')}</RCButton>
+                <RCButton type="submit">{t('vendor_dashboard.listings.create_modal.create')}</RCButton>
               </div>
             </form>
           </div>

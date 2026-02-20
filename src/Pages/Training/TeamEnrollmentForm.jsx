@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { File, X } from "lucide-react";
 
 export default function TeamEnrollmentForm() {
+  const { t } = useTranslation();
   // 'csv' or 'manual'
   const [uploadMethod, setUploadMethod] = useState("csv");
 
@@ -60,45 +62,43 @@ export default function TeamEnrollmentForm() {
       {/* Outer Card */}
       <div className="w-full max-w-2xl bg-white p-8 shadow-lg">
         {/* Heading */}
-        <h1 className="text-3xl font-bold mb-2">Team Enrollment Form</h1>
+        <h1 className="text-3xl font-bold mb-2">{t('training.forms.enroll.title')}</h1>
         <p className="text-gray-600 mb-6">
-          Complete the Team Enrollment Form to enroll your team
+          {t('training.forms.enroll.subtitle')}
         </p>
 
         {/* Toggle Buttons */}
         <div className="flex space-x-2 mb-6">
           <button
             type="button"
-            className={`px-6 py-2 text-sm font-medium transition-colors ${
-              uploadMethod === "csv"
-                ? "bg-[#228B22] text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`px-6 py-2 text-sm font-medium transition-colors ${uploadMethod === "csv"
+              ? "bg-[#228B22] text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
             onClick={() => setUploadMethod("csv")}
           >
-            CSV
+            {t('training.forms.enroll.tab_csv')}
           </button>
 
           <button
             type="button"
-            className={`px-6 py-2 text-sm font-medium transition-colors ${
-              uploadMethod === "manual"
-                ? "bg-[#228B22] text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`px-6 py-2 text-sm font-medium transition-colors ${uploadMethod === "manual"
+              ? "bg-[#228B22] text-white"
+              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
             onClick={() => setUploadMethod("manual")}
           >
-            Manual
+            {t('training.forms.enroll.tab_manual')}
           </button>
         </div>
 
         {/* CSV MODE -------------------------------------------------- */}
         {uploadMethod === "csv" && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold mb-2">Upload CSV</h2>
+            <h2 className="text-lg font-semibold mb-2">{t('training.forms.enroll.tab_csv')}</h2>
             <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
               <p className="text-gray-600 md:w-2/5">
-                Please Upload a CSV file of your employee list to add them to your team
+                {t('training.forms.enroll.upload_text')}
               </p>
               <div
                 onClick={handleUploadClick}
@@ -106,7 +106,7 @@ export default function TeamEnrollmentForm() {
                 style={{ marginLeft: "12px" }} // slight right gap
               >
                 <File className="w-12 h-12 mb-2" />
-                <span className="text-sm font-medium">Upload CSV</span>
+                <span className="text-sm font-medium">{t('training.forms.enroll.tab_csv')}</span>
                 <input
                   type="file"
                   accept=".csv"
@@ -123,7 +123,7 @@ export default function TeamEnrollmentForm() {
                 onClick={handleSubmit}
                 className="bg-[#228B22] text-white py-2 px-8 rounded-full font-semibold text-base hover:bg-green-700 transition-colors"
               >
-                Enroll your Team
+                {t('training.forms.enroll.submit')}
               </button>
             </div>
           </div>
@@ -138,12 +138,12 @@ export default function TeamEnrollmentForm() {
                 htmlFor="fullName"
                 className="w-1/3 text-lg font-medium text-gray-700"
               >
-                Full Name of Employee
+                {t('training.forms.enroll.manual_name')}
               </label>
               <input
                 id="fullName"
                 type="text"
-                placeholder="John Doe"
+                placeholder={t('training.forms.enroll.placeholders.name')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-2/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#228B22] bg-gray-100"
@@ -156,19 +156,19 @@ export default function TeamEnrollmentForm() {
                 htmlFor="email"
                 className="w-1/3 text-lg font-medium text-gray-700"
               >
-                Email of Employee
+                {t('training.forms.enroll.manual_email')}
               </label>
               <input
                 id="email"
                 type="email"
-                placeholder="someone@gmail.com"
+                placeholder={t('training.forms.enroll.placeholders.email')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-2/3 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#228B22] bg-gray-100"
               />
             </div>
 
-           
+
 
             {/* Enrolled Employees Chips */}
             {enrolledEmployees.length > 0 && (
@@ -199,7 +199,7 @@ export default function TeamEnrollmentForm() {
               type="submit"
               className="w-fit mx-auto block bg-[#228B22] text-white py-4 px-8 rounded-full text-lg font-semibold hover:bg-green-700 transition-colors"
             >
-              Enroll your Team
+              {t('training.forms.enroll.submit')}
             </button>
           </form>
         )}

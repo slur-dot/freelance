@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
 import { UserService } from "../../../services/userService";
+import { useTranslation } from "react-i18next";
 
 function Sidebar({ children, className }) {
   return (
@@ -66,6 +67,7 @@ function SidebarMenuButton({ children, isActive, to }) {
 }
 
 export default function FreelancerSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const activePath = location.pathname;
@@ -98,30 +100,30 @@ export default function FreelancerSidebar() {
 
   const navItems = [
     {
-      section: "HOME",
+      section: t('sidebar.home'),
       items: [
-        { title: "Dashboard", url: "/freelancer/dashboard", icon: BarChart3 },
+        { title: t('sidebar.dashboard'), url: "/freelancer/dashboard", icon: BarChart3 },
       ],
     },
     {
-      section: "COURSES",
+      section: t('sidebar.courses'),
       items: [
         {
-          title: "Training Progress",
+          title: t('sidebar.training_progress'),
           url: "/freelancer/dashboard/training-progress",
           icon: Share2,
         },
         {
-          title: "Requested Courses",
+          title: t('sidebar.requested_courses'),
           url: "/freelancer/dashboard/requested-courses",
           icon: MoreHorizontal,
         },
       ],
     },
     {
-      section: "FINANCE",
+      section: t('sidebar.finance'),
       items: [
-        { title: "Earnings", url: "/freelancer/dashboard/earnings", icon: Wallet },
+        { title: t('sidebar.earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
       ],
     },
   ];

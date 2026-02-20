@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import ShopAppleImage from "../../assets/ShopAppleImage.jpg";
 import IphoneImage from "../../assets/iphone.png";
 import MobileImage from "../../assets/mobile.jpg";
 
 export default function IPhoneProductPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // Currency state
@@ -42,14 +44,14 @@ export default function IPhoneProductPage() {
     return saved
       ? JSON.parse(saved)
       : [
-          {
-            name: "Emily Lewis",
-            location: "Conakry",
-            rating: 5,
-            comment: "Great work, delivered on time!",
-            image: null,
-          },
-        ];
+        {
+          name: "Emily Lewis",
+          location: "Conakry",
+          rating: 5,
+          comment: "Great work, delivered on time!",
+          image: null,
+        },
+      ];
   });
 
   // Persist reviews in localStorage whenever they change
@@ -106,9 +108,9 @@ export default function IPhoneProductPage() {
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex text-sm text-gray-500 flex-wrap">
-            <span className="hover:text-gray-700 cursor-pointer">Home</span>
+            <span className="hover:text-gray-700 cursor-pointer">{t('home.title')}</span>
             <span className="mx-2">›</span>
-            <span className="hover:text-gray-700 cursor-pointer">Shop</span>
+            <span className="hover:text-gray-700 cursor-pointer">{t('shop.product.breadcrumb_shop')}</span>
             <span className="mx-2">›</span>
             <span className="text-gray-900">iPhone 14</span>
           </nav>
@@ -123,37 +125,37 @@ export default function IPhoneProductPage() {
               <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 iPhone 14
               </h1>
-              <p className="text-sm sm:text-base text-black">Smartphone</p>
+              <p className="text-sm sm:text-base text-black">{t('shop.product.smartphone')}</p>
             </div>
 
             {/* Specifications */}
             <div className="bg-white">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">
-                Specifications
+                {t('shop.product.specifications')}
               </h2>
               <div>
                 <div>
-                  <h3 className="font-medium text-black mb-2">General</h3>
+                  <h3 className="font-medium text-black mb-2">{t('shop.product.general')}</h3>
                   <div className="text-sm text-black space-y-1">
-                    <p>Model: iPhone 14</p>
-                    <p>Release Date: September 16, 2022</p>
-                    <p>Brand: Apple</p>
-                    <p>Operating System: iOS 16</p>
+                    <p>{t('shop.product.model')}: iPhone 14</p>
+                    <p>{t('shop.product.release_date')}: September 16, 2022</p>
+                    <p>{t('shop.product.brand')}: Apple</p>
+                    <p>{t('shop.product.os')}: iOS 16</p>
                     <p>
-                      Colors: Midnight, Starlight, Blue, Purple, (PRODUCT)RED,
+                      {t('shop.product.colors')}: Midnight, Starlight, Blue, Purple, (PRODUCT)RED,
                       Yellow
                     </p>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <h3 className="font-medium text-black mb-2">Body & Design</h3>
+                  <h3 className="font-medium text-black mb-2">{t('shop.product.body_design')}</h3>
                   <div className="text-sm text-black space-y-1">
-                    <p>Dimensions: 146.7 x 71.5 x 7.8 mm</p>
-                    <p>Weight: 172g</p>
+                    <p>{t('shop.product.dimensions')}: 146.7 x 71.5 x 7.8 mm</p>
+                    <p>{t('shop.product.weight')}: 172g</p>
                     <p>
-                      Build: Aluminum frame, Ceramic Shield front, Glass back
+                      {t('shop.product.build')}: Aluminum frame, Ceramic Shield front, Glass back
                     </p>
-                    <p>Water Resistance: IP68 certified</p>
+                    <p>{t('shop.product.water_resistance')}: IP68 certified</p>
                   </div>
                 </div>
               </div>
@@ -162,21 +164,21 @@ export default function IPhoneProductPage() {
             {/* Availability */}
             <div className="bg-white">
               <h2 className="text-lg sm:text-xl font-semibold mb-5">
-                Availability
+                {t('shop.product.availability')}
               </h2>
               <div className="flex flex-col sm:flex-row sm:space-x-3 space-y-3 sm:space-y-0 items-start">
                 <div className="bg-green-500 text-white px-3 py-1.5 rounded-md text-sm font-medium">
-                  In Stock
+                  {t('shop.product.in_stock')}
                 </div>
                 <div className="bg-green-500 text-white px-3 py-1.5 rounded-md text-sm font-medium">
-                  KYC Verified
+                  {t('shop.product.kyc_verified')}
                 </div>
               </div>
             </div>
 
             {/* Reviews */}
             <div className="bg-white">
-              <h2 className="text-lg sm:text-xl font-semibold mb-4">Reviews</h2>
+              <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('shop.product.reviews')}</h2>
               <div className="space-y-4 mb-6">
                 {reviews.map((review, index) => (
                   <div key={index} className="bg-green-50 p-4 rounded-lg">
@@ -223,14 +225,14 @@ export default function IPhoneProductPage() {
                 onSubmit={handleReviewSubmit}
                 className="p-4 border rounded-lg space-y-3"
               >
-                <h3 className="font-semibold">Leave a Review</h3>
+                <h3 className="font-semibold">{t('shop.product.leave_review')}</h3>
 
                 {/* Name Input */}
                 <input
                   type="text"
                   value={reviewName}
                   onChange={(e) => setReviewName(e.target.value)}
-                  placeholder="Enter your name"
+                  placeholder={t('shop.product.enter_name')}
                   className="w-full border rounded p-2 text-sm"
                   required
                 />
@@ -240,9 +242,8 @@ export default function IPhoneProductPage() {
                   {[1, 2, 3, 4, 5].map((star) => (
                     <FaStar
                       key={star}
-                      className={`cursor-pointer ${
-                        rating >= star ? "text-yellow-400" : "text-gray-300"
-                      }`}
+                      className={`cursor-pointer ${rating >= star ? "text-yellow-400" : "text-gray-300"
+                        }`}
                       onClick={() => setRating(star)}
                     />
                   ))}
@@ -252,7 +253,7 @@ export default function IPhoneProductPage() {
                 <textarea
                   value={reviewText}
                   onChange={(e) => setReviewText(e.target.value)}
-                  placeholder="Write your review..."
+                  placeholder={t('shop.product.write_review')}
                   className="w-full border rounded p-2 text-sm"
                   required
                 />
@@ -269,7 +270,7 @@ export default function IPhoneProductPage() {
                   type="submit"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
-                  Submit Review
+                  {t('shop.product.submit_review')}
                 </button>
               </form>
             </div>
@@ -285,9 +286,8 @@ export default function IPhoneProductPage() {
               onMouseLeave={() => setFlipped(false)}
             >
               <div
-                className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${
-                  flipped ? "[transform:rotateY(180deg)]" : ""
-                }`}
+                className={`relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d] ${flipped ? "[transform:rotateY(180deg)]" : ""
+                  }`}
               >
                 {/* Front Side */}
                 <div className="absolute inset-0 bg-white rounded-xl shadow-lg [backface-visibility:hidden] flex items-center justify-center">
@@ -338,7 +338,7 @@ export default function IPhoneProductPage() {
               {/* Color Selection */}
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Choose Color <span className="text-red-500">*</span>
+                  {t('shop.product.choose_color')} <span className="text-red-500">*</span>
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {colors.map((color) => (
@@ -346,11 +346,10 @@ export default function IPhoneProductPage() {
                       key={color}
                       type="button"
                       onClick={() => setSelectedColor(color)}
-                      className={`px-3 py-1 rounded border ${
-                        selectedColor === color
+                      className={`px-3 py-1 rounded border ${selectedColor === color
                           ? "bg-blue-600 text-white"
                           : "bg-white text-gray-700"
-                      }`}
+                        }`}
                     >
                       {color}
                     </button>
@@ -380,13 +379,12 @@ export default function IPhoneProductPage() {
                 <button
                   disabled={!selectedColor}
                   onClick={() => navigate("/shop/cart")}
-                  className={`${
-                    !selectedColor
+                  className={`${!selectedColor
                       ? "bg-gray-400 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"
-                  } text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto`}
+                    } text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto`}
                 >
-                  <span>Buy Now</span>
+                  <span>{t('shop.product.buy_now')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

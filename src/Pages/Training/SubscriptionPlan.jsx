@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { FaCrown, FaCreditCard, FaPaypal, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import paymentService from "../../services/paymentService";
 
-const SubscriptionPlan = ({ 
+const SubscriptionPlan = ({
   planType, // 'freelancer' or 'company'
-  onPaymentSuccess 
+  onPaymentSuccess
 }) => {
+  const { t } = useTranslation();
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -15,29 +17,20 @@ const SubscriptionPlan = ({
   // Plan configuration
   const planConfig = {
     freelancer: {
-      title: "Unlimited Access Plan",
-      price: "880,000 GNF",
-      priceUSD: "$100 per year",
+      title: t('training.subscription.freelancer.title'),
+      price: t('training.subscription.freelancer.price'),
+      priceUSD: t('training.subscription.freelancer.price_usd'),
       amount: 100,
       currency: "USD",
-      features: [
-        "✓ Unlimited access to all courses",
-        "✓ Downloadable resources & certificates",
-        "✓ Progress tracking & support"
-      ]
+      features: t('training.subscription.freelancer.features', { returnObjects: true })
     },
     company: {
-      title: "Company Unlimited Plan",
-      price: "8,800,000 GNF",
-      priceUSD: "$1,000 per year",
+      title: t('training.subscription.company.title'),
+      price: t('training.subscription.company.price'),
+      priceUSD: t('training.subscription.company.price_usd'),
       amount: 1000,
       currency: "USD",
-      features: [
-        "✓ Unlimited access to all courses",
-        "✓ Up to 10 user licenses",
-        "✓ Team dashboard & management",
-        "✓ Custom training priority"
-      ]
+      features: t('training.subscription.company.features', { returnObjects: true })
     }
   };
 
@@ -87,7 +80,7 @@ const SubscriptionPlan = ({
           success: true,
           message: `Payment successful! Your ${planType} subscription is now active.`
         });
-        
+
         // Close the modal after a short delay
         setTimeout(() => {
           setShowPaymentForm(false);
@@ -175,10 +168,10 @@ const SubscriptionPlan = ({
           <div className="bg-blue-50 p-3 rounded-md">
             <div className="flex items-center gap-2 text-blue-800">
               <FaCheckCircle className="h-4 w-4" />
-              <span className="text-sm font-medium">Secure Payment</span>
+              <span className="text-sm font-medium">{t('training.subscription.secure')}</span>
             </div>
             <p className="text-xs text-blue-700 mt-1">
-              Your payment information is encrypted and secure
+              {t('training.subscription.secure_text')}
             </p>
           </div>
         </div>
@@ -189,15 +182,15 @@ const SubscriptionPlan = ({
           <div className="bg-yellow-50 p-4 rounded-md">
             <div className="flex items-center gap-2 text-yellow-800">
               <FaExclamationCircle className="h-4 w-4" />
-              <span className="font-medium">PayPal Integration</span>
+              <span className="font-medium">{t('training.subscription.paypal_alert')}</span>
             </div>
             <p className="text-sm text-yellow-700 mt-1">
-              You will be redirected to PayPal to complete your payment
+              {t('training.subscription.paypal_text')}
             </p>
           </div>
           <div className="text-center py-4">
             <div className="bg-yellow-500 text-white px-6 py-2 rounded-md inline-block">
-              Continue to PayPal
+              {t('training.subscription.continue_paypal')}
             </div>
           </div>
         </div>
@@ -215,34 +208,34 @@ const SubscriptionPlan = ({
             <FaCrown className="text-2xl text-yellow-500" />
             <h3 className="text-2xl font-bold text-green-800">{currentPlan.title}</h3>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-lg p-4 mb-4 max-w-sm mx-auto">
             <div className="text-2xl font-bold text-green-700 mb-1">{currentPlan.price}</div>
             <div className="text-lg text-gray-600 mb-3">{currentPlan.priceUSD}</div>
             {planType === 'company' && (
-              <div className="text-xs text-gray-500 mb-3">For up to 10 users</div>
+              <div className="text-xs text-gray-500 mb-3">{t('training.subscription.company.subtext')}</div>
             )}
-            
+
             <div className="text-xs text-gray-700 mb-4 space-y-1">
               {currentPlan.features.map((feature, index) => (
                 <div key={index}>{feature}</div>
               ))}
             </div>
-            
+
             <div className="flex flex-col gap-2">
               <button
                 onClick={() => handleSubscription('stripe')}
                 className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
               >
                 <FaCreditCard className="text-xs" />
-                Subscribe with Stripe
+                {t('training.subscription.pay_stripe')}
               </button>
               <button
                 onClick={() => handleSubscription('paypal')}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
               >
                 <FaPaypal className="text-xs" />
-                Subscribe with PayPal
+                {t('training.subscription.pay_paypal')}
               </button>
             </div>
           </div>
@@ -254,11 +247,11 @@ const SubscriptionPlan = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">
-              {selectedPaymentMethod === 'stripe' ? 'Complete Your Stripe Payment' : 'Complete Your PayPal Payment'}
+              {selectedPaymentMethod === 'stripe' ? t('training.subscription.pay_stripe') : t('training.subscription.pay_paypal')}
             </h3>
-            
+
             {renderPaymentForm()}
-            
+
             {paymentResult && (
               <div className={`p-3 rounded-md mt-4 ${paymentResult.success ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
                 {paymentResult.success ? (
@@ -274,20 +267,20 @@ const SubscriptionPlan = ({
                 )}
               </div>
             )}
-            
+
             <div className="flex gap-2 mt-4">
               <button
                 onClick={() => setShowPaymentForm(false)}
                 className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
               >
-                Cancel
+                {t('training.subscription.cancel')}
               </button>
               <button
                 onClick={handlePayNow}
                 disabled={isProcessing}
                 className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg transition-colors"
               >
-                {isProcessing ? 'Processing...' : 'Pay Now'}
+                {isProcessing ? t('training.subscription.processing') : t('training.subscription.pay_now')}
               </button>
             </div>
           </div>

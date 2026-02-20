@@ -7,6 +7,8 @@ import SolutionIntegration from "../assets/SolutionIntegration.png";
 import TrainingIT from "../assets/TrainingIT.png";
 import ITSupport from "../assets/ITSupport.png";
 
+import { useTranslation } from "react-i18next";
+
 // Sample ServiceCard component with updated styling
 const ServiceCard = ({ icon, title, description, buttonText, additionalContent }) => {
   return (
@@ -27,16 +29,17 @@ const ServiceCard = ({ icon, title, description, buttonText, additionalContent }
   );
 };
 
-const profiles = [
-  { name: "Mariama Diallo", role: "IT Specialist in Conakry (Kaloum)" },
-  { name: "Ibrahima Bah", role: "SAP Consultant in Kankan" },
-  { name: "Fatou Camara", role: "Software Developer in Labé" },
-  { name: "Sékou Traoré", role: "Network Engineer in Nzérékoré" },
-  { name: "Aminata Barry", role: "Database Administrator in Kindia" },
-  { name: "Mohamed Sow", role: "Cybersecurity Expert in Boké" },
-];
-
 export default function Services() {
+  const { t } = useTranslation();
+
+  const profiles = [
+    { name: t('services_page.profiles.mariama.name'), role: t('services_page.profiles.mariama.role') },
+    { name: t('services_page.profiles.ibrahima.name'), role: t('services_page.profiles.ibrahima.role') },
+    { name: t('services_page.profiles.fatou.name'), role: t('services_page.profiles.fatou.role') },
+    { name: t('services_page.profiles.sekou.name'), role: t('services_page.profiles.sekou.role') },
+    { name: t('services_page.profiles.aminata.name'), role: t('services_page.profiles.aminata.role') },
+    { name: t('services_page.profiles.mohamed.name'), role: t('services_page.profiles.mohamed.role') },
+  ];
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Header Section */}
@@ -44,28 +47,28 @@ export default function Services() {
         <div className="text-center max-w-5xl mx-auto">
           <div className="mb-4 sm:mb-6">
             <span className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 cursor-pointer">
-              For Companies
+              {t('home.services.for_companies')}
             </span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-            <span className="block">Fuel Innovation and Digital</span>
+            <span className="block">{t('home.services.fuel_innovation')}</span>
             <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Transformation with Freelance-224
+              {t('home.services.transformation')}
             </span>
           </h1>
 
           <p className="text-gray-400 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto mb-12 sm:mb-16 leading-relaxed">
-            Comprehensive tech solutions for Guinean locals, expats, companies, NGOs, and freelancers across Conakry and all prefectures.
+            {t('home.services.subtitle')}
           </p>
         </div>
 
         {/* Carousel Section */}
         <div className="max-w-6xl mx-auto mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Technology Recruitment Services:</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">{t('home.services.recruitment_title')}</h2>
             <p className="text-gray-400 text-base sm:text-lg">
-              Hire top-tier freelancers across Guinea's prefectures for your tech projects.
+              {t('home.services.recruitment_subtitle')}
             </p>
           </div>
           <ProfileCarousel profiles={profiles} />
@@ -81,9 +84,9 @@ export default function Services() {
                 <img src={ERP} alt="ERP" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="ERP/SAP Solutions"
-            description="Implement, optimize, and customize SAP/ERP systems for your business."
-            buttonText="Explore ERP Services →"
+            title={t('home.services.erp_title')}
+            description={t('home.services.erp_desc')}
+            buttonText={t('home.services.erp_btn')}
           />
 
           <ServiceCard
@@ -92,9 +95,9 @@ export default function Services() {
                 <img src={DeviceSales} alt="Device Sales" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="IT Support"
-            description="Reliable IT support for hardware, software, and network issues."
-            buttonText="Get IT Support →"
+            title={t('home.services.it_support_title')}
+            description={t('home.services.it_support_desc')}
+            buttonText={t('home.services.it_support_btn')}
           />
 
           <ServiceCard
@@ -103,9 +106,9 @@ export default function Services() {
                 <img src={Outsourcing} alt="Outsourcing" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="IT Solution Integration"
-            description="Seamlessly integrate IT solutions to enhance business operations."
-            buttonText="Integrate Now →"
+            title={t('home.services.integration_title')}
+            description={t('home.services.integration_desc')}
+            buttonText={t('home.services.integration_btn')}
           />
 
           <ServiceCard
@@ -114,9 +117,9 @@ export default function Services() {
                 <img src={SolutionIntegration} alt="Solution Integration" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="Outsourcing With Freelance-224"
-            description="Outsource IT tasks to our expert team for efficiency and cost savings."
-            buttonText="Outsource Now →"
+            title={t('home.services.outsourcing_title')}
+            description={t('home.services.outsourcing_desc')}
+            buttonText={t('home.services.outsourcing_btn')}
           />
 
           <ServiceCard
@@ -125,15 +128,15 @@ export default function Services() {
                 <img src={TrainingIT} alt="Training" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="Device Sales & Rentals"
-            description="Smartphone Sale"
-            buttonText="Buy or Rent for Your Team →"
+            title={t('home.services.device_title')}
+            description={t('home.services.device_desc')}
+            buttonText={t('home.services.device_btn')}
             additionalContent={
               <div className="space-y-1 text-center sm:text-left flex flex-col items-center sm:items-start">
-                <p className="text-green-400 font-semibold">4,928,000 GNF ($560)</p>
+                <p className="text-green-400 font-semibold">{t('services_page.price_device')}</p>
                 <p className="text-gray-400 text-sm">
-                  <span className="text-xs">Rental</span>{" "}
-                  <span className="text-orange-400 font-semibold">8,800 GNF/hour ($1)</span>
+                  <span className="text-xs">{t('home.services.rental')}</span>{" "}
+                  <span className="text-orange-400 font-semibold">{t('services_page.price_rental')}</span>
                 </p>
               </div>
             }
@@ -145,9 +148,9 @@ export default function Services() {
                 <img src={ITSupport} alt="IT Support" className="w-6 h-6 object-contain" />
               </div>
             }
-            title="Training For Teams"
-            description="Upskill your team with custom training tailored to your business needs."
-            buttonText="Train Your Team →"
+            title={t('home.services.training_title')}
+            description={t('home.services.training_desc')}
+            buttonText={t('home.services.training_btn')}
           />
         </div>
       </div>

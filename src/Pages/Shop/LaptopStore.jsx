@@ -7,7 +7,10 @@ import LaptopImage from '../../assets/Laptop.jpg';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
 
+import { useTranslation } from "react-i18next";
+
 const LaptopStore = () => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
@@ -214,7 +217,7 @@ const LaptopStore = () => {
       <div className={`lg:w-64 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
         <div className="bg-[#E5E7EB] p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Filters</h3>
+            <h3 className="text-lg font-semibold">{t('shop.filters.title')}</h3>
             <button
               onClick={() => setIsFilterOpen(false)}
               className="lg:hidden text-gray-500 hover:text-gray-700"
@@ -225,7 +228,7 @@ const LaptopStore = () => {
 
           {/* Condition Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Condition</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.condition')}</h4>
             {['New', 'Used'].map((condition) => (
               <label key={condition} className="flex items-center mb-2">
                 <input
@@ -234,14 +237,14 @@ const LaptopStore = () => {
                   onChange={() => handleFilterChange('conditions', condition)}
                   className="mr-2 rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                 />
-                <span className="text-sm">{condition}</span>
+                <span className="text-sm">{t(`shop.filters.conditions.${condition.toLowerCase()}`)}</span>
               </label>
             ))}
           </div>
 
           {/* Brand Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Brand</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.brand')}</h4>
             {['Apple', 'Dell', 'HP', 'Lenovo', 'ASUS'].map((brand) => (
               <label key={brand} className="flex items-center mb-2">
                 <input
@@ -257,7 +260,7 @@ const LaptopStore = () => {
 
           {/* Screen Size Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Screen Size</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.screen_size')}</h4>
             {['13.6"', '14"', '15.6"', '16"'].map((size) => (
               <label key={size} className="flex items-center mb-2">
                 <input
@@ -273,7 +276,7 @@ const LaptopStore = () => {
 
           {/* RAM Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">RAM</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.ram')}</h4>
             {['8GB', '16GB', '18GB', '32GB'].map((ram) => (
               <label key={ram} className="flex items-center mb-2">
                 <input
@@ -289,7 +292,7 @@ const LaptopStore = () => {
 
           {/* Storage Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Storage</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.storage')}</h4>
             {['256GB SSD', '512GB SSD', '1TB SSD'].map((storage) => (
               <label key={storage} className="flex items-center mb-2">
                 <input
@@ -305,7 +308,7 @@ const LaptopStore = () => {
 
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Price Range</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.price_range')}</h4>
             <input
               type="range"
               min="0"
@@ -328,8 +331,8 @@ const LaptopStore = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <div className="mb-4 sm:mb-0">
-            <h2 className="text-2xl font-bold text-gray-900">Laptops</h2>
-            <p className="text-gray-600">{filteredLaptops.length} laptops found</p>
+            <h2 className="text-2xl font-bold text-gray-900">{t('shop.laptops.title')}</h2>
+            <p className="text-gray-600">{t('shop.laptops.found', { count: filteredLaptops.length })}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -338,7 +341,7 @@ const LaptopStore = () => {
               className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <Filter className="h-4 w-4" />
-              Filters
+              {t('shop.filters.title')}
             </button>
 
             <div className="flex items-center gap-2">
@@ -348,11 +351,11 @@ const LaptopStore = () => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="Most Popular">Most Popular</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-                <option value="Newest First">Newest First</option>
-                <option value="Best Rating">Best Rating</option>
+                <option value="Most Popular">{t('shop.sorting.most_popular')}</option>
+                <option value="Price: Low to High">{t('shop.sorting.price_low_high')}</option>
+                <option value="Price: High to Low">{t('shop.sorting.price_high_low')}</option>
+                <option value="Newest First">{t('shop.sorting.newest_first')}</option>
+                <option value="Best Rating">{t('shop.sorting.best_rating')}</option>
               </select>
             </div>
           </div>
@@ -371,7 +374,7 @@ const LaptopStore = () => {
 
         {filteredLaptops.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No laptops found matching your criteria.</p>
+            <p className="text-gray-500 text-lg">{t('shop.laptops.no_results')}</p>
           </div>
         )}
       </div>

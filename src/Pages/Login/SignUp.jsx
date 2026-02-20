@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import LoginImage from "../../assets/Login.jpg";
 import { Mail, Lock, UserRound } from "lucide-react";
@@ -9,6 +10,7 @@ import { UserService } from "../../services/userService";
 
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -39,25 +41,25 @@ export default function SignUp() {
     const userRole = role;
 
     if (!agree) {
-      alert("Please accept the terms and conditions");
+      alert(t('signup_page.alerts.accept_terms') || "Please accept the terms and conditions");
       return;
     }
     if (!userRole) {
-      alert("Please select a role.");
+      alert(t('signup_page.alerts.select_role') || "Please select a role.");
       return;
     }
     if (!validateEmail(email)) {
-      alert("Please enter a valid email address.");
+      alert(t('signup_page.alerts.invalid_email') || "Please enter a valid email address.");
       return;
     }
     if (!validatePassword(password)) {
       alert(
-        "Password must be at least 8 characters long and include: uppercase, lowercase, number, and special character."
+        t('signup_page.alerts.invalid_password') || "Password must be at least 8 characters long and include: uppercase, lowercase, number, and special character."
       );
       return;
     }
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert(t('signup_page.alerts.password_mismatch') || "Passwords do not match");
       return;
     }
 
@@ -65,11 +67,11 @@ export default function SignUp() {
       const username = e.target.freelancerUsername?.value.trim();
       const phone = e.target.phone?.value.trim();
       if (!username) {
-        alert("Please enter a username.");
+        alert(t('signup_page.alerts.enter_username') || "Please enter a username.");
         return;
       }
       if (!phone) {
-        alert("Please enter your phone number.");
+        alert(t('signup_page.alerts.enter_phone') || "Please enter your phone number.");
         return;
       }
     }
@@ -93,15 +95,15 @@ export default function SignUp() {
       // Save user profile to Firestore via UserService
       await UserService.createUserProfile(user.uid, userData);
 
-      alert("Sign up successful! Please login.");
+      alert(t('signup_page.alerts.success') || "Sign up successful! Please login.");
       navigate("/login");
 
     } catch (error) {
       console.error("Signup error:", error);
       if (error.code === 'auth/email-already-in-use') {
-        alert("User with this email already exists. Please log in.");
+        alert(t('signup_page.alerts.email_in_use') || "User with this email already exists. Please log in.");
       } else {
-        alert("Signup failed: " + error.message);
+        alert((t('signup_page.alerts.failed') || "Signup failed: ") + error.message);
       }
     }
   };
@@ -125,7 +127,7 @@ export default function SignUp() {
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-4">
         <div className="w-[80%] space-y-6 border border-gray-300 rounded-2xl p-4 bg-white">
           <p className="text-green-700 font-semibold text-lg mb-4">
-            Ignite Your Success: Connect, Sell, Innovate with Freelance-224!
+            {t('signup_page.hero.tagline') || 'Ignite Your Success: Connect, Sell, Innovate with Freelance-224!'}
           </p>
           <img
             src={LoginImage}
@@ -140,13 +142,13 @@ export default function SignUp() {
         <div className="w-full max-w-md space-y-6 border border-gray-300 rounded-2xl shadow-lg p-6 bg-white">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold text-gray-900">
-              Sign<span className="text-green-700"> Up</span>
+              {t('signup_page.form.sign') || 'Sign'}<span className="text-green-700">{t('signup_page.form.up') || ' Up'}</span>
             </h1>
             <p className="text-gray-600 text-sm">
-              Join the Tech Revolution in Guinea!
+              {t('signup_page.hero.subtitle') || 'Join the Tech Revolution in Guinea!'}
             </p>
             <p className="text-green-700 font-semibold text-sm">
-              Ignite Your Success: Connect, Sell, Innovate with Freelance-224!
+              {t('signup_page.hero.tagline') || 'Ignite Your Success: Connect, Sell, Innovate with Freelance-224!'}
             </p>
           </div>
 
@@ -157,7 +159,7 @@ export default function SignUp() {
               <input
                 type="text"
                 name="username"
-                placeholder="Full Name"
+                placeholder={t('signup_page.form.full_name') || "Full Name"}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -169,7 +171,7 @@ export default function SignUp() {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder={t('signup_page.form.email') || "Email"}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -178,7 +180,7 @@ export default function SignUp() {
             {/* Role */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Role
+                {t('signup_page.form.role') || "Role"}
               </label>
               <select
                 value={role}
@@ -186,13 +188,13 @@ export default function SignUp() {
                 className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               >
-                <option value="">Select Role</option>
-                <option value="Freelancer">Freelancer</option>
-                <option value="Vendor">Vendor</option>
-                <option value="Company">Company</option>
-                <option value="Client">Client</option>
-                <option value="Admin">Admin</option>
-                <option value="Seller">Seller</option>
+                <option value="">{t('signup_page.form.select_role') || "Select Role"}</option>
+                <option value="Freelancer">{t('signup_page.form.roles.freelancer') || "Freelancer"}</option>
+                <option value="Vendor">{t('signup_page.form.roles.vendor') || "Vendor"}</option>
+                <option value="Company">{t('signup_page.form.roles.company') || "Company"}</option>
+                <option value="Client">{t('signup_page.form.roles.client') || "Client"}</option>
+                <option value="Admin">{t('signup_page.form.roles.admin') || "Admin"}</option>
+                <option value="Seller">{t('signup_page.form.roles.seller') || "Seller"}</option>
               </select>
             </div>
 
@@ -204,7 +206,7 @@ export default function SignUp() {
                   <input
                     type="text"
                     name="freelancerUsername"
-                    placeholder="Username"
+                    placeholder={t('signup_page.form.username') || "Username"}
                     className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                     required
                   />
@@ -231,7 +233,7 @@ export default function SignUp() {
                   <input
                     type="tel"
                     name="phone"
-                    placeholder="Phone Number"
+                    placeholder={t('signup_page.form.phone_number') || "Phone Number"}
                     className="flex-1 py-2 px-2 focus:outline-none rounded-r-full"
                     required
                   />
@@ -246,7 +248,7 @@ export default function SignUp() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Password"
+                placeholder={t('signup_page.form.password') || "Password"}
                 className="w-full pl-10 pr-10 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -264,7 +266,7 @@ export default function SignUp() {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
-                placeholder="Confirm Password"
+                placeholder={t('signup_page.form.confirm_password') || "Confirm Password"}
                 className="w-full pl-10 pr-10 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -285,15 +287,15 @@ export default function SignUp() {
                 className="mt-1 h-4 w-4 text-white bg-green-600 border-green-600 rounded"
               />
               <label className="text-gray-700">
-                I agree to the{" "}
+                {t('signup_page.form.terms.agree') || "I agree to the "}
                 <a href="/privacy" className="text-green-600 hover:underline">
-                  Privacy Policy
-                </a>{" "}
-                and{" "}
-                <a href="/terms" className="text-green-600 hover:underline">
-                  Terms of Service
+                  {t('signup_page.form.terms.privacy') || "Privacy Policy"}
                 </a>
-                .
+                {t('signup_page.form.terms.and') || " and "}
+                <a href="/terms" className="text-green-600 hover:underline">
+                  {t('signup_page.form.terms.service') || "Terms of Service"}
+                </a>
+                {t('signup_page.form.terms.period') || "."}
               </label>
             </div>
 
@@ -303,17 +305,17 @@ export default function SignUp() {
                 type="submit"
                 className="px-8 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-200"
               >
-                Sign Up
+                {t('signup_page.form.submit') || "Sign Up"}
               </button>
             </div>
 
             <div className="text-center text-sm text-gray-600">
-              Already have an account?{" "}
+              {t('signup_page.form.already_have_account') || "Already have an account? "}
               <a
                 href="/login"
                 className="text-green-600 font-medium hover:underline"
               >
-                Login
+                {t('signup_page.form.login') || "Login"}
               </a>
             </div>
           </form>

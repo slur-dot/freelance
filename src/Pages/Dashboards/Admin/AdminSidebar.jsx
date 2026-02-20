@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import { useTranslation } from "react-i18next";
 import {
   BarChart3,
   CalendarCheck,
@@ -71,6 +72,7 @@ function SidebarMenuButton({ children, isActive, to, collapsed }) {
 }
 
 export default function AdminSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const activePath = location.pathname;
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -80,32 +82,31 @@ export default function AdminSidebar() {
 
   const navItems = [
     {
-      section: "HOME",
-      items: [{ title: "Dashboard", url: "/admin/dashboard", icon: BarChart3 }],
+      section: t('admin_dashboard.sidebar.home.title'),
+      items: [{ title: t('admin_dashboard.sidebar.home.dashboard'), url: "/admin/dashboard", icon: BarChart3 }],
     },
     {
-      section: "LISTINGS",
+      section: t('admin_dashboard.sidebar.listings.title'),
       items: [
-        { title: "Course Listing", url: "/admin/dashboard/course-listing", icon: BookOpen },
-        { title: "Product Listing", url: "/admin/dashboard/product-listing", icon: ShoppingCart },
-        { title: "Tickets Listing", url: "/admin/dashboard/ticket-listing", icon: Ticket },
+        { title: t('admin_dashboard.sidebar.listings.course'), url: "/admin/dashboard/course-listing", icon: BookOpen },
+        { title: t('admin_dashboard.sidebar.listings.product'), url: "/admin/dashboard/product-listing", icon: ShoppingCart },
+        { title: t('admin_dashboard.sidebar.listings.tickets'), url: "/admin/dashboard/ticket-listing", icon: Ticket },
       ],
     },
     {
-      section: "MANAGEMENT",
+      section: t('admin_dashboard.sidebar.management.title'),
       items: [
-        { title: "Bookings", url: "/admin/dashboard/bookings", icon: CalendarCheck },
-        { title: "Training Requests", url: "/admin/dashboard/training-requests", icon: Headphones },
-        { title: "Tech Services Request", url: "#", icon: Zap },
-        { title: "Advertisement", url: "/admin/dashboard/advertisements", icon: Megaphone },
-        { title: "User Management", url: "/admin/dashboard/users", icon: Users },
-        { title: "Sub Admin Management", url: "/admin/dashboard/sub-admin", icon: UserPlus },
-        { title: "Support Team", url: "/admin/dashboard/support-team", icon: LifeBuoy },
+        { title: t('admin_dashboard.sidebar.management.bookings'), url: "/admin/dashboard/bookings", icon: CalendarCheck },
+        { title: t('admin_dashboard.sidebar.management.training'), url: "/admin/dashboard/training-requests", icon: Headphones },
+        { title: t('admin_dashboard.sidebar.management.tech'), url: "#", icon: Zap },
+        { title: t('admin_dashboard.sidebar.management.ads'), url: "/admin/dashboard/advertisements", icon: Megaphone },
+        { title: t('admin_dashboard.sidebar.management.users'), url: "/admin/dashboard/users", icon: Users },
+        { title: t('admin_dashboard.sidebar.management.sub_admin'), url: "/admin/dashboard/sub-admin", icon: UserPlus },
+        { title: t('admin_dashboard.sidebar.management.support'), url: "/admin/dashboard/support-team", icon: LifeBuoy },
       ],
     },
   ];
 
-  // ... inside component ...
   const [user, setUser] = useState({
     name: "Admin User",
     email: "admin@example.com",
@@ -217,7 +218,7 @@ export default function AdminSidebar() {
                     <span className="text-xs text-gray-500 truncate max-w-[120px]">{user.email}</span>
                   </div>
                 )}
-                <button onClick={handleLogout} className="ml-auto text-gray-500 hover:text-red-500">
+                <button onClick={handleLogout} className="ml-auto text-gray-500 hover:text-red-500" title={t('admin_dashboard.sidebar.footer.logout')}>
                   <LogOut className="h-5 w-5" />
                 </button>
               </div>

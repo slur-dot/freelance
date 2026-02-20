@@ -8,7 +8,10 @@ import AccessoriesStore from './AccessoriesStore';
 import ComponentsStore from './ComponentsStore';
 import ShopHero from '../../components/ShopHero';
 
+import { useTranslation } from "react-i18next";
+
 const Shop = () => {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState('Smartphones');
   const [timeRemaining, setTimeRemaining] = useState({
     days: 45,
@@ -50,13 +53,13 @@ const Shop = () => {
             <div className="flex items-center mb-2 sm:mb-0">
               <FaFire className="text-xl mr-2" />
               <span className="text-lg sm:text-xl font-bold">
-                FLASH SALE - 20% OFF ALL DEVICES
+                {t('shop.banner.flash_sale')}
               </span>
             </div>
             <div className="flex items-center text-sm">
               <FaClock className="mr-2" />
               <span>
-                Ends May 16, 2025 • {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m left
+                {t('shop.banner.ends_may')} • {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m {t('shop.banner.left')}
               </span>
             </div>
           </div>
@@ -82,13 +85,12 @@ const Shop = () => {
               <button
                 key={category.name}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`relative whitespace-nowrap px-3 py-2 text-sm font-medium rounded-lg ${
-                  selectedCategory === category.name
+                className={`relative whitespace-nowrap px-3 py-2 text-sm font-medium rounded-lg ${selectedCategory === category.name
                     ? 'bg-[#3B82F6] text-white'
                     : 'text-gray-500 hover:text-gray-700'
-                }`}
+                  }`}
               >
-                {category.name}
+                {t(`shop.categories.${category.name.toLowerCase()}`)}
                 {category.onSale && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 py-0.5 rounded-full">
                     -20%
@@ -109,7 +111,7 @@ const Shop = () => {
         {selectedCategory === 'Components' && <ComponentsStore />}
       </div>
 
-     
+
     </div>
   );
 };

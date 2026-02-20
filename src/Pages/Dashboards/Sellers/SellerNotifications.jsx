@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Bell, Clock, CheckCircle, AlertCircle, Info, Loader2 } from "lucide-react";
 import { NotificationService } from "../../../services/notificationService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -34,6 +35,7 @@ function CardContent({ children, className = "" }) {
 }
 
 export default function SellerNotifications() {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -157,8 +159,8 @@ export default function SellerNotifications() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-          <p className="text-gray-600">Stay updated with your seller activities</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('seller_dashboard.notifications.title')}</h1>
+          <p className="text-gray-600">{t('seller_dashboard.notifications.subtitle')}</p>
         </div>
         <div className="flex items-center gap-3">
           {unreadCount > 0 && (
@@ -171,7 +173,7 @@ export default function SellerNotifications() {
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
           >
-            Mark All as Read
+            {t('seller_dashboard.notifications.mark_all_read')}
           </Button>
         </div>
       </div>
@@ -203,8 +205,8 @@ export default function SellerNotifications() {
           {notifications.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium mb-2">No notifications yet</h3>
-              <p>You'll receive notifications about orders, payouts, and important updates here.</p>
+              <h3 className="text-lg font-medium mb-2">{t('seller_dashboard.notifications.empty.title')}</h3>
+              <p>{t('seller_dashboard.notifications.empty.desc')}</p>
             </div>
           ) : (
             <div className="divide-y divide-gray-200">
@@ -237,7 +239,7 @@ export default function SellerNotifications() {
                                 onClick={() => markAsRead(notification.id)}
                                 className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                               >
-                                Mark as read
+                                {t('seller_dashboard.notifications.mark_read')}
                               </button>
                             )}
                           </div>
@@ -258,14 +260,14 @@ export default function SellerNotifications() {
       {/* Notification Settings */}
       <Card>
         <CardHeader>
-          <h2 className="text-lg font-semibold">Notification Settings</h2>
+          <h2 className="text-lg font-semibold">{t('seller_dashboard.notifications.settings.title')}</h2>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Email Notifications</h3>
-                <p className="text-sm text-gray-500">Receive notifications via email</p>
+                <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.notifications.settings.email')}</h3>
+                <p className="text-sm text-gray-500">{t('seller_dashboard.notifications.settings.email_desc')}</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" defaultChecked />
@@ -274,8 +276,8 @@ export default function SellerNotifications() {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">SMS Notifications</h3>
-                <p className="text-sm text-gray-500">Receive notifications via SMS</p>
+                <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.notifications.settings.sms')}</h3>
+                <p className="text-sm text-gray-500">{t('seller_dashboard.notifications.settings.sms_desc')}</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" defaultChecked />
@@ -284,8 +286,8 @@ export default function SellerNotifications() {
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-medium text-gray-900">Push Notifications</h3>
-                <p className="text-sm text-gray-500">Receive in-app notifications</p>
+                <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.notifications.settings.push')}</h3>
+                <p className="text-sm text-gray-500">{t('seller_dashboard.notifications.settings.push_desc')}</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input type="checkbox" className="sr-only peer" defaultChecked />

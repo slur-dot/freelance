@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import { FaWhatsapp, FaFlag } from "react-icons/fa";
 import logo from "../assets/logo.png";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
 
   const handleNewsletterSubmit = (e) => {
@@ -23,7 +25,7 @@ const Footer = () => {
     if (email) {
       // Here you would integrate with your email marketing service (e.g., Mailchimp)
       console.log('Newsletter signup:', email);
-      alert('Thank you for subscribing to our newsletter!');
+      alert(t('footer.newsletter_success'));
       setEmail("");
     }
   };
@@ -44,8 +46,7 @@ const Footer = () => {
               <h3 className="text-white text-xl font-bold">Freelance</h3>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
-              Freelance-224 connects businesses with talented professionals,
-              offering flexible, remote collaboration for projects of all sizes.
+              {t('footer.description')}
             </p>
 
             {/* App download buttons */}
@@ -63,14 +64,14 @@ const Footer = () => {
 
           {/* Links Column 1 */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-base">Explore</h4>
+            <h4 className="text-white font-semibold mb-4 text-base">{t('footer.explore')}</h4>
             <ul className="space-y-3">
               {[
-                { label: "What We Do", href: "/what-we-do" },
-                { label: "Our Services", href: "#" },
-                { label: "User Strategy", href: "#" },
-                { label: "Blog", href: "/blog" },
-                { label: "FAQs", href: "/faq" },
+                { label: t('footer.what_we_do'), href: "/what-we-do" },
+                { label: t('footer.our_services'), href: "#" },
+                { label: t('footer.user_strategy'), href: "#" },
+                { label: t('footer.blog'), href: "/blog" },
+                { label: t('footer.faqs'), href: "/faq" },
               ].map((item, index) => (
                 <li key={index}>
                   <a
@@ -86,14 +87,14 @@ const Footer = () => {
 
           {/* Links Column 2 */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-base">Company</h4>
+            <h4 className="text-white font-semibold mb-4 text-base">{t('footer.company')}</h4>
             <ul className="space-y-3">
               {[
-                { label: "About Freelance", href: "/about-freelance" },
-                { label: "Contact & Support", href: "/contact" },
-                { label: "Success Stories", href: "/success-stories" },
-                { label: "Privacy Policy", href: "/privacy-policy" },
-                { label: "Join the Guinean Chamber of Commerce", href: "#" },
+                { label: t('footer.about_freelance'), href: "/about-freelance" },
+                { label: t('footer.contact_support'), href: "/contact" },
+                { label: t('footer.success_stories'), href: "/success-stories" },
+                { label: t('footer.privacy_policy'), href: "/privacy-policy" },
+                { label: t('footer.join_chamber'), href: "#" },
               ].map((item, index) => (
                 <li key={index}>
                   <a
@@ -109,11 +110,11 @@ const Footer = () => {
 
           {/* Contact Column */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-base">Contact</h4>
+            <h4 className="text-white font-semibold mb-4 text-base">{t('footer.contact')}</h4>
             <ul className="space-y-3 text-sm text-gray-400 text-center md:text-left">
               <li className="flex items-center justify-center md:justify-start gap-2">
                 <MapPin className="w-4 h-4 text-[#15803D]" />
-                <span>Conakry, Republic of Guinea</span>
+                <span>{t('footer.address')}</span>
               </li>
               <li>
                 <a
@@ -138,7 +139,7 @@ const Footer = () => {
                   className="hover:text-white flex items-center justify-center md:justify-start gap-2"
                 >
                   <FaWhatsapp className="w-4 h-4 text-[#15803D]" />
-                  WhatsApp Support
+                  {t('footer.whatsapp_support')}
                 </a>
               </li>
             </ul>
@@ -149,14 +150,14 @@ const Footer = () => {
             {/* Newsletter Signup */}
             <div className="w-full">
               <h4 className="text-white font-semibold mb-3 text-base text-center lg:text-right">
-                Stay Updated – Join Our Newsletter!
+                {t('footer.stay_updated')}
               </h4>
               <form onSubmit={handleNewsletterSubmit} className="flex gap-2">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder={t('footer.enter_email')}
                   className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#15803D] focus:border-transparent text-sm"
                   required
                 />
@@ -200,7 +201,7 @@ const Footer = () => {
             <FaFlag className="w-4 h-4 text-[#15803D]" />
             <span>© 2025</span>
             <span className="text-blue-400 font-semibold">FREELANCE-224</span>
-            <span>All Rights Reserved</span>
+            <span>{t('footer.all_rights_reserved')}</span>
           </div>
         </div>
       </div>

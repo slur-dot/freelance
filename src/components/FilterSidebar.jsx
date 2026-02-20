@@ -1,109 +1,104 @@
 import React, { useState } from "react";
 import { SlidersHorizontal, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function FilterSidebar() {
   const [priceRange, setPriceRange] = useState([50, 200]);
+  const { t } = useTranslation();
 
   return (
     <div className="p-4 rounded-lg shadow-inner">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Filters</h2>
+        <h2 className="text-lg font-semibold">{t('freelancer.filters.title')}</h2>
         <SlidersHorizontal className="w-5 h-5 text-gray-600" />
       </div>
 
       {/* Work Mode */}
-      <Accordion title="Work Mode">
-        <CheckboxList items={["Remote", "In-Person", "Hybrid"]} />
+      <Accordion title={t('freelancer.filters.work_mode')}>
+        <CheckboxList items={[t('freelancer.filters.options.remote'), t('freelancer.filters.options.in_person'), t('freelancer.filters.options.hybrid')]} />
       </Accordion>
 
       {/* Specialized Skills Categories */}
-      <Accordion title="Specialized Skills">
-        <CheckboxList items={[
-          "Business Applications",
-          "Cloud & Infrastructure", 
-          "Cyber Security",
-          "Data & Analytics",
-          "SAP",
-          "Software Development"
-        ]} />
+      <Accordion title={t('freelancer.filters.specialized_skills')}>
+        <CheckboxList items={t('freelancer.hero.filters', { returnObjects: true })} />
       </Accordion>
 
       {/* Category */}
-      <Accordion title="Category">
+      <Accordion title={t('freelancer.filters.category')}>
         <CategoryList
           groups={{
-            "Development & Tech": [
-              "Web Development",
-              "Mobile App Development",
-              "Software Development",
-              "Game Development",
-              "AI & Machine Learning",
-              "Data Science & Analytics",
-              "Cybersecurity & Networking",
-              "Blockchain & Crypto",
+            [t('freelancer.filters.options.groups.dev_tech')]: [
+              t('freelancer.categories.web_dev'),
+              t('freelancer.categories.mobile_dev'),
+              t('freelancer.categories.software_dev'),
+              t('freelancer.categories.game_dev'),
+              t('freelancer.categories.ai_ml'),
+              t('freelancer.categories.data_science'),
+              t('freelancer.categories.cybersecurity'),
+              t('freelancer.categories.blockchain'),
             ],
-            "Design & Creative": [
-              "Graphics & Branding Design",
-              "UI/UX Design",
-              "Web & App Design",
-              "3D Modeling & Animation",
-              "Video Editing & Production",
-              "Photography & Image Editing",
-              "Motion Graphics",
+            [t('freelancer.filters.options.groups.design')]: [
+              t('freelancer.categories.graphics'),
+              t('freelancer.categories.ui_ux'),
+              t('freelancer.categories.web_design'),
+              t('freelancer.categories.3d_modeling'),
+              t('freelancer.categories.video_editing'),
+              t('freelancer.categories.photography'),
+              t('freelancer.categories.motion_graphics'),
             ],
-            "Writing & Translation": [
-              "Content Writing",
-              "Copywriting",
-              "Technical Writing",
-              "Blog & Article Writing",
-              "Translation Services (FR ↔ EN, Local Languages)",
-              "Proofreading & Editing",
-              "Research & Academic Writing",
+            [t('freelancer.filters.options.groups.writing')]: [
+              t('freelancer.categories.content_writing'),
+              t('freelancer.categories.copywriting'),
+              t('freelancer.categories.technical_writing'),
+              t('freelancer.categories.blog_writing'),
+              t('freelancer.categories.translation'),
+              t('freelancer.categories.proofreading'),
+              t('freelancer.categories.research'),
             ],
-            "Marketing & Sales": [
-              "Digital Marketing",
-              "Social Media Management",
-              "SEO & SEM",
-              "Email Marketing",
-              "Branding & Strategy",
-              "Lead Generation",
-              "Influencer Marketing",
+            [t('freelancer.filters.options.groups.marketing')]: [
+              t('freelancer.categories.digital_marketing'),
+              t('freelancer.categories.social_media'),
+              t('freelancer.categories.seo'),
+              t('freelancer.categories.email_marketing'),
+              t('freelancer.categories.branding'),
+              t('freelancer.categories.lead_gen'),
+              t('freelancer.categories.influencer'),
             ],
-            "Business & Administration": [
-              "Virtual Assistance",
-              "Project Management",
-              "Customer Support",
-              "HR & Recruitment",
-              "Business Consulting",
-              "Legal Assistance",
+            [t('freelancer.filters.options.groups.business')]: [
+              t('freelancer.categories.virtual_assist'),
+              t('freelancer.categories.project_mgmt'),
+              t('freelancer.categories.customer_support'),
+              t('freelancer.categories.hr'),
+              t('freelancer.categories.business_consulting'),
+              t('freelancer.categories.legal'),
             ],
-            "Finance & Accounting": [
-              "Bookkeeping",
-              "Financial Planning",
-              "Tax Consulting",
-              "Payroll Management",
-              "Crypto & Fintech Services",
+            [t('freelancer.filters.options.groups.finance')]: [
+              t('freelancer.categories.bookkeeping'),
+              t('freelancer.categories.financial_planning'),
+              t('freelancer.categories.tax'),
+              t('freelancer.categories.payroll'),
+              t('freelancer.categories.crypto'),
             ],
-            "Education & Training": [
-              "Online Tutoring",
-              "Language Lessons",
-              "IT & Tech Training",
-              "Business Coaching",
+            [t('freelancer.filters.options.groups.education')]: [
+              t('freelancer.categories.tutoring'),
+              t('freelancer.categories.language'),
+              t('freelancer.categories.it_training'),
+              t('freelancer.categories.coaching'),
             ],
-            "Local Services (for Guinea)": [
-              "Device Repair (Laptops, Smartphones, Desktops)",
-              "Internet & Network Setup",
-              "Printing & Branding Materials",
-              "Event Planning & Promotion",
-              "Delivery & Logistics Services",
+            [t('freelancer.filters.options.groups.local')]: [
+              t('freelancer.categories.repair'),
+              t('freelancer.categories.network'),
+              t('freelancer.categories.printing'),
+              t('freelancer.categories.event'),
+              t('freelancer.categories.delivery'),
             ],
           }}
         />
       </Accordion>
 
       {/* Company Name & Field of Operation */}
-      <Accordion title="Company Name & Field of Operation">
+      <Accordion title={t('freelancer.filters.company_field')}>
         <CheckboxList
           items={[
             "Acme Corp — Web & Mobile Development",
@@ -114,17 +109,17 @@ export default function FilterSidebar() {
       </Accordion>
 
       {/* Availability */}
-      <Accordion title="Availability">
-        <CheckboxList items={["Full-time", "Part-time", "Contract"]} />
+      <Accordion title={t('freelancer.filters.availability')}>
+        <CheckboxList items={[t('freelancer.filters.options.full_time'), t('freelancer.filters.options.part_time'), t('freelancer.filters.options.contract')]} />
       </Accordion>
 
       {/* Ratings */}
-      <Accordion title="Ratings" hasBorder>
-        <CheckboxList items={["5 Stars", "4 Stars & Up", "3 Stars & Up"]} />
+      <Accordion title={t('freelancer.filters.ratings')} hasBorder>
+        <CheckboxList items={[t('freelancer.filters.options.stars_5'), t('freelancer.filters.options.stars_4_up'), t('freelancer.filters.options.stars_3_up')]} />
       </Accordion>
 
       {/* Price Range */}
-      <Accordion title="Price" hasBorder>
+      <Accordion title={t('freelancer.filters.price')} hasBorder>
         <div className="grid gap-4">
           <input
             type="range"
@@ -147,7 +142,7 @@ export default function FilterSidebar() {
 
       {/* Apply Filter Button */}
       <button className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full">
-        Apply Filter
+        {t('freelancer.filters.apply')}
       </button>
     </div>
   );

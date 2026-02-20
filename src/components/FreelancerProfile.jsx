@@ -11,6 +11,7 @@ import {
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
 import FilterSidebar from "./FilterSidebar";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // Enhanced freelancer data with specialized skills
 const mockFreelancers = [
@@ -158,6 +159,7 @@ function Loading() {
 
 function FreelancerCard({ freelancer }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition hover:border-green-600 hover:border-2">
       <div className="relative">
@@ -167,7 +169,7 @@ function FreelancerCard({ freelancer }) {
             {freelancer.name.charAt(0)}
           </div>
         </div>
-        
+
         <img
           src={freelancer.image}
           alt={freelancer.name}
@@ -205,7 +207,7 @@ function FreelancerCard({ freelancer }) {
           <div className="flex items-center gap-1 text-gray-600">
             <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
             <span className="text-sm">
-              {freelancer.rating}/5 ({freelancer.reviews} reviews)
+              {freelancer.rating}/5 ({t('freelancer.profile.actions.reviews', { count: freelancer.reviews, defaultValue: `${freelancer.reviews} reviews` })})
             </span>
           </div>
           <div className="text-sm font-semibold text-green-600">
@@ -221,7 +223,7 @@ function FreelancerCard({ freelancer }) {
               className="flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm"
             >
               <ExternalLink className="w-4 h-4" />
-              View Portfolio
+              {t('freelancer.profile.actions.view_portfolio')}
             </button>
           </div>
         )}
@@ -249,8 +251,8 @@ function FreelancerCard({ freelancer }) {
           <button className="p-2 hover:bg-gray-100 rounded-full" title="Save to Favorites">
             <Heart className="w-4 h-4" />
           </button>
-          <button 
-            className="p-2 hover:bg-gray-100 rounded-full" 
+          <button
+            className="p-2 hover:bg-gray-100 rounded-full"
             title="Send Message"
             onClick={() => navigate("/hire-freelancers/info")}
           >
@@ -262,14 +264,14 @@ function FreelancerCard({ freelancer }) {
             onClick={() => navigate("/hire-freelancers/info/job-post")}
             className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded-md"
           >
-            Bid on Project
+            {t('freelancer.profile.actions.bid')}
           </button>
           <button
             onClick={() => navigate("/hire-freelancers/info")}
             className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-1 rounded-md"
             style={{ backgroundColor: '#3B82F6' }}
           >
-            Hire Now →
+            {t('freelancer.profile.actions.hire')} →
           </button>
         </div>
       </div>
@@ -289,9 +291,15 @@ function FreelancerList({ freelancers }) {
 
 export default function FreelancerProfile() {
   const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState("Most Popular");
+  const { t } = useTranslation();
+  const [sortValue, setSortValue] = useState(t('freelancer.sort.options.popular'));
 
-  const sortOptions = ["Most Popular", "Highest Rated", "Lowest Rated", "Newest"];
+  const sortOptions = [
+    t('freelancer.sort.options.popular'),
+    t('freelancer.sort.options.rated_high'),
+    t('freelancer.sort.options.rated_low'),
+    t('freelancer.sort.options.newest')
+  ];
 
   return (
     <div className="min-h-screen bg-white relative">
@@ -299,10 +307,10 @@ export default function FreelancerProfile() {
         {/* Breadcrumb */}
         <div className="text-sm text-gray-600 mb-3 ml-2 sm:ml-10">
           <a href="/" className="hover:underline">
-            Home
+            {t('freelancer.profile.breadcrumbs.home')}
           </a>
           <span className="mx-1">&gt;</span>
-          <span className="text-blue-600">Hire Freelancers</span>
+          <span className="text-blue-600">{t('freelancer.profile.breadcrumbs.hire')}</span>
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
@@ -315,14 +323,14 @@ export default function FreelancerProfile() {
             {/* Freelancer Listings */}
             <div className="flex-1 w-full">
               <h1 className="text-2xl sm:text-3xl font-bold mb-5">
-                Hire Freelancers
+                {t('freelancer.profile.breadcrumbs.hire')}
               </h1>
 
               {/* Sort Section */}
               <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center mb-5 gap-4 relative">
                 <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-                  <p>Showing 1-100 of 100 Freelancers</p>
-                  <span>Sort by:</span>
+                  <p>{t('freelancer.sort.showing', { start: 1, end: 100, total: 100 })}</p>
+                  <span>{t('freelancer.sort.label')}</span>
                   <div className="relative">
                     <button
                       onClick={() => setSortOpen(!sortOpen)}
@@ -361,9 +369,8 @@ export default function FreelancerProfile() {
                   {Array.from({ length: 5 }).map((_, i) => (
                     <div
                       key={i}
-                      className={`w-2 h-2 rounded-full ${
-                        i === 0 ? "bg-blue-600" : "bg-gray-300"
-                      }`}
+                      className={`w-2 h-2 rounded-full ${i === 0 ? "bg-blue-600" : "bg-gray-300"
+                        }`}
                     />
                   ))}
                 </div>

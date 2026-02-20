@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Trash2, Edit, Plus, X } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 export default function SubAdminManagement() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("subAdminName");
-  const [sortDirection] = useState("desc");
+  const [sortDirection, setSortDirection] = useState("desc");
   const [showModal, setShowModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -200,6 +202,26 @@ export default function SubAdminManagement() {
     }
   };
 
+  const roleKeyMap = {
+    "Support": "support",
+    "Head": "head",
+    "Order Manager": "order_manager",
+    "Admin": "admin",
+    "Content Manager": "content_manager",
+    "Finance Manager": "finance_manager",
+    "Analytics Manager": "analytics_manager"
+  };
+
+  const permissionKeyMap = {
+    "User Management Access": "user_access",
+    "Support Team Access": "support_access",
+    "Order Management Access": "order_access",
+    "Content Management Access": "content_access",
+    "Finance Management Access": "finance_access",
+    "Analytics Access": "analytics_access",
+    "Full Admin Access": "full_access"
+  };
+
   const filteredSubAdmins = subAdmins.filter(subAdmin =>
     (subAdmin.subAdminName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (subAdmin.permission || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -217,13 +239,13 @@ export default function SubAdminManagement() {
         {/* Header */}
         <div className="p-6 pb-4" style={{ backgroundColor: '#FCFCFD' }}>
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-800">Sub Admin Management</h1>
+            <h1 className="text-4xl font-bold text-gray-800">{t('admin_dashboard.sub_admin_management.title')}</h1>
             <button
               onClick={handleAddSubAdmin}
               className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-5 w-5" />
-              Add Sub Admin
+              {t('admin_dashboard.sub_admin_management.add_button')}
             </button>
           </div>
 
@@ -232,7 +254,7 @@ export default function SubAdminManagement() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('admin_dashboard.sub_admin_management.search_placeholder')}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -256,23 +278,23 @@ export default function SubAdminManagement() {
                     onClick={() => handleSort("displayName")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Sub Admin Name</span>
+                      <span>{t('admin_dashboard.sub_admin_management.table.headers.name')}</span>
                       {sortField === "displayName" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Permission
+                    {t('admin_dashboard.sub_admin_management.table.headers.permission')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Assigned Date
+                    {t('admin_dashboard.sub_admin_management.table.headers.assigned_date')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Role
+                    {t('admin_dashboard.sub_admin_management.table.headers.role')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('admin_dashboard.sub_admin_management.table.headers.actions')}
                   </th>
                 </tr>
               </thead>
@@ -283,14 +305,14 @@ export default function SubAdminManagement() {
                       {subAdmin.subAdminName || 'N/A'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
-                      {subAdmin.permission}
+                      {permissionKeyMap[subAdmin.permission] ? t(`admin_dashboard.sub_admin_management.permissions.${permissionKeyMap[subAdmin.permission]}`) : subAdmin.permission}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       {subAdmin.assignedDate}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getRolePillColor(subAdmin.role)}`}>
-                        {subAdmin.role}
+                        {roleKeyMap[subAdmin.role] ? t(`admin_dashboard.sub_admin_management.roles.${roleKeyMap[subAdmin.role]}`) : subAdmin.role}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
@@ -327,11 +349,11 @@ export default function SubAdminManagement() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {t('admin_dashboard.sub_admin_management.pagination.previous')}
               </button>
 
               <span className="text-sm font-medium text-gray-700">
-                Page {currentPage} of {totalPages}
+                {t('admin_dashboard.sub_admin_management.pagination.page_info', { current: currentPage, total: totalPages })}
               </span>
 
               <button
@@ -339,7 +361,7 @@ export default function SubAdminManagement() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {t('admin_dashboard.sub_admin_management.pagination.next')}
               </button>
             </div>
           </div>
@@ -352,15 +374,15 @@ export default function SubAdminManagement() {
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Add Sub Admin</h2>
-              <p className="text-gray-600">Add your sub admins manually</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('admin_dashboard.sub_admin_management.modals.add.title')}</h2>
+              <p className="text-gray-600">{t('admin_dashboard.sub_admin_management.modals.add.subtitle')}</p>
             </div>
 
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Name:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.name')}</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -373,7 +395,7 @@ export default function SubAdminManagement() {
 
               {/* Permissions Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Permissions:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.permissions')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
                     value={formData.permissions}
@@ -381,14 +403,14 @@ export default function SubAdminManagement() {
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
                     required
                   >
-                    <option value="">Select Permission</option>
-                    <option value="User Management Access">User Management Access</option>
-                    <option value="Support Team Access">Support Team Access</option>
-                    <option value="Order Management Access">Order Management Access</option>
-                    <option value="Content Management Access">Content Management Access</option>
-                    <option value="Finance Management Access">Finance Management Access</option>
-                    <option value="Analytics Access">Analytics Access</option>
-                    <option value="Full Admin Access">Full Admin Access</option>
+                    <option value="">{t('admin_dashboard.sub_admin_management.modals.form.select_permission')}</option>
+                    <option value="User Management Access">{t('admin_dashboard.sub_admin_management.permissions.user_access')}</option>
+                    <option value="Support Team Access">{t('admin_dashboard.sub_admin_management.permissions.support_access')}</option>
+                    <option value="Order Management Access">{t('admin_dashboard.sub_admin_management.permissions.order_access')}</option>
+                    <option value="Content Management Access">{t('admin_dashboard.sub_admin_management.permissions.content_access')}</option>
+                    <option value="Finance Management Access">{t('admin_dashboard.sub_admin_management.permissions.finance_access')}</option>
+                    <option value="Analytics Access">{t('admin_dashboard.sub_admin_management.permissions.analytics_access')}</option>
+                    <option value="Full Admin Access">{t('admin_dashboard.sub_admin_management.permissions.full_access')}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -396,7 +418,7 @@ export default function SubAdminManagement() {
 
               {/* Roles Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Roles:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.roles')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
                     value=""
@@ -409,14 +431,14 @@ export default function SubAdminManagement() {
                     }}
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
                   >
-                    <option value="">Select Role</option>
-                    <option value="Head">Head</option>
-                    <option value="Support">Support</option>
-                    <option value="Order Manager">Order Manager</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Content Manager">Content Manager</option>
-                    <option value="Finance Manager">Finance Manager</option>
-                    <option value="Analytics Manager">Analytics Manager</option>
+                    <option value="">{t('admin_dashboard.sub_admin_management.modals.form.select_role')}</option>
+                    <option value="Head">{t('admin_dashboard.sub_admin_management.roles.head')}</option>
+                    <option value="Support">{t('admin_dashboard.sub_admin_management.roles.support')}</option>
+                    <option value="Order Manager">{t('admin_dashboard.sub_admin_management.roles.order_manager')}</option>
+                    <option value="Admin">{t('admin_dashboard.sub_admin_management.roles.admin')}</option>
+                    <option value="Content Manager">{t('admin_dashboard.sub_admin_management.roles.content_manager')}</option>
+                    <option value="Finance Manager">{t('admin_dashboard.sub_admin_management.roles.finance_manager')}</option>
+                    <option value="Analytics Manager">{t('admin_dashboard.sub_admin_management.roles.analytics_manager')}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -426,7 +448,7 @@ export default function SubAdminManagement() {
                     onClick={handleClearAllRoles}
                     className="ml-2 px-2 py-1 text-xs text-red-600 hover:text-red-800 transition-colors"
                   >
-                    Clear All
+                    {t('admin_dashboard.sub_admin_management.modals.form.clear_all')}
                   </button>
                 )}
               </div>
@@ -439,7 +461,7 @@ export default function SubAdminManagement() {
                       key={index}
                       className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md"
                     >
-                      {role}
+                      {roleKeyMap[role] ? t(`admin_dashboard.sub_admin_management.roles.${roleKeyMap[role]}`) : role}
                       <button
                         type="button"
                         onClick={() => handleRemoveRole(index)}
@@ -459,7 +481,7 @@ export default function SubAdminManagement() {
                   disabled={loading}
                   className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Adding..." : "Add Sub Admin"}
+                  {loading ? t('admin_dashboard.sub_admin_management.modals.add.submitting') : t('admin_dashboard.sub_admin_management.modals.add.submit')}
                 </button>
               </div>
             </form>
@@ -481,15 +503,15 @@ export default function SubAdminManagement() {
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Edit Sub Admin</h2>
-              <p className="text-gray-600">Update sub admin information</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('admin_dashboard.sub_admin_management.modals.edit.title')}</h2>
+              <p className="text-gray-600">{t('admin_dashboard.sub_admin_management.modals.edit.subtitle')}</p>
             </div>
 
             {/* Modal Form */}
             <form onSubmit={handleEditSubmit} className="space-y-6">
               {/* Name Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Name:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.name')}</label>
                 <input
                   type="text"
                   value={editFormData.name}
@@ -502,7 +524,7 @@ export default function SubAdminManagement() {
 
               {/* Permissions Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Permissions:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.permissions')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
                     value={editFormData.permissions}
@@ -510,14 +532,14 @@ export default function SubAdminManagement() {
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
                     required
                   >
-                    <option value="">Select Permission</option>
-                    <option value="User Management Access">User Management Access</option>
-                    <option value="Support Team Access">Support Team Access</option>
-                    <option value="Order Management Access">Order Management Access</option>
-                    <option value="Content Management Access">Content Management Access</option>
-                    <option value="Finance Management Access">Finance Management Access</option>
-                    <option value="Analytics Access">Analytics Access</option>
-                    <option value="Full Admin Access">Full Admin Access</option>
+                    <option value="">{t('admin_dashboard.sub_admin_management.modals.form.select_permission')}</option>
+                    <option value="User Management Access">{t('admin_dashboard.sub_admin_management.permissions.user_access')}</option>
+                    <option value="Support Team Access">{t('admin_dashboard.sub_admin_management.permissions.support_access')}</option>
+                    <option value="Order Management Access">{t('admin_dashboard.sub_admin_management.permissions.order_access')}</option>
+                    <option value="Content Management Access">{t('admin_dashboard.sub_admin_management.permissions.content_access')}</option>
+                    <option value="Finance Management Access">{t('admin_dashboard.sub_admin_management.permissions.finance_access')}</option>
+                    <option value="Analytics Access">{t('admin_dashboard.sub_admin_management.permissions.analytics_access')}</option>
+                    <option value="Full Admin Access">{t('admin_dashboard.sub_admin_management.permissions.full_access')}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -525,7 +547,7 @@ export default function SubAdminManagement() {
 
               {/* Roles Field */}
               <div className="flex items-center">
-                <label className="w-24 text-sm font-medium text-gray-700">Roles:</label>
+                <label className="w-24 text-sm font-medium text-gray-700">{t('admin_dashboard.sub_admin_management.modals.form.roles')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
                     value=""
@@ -538,14 +560,14 @@ export default function SubAdminManagement() {
                     }}
                     className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
                   >
-                    <option value="">Select Multiple</option>
-                    <option value="Support">Support</option>
-                    <option value="Head">Head</option>
-                    <option value="Order Manager">Order Manager</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Content Manager">Content Manager</option>
-                    <option value="Finance Manager">Finance Manager</option>
-                    <option value="Analytics Manager">Analytics Manager</option>
+                    <option value="">{t('admin_dashboard.sub_admin_management.modals.form.select_multiple')}</option>
+                    <option value="Support">{t('admin_dashboard.sub_admin_management.roles.support')}</option>
+                    <option value="Head">{t('admin_dashboard.sub_admin_management.roles.head')}</option>
+                    <option value="Order Manager">{t('admin_dashboard.sub_admin_management.roles.order_manager')}</option>
+                    <option value="Admin">{t('admin_dashboard.sub_admin_management.roles.admin')}</option>
+                    <option value="Content Manager">{t('admin_dashboard.sub_admin_management.roles.content_manager')}</option>
+                    <option value="Finance Manager">{t('admin_dashboard.sub_admin_management.roles.finance_manager')}</option>
+                    <option value="Analytics Manager">{t('admin_dashboard.sub_admin_management.roles.analytics_manager')}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -555,7 +577,7 @@ export default function SubAdminManagement() {
                     onClick={() => setEditSelectedRoles([])}
                     className="ml-2 px-2 py-1 text-xs text-red-600 hover:text-red-800 transition-colors"
                   >
-                    Clear All
+                    {t('admin_dashboard.sub_admin_management.modals.form.clear_all')}
                   </button>
                 )}
               </div>
@@ -568,7 +590,7 @@ export default function SubAdminManagement() {
                       key={index}
                       className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md"
                     >
-                      {role}
+                      {roleKeyMap[role] ? t(`admin_dashboard.sub_admin_management.roles.${roleKeyMap[role]}`) : role}
                       <button
                         type="button"
                         onClick={() => handleRemoveEditRole(index)}
@@ -588,7 +610,7 @@ export default function SubAdminManagement() {
                   disabled={loading}
                   className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Updating..." : "Update Sub Admin"}
+                  {loading ? t('admin_dashboard.sub_admin_management.modals.edit.submitting') : t('admin_dashboard.sub_admin_management.modals.edit.submit')}
                 </button>
               </div>
             </form>
@@ -610,14 +632,16 @@ export default function SubAdminManagement() {
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Confirm Deletion</h2>
-              <p className="text-gray-600">Are you sure you want to delete this sub admin?</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('admin_dashboard.sub_admin_management.modals.delete.title')}</h2>
+              <p className="text-gray-600">{t('admin_dashboard.sub_admin_management.modals.delete.message')}</p>
             </div>
 
             {/* Sub Admin Info */}
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
               <p className="text-gray-800 font-medium">{deletingSubAdmin.subAdminName}</p>
-              <p className="text-gray-600 text-sm">{deletingSubAdmin.role}</p>
+              <p className="text-gray-600 text-sm">
+                {roleKeyMap[deletingSubAdmin.role] ? t(`admin_dashboard.sub_admin_management.roles.${roleKeyMap[deletingSubAdmin.role]}`) : deletingSubAdmin.role}
+              </p>
             </div>
 
             {/* Action Buttons */}
@@ -626,14 +650,14 @@ export default function SubAdminManagement() {
                 onClick={handleCloseDeleteModal}
                 className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors"
               >
-                Cancel
+                {t('admin_dashboard.sub_admin_management.modals.delete.cancel')}
               </button>
               <button
                 onClick={handleConfirmDelete}
                 disabled={loading}
                 className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Deleting..." : "Delete"}
+                {loading ? t('admin_dashboard.sub_admin_management.modals.delete.deleting') : t('admin_dashboard.sub_admin_management.modals.delete.confirm')}
               </button>
             </div>
           </div>

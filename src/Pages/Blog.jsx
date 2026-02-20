@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import blogCardImage from "../assets/BlogCard.png";
+import { useTranslation } from "react-i18next";
 
 export default function Blog() {
+  const { t } = useTranslation();
   const [selectedCat, setSelectedCat] = useState("business");
   const [showCategories, setShowCategories] = useState(true);
 
   const categories = [
-    { id: "freelancing", name: "Freelancing", count: 10 },
-    { id: "tech", name: "Tech", count: 8 },
-    { id: "business", name: "Business", count: 20 },
-    { id: "training", name: "Training", count: 29 },
+    { id: "freelancing", name: t('blog.freelancing'), count: 10 },
+    { id: "tech", name: t('blog.tech'), count: 8 },
+    { id: "business", name: t('blog.business'), count: 20 },
+    { id: "training", name: t('blog.training'), count: 29 },
   ];
 
   const blogPosts = Array(9).fill({
@@ -38,11 +40,10 @@ export default function Blog() {
                 aria-expanded={showCategories}
                 aria-controls="blog-categories-list"
               >
-                <h2 className="text-lg font-semibold text-gray-900">Categories</h2>
+                <h2 className="text-lg font-semibold text-gray-900">{t('blog.categories')}</h2>
                 <ChevronDown
-                  className={`h-5 w-5 text-gray-600 transition-transform ${
-                    showCategories ? "rotate-180" : "rotate-0"
-                  }`}
+                  className={`h-5 w-5 text-gray-600 transition-transform ${showCategories ? "rotate-180" : "rotate-0"
+                    }`}
                 />
               </button>
 
@@ -76,14 +77,14 @@ export default function Blog() {
             {/* Main Content */}
             <div className="flex-1">
               <div className="mb-8">
-                <h1 className="text-sm font-semibold uppercase text-gray-600 mb-2">EXPLORE LATEST BLOGS</h1>
-                <h2 className="text-4xl font-bold text-gray-900 mb-6">Blogs</h2>
+                <h1 className="text-sm font-semibold uppercase text-gray-600 mb-2">{t('blog.explore_latest')}</h1>
+                <h2 className="text-4xl font-bold text-gray-900 mb-6">{t('blog.blogs')}</h2>
 
                 {/* Search Bar */}
                 <div className="flex flex-col sm:flex-row w-full mb-8">
                   <input
                     type="text"
-                    placeholder="Search anything here..."
+                    placeholder={t('blog.search_placeholder')}
                     className="flex-1 h-12 bg-gray-100 border border-gray-300 rounded-t-md sm:rounded-l-md sm:rounded-tr-none px-4 focus:border-green-500 focus:ring-2 focus:ring-green-500 outline-none"
                   />
                   <button
@@ -128,7 +129,7 @@ export default function Blog() {
                               href="#"
                               className="text-gray-500 hover:underline inline-flex items-center gap-1 text-sm font-medium"
                             >
-                              READ MORE <ArrowRight className="h-4 w-4" />
+                              {t('blog.read_more')} <ArrowRight className="h-4 w-4" />
                             </a>
                           </div>
                         </div>
@@ -146,7 +147,7 @@ export default function Blog() {
                   type="button"
                   className="bg-[#228B22] hover:bg-[#1e7a1e] text-white px-8 py-3 rounded-full text-lg font-semibold flex items-center gap-2"
                 >
-                  Explore more <ArrowRight className="h-5 w-5" />
+                  {t('blog.explore_more')} <ArrowRight className="h-5 w-5" />
                 </button>
               </div>
             </div>
@@ -164,10 +165,10 @@ export default function Blog() {
 
         <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
           <h2 className="text-white text-3xl sm:text-4xl md:text-5xl font-bold mb-8">
-            Refer a Friend & Earn Rewards!
+            {t('blog.referral_title')}
           </h2>
           <button className="bg-[#228B22] hover:bg-[#1e7a1e] text-white px-8 py-3 rounded-full text-lg font-semibold flex items-center gap-2">
-            Invite Friends <ArrowRight className="h-5 w-5" />
+            {t('blog.invite_friends')} <ArrowRight className="h-5 w-5" />
           </button>
         </div>
       </section>

@@ -3,8 +3,10 @@ import { Send, Facebook, Twitter, Youtube, Linkedin, MessageCircle, Plus, AlertC
 import { FaWhatsapp } from "react-icons/fa";
 import LiveChatWidget from "../components/Support/LiveChatWidget";
 import SupportTickets from "../components/Support/SupportTickets";
+import { useTranslation } from "react-i18next";
 
 export default function ContactPage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("contact");
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
@@ -21,11 +23,11 @@ export default function ContactPage() {
       <header className="max-w-7xl mx-auto px-2 py-4 text-sm text-gray-600">
         <nav>
           <a href="#" className="hover:underline">
-            Home
+            {t('contact.home_breadcrumb')}
           </a>{" "}
           {">"}{" "}
           <a href="#" className="text-blue-400 hover:underline">
-            Contact
+            {t('contact.contact_breadcrumb')}
           </a>
         </nav>
       </header>
@@ -35,23 +37,21 @@ export default function ContactPage() {
         <div className="flex space-x-6">
           <button
             onClick={() => setActiveTab("contact")}
-            className={`pb-2 text-sm font-medium transition-colors ${
-              activeTab === "contact"
+            className={`pb-2 text-sm font-medium transition-colors ${activeTab === "contact"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-blue-600"
-            }`}
+              }`}
           >
-            Contact Form
+            {t('contact.contact_form_tab')}
           </button>
           <button
             onClick={() => setActiveTab("support")}
-            className={`pb-2 text-sm font-medium transition-colors ${
-              activeTab === "support"
+            className={`pb-2 text-sm font-medium transition-colors ${activeTab === "support"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-600 hover:text-blue-600"
-            }`}
+              }`}
           >
-            Support Tickets
+            {t('contact.support_tickets_tab')}
           </button>
         </div>
       </div>
@@ -62,188 +62,190 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
               {/* Contact Form Section */}
               <section className="space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold">Contact Us</h1>
-              <p className="text-gray-600">Send us a message and we are here to help.</p>
-            </div>
-            <form className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="flex items-center gap-4">
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                    Full Name
-                  </label>
-                  <input
-                    id="fullName"
-                    type="text"
-                    placeholder="John Doe"
-                    className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
-                  />
+                <div className="space-y-2">
+                  <div className="space-y-2">
+                    <h1 className="text-2xl font-bold">{t('contact.title')}</h1>
+                    <p className="text-gray-600">{t('contact.subtitle')}</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-4">
-                  <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                    Company Name
-                  </label>
-                  <input
-                    id="companyName"
-                    type="text"
-                    placeholder="Supreme Workers and Co."
-                    className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                  Job Title / Position
-                </label>
-                <select
-                  id="jobTitle"
-                  className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100 appearance-none pr-8"
-                >
-                  <option value="">Select an Option</option>
-                  <option value="developer">Developer</option>
-                  <option value="designer">Designer</option>
-                  <option value="manager">Manager</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-4">
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                  Address
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  placeholder="123 Street"
-                  className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
-                />
-              </div>
-              <div className="flex items-center gap-4">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="123@gmail.com"
-                  className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
-                />
-              </div>
-              <div className="flex items-start gap-4">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  placeholder="Write your message here"
-                  className="flex-1 min-h-[100px] p-2 border border-gray-300 rounded-md bg-gray-100"
-                ></textarea>
-              </div>
-               <div className="flex flex-col gap-4 items-center">
-                 <button 
-                   type="button" 
-                   onClick={() => {
-                     // Trigger the existing LiveChatWidget to open
-                     const chatButton = document.querySelector('[data-chat-trigger]');
-                     if (chatButton) {
-                       chatButton.click();
-                     }
-                   }}
-                   className="w-fit px-8 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition-colors duration-200"
-                 >
-                   Message Us Now
-                 </button>
-                 
-                 <button 
-                   type="button"
-                   onClick={() => setShowCalendar(true)}
-                   className="w-fit px-8 bg-[#3B82F6] hover:bg-[#2563EB] text-white py-3 rounded-full transition-colors duration-200 flex items-center gap-2 font-medium"
-                 >
-                   <Calendar className="w-5 h-5" />
-                   Schedule a Call
-                 </button>
-               </div>
-            </form>
+                <form className="space-y-4">
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="flex items-center gap-4">
+                      <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                        {t('contact.full_name')}
+                      </label>
+                      <input
+                        id="fullName"
+                        type="text"
+                        placeholder="John Doe"
+                        className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                      />
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                        {t('contact.company_name')}
+                      </label>
+                      <input
+                        id="companyName"
+                        type="text"
+                        placeholder="Supreme Workers and Co."
+                        className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                      Job Title / Position
+                    </label>
+                    <select
+                      id="jobTitle"
+                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100 appearance-none pr-8"
+                    >
+                      <option value="">Select an Option</option>
+                      <option value="developer">Developer</option>
+                      <option value="designer">Designer</option>
+                      <option value="manager">Manager</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                      Address
+                    </label>
+                    <input
+                      id="address"
+                      type="text"
+                      placeholder="123 Street"
+                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                    />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                      Email Address
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="123@gmail.com"
+                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                    />
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                      {t('contact.message')}
+                    </label>
+                    <textarea
+                      id="message"
+                      placeholder="Write your message here"
+                      className="flex-1 min-h-[100px] p-2 border border-gray-300 rounded-md bg-gray-100"
+                    ></textarea>
+                  </div>
+                  <div className="flex flex-col gap-4 items-center">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // Trigger the existing LiveChatWidget to open
+                        const chatButton = document.querySelector('[data-chat-trigger]');
+                        if (chatButton) {
+                          chatButton.click();
+                        }
+                      }}
+                      className="w-fit px-8 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition-colors duration-200"
+                    >
+                      Message Us Now
+                    </button>
 
-            {/* Google Map Section - Conakry */}
-            <section className="mt-8 w-full">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-gray-600" />
-                  <h3 className="text-lg font-semibold text-gray-900">Our Location</h3>
-                </div>
-                <iframe
-                  className="w-full h-64 rounded-lg shadow-md"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.123456789!2d-13.6667!3d9.5500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzMnMDAuMCJOIDEzwrA0MCcwMC4wIlc!5e0!3m2!1sen!2sgn!4v1234567890123!5m2!1sen!2sgn"
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Conakry Location Map"
-                ></iframe>
-                <p className="text-sm text-gray-600">Conakry, Guinea - Centered at 9.5500°N, -13.6667°W</p>
-              </div>
-            </section>
-          </section>
+                    <button
+                      type="button"
+                      onClick={() => setShowCalendar(true)}
+                      className="w-fit px-8 bg-[#3B82F6] hover:bg-[#2563EB] text-white py-3 rounded-full transition-colors duration-200 flex items-center gap-2 font-medium"
+                    >
+                      <Calendar className="w-5 h-5" />
+                      Schedule a Call
+                    </button>
+                  </div>
+                </form>
 
-          {/* Chat Section */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-bold">Chat With Us</h2>
-            <div className="bg-gray-100 border border-gray-300 rounded-xl shadow-lg p-8">
-              <div className="text-center space-y-6">
-                <div className="relative">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <MessageCircle className="w-10 h-10 text-white" />
+                {/* Google Map Section - Conakry */}
+                <section className="mt-8 w-full">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-5 w-5 text-gray-600" />
+                      <h3 className="text-lg font-semibold text-gray-900">{t('contact.our_location')}</h3>
+                    </div>
+                    <iframe
+                      className="w-full h-64 rounded-lg shadow-md"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.123456789!2d-13.6667!3d9.5500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzMnMDAuMCJOIDEzwrA0MCcwMC4wIlc!5e0!3m2!1sen!2sgn!4v1234567890123!5m2!1sen!2sgn"
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Conakry Location Map"
+                    ></iframe>
+                    <p className="text-sm text-gray-600">{t('contact.location_details')}</p>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                </section>
+              </section>
+
+              {/* Chat Section */}
+              <section className="space-y-4">
+                <h2 className="text-xl font-bold">{t('contact.chat_with_us')}</h2>
+                <div className="bg-gray-100 border border-gray-300 rounded-xl shadow-lg p-8">
+                  <div className="text-center space-y-6">
+                    <div className="relative">
+                      <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                        <MessageCircle className="w-10 h-10 text-white" />
+                      </div>
+                      <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-bold text-gray-800">{t('contact.need_instant_help')}</h3>
+                      <p className="text-gray-600 text-base leading-relaxed max-w-md mx-auto">
+                        {t('contact.support_team_desc')}
+                      </p>
+                    </div>
+
+                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 space-y-3 border border-gray-300">
+                      <div className="flex items-center justify-center gap-3 text-sm font-medium text-gray-700">
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                        <span>{t('contact.support_online')}</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 text-xs text-gray-600">
+                        <div className="flex items-center justify-center gap-1">
+                          <span className="font-semibold">{t('contact.response_time')}</span>
+                          <span>{t('contact.approx_time')}</span>
+                        </div>
+                        <div className="flex items-center justify-center gap-1">
+                          <span className="font-semibold">{t('contact.available')}</span>
+                          <span>{t('contact.available_24_7')}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <button
+                        onClick={() => {
+                          // Trigger the existing LiveChatWidget to open
+                          const chatButton = document.querySelector('[data-chat-trigger]');
+                          if (chatButton) {
+                            chatButton.click();
+                          }
+                        }}
+                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105"
+                      >
+                        <MessageCircle className="w-6 h-6" />
+                        {t('contact.start_live_chat')}
+                      </button>
+
+                      <p className="text-xs text-gray-500">
+                        {t('contact.no_registration')}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-gray-800">Need Instant Help?</h3>
-                  <p className="text-gray-600 text-base leading-relaxed max-w-md mx-auto">
-                    Our expert support team is online 24/7 and ready to assist Guinean locals, expats, companies, NGOs, and freelancers across all prefectures.
-                  </p>
-                  </div>
-                
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 space-y-3 border border-gray-300">
-                  <div className="flex items-center justify-center gap-3 text-sm font-medium text-gray-700">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span>Support team is online now</span>
-                </div>
-                  <div className="grid grid-cols-2 gap-4 text-xs text-gray-600">
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="font-semibold">Response time:</span>
-                      <span>~2 min</span>
-                  </div>
-                    <div className="flex items-center justify-center gap-1">
-                      <span className="font-semibold">Available:</span>
-                      <span>24/7</span>
-                  </div>
-                </div>
-              </div>
-                
-                <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    // Trigger the existing LiveChatWidget to open
-                    const chatButton = document.querySelector('[data-chat-trigger]');
-                    if (chatButton) {
-                      chatButton.click();
-                    }
-                  }}
-                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-4 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105"
-                >
-                  <MessageCircle className="w-6 h-6" />
-                  Start Live Chat
-                </button>
-                  
-                  <p className="text-xs text-gray-500">
-                    Click to open chat window • No registration required
-                  </p>
-                </div>
-              </div>
+              </section>
             </div>
-          </section>
-        </div>
 
             {/* Social Media Icons */}
             <footer className="mt-8 lg:mt-12 flex justify-start pl-4 text-gray-600 gap-3">
@@ -306,7 +308,7 @@ export default function ContactPage() {
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Schedule a Call</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t('contact.schedule_call')}</h2>
                 <button
                   onClick={() => setShowCalendar(false)}
                   className="text-gray-400 hover:text-gray-600 text-2xl"
@@ -319,7 +321,7 @@ export default function ContactPage() {
                 {/* Personal Details */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
+                    {t('contact.full_name')} *
                   </label>
                   <input
                     type="text"
@@ -332,7 +334,7 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address *
+                    {t('contact.email_address')} *
                   </label>
                   <input
                     type="email"
@@ -345,7 +347,7 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Company Name
+                    {t('contact.company_name')}
                   </label>
                   <input
                     type="text"
@@ -358,26 +360,26 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Purpose of Call
+                    {t('contact.select_purpose')}
                   </label>
                   <select
                     value={callDetails.purpose}
                     onChange={(e) => setCallDetails(prev => ({ ...prev, purpose: e.target.value }))}
                     className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="">Select a purpose</option>
-                    <option value="business_inquiry">Business Inquiry</option>
-                    <option value="partnership">Partnership Discussion</option>
-                    <option value="consultation">Consultation</option>
-                    <option value="support">Technical Support</option>
-                    <option value="other">Other</option>
+                    <option value="">{t('contact.select_purpose')}</option>
+                    <option value="business_inquiry">{t('contact.business_inquiry')}</option>
+                    <option value="partnership">{t('contact.partnership')}</option>
+                    <option value="consultation">{t('contact.consultation')}</option>
+                    <option value="support">{t('contact.technical_support')}</option>
+                    <option value="other">{t('contact.other')}</option>
                   </select>
                 </div>
 
                 {/* Date Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Preferred Date *
+                    {t('contact.preferred_date')}
                   </label>
                   <input
                     type="date"
@@ -391,14 +393,14 @@ export default function ContactPage() {
                 {/* Time Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Preferred Time *
+                    {t('contact.preferred_time')}
                   </label>
                   <select
                     value={selectedTime}
                     onChange={(e) => setSelectedTime(e.target.value)}
                     className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="">Select a time</option>
+                    <option value="">{t('contact.select_time')}</option>
                     <option value="09:00">9:00 AM</option>
                     <option value="10:00">10:00 AM</option>
                     <option value="11:00">11:00 AM</option>
@@ -416,20 +418,20 @@ export default function ContactPage() {
                     onClick={() => setShowCalendar(false)}
                     className="flex-1 px-4 py-3 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                   >
-                    Cancel
+                    {t('contact.cancel')}
                   </button>
                   <button
                     type="button"
                     onClick={() => {
                       if (!callDetails.name || !callDetails.email || !selectedDate || !selectedTime) {
-                        alert('Please fill in all required fields');
+                        alert(t('contact.fill_required'));
                         return;
                       }
-                      
+
                       // Here you would typically send the data to your backend
                       console.log('Call scheduled:', { callDetails, selectedDate, selectedTime });
-                      alert('Call scheduled successfully! We will contact you to confirm the appointment.');
-                      
+                      alert(t('contact.call_scheduled_success'));
+
                       // Reset form and close modal
                       setCallDetails({ name: "", email: "", company: "", purpose: "" });
                       setSelectedDate("");
@@ -438,7 +440,7 @@ export default function ContactPage() {
                     }}
                     className="flex-1 px-4 py-3 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg transition-colors font-medium"
                   >
-                    Schedule Call
+                    {t('contact.schedule_call')}
                   </button>
                 </div>
               </form>

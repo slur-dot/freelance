@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Search, Trash2, Pencil } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 // Reusable Button
 function RCButton({
@@ -84,6 +85,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function TicketListings() {
+  const { t } = useTranslation();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -114,7 +116,7 @@ export default function TicketListings() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this ticket?")) {
+    if (!window.confirm(t('admin_dashboard.listings.ticket.actions.delete_confirm'))) {
       return;
     }
 
@@ -125,7 +127,7 @@ export default function TicketListings() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error deleting ticket:", e);
-      setError(`Failed to delete ticket: ${e.message}`);
+      setError(t('admin_dashboard.listings.ticket.errors.delete_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -168,7 +170,7 @@ export default function TicketListings() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error updating ticket:", e);
-      setError(`Failed to update ticket: ${e.message}`);
+      setError(t('admin_dashboard.listings.ticket.errors.update_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -194,7 +196,7 @@ export default function TicketListings() {
       {/* Heading with button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
-          Ticket Listings
+          {t('admin_dashboard.listings.ticket.title')}
         </h1>
 
       </div>
@@ -205,7 +207,7 @@ export default function TicketListings() {
           {error && <div className="mb-3 text-red-600 text-sm">{error}</div>}
           {loading && <div className="mb-3 text-gray-500 text-sm">Loading...</div>}
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search tickets..." />
+          <RCInput placeholder={t('admin_dashboard.listings.ticket.search_placeholder')} />
         </div>
 
         {/* Table */}
@@ -213,12 +215,12 @@ export default function TicketListings() {
           <RCTable>
             <RCTableHeader>
               <RCTableRow>
-                <RCTableHead>S.No</RCTableHead>
-                <RCTableHead>Ticket Name</RCTableHead>
-                <RCTableHead>Assigned To</RCTableHead>
-                <RCTableHead>Created Date</RCTableHead>
-                <RCTableHead>Status</RCTableHead>
-                <RCTableHead>Actions</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.s_no')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.name')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.assigned_to')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.created_date')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.status')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.ticket.table.headers.actions')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -232,7 +234,7 @@ export default function TicketListings() {
                         value={editFormData.subject}
                         onChange={(e) => setEditFormData(prev => ({ ...prev, subject: e.target.value }))}
                         className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                        placeholder="Ticket subject"
+                        placeholder={t('admin_dashboard.listings.ticket.form.subject_placeholder')}
                       />
                     ) : (
                       ticket.subject
@@ -245,7 +247,7 @@ export default function TicketListings() {
                         value={editFormData.assignedTo}
                         onChange={(e) => setEditFormData(prev => ({ ...prev, assignedTo: e.target.value }))}
                         className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
-                        placeholder="Assigned to"
+                        placeholder={t('admin_dashboard.listings.ticket.form.assigned_to_placeholder')}
                       />
                     ) : (
                       ticket.assignedTo || '-'
@@ -259,10 +261,10 @@ export default function TicketListings() {
                         onChange={(e) => setEditFormData(prev => ({ ...prev, status: e.target.value }))}
                         className="px-2 py-1 border border-gray-300 rounded text-sm"
                       >
-                        <option value="open">Open</option>
-                        <option value="in_progress">In Progress</option>
-                        <option value="resolved">Resolved</option>
-                        <option value="closed">Closed</option>
+                        <option value="open">{t('admin_dashboard.listings.ticket.status.open')}</option>
+                        <option value="in_progress">{t('admin_dashboard.listings.ticket.status.in_progress')}</option>
+                        <option value="resolved">{t('admin_dashboard.listings.ticket.status.resolved')}</option>
+                        <option value="closed">{t('admin_dashboard.listings.ticket.status.closed')}</option>
                       </select>
                     ) : (
                       <span
@@ -275,7 +277,7 @@ export default function TicketListings() {
                           }`}
                       >
                         <span
-                          className={`h-2 w-2 rounded-full 
+                          className={`h-2 w-2 rounded-full
                             ${(ticket.status || 'open').toLowerCase() === "open"
                               ? "bg-green-500"
                               : (ticket.status || '').toLowerCase() === "closed"
@@ -283,7 +285,7 @@ export default function TicketListings() {
                                 : "bg-yellow-500"
                             }`}
                         />
-                        {(ticket.status || 'open').toString()}
+                        {t(`admin_dashboard.listings.ticket.status.${(ticket.status || 'open')}`)}
                       </span>
                     )}
                   </RCTableCell>
@@ -298,7 +300,7 @@ export default function TicketListings() {
                             disabled={loading}
                             title="Save changes"
                           >
-                            Save
+                            {t('admin_dashboard.listings.ticket.actions.save')}
                           </RCButton>
                           <RCButton
                             variant="custom"
@@ -307,7 +309,7 @@ export default function TicketListings() {
                             disabled={loading}
                             title="Cancel editing"
                           >
-                            Cancel
+                            {t('admin_dashboard.listings.ticket.actions.cancel')}
                           </RCButton>
                         </>
                       ) : (
@@ -337,7 +339,7 @@ export default function TicketListings() {
                             disabled={loading}
                             title="View ticket details"
                           >
-                            View
+                            {t('admin_dashboard.listings.ticket.actions.view')}
                           </RCButton>
                         </>
                       )}
@@ -360,20 +362,20 @@ export default function TicketListings() {
                 {index + 1}. {ticket.subject}
               </h2>
               <p className="text-xs text-gray-500 mb-1">
-                Assigned to: {ticket.assignedTo || 'Unassigned'}
+                {t('admin_dashboard.listings.ticket.mobile.assigned_to')} {ticket.assignedTo || t('admin_dashboard.listings.ticket.details.unassigned')}
               </p>
               <p className="text-xs text-gray-500 mb-1">
-                Created: {new Date(ticket.createdAt?._seconds ? ticket.createdAt._seconds * 1000 : ticket.createdAt || Date.now()).toLocaleDateString()}
+                {t('admin_dashboard.listings.ticket.mobile.created')} {new Date(ticket.createdAt?._seconds ? ticket.createdAt._seconds * 1000 : ticket.createdAt || Date.now()).toLocaleDateString()}
               </p>
               <p
                 className={`text-xs font-medium mb-2 ${(ticket.status || 'open').toLowerCase() === "open"
-                    ? "text-green-600"
-                    : (ticket.status || '').toLowerCase() === "closed"
-                      ? "text-red-600"
-                      : "text-yellow-600"
+                  ? "text-green-600"
+                  : (ticket.status || '').toLowerCase() === "closed"
+                    ? "text-red-600"
+                    : "text-yellow-600"
                   }`}
               >
-                Status: {(ticket.status || 'open').toString()}
+                {t('admin_dashboard.listings.ticket.mobile.status')} {t(`admin_dashboard.listings.ticket.status.${(ticket.status || 'open')}`)}
               </p>
               <div className="flex items-center gap-2">
                 <RCButton
@@ -401,7 +403,7 @@ export default function TicketListings() {
                   disabled={loading}
                   title="View ticket details"
                 >
-                  View
+                  {t('admin_dashboard.listings.ticket.actions.view')}
                 </RCButton>
               </div>
             </div>
@@ -410,11 +412,11 @@ export default function TicketListings() {
 
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-3 border-t border-gray-300 pt-4">
-          <RCButton variant="outline">Previous</RCButton>
+          <RCButton variant="outline">{t('admin_dashboard.pagination.previous')}</RCButton>
           <span className="text-xs sm:text-sm text-gray-500">
-            Page 1 of 10
+            {t('admin_dashboard.pagination.page_info', { current: 1, total: 10 })}
           </span>
-          <RCButton>Next</RCButton>
+          <RCButton>{t('admin_dashboard.pagination.next')}</RCButton>
         </div>
       </RCCard>
 
@@ -424,7 +426,7 @@ export default function TicketListings() {
           <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">Ticket Details</h2>
+                <h2 className="text-xl font-bold">{t('admin_dashboard.listings.ticket.details.title')}</h2>
                 <button
                   onClick={handleCloseView}
                   className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -436,7 +438,7 @@ export default function TicketListings() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Subject
+                    {t('admin_dashboard.listings.ticket.details.subject')}
                   </label>
                   <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded">
                     {viewingTicket.subject}
@@ -445,17 +447,17 @@ export default function TicketListings() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
+                    {t('admin_dashboard.listings.ticket.details.description')}
                   </label>
                   <p className="text-sm text-gray-900 bg-gray-50 p-2 rounded min-h-[100px]">
-                    {viewingTicket.description || 'No description provided'}
+                    {viewingTicket.description || t('admin_dashboard.listings.ticket.details.no_description')}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Status
+                      {t('admin_dashboard.listings.ticket.details.status')}
                     </label>
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
@@ -466,16 +468,16 @@ export default function TicketListings() {
                             : "bg-yellow-100 text-yellow-700"
                         }`}
                     >
-                      {(viewingTicket.status || 'open').toString()}
+                      {t(`admin_dashboard.listings.ticket.status.${(viewingTicket.status || 'open')}`)}
                     </span>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Priority
+                      {t('admin_dashboard.listings.ticket.details.priority')}
                     </label>
                     <p className="text-sm text-gray-900">
-                      {viewingTicket.priority || 'Medium'}
+                      {viewingTicket.priority || t('admin_dashboard.listings.ticket.priority.medium')}
                     </p>
                   </div>
                 </div>
@@ -483,26 +485,26 @@ export default function TicketListings() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Assigned To
+                      {t('admin_dashboard.listings.ticket.details.assigned_to')}
                     </label>
                     <p className="text-sm text-gray-900">
-                      {viewingTicket.assignedTo || 'Unassigned'}
+                      {viewingTicket.assignedTo || t('admin_dashboard.listings.ticket.details.unassigned')}
                     </p>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Created By
+                      {t('admin_dashboard.listings.ticket.details.created_by')}
                     </label>
                     <p className="text-sm text-gray-900">
-                      {viewingTicket.createdBy || 'Unknown'}
+                      {viewingTicket.createdBy || t('admin_dashboard.listings.ticket.details.unknown')}
                     </p>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Created Date
+                    {t('admin_dashboard.listings.ticket.details.created_date')}
                   </label>
                   <p className="text-sm text-gray-900">
                     {new Date(viewingTicket.createdAt?._seconds ? viewingTicket.createdAt._seconds * 1000 : viewingTicket.createdAt || Date.now()).toLocaleString()}
@@ -516,7 +518,7 @@ export default function TicketListings() {
                   className="bg-gray-600 text-white hover:bg-gray-700"
                   onClick={handleCloseView}
                 >
-                  Close
+                  {t('admin_dashboard.listings.ticket.actions.close')}
                 </RCButton>
                 <RCButton
                   variant="custom"
@@ -526,7 +528,7 @@ export default function TicketListings() {
                     handleEdit(viewingTicket.id);
                   }}
                 >
-                  Edit Ticket
+                  {t('admin_dashboard.listings.ticket.actions.edit_ticket')}
                 </RCButton>
               </div>
             </div>

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { X, Send, Plus, Camera, Video, FileText, Image } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function ChatPopup({ onClose }) {
+  const { t } = useTranslation();
   const [showMenu, setShowMenu] = useState(false);
 
   return (
@@ -70,16 +72,16 @@ export default function ChatPopup({ onClose }) {
                 {showMenu && (
                   <div className="absolute bottom-14 left-0 bg-white shadow-lg rounded-lg p-2 flex flex-col gap-2">
                     <button className="flex items-center gap-2 text-green-600 hover:text-green-800">
-                      <Camera className="w-5 h-5" /> Camera
+                      <Camera className="w-5 h-5" /> {t('chat.camera')}
                     </button>
                     <button className="flex items-center gap-2 text-green-600 hover:text-green-800">
-                      <Video className="w-5 h-5" /> Video
+                      <Video className="w-5 h-5" /> {t('chat.video')}
                     </button>
                     <button className="flex items-center gap-2 text-green-600 hover:text-green-800">
-                      <FileText className="w-5 h-5" /> Document
+                      <FileText className="w-5 h-5" /> {t('chat.document')}
                     </button>
                     <button className="flex items-center gap-2 text-green-600 hover:text-green-800">
-                      <Image className="w-5 h-5" /> Gallery
+                      <Image className="w-5 h-5" /> {t('chat.gallery')}
                     </button>
                   </div>
                 )}
@@ -88,7 +90,7 @@ export default function ChatPopup({ onClose }) {
               {/* Message Input */}
               <input
                 type="text"
-                placeholder="Type a message..."
+                placeholder={t('chat.type_message')}
                 className="flex-1 p-2 border border-gray-300 rounded-md"
               />
 
@@ -98,7 +100,7 @@ export default function ChatPopup({ onClose }) {
                 className="p-2 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center"
               >
                 <Send className="w-5 h-5" />
-                <span className="sr-only">Send message</span>
+                <span className="sr-only">{t('chat.send_sr')}</span>
               </button>
             </div>
           </div>

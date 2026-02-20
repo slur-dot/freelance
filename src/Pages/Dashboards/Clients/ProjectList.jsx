@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Trash2 } from "lucide-react";
 import ChatPopup from "../../../components/ChatPopup";
 import { ClientService } from "../../../services/clientService";
@@ -47,6 +48,7 @@ function TPInput({ className = "", ...props }) {
 }
 
 export default function ProjectList() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [chatCourseId, setChatCourseId] = useState(null);
   const [courses, setCourses] = useState([]);
@@ -95,7 +97,7 @@ export default function ProjectList() {
     <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Header */}
       <header className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Project List</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t('client_dashboard.project_list.title')}</h1>
       </header>
 
       {/* Search */}
@@ -103,7 +105,7 @@ export default function ProjectList() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
         <TPInput
           type="search"
-          placeholder="Search"
+          placeholder={t('client_dashboard.project_list.search_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           aria-label="Search courses"
@@ -115,12 +117,12 @@ export default function ProjectList() {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Course Title</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Completion</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Milestone</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Time Remaining</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Actions</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.title')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.completion')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.status')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.milestone')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.time_remaining')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('client_dashboard.project_list.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -149,14 +151,14 @@ export default function ProjectList() {
                     <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                       <Trash2 className="h-4 w-4 text-gray-500" />
                     </TPButton>
-                    <TPButton onClick={() => handleOpenChat(course.id)}>Messages</TPButton>
+                    <TPButton onClick={() => handleOpenChat(course.id)}>{t('client_dashboard.project_list.buttons.messages')}</TPButton>
                   </div>
                 </td>
               </tr>
             ))}
             {filteredCourses.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-6 py-10 text-center text-gray-500">No Projects found.</td>
+                <td colSpan={6} className="px-6 py-10 text-center text-gray-500">{t('client_dashboard.project_list.table.empty')}</td>
               </tr>
             )}
           </tbody>
@@ -168,8 +170,8 @@ export default function ProjectList() {
         {filteredCourses.map((course) => (
           <div key={course.id} className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
             <h3 className="font-semibold text-gray-900">{course.title}</h3>
-            <p className="text-sm text-gray-500 mt-1">Milestone: {course.lastAccessed}</p>
-            <p className="text-sm text-gray-500">Time Remaining: {course.timeRemaining}</p>
+            <p className="text-sm text-gray-500 mt-1">{t('client_dashboard.project_list.table.milestone')}: {course.lastAccessed}</p>
+            <p className="text-sm text-gray-500">{t('client_dashboard.project_list.table.time_remaining')}: {course.timeRemaining}</p>
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center space-x-2 text-sm text-gray-500">
                 <span>{course.completion}%</span>
@@ -181,21 +183,21 @@ export default function ProjectList() {
                 <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                   <Trash2 className="h-4 w-4 text-gray-500" />
                 </TPButton>
-                <TPButton size="sm" onClick={() => handleOpenChat(course.id)}>Msg</TPButton>
+                <TPButton size="sm" onClick={() => handleOpenChat(course.id)}>{t('client_dashboard.project_list.buttons.msg')}</TPButton>
               </div>
             </div>
           </div>
         ))}
         {filteredCourses.length === 0 && (
-          <p className="text-center text-gray-500 py-6">No Projects found.</p>
+          <p className="text-center text-gray-500 py-6">{t('client_dashboard.project_list.table.empty')}</p>
         )}
       </div>
 
       {/* Pagination */}
       <div className="flex flex-col sm:flex-row justify-between items-center gap-2  px-4 py-3 bg-white rounded-lg border border-gray-200 shadow-sm">
-        <TPButton variant="outline">Previous</TPButton>
-        <span className="text-sm text-gray-700">Page 1 of 10</span>
-        <TPButton variant="outline">Next</TPButton>
+        <TPButton variant="outline">{t('client_dashboard.project_list.buttons.previous')}</TPButton>
+        <span className="text-sm text-gray-700">{t('client_dashboard.project_list.page_info')}</span>
+        <TPButton variant="outline">{t('client_dashboard.project_list.buttons.next')}</TPButton>
       </div>
 
       {/* Chat Popup */}

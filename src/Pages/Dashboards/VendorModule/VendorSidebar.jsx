@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { LogOut, Menu, X } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -55,6 +56,7 @@ function SidebarMenuButton({ children, isActive, to, collapsed }) {
 }
 
 export default function VendorSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const activePath = location.pathname;
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -89,10 +91,10 @@ export default function VendorSidebar() {
 
   const navItems = [
     {
-      section: "HOME",
+      section: t('vendor_dashboard.sidebar.home'),
       items: [
         {
-          title: "Dashboard",
+          title: t('vendor_dashboard.sidebar.dashboard'),
           url: "/vendor/dashboard",
           icon: (
             <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -101,7 +103,7 @@ export default function VendorSidebar() {
           ),
         },
         {
-          title: "Listings",
+          title: t('vendor_dashboard.sidebar.listings'),
           url: "/vendor/dashboard/listings",
           icon: (
             <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -110,7 +112,7 @@ export default function VendorSidebar() {
           ),
         },
         {
-          title: "Orders",
+          title: t('vendor_dashboard.sidebar.orders'),
           url: "/vendor/dashboard/orders",
           icon: (
             <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -119,7 +121,7 @@ export default function VendorSidebar() {
           ),
         },
         {
-          title: "Payouts",
+          title: t('vendor_dashboard.sidebar.payouts'),
           url: "/vendor/dashboard/payouts",
           icon: (
             <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +130,7 @@ export default function VendorSidebar() {
           ),
         },
         {
-          title: "Ads",
+          title: t('vendor_dashboard.sidebar.ads'),
           url: "/vendor/dashboard/ads",
           icon: (
             <svg width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">

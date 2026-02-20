@@ -5,9 +5,10 @@ import iphoneProduct from "../assets/iphoneProduct.jpg";
 import mobile from "../assets/mobile.jpg";
 import Laptop from "../assets/Laptop.jpg";
 import ComputerBookingForm from "./ComputerRentalBooking/ComputerBookingForm";
+import { useTranslation } from "react-i18next";
 
 // Updated RentalCard to show pricing for both Weekly and Monthly
-const RentalCard = ({ imageSrc, imageAlt, name, weeklyRate, monthlyRate, onRent }) => {
+const RentalCard = ({ imageSrc, imageAlt, name, weeklyRate, monthlyRate, onRent, weeklyLabel, monthlyLabel, rentBtnText }) => {
   return (
     <div className="w-full bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-gray-300 hover:border-green-600 transition-all duration-300 hover:shadow-lg">
       <div className="relative w-full h-40 sm:h-48 md:h-60 bg-gray-100">
@@ -25,14 +26,14 @@ const RentalCard = ({ imageSrc, imageAlt, name, weeklyRate, monthlyRate, onRent 
           <div className="flex justify-between items-center bg-white p-2 rounded shadow-sm">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-500 uppercase font-semibold">Weekly</span>
+              <span className="text-sm text-gray-500 uppercase font-semibold">{weeklyLabel}</span>
             </div>
             <span className="text-lg font-bold text-green-600">{weeklyRate}</span>
           </div>
           <div className="flex justify-between items-center bg-white p-2 rounded shadow-sm">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-500 uppercase font-semibold">Monthly</span>
+              <span className="text-sm text-gray-500 uppercase font-semibold">{monthlyLabel}</span>
             </div>
             <span className="text-lg font-bold text-green-600">{monthlyRate}</span>
           </div>
@@ -43,7 +44,7 @@ const RentalCard = ({ imageSrc, imageAlt, name, weeklyRate, monthlyRate, onRent 
             onClick={() => onRent(name)}
             className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
           >
-            Rent Now
+            {rentBtnText}
           </button>
         </div>
       </div>
@@ -52,6 +53,7 @@ const RentalCard = ({ imageSrc, imageAlt, name, weeklyRate, monthlyRate, onRent 
 };
 
 export default function CorporateRentalProduct() {
+  const { t } = useTranslation();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -69,21 +71,21 @@ export default function CorporateRentalProduct() {
     {
       imageSrc: iphoneProduct,
       imageAlt: "iPhone 14",
-      name: "iPhone 14",
+      name: t('corporate_sales.rental.products.iphone14.name'),
       weeklyRate: "350,000 GNF",
       monthlyRate: "1,200,000 GNF",
     },
     {
       imageSrc: mobile,
       imageAlt: "Samsung Galaxy S23",
-      name: "Samsung Galaxy S23",
+      name: t('corporate_sales.rental.products.s23.name'),
       weeklyRate: "300,000 GNF",
       monthlyRate: "1,000,000 GNF",
     },
     {
       imageSrc: mobile, // Reuse or find better image
       imageAlt: "Pixel 7 Pro",
-      name: "Google Pixel 7 Pro",
+      name: t('corporate_sales.rental.products.pixel7.name'),
       weeklyRate: "320,000 GNF",
       monthlyRate: "1,100,000 GNF",
     },
@@ -94,21 +96,21 @@ export default function CorporateRentalProduct() {
     {
       imageSrc: Laptop,
       imageAlt: "Basic Laptop",
-      name: "Basic Laptop (i5/8GB)",
+      name: t('corporate_sales.rental.products.basic_laptop.name'),
       weeklyRate: "250,000 GNF",
       monthlyRate: "900,000 GNF",
     },
     {
       imageSrc: Laptop,
       imageAlt: "Standard Laptop",
-      name: "Standard Laptop (i7/16GB)",
+      name: t('corporate_sales.rental.products.standard_laptop.name'),
       weeklyRate: "350,000 GNF",
       monthlyRate: "1,200,000 GNF",
     },
     {
       imageSrc: Laptop,
       imageAlt: "Premium Laptop",
-      name: "Premium Workstation",
+      name: t('corporate_sales.rental.products.premium_laptop.name'),
       weeklyRate: "500,000 GNF",
       monthlyRate: "1,800,000 GNF",
     },
@@ -119,7 +121,7 @@ export default function CorporateRentalProduct() {
       {showBookingForm ? (
         <div className="px-4 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
-            Rental Booking for: {selectedProduct}
+            {t('corporate_sales.rental.booking_title', { product: selectedProduct })}
           </h1>
           <ComputerBookingForm />
           <div className="mt-6">
@@ -127,7 +129,7 @@ export default function CorporateRentalProduct() {
               onClick={handleBackToProducts}
               className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg"
             >
-              Back to Rental Options
+              {t('corporate_sales.rental.back_to_rental')}
             </button>
           </div>
         </div>
@@ -135,19 +137,22 @@ export default function CorporateRentalProduct() {
         <>
           <div className="flex flex-col md:flex-row items-center justify-between px-4 md:px-6 lg:px-8 max-w-screen-xl mx-auto mb-8 gap-4">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Rental Options
+              {t('corporate_sales.rental.title')}
             </h1>
           </div>
 
           {/* Smartphones Section */}
           <section className="px-4 md:px-6 lg:px-8 mb-12 max-w-screen-xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 border-l-4 border-green-500 pl-3">Smartphones</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 border-l-4 border-green-500 pl-3">{t('corporate_sales.rental.smartphones')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
               {smartphones.map((product) => (
                 <RentalCard
                   key={product.name}
                   {...product}
                   onRent={handleRentNow}
+                  weeklyLabel={t('corporate_sales.rental.weekly')}
+                  monthlyLabel={t('corporate_sales.rental.monthly')}
+                  rentBtnText={t('corporate_sales.rental.rent_now')}
                 />
               ))}
             </div>
@@ -156,7 +161,7 @@ export default function CorporateRentalProduct() {
           {/* Laptops Section */}
           <section className="px-4 md:px-6 lg:px-8 mb-12 max-w-screen-xl mx-auto">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-500 pl-3">
-              Laptops & Computers
+              {t('corporate_sales.rental.laptops')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
               {laptops.map((product) => (
@@ -164,6 +169,9 @@ export default function CorporateRentalProduct() {
                   key={product.name}
                   {...product}
                   onRent={handleRentNow}
+                  weeklyLabel={t('corporate_sales.rental.weekly')}
+                  monthlyLabel={t('corporate_sales.rental.monthly')}
+                  rentBtnText={t('corporate_sales.rental.rent_now')}
                 />
               ))}
             </div>
@@ -179,13 +187,13 @@ export default function CorporateRentalProduct() {
 
             <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-screen-xl mx-auto">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8">
-                Bulk orders needed? Contact our sales team.
+                {t('corporate_sales.rental.cta.title')}
               </h2>
               <button
                 onClick={() => window.location.href = '/contact'}
                 className="bg-[#228B22] hover:bg-[#1e7a1e] text-white px-8 py-3 rounded-full text-base sm:text-lg font-semibold flex items-center gap-2"
               >
-                Contact Sales <ArrowRight className="h-5 w-5" />
+                {t('corporate_sales.rental.cta.button')} <ArrowRight className="h-5 w-5" />
               </button>
             </div>
           </section>

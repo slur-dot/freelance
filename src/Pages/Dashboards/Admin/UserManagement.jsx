@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 export default function UserManagement() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("userName");
@@ -88,14 +90,14 @@ export default function UserManagement() {
       <div className="w-full">
         {/* Header */}
         <div className="p-6 pb-4" style={{ backgroundColor: '#FCFCFD' }}>
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">User Management</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('admin_dashboard.user_management.title')}</h1>
 
           {/* Search Bar */}
           <div className="relative mx-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('admin_dashboard.user_management.search_placeholder')}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -119,23 +121,23 @@ export default function UserManagement() {
                     onClick={() => handleSort("displayName")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>User Name</span>
+                      <span>{t('admin_dashboard.user_management.table.headers.name')}</span>
                       {sortField === "displayName" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Total Completed Order
+                    {t('admin_dashboard.user_management.table.headers.completed_orders')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Creation Date
+                    {t('admin_dashboard.user_management.table.headers.creation_date')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Total Money spent
+                    {t('admin_dashboard.user_management.table.headers.spent')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('admin_dashboard.user_management.table.headers.actions')}
                   </th>
                 </tr>
               </thead>
@@ -166,7 +168,7 @@ export default function UserManagement() {
                           disabled={loading}
                           className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          {loading ? "Processing..." : "Unban User"}
+                          {loading ? t('admin_dashboard.user_management.table.actions.processing') : t('admin_dashboard.user_management.table.actions.unban')}
                         </button>
                       ) : (
                         <button
@@ -174,7 +176,7 @@ export default function UserManagement() {
                           disabled={loading}
                           className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          {loading ? "Processing..." : "Ban User"}
+                          {loading ? t('admin_dashboard.user_management.table.actions.processing') : t('admin_dashboard.user_management.table.actions.ban')}
                         </button>
                       )}
                     </td>
@@ -192,11 +194,11 @@ export default function UserManagement() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {t('admin_dashboard.user_management.pagination.previous')}
               </button>
 
               <span className="text-sm font-medium text-gray-700">
-                Page {currentPage} of {totalPages}
+                {t('admin_dashboard.user_management.pagination.page_info', { current: currentPage, total: totalPages })}
               </span>
 
               <button
@@ -204,7 +206,7 @@ export default function UserManagement() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {t('admin_dashboard.user_management.pagination.next')}
               </button>
             </div>
           </div>

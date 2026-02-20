@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, ChevronDown, Trash2, Plus, Upload } from "lucide-react";
 import { AdService } from "../../../services/adService";
 import { auth } from "../../../firebaseConfig";
 
 export default function AdsManagement() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("adTitle");
@@ -118,7 +120,7 @@ export default function AdsManagement() {
   const closeModal = () => { setShowModal(false); setFormData({ title: "", subtitle: "", cta: "", type: "banner" }); setFiles([]); };
 
   const deleteAd = async (adId) => {
-    if (!window.confirm('Delete this ad?')) return;
+    if (!window.confirm(t('vendor_dashboard.ads.delete_confirm'))) return;
     try {
       await AdService.deleteAd(adId);
       setAds(prev => prev.filter(ad => ad.id !== adId));
@@ -152,13 +154,13 @@ export default function AdsManagement() {
         {/* Header */}
         <div className="p-6 pb-4">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-800">Ads Management</h1>
+            <h1 className="text-4xl font-bold text-gray-800">{t('vendor_dashboard.ads.title')}</h1>
             <button
               onClick={openModal}
               className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-5 w-5" />
-              Add new Ad
+              {t('vendor_dashboard.ads.add_btn')}
             </button>
           </div>
           {/* Search Bar */}
@@ -166,7 +168,7 @@ export default function AdsManagement() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('vendor_dashboard.ads.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
@@ -181,14 +183,14 @@ export default function AdsManagement() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Image
+                    {t('vendor_dashboard.ads.table.image')}
                   </th>
                   <th
                     className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSort("adTitle")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Ad Title</span>
+                      <span>{t('vendor_dashboard.ads.table.title')}</span>
                       {sortField === "adTitle" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
@@ -199,7 +201,7 @@ export default function AdsManagement() {
                     onClick={() => handleSort("adSubtitle")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Ad subtitle</span>
+                      <span>{t('vendor_dashboard.ads.table.subtitle')}</span>
                       {sortField === "adSubtitle" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
@@ -210,17 +212,17 @@ export default function AdsManagement() {
                     onClick={() => handleSort("cta")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>CTA</span>
+                      <span>{t('vendor_dashboard.ads.table.cta')}</span>
                       {sortField === "cta" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Status
+                    {t('vendor_dashboard.ads.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('vendor_dashboard.ads.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -258,11 +260,11 @@ export default function AdsManagement() {
                         </button>
                         {ad.status === 'active' ? (
                           <button className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-colors" onClick={() => toggleAd(ad.id, 'inactive')}>
-                            Deactivate
+                            {t('vendor_dashboard.ads.deactivate')}
                           </button>
                         ) : (
                           <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors" onClick={() => toggleAd(ad.id, 'active')}>
-                            Activate
+                            {t('vendor_dashboard.ads.activate')}
                           </button>
                         )}
                       </div>
@@ -270,7 +272,7 @@ export default function AdsManagement() {
                   </tr>
                 ))}
                 {paginatedAds.length === 0 && (
-                  <tr><td colSpan={6} className="text-center p-4 text-gray-500">No ads found.</td></tr>
+                  <tr><td colSpan={6} className="text-center p-4 text-gray-500">{t('vendor_dashboard.ads.no_ads')}</td></tr>
                 )}
               </tbody>
             </table>
@@ -314,8 +316,8 @@ export default function AdsManagement() {
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-start">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Add Advertisement</h2>
-                <p className="text-gray-600 mt-1">Complete the Advertisement form to add your Ad</p>
+                <h2 className="text-2xl font-bold text-gray-800">{t('vendor_dashboard.ads.create_modal.title')}</h2>
+                <p className="text-gray-600 mt-1">{t('vendor_dashboard.ads.create_modal.desc')}</p>
               </div>
               <button
                 onClick={closeModal}
@@ -331,7 +333,7 @@ export default function AdsManagement() {
                 {/* Title Field */}
                 <div>
                   <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                    Title
+                    {t('vendor_dashboard.ads.create_modal.title_label')}
                   </label>
                   <input
                     type="text"
@@ -348,7 +350,7 @@ export default function AdsManagement() {
                 {/* Subtitle Field */}
                 <div>
                   <label htmlFor="subtitle" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subtitle
+                    {t('vendor_dashboard.ads.create_modal.subtitle_label')}
                   </label>
                   <textarea
                     id="subtitle"
@@ -365,7 +367,7 @@ export default function AdsManagement() {
                 {/* CTA Field */}
                 <div>
                   <label htmlFor="cta" className="block text-sm font-medium text-gray-700 mb-2">
-                    CTA
+                    {t('vendor_dashboard.ads.create_modal.cta_label')}
                   </label>
                   <input
                     type="text"
@@ -382,13 +384,13 @@ export default function AdsManagement() {
                 {/* File Upload Field */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Ad Image
+                    {t('vendor_dashboard.ads.create_modal.image_label')}
                   </label>
                   <div className="flex items-center justify-center w-full">
                     <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <Upload className="w-8 h-8 text-gray-500 mb-2" />
-                        <p className="text-sm text-gray-500"><span className="font-semibold">Click to upload</span></p>
+                        <p className="text-sm text-gray-500"><span className="font-semibold">{t('vendor_dashboard.ads.create_modal.click_upload')}</span></p>
                       </div>
                       <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                     </label>
@@ -407,13 +409,13 @@ export default function AdsManagement() {
                   onClick={closeModal}
                   className="px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Cancel
+                  {t('vendor_dashboard.ads.create_modal.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors"
                 >
-                  Add Advertisement
+                  {t('vendor_dashboard.ads.create_modal.create')}
                 </button>
               </div>
             </form>

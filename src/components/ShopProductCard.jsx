@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFire } from 'react-icons/fa';
 import PriceDisplay from './PriceDisplay';
+import { useTranslation } from "react-i18next";
 
 const ShopProductCard = ({ product, onAddToCart }) => {
+    const { t } = useTranslation();
     return (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300 flex flex-col h-full overflow-hidden p-3">
             <Link to={`/shop/product/${product.id}`} className="block relative">
@@ -63,7 +65,7 @@ const ShopProductCard = ({ product, onAddToCart }) => {
 
                     <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50 lg:border-none lg:pt-0">
                         <div className="text-sm text-gray-500">
-                            <span className="text-gray-400">Rent</span> <span className="text-gray-900 font-semibold"><PriceDisplay amount={product.rentPrice} size="sm" showSecondary={false} /></span> <span className="text-gray-400">/month</span>
+                            <span className="text-gray-400">{t('shop.product.rent')}</span> <span className="text-gray-900 font-semibold"><PriceDisplay amount={product.rentPrice} size="sm" showSecondary={false} /></span> <span className="text-gray-400">{t('shop.product.per_month')}</span>
                         </div>
 
                         <button
@@ -73,7 +75,7 @@ const ShopProductCard = ({ product, onAddToCart }) => {
                             }}
                             className="bg-[#15803D] hover:bg-[#166534] text-white py-2 px-4 rounded-lg text-sm font-semibold transition-colors"
                         >
-                            Add to Cart
+                            {t('shop.product.add_to_cart')}
                         </button>
                     </div>
                 </div>

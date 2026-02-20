@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Info, Upload, Star, Edit, Lock, Trash2, Eye, EyeOff } from "lucide-react";
 import AlexandraImg from "../../../assets/Alexandra.png";
@@ -54,6 +55,7 @@ function AvatarImage({ src, alt }) {
 
 // 🔹 Profile Card Component
 function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDeleteAccount }) {
+  const { t } = useTranslation();
   const [avatar, setAvatar] = useState(vendor?.avatar || DefaultAvatar);
   const progress = Math.round(vendor?.status?.profileCompletion || 0);
   const [isVendorOwner] = useState(true);
@@ -88,7 +90,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
 
   return (
     <Card className="p-4 md:col-span-3">
-      <h3 className="text-lg font-semibold mb-3">Profile</h3>
+      <h3 className="text-lg font-semibold mb-3">{t('vendor_dashboard.profile.title')}</h3>
       <div className="flex items-start gap-4 flex-wrap">
         <div className="relative">
           <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
@@ -102,7 +104,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
           )}
         </div>
         <div className="w-full text-sm italic text-gray-600 mt-1">
-          Add a photo to inspire trust!
+          {t('vendor_dashboard.profile.upload_photo')}
         </div>
 
         <div className="flex-grow">
@@ -126,7 +128,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
       </div>
 
       <div className="mt-3">
-        <div className="text-sm mb-1">Profile {progress}% complete</div>
+        <div className="text-sm mb-1">{t('vendor_dashboard.profile.complete_progress', { progress })}</div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div className="bg-green-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
         </div>
@@ -134,16 +136,16 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
 
       <div className="flex gap-2 mt-3 flex-wrap">
         {progress === 100 && (
-          <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">Profile complete</span>
+          <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">{t('vendor_dashboard.profile.profile_complete')}</span>
         )}
         {vendor?.status?.verified && (
-          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">Verified Vendor</span>
+          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">{t('vendor_dashboard.profile.verified_vendor')}</span>
         )}
         {vendor?.businessLicense?.licenseNumber && (
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">License: {vendor.businessLicense.licenseNumber}</span>
+          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('vendor_dashboard.profile.license', { number: vendor.businessLicense.licenseNumber })}</span>
         )}
         {vendor?.paymentMethod?.type && (
-          <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">Payment: {vendor.paymentMethod.type} {vendor.paymentMethod.number}</span>
+          <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{t('vendor_dashboard.profile.payment', { type: vendor.paymentMethod.type, number: vendor.paymentMethod.number })}</span>
         )}
       </div>
 
@@ -163,7 +165,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
             onClick={onEditProfile}
           >
             <Edit className="h-3 w-3 mr-1" />
-            Edit Profile
+            {t('vendor_dashboard.profile.edit')}
           </Button>
           <Button
             variant="outline"
@@ -171,7 +173,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
             onClick={onChangePassword}
           >
             <Lock className="h-3 w-3 mr-1" />
-            Change Password
+            {t('vendor_dashboard.profile.change_password')}
           </Button>
         </div>
 
@@ -181,7 +183,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
           onClick={onDeleteAccount}
         >
           <Trash2 className="h-3 w-3 mr-1" />
-          Delete Account
+          {t('vendor_dashboard.profile.delete_account')}
         </Button>
       </div>
     </Card>
@@ -190,6 +192,7 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
 
 // Edit Profile Modal Component
 function EditProfileModal({ vendorData, onClose, onUpdate }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: vendorData?.name || '',
     businessName: vendorData?.businessName || '',
@@ -247,53 +250,53 @@ function EditProfileModal({ vendorData, onClose, onUpdate }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('vendor_dashboard.modals.edit_profile.title')}</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.name')}</label>
               <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.business_name')}</label>
               <input type="text" name="businessName" value={formData.businessName} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.location')}</label>
               <input type="text" name="location" value={formData.location} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.email')}</label>
               <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.phone')}</label>
               <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Payment Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.payment_number')}</label>
               <input type="tel" name="paymentNumber" value={formData.paymentNumber} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Social Links</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('vendor_dashboard.modals.edit_profile.social_links')}</label>
             <div className="space-y-2">
-              <input type="url" name="linkedin" value={formData.linkedin} onChange={handleInputChange} placeholder="LinkedIn URL" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <input type="url" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder="Facebook URL" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder="Website URL" className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+              <input type="url" name="linkedin" value={formData.linkedin} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.linkedin')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+              <input type="url" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.facebook')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
+              <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.website')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
             </div>
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button type="submit" className="flex-1" disabled={loading}>{loading ? 'Updating...' : 'Update Profile'}</Button>
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>Cancel</Button>
+            <Button type="submit" className="flex-1" disabled={loading}>{loading ? t('vendor_dashboard.modals.edit_profile.updating_btn') : t('vendor_dashboard.modals.edit_profile.update_btn')}</Button>
+            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>{t('vendor_dashboard.modals.edit_profile.cancel')}</Button>
           </div>
         </form>
       </div>
@@ -303,6 +306,7 @@ function EditProfileModal({ vendorData, onClose, onUpdate }) {
 
 // Change Password Modal Component
 function ChangePasswordModal({ vendorData, onClose }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
@@ -369,28 +373,28 @@ function ChangePasswordModal({ vendorData, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 className="text-lg font-semibold mb-4">Change Password</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('vendor_dashboard.modals.change_password.title')}</h3>
         <p className="text-sm text-gray-600 mb-4">
-          Please set a new password for security. Minimum 10 characters, 1 number, 1 special character.
+          {t('vendor_dashboard.modals.change_password.desc')}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
-            <input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleInputChange} placeholder="Current Password" className={`w-full px-3 py-2 border rounded-md ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.current')} className={`w-full px-3 py-2 border rounded-md ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.currentPassword && <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>}
           </div>
           <div>
-            <input type="password" name="newPassword" value={formData.newPassword} onChange={handleInputChange} placeholder="New Password" className={`w-full px-3 py-2 border rounded-md ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="password" name="newPassword" value={formData.newPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.new')} className={`w-full px-3 py-2 border rounded-md ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.newPassword && <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>}
           </div>
           <div>
-            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder="Confirm New Password" className={`w-full px-3 py-2 border rounded-md ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`} />
+            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.confirm')} className={`w-full px-3 py-2 border rounded-md ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`} />
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
 
           <div className="flex gap-2 mt-4">
-            <Button type="submit" className="flex-1" disabled={loading}>{loading ? 'Changing...' : 'Change Password'}</Button>
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>Cancel</Button>
+            <Button type="submit" className="flex-1" disabled={loading}>{loading ? t('vendor_dashboard.modals.change_password.changing_btn') : t('vendor_dashboard.modals.change_password.change_btn')}</Button>
+            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>{t('vendor_dashboard.modals.change_password.cancel')}</Button>
           </div>
         </form>
       </div>
@@ -398,7 +402,8 @@ function ChangePasswordModal({ vendorData, onClose }) {
   );
 }
 
-export default function VendorDashbaord() {
+export default function VendorDashboard() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const [showSerialModal, setShowSerialModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -477,7 +482,7 @@ export default function VendorDashbaord() {
 
   const handleDeleteAccount = async () => {
     if (!vendor?.id) return;
-    if (!window.confirm('Are you sure you want to delete your vendor account? This action cannot be undone and will permanently remove all your data.')) return;
+    if (!window.confirm(t('vendor_dashboard.profile.delete_confirm'))) return;
 
     try {
       await VendorService.deleteVendor(vendor.id);
@@ -528,7 +533,7 @@ export default function VendorDashbaord() {
   };
 
   const handleDeleteSerial = (id) => {
-    if (window.confirm("Are you sure you want to delete this serial number?")) {
+    if (window.confirm(t('vendor_dashboard.modals.serial_numbers.delete_confirm'))) {
       setSerialNumbers(serialNumbers.filter(s => s.id !== id));
     }
   };
@@ -548,7 +553,7 @@ export default function VendorDashbaord() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 px-4">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 max-w-7xl mx-auto">Dashboard</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 max-w-7xl mx-auto">{t('vendor_dashboard.overview.title')}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
         {/* Profile Section */}
@@ -562,31 +567,31 @@ export default function VendorDashbaord() {
 
         {/* Orders Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Total Orders</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.total_orders')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Orders placed</p>
+              <p className="text-sm font-medium text-gray-500">{t('vendor_dashboard.overview.orders_placed')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{totalOrders}</div>
-              <Button className="mt-4 w-fit" onClick={() => navigate("/vendor/dashboard/orders")}>View Orders</Button>
+              <Button className="mt-4 w-fit" onClick={() => navigate("/vendor/dashboard/orders")}>{t('vendor_dashboard.overview.view_orders')}</Button>
             </CardContent>
           </Card>
         </div>
 
         {/* Listings Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Total Listings</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.total_listings')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Active listings</p>
+              <p className="text-sm font-medium text-gray-500">{t('vendor_dashboard.overview.active_listings')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{totalListings}</div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/vendor/dashboard/listings")}>
-                View Listings
+                {t('vendor_dashboard.overview.view_listings')}
               </Button>
             </CardContent>
           </Card>
@@ -594,16 +599,16 @@ export default function VendorDashbaord() {
 
         {/* Serial Number Management */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Serial Numbers</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.serial_numbers')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Manage Product Serial Numbers</p>
+              <p className="text-sm font-medium text-gray-500">{t('vendor_dashboard.overview.manage_serials')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-3xl md:text-4xl font-bold">{serialNumbers.length} Products</div>
+              <div className="text-3xl md:text-4xl font-bold">{t('vendor_dashboard.overview.products_count', { count: serialNumbers.length })}</div>
               <Button className="mt-4 w-fit" onClick={() => setShowSerialModal(true)}>
-                Manage Serial Numbers
+                {t('vendor_dashboard.overview.manage_serials_btn')}
               </Button>
             </CardContent>
           </Card>
@@ -611,23 +616,23 @@ export default function VendorDashbaord() {
 
         {/* Orders Section (Left) */}
         <div className="md:col-span-2 flex flex-col">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Current Order Status</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.current_order_status')}</h3>
           <Card className="h-auto md:h-[520px]">
             <CardContent className="flex flex-col items-center justify-center p-4 text-center h-full">
               <div className="w-full text-left mb-4 bg-gray-50 overflow-x-auto">
                 <div className="grid grid-cols-6 min-w-[600px] gap-4 font-semibold text-sm text-gray-600 border-b border-gray-100 p-4">
-                  <div>Date</div>
-                  <div>Name</div>
-                  <div>Product</div>
-                  <div>Serial Number</div>
-                  <div>Status</div>
-                  <div>Price</div>
+                  <div>{t('vendor_dashboard.overview.table.date')}</div>
+                  <div>{t('vendor_dashboard.overview.table.name')}</div>
+                  <div>{t('vendor_dashboard.overview.table.product')}</div>
+                  <div>{t('vendor_dashboard.overview.table.serial')}</div>
+                  <div>{t('vendor_dashboard.overview.table.status')}</div>
+                  <div>{t('vendor_dashboard.overview.table.price')}</div>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center flex-grow">
-                <h4 className="text-lg md:text-xl font-bold mb-2">Get Started with Orders!</h4>
+                <h4 className="text-lg md:text-xl font-bold mb-2">{t('vendor_dashboard.overview.get_started_orders')}</h4>
                 <p className="text-gray-500 w-full">
-                  You'll find all your Orders info here once you complete your first order.
+                  {t('vendor_dashboard.overview.orders_info')}
                 </p>
               </div>
             </CardContent>
@@ -636,13 +641,13 @@ export default function VendorDashbaord() {
 
         {/* Reviews Section (Right) */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Reviews</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.reviews')}</h3>
           <Card className="flex-grow">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
                 {reviews.length === 0 ? (
                   <div className="p-4 text-center text-gray-500 italic">
-                    No reviews yet.
+                    {t('vendor_dashboard.overview.no_reviews')}
                   </div>
                 ) : (
                   reviews.map((review) => (
@@ -676,7 +681,7 @@ export default function VendorDashbaord() {
                   className="w-full"
                   onClick={() => setShowChatWidget(true)}
                 >
-                  MANAGE MESSAGES
+                  {t('vendor_dashboard.overview.manage_messages')}
                 </Button>
               </div>
             </CardContent>
@@ -692,7 +697,7 @@ export default function VendorDashbaord() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Serial Number Management</h2>
+              <h2 className="text-xl font-bold">{t('vendor_dashboard.modals.serial_numbers.title')}</h2>
               <button
                 onClick={() => setShowSerialModal(false)}
                 className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -705,10 +710,10 @@ export default function VendorDashbaord() {
               <table className="w-full border-collapse border border-gray-300">
                 <thead>
                   <tr className="bg-gray-100">
-                    <th className="border border-gray-300 px-4 py-2 text-left">Product</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Serial Number</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Status</th>
-                    <th className="border border-gray-300 px-4 py-2 text-left">Actions</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">{t('vendor_dashboard.modals.serial_numbers.product')}</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">{t('vendor_dashboard.modals.serial_numbers.serial')}</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">{t('vendor_dashboard.modals.serial_numbers.status')}</th>
+                    <th className="border border-gray-300 px-4 py-2 text-left">{t('vendor_dashboard.modals.serial_numbers.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -751,13 +756,13 @@ export default function VendorDashbaord() {
                 onClick={() => setShowSerialModal(false)}
                 className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                Close
+                {t('vendor_dashboard.modals.serial_numbers.close')}
               </button>
               <button
                 onClick={() => setShowAddModal(true)}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
               >
-                Add New Serial Number
+                {t('vendor_dashboard.modals.serial_numbers.add_btn')}
               </button>
             </div>
           </div>
@@ -770,7 +775,7 @@ export default function VendorDashbaord() {
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">
-                {editingId ? "Edit Serial Number" : "Add New Serial Number"}
+                {editingId ? t('vendor_dashboard.modals.add_serial.edit_title') : t('vendor_dashboard.modals.add_serial.add_title')}
               </h2>
               <button
                 onClick={closeModals}
@@ -783,42 +788,44 @@ export default function VendorDashbaord() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Product Name
+                  {t('vendor_dashboard.modals.add_serial.product_label')}
                 </label>
                 <input
                   type="text"
                   value={newSerial.product}
                   onChange={(e) => setNewSerial({ ...newSerial, product: e.target.value })}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., iPhone 14 Pro"
+                  placeholder={t('vendor_dashboard.modals.add_serial.product_placeholder')}
                 />
               </div>
 
+
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Serial Number
+                  {t('vendor_dashboard.modals.add_serial.serial_label')}
                 </label>
                 <input
                   type="text"
                   value={newSerial.serialNumber}
                   onChange={(e) => setNewSerial({ ...newSerial, serialNumber: e.target.value })}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono"
-                  placeholder="e.g., IP14P256SB001234"
+                  placeholder={t('vendor_dashboard.modals.add_serial.serial_placeholder')}
                 />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status
+                  {t('vendor_dashboard.modals.add_serial.status_label')}
                 </label>
                 <select
                   value={newSerial.status}
                   onChange={(e) => setNewSerial({ ...newSerial, status: e.target.value })}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="Available">Available</option>
-                  <option value="Sold">Sold</option>
-                  <option value="Reserved">Reserved</option>
+                  <option value="Available">{t('vendor_dashboard.modals.add_serial.available')}</option>
+                  <option value="Sold">{t('vendor_dashboard.modals.add_serial.sold')}</option>
+                  <option value="Reserved">{t('vendor_dashboard.modals.add_serial.reserved')}</option>
                 </select>
               </div>
             </div>
@@ -828,13 +835,13 @@ export default function VendorDashbaord() {
                 onClick={closeModals}
                 className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                Cancel
+                {t('vendor_dashboard.modals.add_serial.cancel')}
               </button>
               <button
                 onClick={editingId ? handleUpdateSerial : handleAddSerial}
                 className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
               >
-                {editingId ? "Update" : "Add"} Serial Number
+                {editingId ? t('vendor_dashboard.modals.add_serial.update_btn') : t('vendor_dashboard.modals.add_serial.add_btn')}
               </button>
             </div>
           </div>

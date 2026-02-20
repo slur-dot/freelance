@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, ArrowUpDown, Trash2, Pencil } from "lucide-react";
 import { auth } from "../../../firebaseConfig";
 
@@ -63,6 +64,7 @@ import { FreelancerService } from "../../../services/freelancerService";
 // ... (existing imports)
 
 export default function RequestedCourses() {
+  const { t } = useTranslation();
   const [user, setUser] = useState(auth.currentUser);
   const FREELANCER_ID = user?.uid;
 
@@ -99,7 +101,7 @@ export default function RequestedCourses() {
           rawStatus: c.status || 'pending',
           price: typeof c.price === 'number' ? c.price : 0,
           requestedAtSeconds: c.requestDate?.seconds ?? null,
-          status: (c.status || 'pending').toLowerCase() === 'confirmed' ? 'Approved' : 'Under Review',
+          status: (c.status || 'pending').toLowerCase() === 'confirmed' ? t('requested_courses_page.modals.edit.status_options.approved') || 'Approved' : t('requested_courses_page.modals.edit.status_options.under_review') || 'Under Review',
           requestDate: c.requestDate ? new Date(c.requestDate.seconds ? c.requestDate.seconds * 1000 : c.requestDate).toLocaleDateString() : '-'
         }));
         if (isMounted) setCourses(mapped);
@@ -135,14 +137,14 @@ export default function RequestedCourses() {
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">Requested Courses</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-6">{t('requested_courses_page.title')}</h1>
       <RCCard className="p-4 md:p-6">
-        {loading && <div className="mb-4">Loading...</div>}
+        {loading && <div className="mb-4">{t('requested_courses_page.loading') || 'Loading...'}</div>}
         {error && !loading && <div className="mb-4 text-red-600">{error}</div>}
         {/* Search */}
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search" />
+          <RCInput placeholder={t('requested_courses_page.search_placeholder')} />
         </div>
 
         {/* Table */}
@@ -152,13 +154,13 @@ export default function RequestedCourses() {
               <RCTableRow>
                 <RCTableHead className="min-w-[150px]">
                   <div className="flex items-center gap-1">
-                    Course Title <ArrowUpDown className="h-4 w-4" />
+                    {t('requested_courses_page.table.course_title')} <ArrowUpDown className="h-4 w-4" />
                   </div>
                 </RCTableHead>
-                <RCTableHead className="min-w-[120px]">Category</RCTableHead>
-                <RCTableHead className="min-w-[100px]">Status</RCTableHead>
-                <RCTableHead className="min-w-[120px]">Request Date</RCTableHead>
-                <RCTableHead className="min-w-[100px]">Actions</RCTableHead>
+                <RCTableHead className="min-w-[120px]">{t('requested_courses_page.table.category')}</RCTableHead>
+                <RCTableHead className="min-w-[100px]">{t('requested_courses_page.table.status')}</RCTableHead>
+                <RCTableHead className="min-w-[120px]">{t('requested_courses_page.table.request_date')}</RCTableHead>
+                <RCTableHead className="min-w-[100px]">{t('requested_courses_page.table.actions')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -168,13 +170,13 @@ export default function RequestedCourses() {
                   <RCTableCell>{course.category}</RCTableCell>
                   <RCTableCell>
                     <div
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${course.status === "Approved"
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${(course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved'))
                         ? "bg-green-100 text-green-800"
                         : "bg-orange-100 text-orange-800"
                         }`}
                     >
                       <span
-                        className={`h-2 w-2 rounded-full ${course.status === "Approved" ? "bg-green-500" : "bg-orange-500"
+                        className={`h-2 w-2 rounded-full ${(course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved')) ? "bg-green-500" : "bg-orange-500"
                           }`}
                       />
                       {course.status}
@@ -199,9 +201,9 @@ export default function RequestedCourses() {
 
         {/* Pagination */}
         <div className="flex justify-between items-center mt-6 flex-wrap gap-4">
-          <RCButton variant="outline">Previous</RCButton>
-          <span className="text-sm text-gray-500">Page 1 of 10</span>
-          <RCButton>Next</RCButton>
+          <RCButton variant="outline">{t('requested_courses_page.pagination.previous')}</RCButton>
+          <span className="text-sm text-gray-500">{t('requested_courses_page.pagination.page_info', { current: 1, total: 10 })}</span>
+          <RCButton>{t('requested_courses_page.pagination.next')}</RCButton>
         </div>
       </RCCard>
 
@@ -209,10 +211,10 @@ export default function RequestedCourses() {
       {editOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Edit Requested Course</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('requested_courses_page.modals.edit.title')}</h3>
             <div className="space-y-3">
               <div>
-                <label className="text-sm text-gray-600">Title</label>
+                <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.course_title')}</label>
                 <input
                   className="w-full border rounded-md px-3 py-2 mt-1"
                   value={editForm.title}
@@ -220,7 +222,7 @@ export default function RequestedCourses() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600">Price (GNF)</label>
+                <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.price')}</label>
                 <input
                   type="number"
                   className="w-full border rounded-md px-3 py-2 mt-1"
@@ -229,20 +231,20 @@ export default function RequestedCourses() {
                 />
               </div>
               <div>
-                <label className="text-sm text-gray-600">Status</label>
+                <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.status')}</label>
                 <select
                   className="w-full border rounded-md px-3 py-2 mt-1"
                   value={editForm.status}
                   onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                 >
-                  <option value="pending">Pending</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="rejected">Rejected</option>
+                  <option value="pending">{t('requested_courses_page.modals.edit.status_options.pending') || 'Pending'}</option>
+                  <option value="confirmed">{t('requested_courses_page.modals.edit.status_options.confirmed') || 'Confirmed'}</option>
+                  <option value="rejected">{t('requested_courses_page.modals.edit.status_options.rejected') || 'Rejected'}</option>
                 </select>
               </div>
             </div>
             <div className="mt-6 flex items-center justify-end gap-2">
-              <RCButton variant="outline" onClick={() => setEditOpen(false)}>Cancel</RCButton>
+              <RCButton variant="outline" onClick={() => setEditOpen(false)}>{t('requested_courses_page.modals.edit.cancel')}</RCButton>
               <RCButton
                 onClick={async () => {
                   try {
@@ -260,7 +262,7 @@ export default function RequestedCourses() {
                         ...c,
                         ...updatedData,
                         rawStatus: editForm.status,
-                        status: editForm.status === 'confirmed' ? 'Approved' : 'Under Review'
+                        status: editForm.status === 'confirmed' ? (t('requested_courses_page.modals.edit.status_options.approved') || 'Approved') : (t('requested_courses_page.modals.edit.status_options.under_review') || 'Under Review')
                       }
                       : c
                     );
@@ -272,7 +274,7 @@ export default function RequestedCourses() {
                   }
                 }}
               >
-                Save Changes
+                {t('requested_courses_page.modals.edit.save')}
               </RCButton>
             </div>
           </div>

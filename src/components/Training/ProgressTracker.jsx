@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Circle, Award, Download, BookOpen } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 export default function ProgressTracker({ courseId, userId }) {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState({
     courseId: courseId,
     userId: userId,
@@ -66,13 +68,13 @@ export default function ProgressTracker({ courseId, userId }) {
     <div className="bg-white rounded-lg shadow-lg p-6">
       <div className="flex items-center gap-3 mb-6">
         <BookOpen className="h-6 w-6 text-blue-600" />
-        <h2 className="text-2xl font-bold">Course Progress</h2>
+        <h2 className="text-2xl font-bold">{t('training.progress.course_progress')}</h2>
       </div>
 
       {/* Overall Progress */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-blue-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-blue-800 mb-2">Lessons Progress</h3>
+          <h3 className="font-semibold text-blue-800 mb-2">{t('training.progress.lessons_progress')}</h3>
           <div className="flex items-center gap-3">
             <div className="flex-1 bg-blue-200 rounded-full h-3">
               <div
@@ -84,11 +86,11 @@ export default function ProgressTracker({ courseId, userId }) {
               {progress.completedLessons}/{progress.totalLessons}
             </span>
           </div>
-          <p className="text-sm text-blue-600 mt-1">{completionPercentage.toFixed(1)}% Complete</p>
+          <p className="text-sm text-blue-600 mt-1">{t('training.detail.progress.complete', { percent: completionPercentage.toFixed(1) })}</p>
         </div>
 
         <div className="bg-green-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-green-800 mb-2">Time Progress</h3>
+          <h3 className="font-semibold text-green-800 mb-2">{t('training.progress.time_progress')}</h3>
           <div className="flex items-center gap-3">
             <div className="flex-1 bg-green-200 rounded-full h-3">
               <div
@@ -97,38 +99,37 @@ export default function ProgressTracker({ courseId, userId }) {
               />
             </div>
             <span className="text-sm font-medium text-green-800">
-              {progress.watchedTime}/{progress.totalTime} min
+              {progress.watchedTime}/{progress.totalTime} {t('training.progress.minutes')}
             </span>
           </div>
-          <p className="text-sm text-green-600 mt-1">{timeProgressPercentage.toFixed(1)}% Watched</p>
+          <p className="text-sm text-green-600 mt-1">{t('training.detail.progress.watched', { percent: timeProgressPercentage.toFixed(1) })}</p>
         </div>
 
         <div className="bg-purple-50 p-4 rounded-lg">
-          <h3 className="font-semibold text-purple-800 mb-2">Certificates</h3>
+          <h3 className="font-semibold text-purple-800 mb-2">{t('training.progress.certificates')}</h3>
           <div className="flex items-center gap-2">
             <Award className="h-5 w-5 text-purple-600" />
             <span className="text-sm font-medium text-purple-800">
               {certificates.filter(c => c.earned).length}/{certificates.length}
             </span>
           </div>
-          <p className="text-sm text-purple-600 mt-1">Certificates Earned</p>
+          <p className="text-sm text-purple-600 mt-1">{t('training.detail.progress.earned')}</p>
         </div>
       </div>
 
       {/* Lessons List */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Course Lessons</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('training.detail.lessons.title')}</h3>
         <div className="space-y-3">
           {lessons.map((lesson) => (
             <div
               key={lesson.id}
-              className={`flex items-center gap-4 p-3 rounded-lg border-2 transition-all ${
-                lesson.current
-                  ? 'border-blue-500 bg-blue-50'
-                  : lesson.completed
+              className={`flex items-center gap-4 p-3 rounded-lg border-2 transition-all ${lesson.current
+                ? 'border-blue-500 bg-blue-50'
+                : lesson.completed
                   ? 'border-green-500 bg-green-50'
                   : 'border-gray-200 bg-gray-50'
-              }`}
+                }`}
             >
               <div className="flex-shrink-0">
                 {lesson.completed ? (
@@ -137,19 +138,19 @@ export default function ProgressTracker({ courseId, userId }) {
                   <Circle className="h-6 w-6 text-gray-400" />
                 )}
               </div>
-              
+
               <div className="flex-1">
                 <h4 className="font-medium">{lesson.title}</h4>
-                <p className="text-sm text-gray-600">{lesson.duration} minutes</p>
+                <p className="text-sm text-gray-600">{lesson.duration} {t('training.progress.minutes')}</p>
               </div>
-              
+
               <div className="flex-shrink-0">
                 {lesson.completed ? (
-                  <span className="text-green-600 text-sm font-medium">Completed</span>
+                  <span className="text-green-600 text-sm font-medium">{t('training.status.completed')}</span>
                 ) : lesson.current ? (
-                  <span className="text-blue-600 text-sm font-medium">Current</span>
+                  <span className="text-blue-600 text-sm font-medium">{t('training.status.current')}</span>
                 ) : (
-                  <span className="text-gray-500 text-sm">Locked</span>
+                  <span className="text-gray-500 text-sm">{t('training.status.locked')}</span>
                 )}
               </div>
             </div>
@@ -159,7 +160,7 @@ export default function ProgressTracker({ courseId, userId }) {
 
       {/* Resources */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-4">Downloadable Resources</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('training.progress.resources')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {resources.map((resource) => (
             <div
@@ -173,13 +174,12 @@ export default function ProgressTracker({ courseId, userId }) {
               </div>
               <button
                 onClick={() => handleResourceDownload(resource.id)}
-                className={`px-3 py-1 rounded text-sm ${
-                  resource.downloaded
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                }`}
+                className={`px-3 py-1 rounded text-sm ${resource.downloaded
+                  ? 'bg-green-100 text-green-700'
+                  : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                  }`}
               >
-                {resource.downloaded ? 'Downloaded' : 'Download'}
+                {resource.downloaded ? t('training.detail.resources.downloaded') : t('training.detail.resources.download')}
               </button>
             </div>
           ))}
@@ -188,32 +188,30 @@ export default function ProgressTracker({ courseId, userId }) {
 
       {/* Certificates */}
       <div>
-        <h3 className="text-lg font-semibold mb-4">Certificates</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('training.progress.certificates')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {certificates.map((certificate) => (
             <div
               key={certificate.id}
-              className={`p-4 border-2 rounded-lg ${
-                certificate.earned
-                  ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 bg-gray-50'
-              }`}
+              className={`p-4 border-2 rounded-lg ${certificate.earned
+                ? 'border-green-500 bg-green-50'
+                : 'border-gray-200 bg-gray-50'
+                }`}
             >
               <div className="flex items-center gap-3 mb-2">
-                <Award className={`h-5 w-5 ${
-                  certificate.earned ? 'text-green-600' : 'text-gray-400'
-                }`} />
+                <Award className={`h-5 w-5 ${certificate.earned ? 'text-green-600' : 'text-gray-400'
+                  }`} />
                 <h4 className="font-medium">{certificate.name}</h4>
               </div>
-              
+
               {certificate.earned ? (
                 <div className="space-y-2">
-                  <p className="text-sm text-green-600">Earned on {certificate.date}</p>
+                  <p className="text-sm text-green-600">{t('training.detail.certificates.earned_on', { date: certificate.date })}</p>
                   <button
                     onClick={() => handleCertificateDownload(certificate.id)}
                     className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
                   >
-                    Download Certificate
+                    {t('training.detail.certificates.download')}
                   </button>
                 </div>
               ) : (
@@ -227,7 +225,7 @@ export default function ProgressTracker({ courseId, userId }) {
                     </div>
                     <span className="text-sm text-gray-600">{certificate.progress}%</span>
                   </div>
-                  <p className="text-sm text-gray-600">Complete more lessons to earn this certificate</p>
+                  <p className="text-sm text-gray-600">{t('training.detail.certificates.complete_more')}</p>
                 </div>
               )}
             </div>

@@ -1,8 +1,10 @@
 import React from "react";
 import computerHero from "../assets/computerHero.jpg";
 import shopLaptop from "../assets/laptopdevice.png";
+import { useTranslation } from "react-i18next";
 
 const ComputerRentalHero = () => {
+  const { t } = useTranslation();
   return (
     <section className="relative w-full h-screen overflow-hidden">
       {/* Background Image with brightness filter */}
@@ -22,10 +24,10 @@ const ComputerRentalHero = () => {
       {/* Text Content */}
       <div className="relative z-30 flex flex-col items-center justify-center h-3/4 px-4 text-center">
         <h1 className="text-white text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-xs sm:max-w-xl md:max-w-4xl">
-          Rent Computers for Your Needs in Conakry
+          {t('computer_rental.hero.title')}
         </h1>
         <p className="text-white text-base sm:text-lg md:text-xl lg:text-2xl mt-4 max-w-sm sm:max-w-lg md:max-w-2xl -ml-2 sm:-ml-4 md:-ml-14 lg:-ml-50">
-          Hourly, Daily, or Weekly Rentals – Perfect for Short-Term Use
+          {t('computer_rental.hero.subtitle')}
         </p>
       </div>
 

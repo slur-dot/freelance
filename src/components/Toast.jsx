@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Toast = ({ message, isVisible, onClose }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
@@ -15,7 +17,7 @@ const Toast = ({ message, isVisible, onClose }) => {
   return (
     <div className="fixed top-5 right-5 bg-white border border-gray-300 rounded-lg p-4 shadow-lg z-50 flex items-start gap-3 max-w-sm animate-slide-in">
       <div className="flex-1">
-        <h4 className="text-sm font-semibold text-gray-900 mb-1">Added to Cart</h4>
+        <h4 className="text-sm font-semibold text-gray-900 mb-1">{t('toast.added_to_cart')}</h4>
         <p className="text-sm text-gray-600">{message}</p>
       </div>
       <button

@@ -4,7 +4,10 @@ import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
 
+import { useTranslation } from "react-i18next";
+
 const ComponentsStore = () => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
@@ -249,7 +252,7 @@ const ComponentsStore = () => {
       <div className={`lg:w-64 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
         <div className="bg-[#E5E7EB] p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Filters</h3>
+            <h3 className="text-lg font-semibold">{t('shop.filters.title')}</h3>
             <button
               onClick={() => setIsFilterOpen(false)}
               className="lg:hidden text-gray-500 hover:text-gray-700"
@@ -260,7 +263,7 @@ const ComponentsStore = () => {
 
           {/* Category Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Category</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.category')}</h4>
             {['Processors', 'Graphics Cards', 'Memory', 'Storage', 'Motherboards', 'Power Supplies', 'Cooling', 'Cases', 'Monitors'].map((category) => (
               <label key={category} className="flex items-center mb-2">
                 <input
@@ -269,14 +272,14 @@ const ComponentsStore = () => {
                   onChange={() => handleFilterChange('categories', category)}
                   className="mr-2 rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                 />
-                <span className="text-sm">{category}</span>
+                <span className="text-sm">{t(`shop.categories.${category.toLowerCase().replace(' ', '_')}`)}</span>
               </label>
             ))}
           </div>
 
           {/* Brand Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Brand</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.brand')}</h4>
             {['Intel', 'AMD', 'NVIDIA', 'Corsair', 'Samsung', 'ASUS', 'Noctua', 'Fractal Design'].map((brand) => (
               <label key={brand} className="flex items-center mb-2">
                 <input
@@ -292,7 +295,7 @@ const ComponentsStore = () => {
 
           {/* Compatibility Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Compatibility</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.compatibility')}</h4>
             {['LGA 1700', 'AM5', 'DDR4', 'DDR5', 'PCIe 4.0', 'PCIe 5.0', 'M.2', 'ATX', 'E-ATX'].map((compatibility) => (
               <label key={compatibility} className="flex items-center mb-2">
                 <input
@@ -308,7 +311,7 @@ const ComponentsStore = () => {
 
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Price Range</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.price_range')}</h4>
             <input
               type="range"
               min="0"
@@ -331,8 +334,8 @@ const ComponentsStore = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <div className="mb-4 sm:mb-0">
-            <h2 className="text-2xl font-bold text-gray-900">PC Components</h2>
-            <p className="text-gray-600">{filteredComponents.length} components found</p>
+            <h2 className="text-2xl font-bold text-gray-900">{t('shop.components.title')}</h2>
+            <p className="text-gray-600">{t('shop.components.found', { count: filteredComponents.length })}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -341,7 +344,7 @@ const ComponentsStore = () => {
               className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <Filter className="h-4 w-4" />
-              Filters
+              {t('shop.filters.title')}
             </button>
 
             <div className="flex items-center gap-2">
@@ -351,11 +354,11 @@ const ComponentsStore = () => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="Most Popular">Most Popular</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-                <option value="Newest First">Newest First</option>
-                <option value="Best Rating">Best Rating</option>
+                <option value="Most Popular">{t('shop.sorting.most_popular')}</option>
+                <option value="Price: Low to High">{t('shop.sorting.price_low_high')}</option>
+                <option value="Price: High to Low">{t('shop.sorting.price_high_low')}</option>
+                <option value="Newest First">{t('shop.sorting.newest_first')}</option>
+                <option value="Best Rating">{t('shop.sorting.best_rating')}</option>
               </select>
             </div>
           </div>
@@ -374,7 +377,7 @@ const ComponentsStore = () => {
 
         {filteredComponents.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No components found matching your criteria.</p>
+            <p className="text-gray-500 text-lg">{t('shop.components.no_results')}</p>
           </div>
         )}
       </div>

@@ -5,7 +5,10 @@ import PhoneImage from "../assets/phone.png";
 import LaptopImage from "../assets/laptopdevice.png";
 import ServiceImage from "../assets/shopService.png";
 
+import { useTranslation } from "react-i18next";
+
 export default function ShopHero() {
+  const { t } = useTranslation();
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -40,19 +43,19 @@ export default function ShopHero() {
         <div className="container px-4 sm:px-5 md:px-6 relative z-10">
           <div className="flex flex-col items-center text-center space-y-4 sm:space-y-5 md:space-y-6">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 max-w-4xl">
-              Discover Smartphones, Laptops, Desktops, and Accessories
+              {t('shop.hero.title')}
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl text-gray-700">
-              Sale Ends September 10, 2025 – Save 20%!
+              {t('shop.hero.subtitle')}
             </p>
 
             {/* Dynamic Countdown */}
             <div className="rounded-lg px-4 sm:px-6 py-3 max-w-2xl w-full">
               <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center">
-                {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s remaining
+                {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s {t('shop.hero.remaining')}
               </p>
               <p className="text-sm sm:text-base md:text-lg text-gray-600 mt-1 text-center">
-                Sale ends on September 10, 2025 at 11:59 PM
+                {t('shop.hero.ends_on')}
               </p>
             </div>
           </div>
@@ -86,9 +89,9 @@ export default function ShopHero() {
 
           {/* Centered content */}
           <div className="flex flex-col space-y-4 text-left items-start justify-center">
-            <span className="text-xs sm:text-sm font-semibold uppercase text-gray-400">Ad</span>
+            <span className="text-xs sm:text-sm font-semibold uppercase text-gray-400">{t('shop.hero.ad')}</span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight max-w-xl">
-              Need IT Support? Explore Our Tech Services!
+              {t('shop.hero.need_support')}
             </h2>
             <Link
               to="/tech-services"
@@ -104,7 +107,7 @@ export default function ShopHero() {
                 }
               }}
             >
-              Get IT Support
+              {t('shop.hero.get_support')}
               <ArrowRightIcon className="ml-2 h-4 w-4" />
             </Link>
           </div>

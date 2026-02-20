@@ -3,6 +3,7 @@ import { Settings, User, Shield, Bell, CreditCard, Globe, Save, Eye, EyeOff } fr
 import { auth } from "../../../firebaseConfig";
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { UserService } from "../../../services/userService";
+import { useTranslation } from "react-i18next";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -35,6 +36,7 @@ function CardContent({ children, className = "" }) {
 }
 
 export default function SellerSettings() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -139,7 +141,7 @@ export default function SellerSettings() {
       await UserService.updateUserProfile(currentUser.uid, {
         [settingsType]: data
       });
-      alert('Settings saved successfully!');
+      alert(t('settings_saved_successfully')); // You might want to add a generic key for this or use hardcoded if not critical
     } catch (error) {
       console.error(`Error saving ${settingsType}:`, error);
       alert('Error saving settings');
@@ -178,19 +180,19 @@ export default function SellerSettings() {
   };
 
   const tabs = [
-    { id: 'profile', label: 'Profile', icon: User },
-    { id: 'security', label: 'Security', icon: Shield },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'privacy', label: 'Privacy', icon: Globe },
-    { id: 'payment', label: 'Payment', icon: CreditCard }
+    { id: 'profile', label: t('seller_dashboard.settings.tabs.profile'), icon: User },
+    { id: 'security', label: t('seller_dashboard.settings.tabs.security'), icon: Shield },
+    { id: 'notifications', label: t('seller_dashboard.settings.tabs.notifications'), icon: Bell },
+    { id: 'privacy', label: t('seller_dashboard.settings.tabs.privacy'), icon: Globe },
+    { id: 'payment', label: t('seller_dashboard.settings.tabs.payment'), icon: CreditCard }
   ];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
-        <p className="text-gray-600">Manage your seller account preferences and settings</p>
+        <h1 className="text-2xl font-bold text-gray-900">{t('seller_dashboard.settings.title')}</h1>
+        <p className="text-gray-600">{t('seller_dashboard.settings.subtitle')}</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
@@ -226,14 +228,14 @@ export default function SellerSettings() {
           {activeTab === 'profile' && (
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Profile Information</h2>
-                <p className="text-sm text-gray-600">Update your business profile information</p>
+                <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.profile.title')}</h2>
+                <p className="text-sm text-gray-600">{t('seller_dashboard.settings.profile.subtitle')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Business Name
+                      {t('seller_dashboard.settings.profile.business_name')}
                     </label>
                     <input
                       type="text"
@@ -244,7 +246,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Contact Name
+                      {t('seller_dashboard.settings.profile.contact_name')}
                     </label>
                     <input
                       type="text"
@@ -255,7 +257,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Location
+                      {t('seller_dashboard.settings.profile.location')}
                     </label>
                     <input
                       type="text"
@@ -266,7 +268,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
+                      {t('seller_dashboard.settings.profile.email')}
                     </label>
                     <input
                       type="email"
@@ -277,7 +279,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone
+                      {t('seller_dashboard.settings.profile.phone')}
                     </label>
                     <input
                       type="tel"
@@ -288,7 +290,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Website
+                      {t('seller_dashboard.settings.profile.website')}
                     </label>
                     <input
                       type="url"
@@ -311,13 +313,13 @@ export default function SellerSettings() {
           {activeTab === 'security' && (
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Security Settings</h2>
-                <p className="text-sm text-gray-600">Manage your password and security preferences</p>
+                <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.security.title')}</h2>
+                <p className="text-sm text-gray-600">{t('seller_dashboard.settings.security.subtitle')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Current Password
+                    {t('seller_dashboard.settings.security.current_password')}
                   </label>
                   <div className="relative">
                     <input
@@ -337,7 +339,7 @@ export default function SellerSettings() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    New Password
+                    {t('seller_dashboard.settings.security.new_password')}
                   </label>
                   <input
                     type="password"
@@ -348,7 +350,7 @@ export default function SellerSettings() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Confirm New Password
+                    {t('seller_dashboard.settings.security.confirm_password')}
                   </label>
                   <input
                     type="password"
@@ -359,7 +361,7 @@ export default function SellerSettings() {
                 </div>
                 <div className="flex justify-end">
                   <Button onClick={handleChangePassword} disabled={loading}>
-                    {loading ? 'Changing...' : 'Change Password'}
+                    {loading ? 'Changing...' : t('seller_dashboard.settings.security.change_password')}
                   </Button>
                 </div>
               </CardContent>
@@ -370,15 +372,15 @@ export default function SellerSettings() {
           {activeTab === 'notifications' && (
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Notification Preferences</h2>
-                <p className="text-sm text-gray-600">Choose how you want to receive notifications</p>
+                <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.notifications.title')}</h2>
+                <p className="text-sm text-gray-600">{t('seller_dashboard.settings.notifications.subtitle')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Email Notifications</h3>
-                      <p className="text-sm text-gray-500">Receive notifications via email</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.email')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.email_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -392,8 +394,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">SMS Notifications</h3>
-                      <p className="text-sm text-gray-500">Receive notifications via SMS</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.sms')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.sms_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -407,8 +409,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Push Notifications</h3>
-                      <p className="text-sm text-gray-500">Receive in-app notifications</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.push')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.push_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -422,8 +424,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Order Notifications</h3>
-                      <p className="text-sm text-gray-500">Get notified about new orders</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.order')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.order_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -437,8 +439,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Payout Notifications</h3>
-                      <p className="text-sm text-gray-500">Get notified about payouts</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.payout')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.payout_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -452,8 +454,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Stock Alerts</h3>
-                      <p className="text-sm text-gray-500">Get notified when stock is low</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.notifications.stock')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.notifications.stock_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -479,15 +481,15 @@ export default function SellerSettings() {
           {activeTab === 'privacy' && (
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Privacy Settings</h2>
-                <p className="text-sm text-gray-600">Control what information is visible to others</p>
+                <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.privacy.title')}</h2>
+                <p className="text-sm text-gray-600">{t('seller_dashboard.settings.privacy.subtitle')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Show Email Address</h3>
-                      <p className="text-sm text-gray-500">Make your email visible to customers</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.privacy.show_email')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.privacy.show_email_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -501,8 +503,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Show Phone Number</h3>
-                      <p className="text-sm text-gray-500">Make your phone number visible to customers</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.privacy.show_phone')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.privacy.show_phone_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -516,8 +518,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Show Social Links</h3>
-                      <p className="text-sm text-gray-500">Display your social media links</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.privacy.show_social')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.privacy.show_social_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -531,8 +533,8 @@ export default function SellerSettings() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-sm font-medium text-gray-900">Show Business Information</h3>
-                      <p className="text-sm text-gray-500">Display business details and location</p>
+                      <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.privacy.show_business')}</h3>
+                      <p className="text-sm text-gray-500">{t('seller_dashboard.settings.privacy.show_business_desc')}</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -558,14 +560,14 @@ export default function SellerSettings() {
           {activeTab === 'payment' && (
             <Card>
               <CardHeader>
-                <h2 className="text-lg font-semibold">Payment Settings</h2>
-                <p className="text-sm text-gray-600">Manage your payment methods and preferences</p>
+                <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.payment.title')}</h2>
+                <p className="text-sm text-gray-600">{t('seller_dashboard.settings.payment.subtitle')}</p>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Payment Method
+                      {t('seller_dashboard.settings.payment.method')}
                     </label>
                     <select
                       value={paymentSettings.paymentMethod}
@@ -579,7 +581,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Payment Number
+                      {t('seller_dashboard.settings.payment.number')}
                     </label>
                     <input
                       type="tel"
@@ -590,7 +592,7 @@ export default function SellerSettings() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Payout Threshold (GNF)
+                      {t('seller_dashboard.settings.payment.threshold')}
                     </label>
                     <input
                       type="number"
@@ -602,8 +604,8 @@ export default function SellerSettings() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-sm font-medium text-gray-900">Auto Payout</h3>
-                    <p className="text-sm text-gray-500">Automatically request payouts when threshold is reached</p>
+                    <h3 className="text-sm font-medium text-gray-900">{t('seller_dashboard.settings.payment.auto_payout')}</h3>
+                    <p className="text-sm text-gray-500">{t('seller_dashboard.settings.payment.auto_payout_desc')}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input

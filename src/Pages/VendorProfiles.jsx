@@ -1,4 +1,5 @@
 import React, { Suspense, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ChevronDown,
   ChevronRight,
@@ -114,9 +115,8 @@ function Accordion({ title, children }) {
       >
         <span>{title}</span>
         <ChevronRight
-          className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-            open ? "rotate-90" : ""
-          }`}
+          className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${open ? "rotate-90" : ""
+            }`}
         />
       </button>
       {open && <div className="mt-2">{children}</div>}
@@ -145,6 +145,7 @@ function CheckboxList({ items, selected, onChange }) {
 }
 
 function FilterSidebar({ filters, setFilters, applyFilters }) {
+  const { t } = useTranslation();
   const toggleFilter = (type, value) => {
     setFilters((prev) => {
       const current = prev[type];
@@ -159,12 +160,12 @@ function FilterSidebar({ filters, setFilters, applyFilters }) {
     <div className="p-3 sm:p-4 rounded-lg shadow-inner border border-gray-300">
       {/* Header */}
       <div className="flex items-center justify-between mb-3 sm:mb-4 border-b border-gray-300 pb-2">
-        <h2 className="text-base sm:text-lg font-semibold">Filters</h2>
+        <h2 className="text-base sm:text-lg font-semibold">{t('vendor_profiles_page.sidebar.filters_title') || 'Filters'}</h2>
         <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
       </div>
 
       {/* Category */}
-      <Accordion title="Category">
+      <Accordion title={t('vendor_profiles_page.sidebar.category.title') || "Category"}>
         <CheckboxList
           items={["Mobile", "Laptop", "Tablet", "Smartwatch"]}
           selected={filters.category}
@@ -173,7 +174,7 @@ function FilterSidebar({ filters, setFilters, applyFilters }) {
       </Accordion>
 
       {/* Premium */}
-      <Accordion title="Premium">
+      <Accordion title={t('vendor_profiles_page.sidebar.premium.title') || "Premium"}>
         <CheckboxList
           items={["Premium", "Non-Premium"]}
           selected={filters.premium}
@@ -182,7 +183,7 @@ function FilterSidebar({ filters, setFilters, applyFilters }) {
       </Accordion>
 
       {/* Ratings */}
-      <Accordion title="Ratings">
+      <Accordion title={t('vendor_profiles_page.sidebar.ratings.title') || "Ratings"}>
         <CheckboxList
           items={[
             "5 Stars",
@@ -201,7 +202,7 @@ function FilterSidebar({ filters, setFilters, applyFilters }) {
         onClick={applyFilters}
         className="w-full mt-3 sm:mt-4 bg-blue-600 text-white py-2 sm:py-3 rounded-lg font-medium hover:bg-blue-700 transition text-sm sm:text-base"
       >
-        Apply Filters
+        {t('vendor_profiles_page.sidebar.apply_btn') || 'Apply Filters'}
       </button>
     </div>
   );
@@ -209,6 +210,7 @@ function FilterSidebar({ filters, setFilters, applyFilters }) {
 
 /* ---------------- Freelancer Card ---------------- */
 function FreelancerCard({ freelancer }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition">
@@ -244,7 +246,7 @@ function FreelancerCard({ freelancer }) {
           onClick={() => navigate("/vendor-profiles/info")}
           className="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-md"
         >
-          View Devices →
+          {t('vendor_profiles_page.card.view_devices') || 'View Devices →'}
         </button>
       </div>
     </div>
@@ -264,6 +266,7 @@ function FreelancerList({ freelancers }) {
 
 /* ---------------- Main Page ---------------- */
 export default function VendorProfiles() {
+  const { t } = useTranslation();
   const [sortOpen, setSortOpen] = useState(false);
   const [sortValue, setSortValue] = useState("Most Popular");
   const [filters, setFilters] = useState({
@@ -315,10 +318,10 @@ export default function VendorProfiles() {
         {/* Breadcrumb */}
         <div className="text-xs sm:text-sm text-gray-600 mb-3 ml-2">
           <a href="/" className="hover:underline">
-            Home
+            {t('vendor_profiles_page.breadcrumb.home') || 'Home'}
           </a>
           <span className="mx-1">&gt;</span>
-          <span className="text-blue-600">Vendor Profiles</span>
+          <span className="text-blue-600">{t('vendor_profiles_page.title') || 'Vendor Profiles'}</span>
         </div>
 
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8">
@@ -335,17 +338,16 @@ export default function VendorProfiles() {
             {/* Freelancer Listings */}
             <div className="flex-1 w-full">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-5">
-                Vendor Profiles
+                {t('vendor_profiles_page.title') || 'Vendor Profiles'}
               </h1>
 
               {/* Sort Section */}
               <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center mb-4 sm:mb-5 gap-3 sm:gap-4 relative">
                 <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-600">
                   <p>
-                    Showing {sortedFreelancers.length} of{" "}
-                    {mockFreelancers.length} Freelancers
+                    {t('vendor_profiles_page.sort.showing_x_of_y', { visible: sortedFreelancers.length, total: mockFreelancers.length }) || `Showing ${sortedFreelancers.length} of ${mockFreelancers.length} Freelancers`}
                   </p>
-                  <span>Sort by:</span>
+                  <span>{t('vendor_profiles_page.sort.sort_by') || 'Sort by:'}</span>
                   <div className="relative">
                     <button
                       onClick={() => setSortOpen(!sortOpen)}

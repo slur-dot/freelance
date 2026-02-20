@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaSearch, FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 
 import { auth } from "../firebaseConfig";
@@ -14,6 +15,11 @@ export default function Navbar() {
   const current = location.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { currentUser } = useAuth();
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   const isActive = (path) =>
     current === path
@@ -49,40 +55,40 @@ export default function Navbar() {
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex ml-10 space-x-6 items-center">
-            <Link to="/" className={isActive("/")}>Home</Link>
-            <Link to="/shop" className={isActive("/shop")}>Shop</Link>
-            <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>Hire Freelancers</Link>
-            <Link to="/locations" className={isActive("/locations")}>Locations</Link>
-            <Link to="/tech-services" className={isActive("/tech-services")}>Tech Services</Link>
+            <Link to="/" className={isActive("/")}>{t('navbar.home')}</Link>
+            <Link to="/shop" className={isActive("/shop")}>{t('navbar.shop')}</Link>
+            <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>{t('navbar.hire_freelancers')}</Link>
+            <Link to="/locations" className={isActive("/locations")}>{t('navbar.locations')}</Link>
+            <Link to="/tech-services" className={isActive("/tech-services")}>{t('navbar.tech_services')}</Link>
 
             {/* Dashboards Dropdown */}
             <div className="relative group">
               <button className="flex items-center text-gray-700 font-medium pb-1">
-                Dashboards <HiChevronDown className="ml-1 text-sm text-gray-500" />
+                {t('navbar.dashboards')} <HiChevronDown className="ml-1 text-sm text-gray-500" />
               </button>
               <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 py-1">
-                <Link to="/freelancer/dashboard" className="block px-4 py-2 hover:bg-gray-100">Freelancer Dashboard</Link>
-                <Link to="/Clients/dashboard" className="block px-4 py-2 hover:bg-gray-100">Clients Dashboard</Link>
-                <Link to="/Company/dashboard" className="block px-4 py-2 hover:bg-gray-100">Company Dashboard</Link>
-                <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">Admin Dashboard</Link>
-                <Link to="/vendor/dashboard" className="block px-4 py-2 hover:bg-gray-100">Vendor Modules</Link>
-                <Link to="/seller/dashboard" className="block px-4 py-2 hover:bg-gray-100">Seller Dashboard</Link>
+                <Link to="/freelancer/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.freelancer_dashboard')}</Link>
+                <Link to="/Clients/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.clients_dashboard')}</Link>
+                <Link to="/Company/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.company_dashboard')}</Link>
+                <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.admin_dashboard')}</Link>
+                <Link to="/vendor/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_modules')}</Link>
+                <Link to="/seller/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.seller_dashboard')}</Link>
               </div>
             </div>
 
             {/* More Dropdown */}
             <div className="relative group">
               <button className="flex items-center text-gray-700 font-medium pb-1">
-                More <HiChevronDown className="ml-1 text-sm text-gray-500" />
+                {t('navbar.more')} <HiChevronDown className="ml-1 text-sm text-gray-500" />
               </button>
               <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 py-1">
-                <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">Device Rental</Link>
-                <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">Training & Upskilling</Link>
-                <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">Corporate & NGO Sales</Link>
-                <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">FAQ</Link>
-                <Link to="/blog" className="block px-4 py-2 hover:bg-gray-100">Blog</Link>
-                <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">Contact Us</Link>
-                <Link to="/vendor-profiles" className="block px-4 py-2 hover:bg-gray-100">Vendor Profiles</Link>
+                <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
+                <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
+                <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales')}</Link>
+                <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.faq')}</Link>
+                <Link to="/blog" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.blog')}</Link>
+                <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.contact_us')}</Link>
+                <Link to="/vendor-profiles" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_profiles')}</Link>
               </div>
             </div>
           </div>
@@ -98,7 +104,7 @@ export default function Navbar() {
                   onClick={handleLogout}
                   className="text-white bg-red-500 rounded-2xl px-4 py-1 hover:bg-red-600 transition"
                 >
-                  Logout
+                  {t('navbar.logout')}
                 </button>
               </div>
             ) : (
@@ -107,17 +113,21 @@ export default function Navbar() {
                   onClick={handleLogin}
                   className="text-white bg-blue-500 rounded-2xl px-4 py-1 hover:bg-blue-600 transition"
                 >
-                  Login
+                  {t('navbar.login')}
                 </button>
                 <button
                   onClick={handleSignup}
                   className="bg-green-700 text-white rounded-2xl px-4 py-1 hover:bg-green-800 transition"
                 >
-                  Sign Up
+                  {t('navbar.signup')}
                 </button>
               </>
             )}
-            <span className="text-gray-700 font-medium">EN</span>
+            <div className="flex space-x-2">
+              <button onClick={() => changeLanguage('en')} className={`text-sm font-medium ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-700'}`}>EN</button>
+              <span className="text-gray-400">|</span>
+              <button onClick={() => changeLanguage('fr')} className={`text-sm font-medium ${i18n.language === 'fr' ? 'text-blue-600' : 'text-gray-700'}`}>FR</button>
+            </div>
             <FaShoppingCart className="text-black text-[18px] cursor-pointer" />
           </div>
 
@@ -133,43 +143,48 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-3">
-          <Link to="/" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-          <Link to="/shop" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>Shop</Link>
-          <Link to="/hire-freelancers" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>Hire Freelancers</Link>
-          <Link to="/locations" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>Locations</Link>
-          <Link to="/tech-services" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>Tech Services</Link>
+          <Link to="/" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.home')}</Link>
+          <Link to="/shop" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.shop')}</Link>
+          <Link to="/hire-freelancers" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.hire_freelancers')}</Link>
+          <Link to="/locations" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.locations')}</Link>
+          <Link to="/tech-services" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.tech_services')}</Link>
 
           {/* Dashboards Dropdown (Flat) */}
           <div>
-            <p className="font-semibold text-gray-700 mt-2">Dashboards</p>
-            <Link to="/freelancer/dashboard" className="block text-sm text-gray-600 ml-4">Freelancer</Link>
-            <Link to="/Clients/dashboard" className="block text-sm text-gray-600 ml-4">Clients</Link>
-            <Link to="/Company/dashboard" className="block text-sm text-gray-600 ml-4">Company</Link>
-            <Link to="/admin/dashboard" className="block text-sm text-gray-600 ml-4">Admin</Link>
-            <Link to="/vendor/dashboard" className="block text-sm text-gray-600 ml-4">Vendor</Link>
-            <Link to="/seller/dashboard" className="block text-sm text-gray-600 ml-4">Seller</Link>
+            <p className="font-semibold text-gray-700 mt-2">{t('navbar.dashboards')}</p>
+            <Link to="/freelancer/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.freelancer_dashboard')}</Link>
+            <Link to="/Clients/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.clients_dashboard')}</Link>
+            <Link to="/Company/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.company_dashboard')}</Link>
+            <Link to="/admin/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.admin_dashboard')}</Link>
+            <Link to="/vendor/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.vendor_modules')}</Link>
+            <Link to="/seller/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.seller_dashboard')}</Link>
           </div>
 
           {/* More Dropdown (Flat) */}
           <div>
-            <p className="font-semibold text-gray-700 mt-2">More</p>
-            <Link to="/computer-rental" className="block text-sm text-gray-600 ml-4">Device Rental</Link>
-            <Link to="/training-modules" className="block text-sm text-gray-600 ml-4">Training & Upskilling</Link>
-            <Link to="/corporate-sales" className="block text-sm text-gray-600 ml-4">Corporate & NGO Sales</Link>
-            <Link to="/faq" className="block text-sm text-gray-600 ml-4">FAQ</Link>
-            <Link to="/blog" className="block text-sm text-gray-600 ml-4">Blog</Link>
-            <Link to="/contact" className="block text-sm text-gray-600 ml-4">Contact Us</Link>
-            <Link to="/vendor-profiles" className="block text-sm text-gray-600 ml-4">Vendor Profiles</Link>
+            <p className="font-semibold text-gray-700 mt-2">{t('navbar.more')}</p>
+            <Link to="/computer-rental" className="block text-sm text-gray-600 ml-4">{t('navbar.device_rental')}</Link>
+            <Link to="/training-modules" className="block text-sm text-gray-600 ml-4">{t('navbar.training_upskilling')}</Link>
+            <Link to="/corporate-sales" className="block text-sm text-gray-600 ml-4">{t('navbar.corporate_sales')}</Link>
+            <Link to="/faq" className="block text-sm text-gray-600 ml-4">{t('navbar.faq')}</Link>
+            <Link to="/blog" className="block text-sm text-gray-600 ml-4">{t('navbar.blog')}</Link>
+            <Link to="/contact" className="block text-sm text-gray-600 ml-4">{t('navbar.contact_us')}</Link>
+            <Link to="/vendor-profiles" className="block text-sm text-gray-600 ml-4">{t('navbar.vendor_profiles')}</Link>
+          </div>
+
+          <div className="flex space-x-4 mt-4 items-center justify-center">
+            <button onClick={() => changeLanguage('en')} className={`text-sm font-medium px-4 py-2 rounded-full border ${i18n.language === 'en' ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300'}`}>EN</button>
+            <button onClick={() => changeLanguage('fr')} className={`text-sm font-medium px-4 py-2 rounded-full border ${i18n.language === 'fr' ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300'}`}>FR</button>
           </div>
 
           {/* Auth Buttons */}
           <div className="pt-4 space-y-2">
             {currentUser ? (
-              <button onClick={handleLogout} className="w-full bg-red-500 text-white py-2 rounded">Logout</button>
+              <button onClick={handleLogout} className="w-full bg-red-500 text-white py-2 rounded">{t('navbar.logout')}</button>
             ) : (
               <>
-                <button onClick={handleLogin} className="w-full bg-blue-500 text-white py-2 rounded">Login</button>
-                <button onClick={handleSignup} className="w-full bg-green-600 text-white py-2 rounded">Sign Up</button>
+                <button onClick={handleLogin} className="w-full bg-blue-500 text-white py-2 rounded">{t('navbar.login')}</button>
+                <button onClick={handleSignup} className="w-full bg-green-600 text-white py-2 rounded">{t('navbar.signup')}</button>
               </>
             )}
           </div>

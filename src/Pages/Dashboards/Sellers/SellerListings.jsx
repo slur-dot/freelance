@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Eye, EyeOff, Package, TrendingUp, Loader2, CheckCircle } from "lucide-react";
 import { ProductService } from "../../../services/productService";
+
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -35,6 +37,7 @@ function CardContent({ children, className = "" }) {
 
 // Edit Listing Modal
 function EditListingModal({ listing, onClose, onUpdate }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     productName: listing?.productName || '',
     category: listing?.category || '',
@@ -88,11 +91,11 @@ function EditListingModal({ listing, onClose, onUpdate }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Edit Listing</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.listings.modal.edit_title')}</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.product_name')}</label>
             <input
               type="text"
               name="productName"
@@ -104,7 +107,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.category')}</label>
             <select
               name="category"
               value={formData.category}
@@ -112,7 +115,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             >
-              <option value="">Select Category</option>
+              <option value="">{t('seller_dashboard.listings.modal.select_category')}</option>
               <option value="Phones">Phones</option>
               <option value="Laptops">Laptops</option>
               <option value="Printers">Printers</option>
@@ -124,7 +127,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price (GNF)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.price')}</label>
               <input
                 type="number"
                 name="purchasePrice"
@@ -136,7 +139,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.stock')}</label>
               <input
                 type="number"
                 name="stock"
@@ -149,7 +152,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.description')}</label>
             <textarea
               name="description"
               value={formData.description}
@@ -161,7 +164,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.image')}</label>
             <input
               type="file"
               onChange={handleFileChange}
@@ -175,7 +178,8 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               className="flex-1"
               disabled={loading}
             >
-              {loading ? 'Updating...' : 'Update Listing'}
+
+              {loading ? t('seller_dashboard.listings.modal.updating') : t('seller_dashboard.listings.modal.update')}
             </Button>
             <Button
               type="button"
@@ -184,7 +188,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               onClick={onClose}
               disabled={loading}
             >
-              Cancel
+              {t('seller_dashboard.listings.modal.cancel')}
             </Button>
           </div>
         </form>
@@ -195,6 +199,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
 
 // Create Listing Modal
 function CreateListingModal({ onClose, onUpdate, sellerId }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     productName: '',
     category: '',
@@ -245,11 +250,11 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Create New Listing</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.listings.modal.create_title')}</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.product_name')}</label>
             <input
               type="text"
               name="productName"
@@ -261,7 +266,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.category')}</label>
             <select
               name="category"
               value={formData.category}
@@ -269,7 +274,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             >
-              <option value="">Select Category</option>
+              <option value="">{t('seller_dashboard.listings.modal.select_category')}</option>
               <option value="Phones">Phones</option>
               <option value="Laptops">Laptops</option>
               <option value="Printers">Printers</option>
@@ -281,7 +286,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price (GNF)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.price')}</label>
               <input
                 type="number"
                 name="purchasePrice"
@@ -293,7 +298,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.stock')}</label>
               <input
                 type="number"
                 name="stock"
@@ -306,7 +311,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.description')}</label>
             <textarea
               name="description"
               value={formData.description}
@@ -318,7 +323,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Product Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.listings.modal.image')}</label>
             <input
               type="file"
               onChange={handleFileChange}
@@ -332,7 +337,8 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               className="flex-1"
               disabled={loading}
             >
-              {loading ? 'Creating...' : 'Create Listing'}
+
+              {loading ? t('seller_dashboard.listings.modal.creating') : t('seller_dashboard.listings.modal.create')}
             </Button>
             <Button
               type="button"
@@ -341,7 +347,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               onClick={onClose}
               disabled={loading}
             >
-              Cancel
+              {t('seller_dashboard.listings.modal.cancel')}
             </Button>
           </div>
         </form>
@@ -351,6 +357,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
 }
 
 export default function SellerListings() {
+  const { t } = useTranslation();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -460,12 +467,12 @@ export default function SellerListings() {
         <div className="mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-2">My Listings</h1>
-              <p className="text-gray-600">Manage your product listings and track their performance</p>
+              <h1 className="text-2xl md:text-3xl font-bold mb-2">{t('seller_dashboard.listings.title')}</h1>
+              <p className="text-gray-600">{t('seller_dashboard.listings.subtitle')}</p>
             </div>
             <Button onClick={() => setShowCreateModal(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Create New Listing
+              {t('seller_dashboard.listings.create_btn')}
             </Button>
           </div>
 
@@ -485,7 +492,7 @@ export default function SellerListings() {
               <div className="flex items-center">
                 <Package className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Listings</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.listings.stats.total')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.total || 0}</p>
                 </div>
               </div>
@@ -497,7 +504,7 @@ export default function SellerListings() {
               <div className="flex items-center">
                 <TrendingUp className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Active Listings</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.listings.stats.active')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.active || 0}</p>
                 </div>
               </div>
@@ -509,7 +516,7 @@ export default function SellerListings() {
               <div className="flex items-center">
                 <Eye className="h-8 w-8 text-purple-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Views</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.listings.stats.views')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalViews || 0}</p>
                 </div>
               </div>
@@ -521,7 +528,7 @@ export default function SellerListings() {
               <div className="flex items-center">
                 <Package className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Stock</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.listings.stats.stock')}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalStock || 0}</p>
                 </div>
               </div>
@@ -536,19 +543,19 @@ export default function SellerListings() {
               variant={filter === 'all' ? 'default' : 'outline'}
               onClick={() => setFilter('all')}
             >
-              All ({listings.length})
+              {t('seller_dashboard.listings.filters.all')} ({listings.length})
             </Button>
             <Button
               variant={filter === 'active' ? 'default' : 'outline'}
               onClick={() => setFilter('active')}
             >
-              Active ({listings.filter(l => l.status === 'Active').length})
+              {t('seller_dashboard.listings.filters.active')} ({listings.filter(l => l.status === 'Active').length})
             </Button>
             <Button
               variant={filter === 'pending' ? 'default' : 'outline'}
               onClick={() => setFilter('pending')}
             >
-              Pending ({listings.filter(l => l.status === 'Pending Review').length})
+              {t('seller_dashboard.listings.filters.pending')} ({listings.filter(l => l.status === 'Pending Review').length})
             </Button>
           </div>
         </div>
@@ -564,25 +571,25 @@ export default function SellerListings() {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Product
+                      {t('seller_dashboard.listings.table.product')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
+                      {t('seller_dashboard.listings.table.category')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Price
+                      {t('seller_dashboard.listings.table.price')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Stock
+                      {t('seller_dashboard.listings.table.stock')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Views
+                      {t('seller_dashboard.listings.table.views')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                      {t('seller_dashboard.listings.table.status')}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
+                      {t('seller_dashboard.listings.table.actions')}
                     </th>
                   </tr>
                 </thead>
@@ -618,8 +625,8 @@ export default function SellerListings() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${listing.status === 'Active'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-yellow-100 text-yellow-800'
                           }`}>
                           {listing.status}
                         </span>

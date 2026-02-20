@@ -1,6 +1,7 @@
-import React from "react";
+import { useTranslation } from "react-i18next";
 
 const ProductCard = ({ product, onAddToCart }) => {
+  const { t } = useTranslation();
   return (
     <div className="border rounded-lg shadow-md overflow-hidden flex flex-col h-full">
       <img src={product.image} alt={product.name} className="w-full h-48 object-cover" />
@@ -17,7 +18,7 @@ const ProductCard = ({ product, onAddToCart }) => {
             <p className="text-red-500 line-through">{product.originalPrice}</p>
             <p className="text-green-600 font-bold">{product.currentPrice}</p>
             <p className="text-sm text-gray-500">
-              {product.monthlyOriginal} → {product.monthlyPrice} /mo
+              {product.monthlyOriginal} → {product.monthlyPrice} {t('shop.product.per_month')}
             </p>
           </div>
         </div>
@@ -25,7 +26,7 @@ const ProductCard = ({ product, onAddToCart }) => {
           onClick={() => onAddToCart(product.id)}
           className="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 mt-auto"
         >
-          Add to Cart
+          {t('shop.product.add_to_cart')}
         </button>
       </div>
     </div>

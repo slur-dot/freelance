@@ -13,6 +13,7 @@ import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { ClientService } from "../../../services/clientService";
+import { useTranslation } from "react-i18next";
 
 function Sidebar({ children, className }) {
   return (
@@ -57,8 +58,8 @@ function SidebarMenuButton({ children, isActive, to }) {
     <Link
       to={to}
       className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg text-sm font-medium transition ${isActive
-          ? "bg-gray-100 text-gray-900"
-          : "text-gray-700 hover:bg-gray-100"
+        ? "bg-gray-100 text-gray-900"
+        : "text-gray-700 hover:bg-gray-100"
         }`}
     >
       {children}
@@ -67,36 +68,37 @@ function SidebarMenuButton({ children, isActive, to }) {
 }
 
 export default function ClientSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const activePath = location.pathname;
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     {
-      section: "HOME",
+      section: t('sidebar.home'),
       items: [
-        { title: "Dashboard", url: "/Clients/dashboard", icon: BarChart3 },
+        { title: t('sidebar.dashboard'), url: "/Clients/dashboard", icon: BarChart3 },
       ],
     },
     {
-      section: "WORK",
+      section: t('sidebar.work'),
       items: [
         {
-          title: "Project-List",
+          title: t('sidebar.project_list'),
           url: "/Clients/dashboard/Project-List",
           icon: Share2,
         },
         {
-          title: "HiredFreelancers",
+          title: t('sidebar.hired_freelancers'),
           url: "/Clients/dashboard/Hired-Freelancers",
           icon: MoreHorizontal,
         },
       ],
     },
     {
-      section: "FINANCE",
+      section: t('sidebar.finance'),
       items: [
-        { title: "Payments", url: "/Clients/dashboard/payments", icon: Wallet },
+        { title: t('sidebar.payments'), url: "/Clients/dashboard/payments", icon: Wallet },
       ],
     },
   ];

@@ -1,10 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle, Zap } from "lucide-react";
+import { useTranslation, Trans } from "react-i18next";
 import TrainingHeroBg from "../assets/Training_hero.png";
 import TrainingHeroIcon from "../assets/Traiining_heroIcon.png";
 
 export default function TrainingHeroSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="relative w-full h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden">
       {/* Background Image */}
@@ -41,17 +44,17 @@ export default function TrainingHeroSection() {
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 md:px-6">
         <div className="max-w-3xl space-y-4">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
-            Tailored Training for Companies & Freelancers
+            {t('training.hero.title')}
           </h1>
           <p className="text-lg md:text-xl text-gray-200 leading-snug">
-            Customized Learning Solutions for Your Business Needs or <br />
-            <span className="block">Request Courses to Upskill!</span>
+            {t('training.hero.subtitle')} <br />
+            <span className="block">{t('training.hero.subtitle_2')}</span>
           </p>
           <Link
             to="#"
             className="inline-flex items-center justify-center px-6 py-3 mt-6 text-base font-medium text-white bg-blue-600 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
           >
-            Explore Courses
+            {t('training.hero.cta')}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </div>

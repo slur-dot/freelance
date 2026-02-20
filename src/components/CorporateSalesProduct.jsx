@@ -4,8 +4,9 @@ import mobile from "../assets/mobile.jpg";
 import Laptop from "../assets/Laptop.jpg";
 import { ArrowRight } from "lucide-react";
 import ComputerBookingForm from "./ComputerRentalBooking/ComputerBookingForm";
+import { useTranslation } from "react-i18next";
 
-const ProductCard = ({ imageSrc, imageAlt, name, price, discountText, onBuy }) => {
+const ProductCard = ({ imageSrc, imageAlt, name, price, discountText, onBuy, buyBtnText }) => {
   return (
     <div className="w-full bg-white rounded-xl shadow-md overflow-hidden flex flex-col border border-gray-400">
       <div className="relative w-full h-40 sm:h-48 md:h-60">
@@ -25,7 +26,7 @@ const ProductCard = ({ imageSrc, imageAlt, name, price, discountText, onBuy }) =
             onClick={() => onBuy(name)}
             className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg"
           >
-            Buy Now
+            {buyBtnText}
           </button>
         </div>
       </div>
@@ -34,6 +35,7 @@ const ProductCard = ({ imageSrc, imageAlt, name, price, discountText, onBuy }) =
 };
 
 export default function CorporateSalesProduct() {
+  const { t } = useTranslation();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -50,16 +52,16 @@ export default function CorporateSalesProduct() {
     {
       imageSrc: iphoneProduct,
       imageAlt: "iPhone 14",
-      name: "iPhone 14",
+      name: t('corporate_sales.sales.products.iphone14.name'),
       price: "6,336,000 GNF($1,200)",
-      discountText: "/unit post discount",
+      discountText: t('corporate_sales.sales.discount_text'),
     },
     {
       imageSrc: mobile,
       imageAlt: "Samsung Galaxy S23",
-      name: "Samsung Galaxy S23",
+      name: t('corporate_sales.sales.products.s23.name'),
       price: "4,928,000 GNF($960)",
-      discountText: "/unit post discount",
+      discountText: t('corporate_sales.sales.discount_text'),
     },
   ];
 
@@ -67,16 +69,16 @@ export default function CorporateSalesProduct() {
     {
       imageSrc: Laptop,
       imageAlt: "MacBook Pro M2",
-      name: "MacBook Pro M2",
+      name: t('corporate_sales.sales.products.macbook_pro.name'),
       price: "10,560,000 GNF($1,200)",
-      discountText: "/unit post discount",
+      discountText: t('corporate_sales.sales.discount_text'),
     },
     {
       imageSrc: Laptop,
       imageAlt: "Dell XPS 13",
-      name: "Dell XPS 13",
+      name: t('corporate_sales.sales.products.dell_xps.name'),
       price: "8,448,000 GNF($960)",
-      discountText: "/unit post discount",
+      discountText: t('corporate_sales.sales.discount_text'),
     },
   ];
 
@@ -85,7 +87,7 @@ export default function CorporateSalesProduct() {
       {showBookingForm ? (
         <div className="px-4 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
-            Booking for: {selectedProduct}
+            {t('corporate_sales.sales.booking_title', { product: selectedProduct })}
           </h1>
           <ComputerBookingForm />
           <div className="mt-6">
@@ -93,22 +95,22 @@ export default function CorporateSalesProduct() {
               onClick={handleBackToProducts}
               className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg"
             >
-              Back to Products
+              {t('corporate_sales.sales.back_to_products')}
             </button>
           </div>
         </div>
       ) : (
         <>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8 px-4 md:px-6 lg:px-8 max-w-screen-xl mx-auto">
-            Sales Options
+            {t('corporate_sales.sales.title')}
           </h1>
 
           {/* Smartphones Section */}
           <section className="px-4 md:px-6 lg:px-8 mb-12 max-w-screen-xl mx-auto">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">Smartphones</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">{t('corporate_sales.sales.smartphones')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {smartphones.map((product) => (
-                <ProductCard key={product.name} {...product} onBuy={handleBuyNow} />
+                <ProductCard key={product.name} {...product} onBuy={handleBuyNow} buyBtnText={t('corporate_sales.sales.buy_now')} />
               ))}
             </div>
           </section>
@@ -116,11 +118,11 @@ export default function CorporateSalesProduct() {
           {/* Laptops Section */}
           <section className="px-4 md:px-6 lg:px-8 mb-12 max-w-screen-xl mx-auto">
             <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6">
-              Laptops
+              {t('corporate_sales.sales.laptops')}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {laptops.map((product) => (
-                <ProductCard key={product.name} {...product} onBuy={handleBuyNow} />
+                <ProductCard key={product.name} {...product} onBuy={handleBuyNow} buyBtnText={t('corporate_sales.sales.buy_now')} />
               ))}
             </div>
           </section>
@@ -135,13 +137,13 @@ export default function CorporateSalesProduct() {
 
             <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-screen-xl mx-auto">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-8">
-                Buy 10 smartphones for your education project
+                {t('corporate_sales.sales.cta.title')}
               </h2>
               <button
                 onClick={() => handleBuyNow("Bulk Smartphone Order")}
                 className="bg-[#228B22] hover:bg-[#1e7a1e] text-white px-8 py-3 rounded-full text-base sm:text-lg font-semibold flex items-center gap-2"
               >
-                Buy Now <ArrowRight className="h-5 w-5" />
+                {t('corporate_sales.sales.cta.button')} <ArrowRight className="h-5 w-5" />
               </button>
             </div>
           </section>

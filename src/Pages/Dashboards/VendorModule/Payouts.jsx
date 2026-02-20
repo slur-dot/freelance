@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Trash2, Edit } from "lucide-react";
 import { PayoutService } from "../../../services/payoutService";
 import { auth } from "../../../firebaseConfig";
 
 export default function Payouts() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("createdAt");
@@ -41,7 +43,7 @@ export default function Payouts() {
   }, [loadPayouts]);
 
   const removePayout = async (payoutId) => {
-    if (!window.confirm('Delete this payout?')) return;
+    if (!window.confirm(t('vendor_dashboard.payouts.delete_confirm'))) return;
     try {
       await PayoutService.deletePayout(payoutId);
       setPayouts(prev => prev.filter(p => p.id !== payoutId));
@@ -107,13 +109,13 @@ export default function Payouts() {
       <div className="w-full">
         {/* Header */}
         <div className="p-6 pb-4">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">Payouts</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('vendor_dashboard.payouts.title')}</h1>
           {/* Search Bar */}
           <div className="relative max-w-4xl">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('vendor_dashboard.payouts.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
@@ -128,19 +130,19 @@ export default function Payouts() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Amount
+                    {t('vendor_dashboard.payouts.table.amount')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Method
+                    {t('vendor_dashboard.payouts.table.method')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Status
+                    {t('vendor_dashboard.payouts.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100" onClick={() => handleSort("createdAt")}>
-                    Created At
+                    {t('vendor_dashboard.payouts.table.created_at')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('vendor_dashboard.payouts.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -172,7 +174,7 @@ export default function Payouts() {
                   </tr>
                 ))}
                 {paginatedPayouts.length === 0 && (
-                  <tr><td colSpan={5} className="text-center p-4 text-gray-500">No payouts found.</td></tr>
+                  <tr><td colSpan={5} className="text-center p-4 text-gray-500">{t('vendor_dashboard.payouts.no_payouts')}</td></tr>
                 )}
               </tbody>
             </table>
@@ -205,10 +207,10 @@ export default function Payouts() {
       {editPayout && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Edit Payout</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('vendor_dashboard.payouts.edit_modal.title')}</h2>
             <form onSubmit={savePayout} className="space-y-4">
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Status</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.status')}</label>
                 <select className="w-full border rounded px-3 py-2" value={editPayout.status} onChange={e => setEditPayout({ ...editPayout, status: e.target.value })}>
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
@@ -216,16 +218,16 @@ export default function Payouts() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Amount (GNF)</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.amount')}</label>
                 <input type="number" className="w-full border rounded px-3 py-2" value={editPayout.amount || 0} onChange={e => setEditPayout({ ...editPayout, amount: e.target.value })} />
               </div>
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Method</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.method')}</label>
                 <input className="w-full border rounded px-3 py-2" value={editPayout.method || ''} onChange={e => setEditPayout({ ...editPayout, method: e.target.value })} />
               </div>
               <div className="flex justify-end gap-2">
-                <button type="button" className="px-4 py-2 border rounded" onClick={() => setEditPayout(null)}>Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">Save</button>
+                <button type="button" className="px-4 py-2 border rounded" onClick={() => setEditPayout(null)}>{t('vendor_dashboard.payouts.edit_modal.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">{t('vendor_dashboard.payouts.edit_modal.save')}</button>
               </div>
             </form>
           </div>

@@ -7,8 +7,10 @@ import LoginImage from "../../assets/Login.jpg";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { UserService } from "../../services/userService";
+import { useTranslation, Trans } from "react-i18next"; // Added useTranslation and Trans
 
 export default function UserLogin() {
+  const { t } = useTranslation(); // Initialize translation hook
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -75,12 +77,12 @@ export default function UserLogin() {
         <div className="w-[80%] space-y-6 border border-gray-300 rounded-2xl p-4 bg-white text-center">
           {/* Tagline placed above image */}
           <p className="text-green-700 font-semibold text-lg mb-4">
-            Ignite Your Success: Connect, Sell, Innovate with Freelance-224!
+            {t('login_page.tagline')}
           </p>
 
           <img
             src={LoginImage}
-            alt="Freelance work"
+            alt={t('login_page.img_alt')}
             className="w-full max-h-100 object-contain mx-auto"
           />
         </div>
@@ -91,9 +93,9 @@ export default function UserLogin() {
         <div className="w-full max-w-md space-y-6 border border-gray-300 rounded-2xl shadow-lg p-6 bg-white">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold text-gray-900">
-              Log<span className="text-green-700">in</span>
+              <Trans i18nKey="login_page.title" components={{ span: <span className="text-green-700" /> }} />
             </h1>
-            <p className="text-gray-600">Welcome back to Freelance Guinea!</p>
+            <p className="text-gray-600">{t('login_page.welcome')}</p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -103,7 +105,7 @@ export default function UserLogin() {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder={t('login_page.email_placeholder')}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -115,7 +117,7 @@ export default function UserLogin() {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
-                placeholder="Password"
+                placeholder={t('login_page.password_placeholder')}
                 className="w-full pl-10 pr-10 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
               />
@@ -133,7 +135,7 @@ export default function UserLogin() {
                 href="/forgot-password"
                 className="text-sm text-green-600 hover:underline"
               >
-                Forgot Password?
+                {t('login_page.forgot_password')}
               </a>
             </div>
 
@@ -143,24 +145,24 @@ export default function UserLogin() {
                 type="submit"
                 className="px-8 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-200 cursor-pointer"
               >
-                Login
+                {t('login_page.login_btn')}
               </button>
             </div>
 
             {/* Sign Up Link */}
             <div className="text-center text-sm text-gray-600">
-              Don’t have an account?{" "}
+              {t('login_page.no_account')}{" "}
               <a
                 href="/signup"
                 className="text-green-600 font-medium hover:underline"
               >
-                Sign Up
+                {t('login_page.signup_link')}
               </a>
             </div>
 
             {/* OR Divider */}
             <div className="relative text-center text-sm text-gray-500">
-              <span className="bg-white px-2">OR</span>
+              <span className="bg-white px-2">{t('login_page.or')}</span>
             </div>
 
             {/* Google Sign In */}
@@ -169,18 +171,18 @@ export default function UserLogin() {
               className="w-full border border-green-600 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-full transition-colors flex items-center justify-center space-x-2 bg-white"
             >
               <FcGoogle className="w-5 h-5" />
-              <span>Sign in with Google</span>
+              <span>{t('login_page.google_signin')}</span>
             </button>
 
             {/* Terms */}
             <p className="text-xs text-gray-500 text-center">
-              By logging in, you agree to our{" "}
+              {t('login_page.terms_agreement')}{" "}
               <a href="/terms" className="text-blue-500 hover:underline">
-                Terms of Service
+                {t('login_page.terms_of_service')}
               </a>{" "}
-              and{" "}
+              {t('login_page.and')}{" "}
               <a href="/privacy" className="text-blue-500 hover:underline">
-                Privacy Policy
+                {t('login_page.privacy_policy')}
               </a>
               .
             </p>

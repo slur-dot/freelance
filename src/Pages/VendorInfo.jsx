@@ -4,8 +4,10 @@ import DefaultAvatar from "../assets/profile-image.jpg";
 import IphoneImage from "../assets/iphoneProduct.jpg";
 import SamsungImage from "../assets/mobile.jpg";
 import LaptopImage from "../assets/Laptop.jpg";
+import { useTranslation } from "react-i18next";
 
 export default function VendorProfile() {
+  const { t } = useTranslation();
   const [vendor] = useState({
     avatarUrl: "",
     name: "John Doe",
@@ -50,7 +52,7 @@ export default function VendorProfile() {
 
   const handleBuy = () => {
     // Simulate purchase logic
-    alert("Purchase successful! Vendor contact info verified.");
+    alert(t('vendor_profile.purchase_success'));
     setHasPurchased(true);
   };
 
@@ -82,15 +84,15 @@ export default function VendorProfile() {
                 <Star className="text-yellow-500 w-4 h-4" />
                 <span>{vendor.rating} Rating</span>
               </div>
-              <div>Joined {vendor.joined}</div>
-              <div>{vendor.devices.length} Products</div>
+              <div>{t('vendor_profile.joined')} {vendor.joined}</div>
+              <div>{vendor.devices.length} {t('vendor_profile.products_count')}</div>
             </div>
 
             {/* Contact Vendor */}
             <div className="mt-4">
               {hasPurchased ? (
                 <div className="flex flex-col gap-2">
-                  <span className="text-green-600 font-medium">Verified Customer Access</span>
+                  <span className="text-green-600 font-medium">{t('vendor_profile.verified_access')}</span>
                   <a
                     href={`https://wa.me/${vendor.whatsapp.replace(/\D/g, "")}`}
                     target="_blank"
@@ -106,7 +108,7 @@ export default function VendorProfile() {
                     <Phone className="w-4 h-4" /> {vendor.whatsapp.slice(0, 4)} **** ****
                   </div>
                   <p className="text-xs text-red-500 font-medium">
-                    * Contact info hidden. Purchase a device to reveal.
+                    {t('vendor_profile.contact_hidden')}
                   </p>
                 </div>
               )}
@@ -118,7 +120,7 @@ export default function VendorProfile() {
       {/* Devices Section */}
       <div className="max-w-7xl mx-auto px-6 py-12">
         <h2 className="text-2xl font-semibold text-gray-900 mb-6 border-b pb-2">
-          Devices for Sale
+          {t('vendor_profile.devices_for_sale')}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -149,7 +151,7 @@ export default function VendorProfile() {
                     {device.condition}
                   </span>
                   <span className="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full">
-                    Warranty: {device.warranty}
+                    {t('vendor_profile.warranty')}: {device.warranty}
                   </span>
                 </div>
 
@@ -158,7 +160,7 @@ export default function VendorProfile() {
                   onClick={handleBuy}
                   className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors mt-auto"
                 >
-                  Buy Now
+                  {t('vendor_profile.buy_now')}
                 </button>
               </div>
             </div>

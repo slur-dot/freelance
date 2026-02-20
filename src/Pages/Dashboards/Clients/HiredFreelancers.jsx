@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, ArrowUpDown } from "lucide-react";
 import { ClientService } from "../../../services/clientService";
 import { auth } from "../../../firebaseConfig";
@@ -55,6 +56,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function HiredFreelancers() {
+  const { t } = useTranslation();
   const [freelancers, setFreelancers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -106,9 +108,9 @@ export default function HiredFreelancers() {
     <div className="p-4 md:p-6 lg:p-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h1 className="text-2xl md:text-3xl font-bold">Hired Freelancers</h1>
+        <h1 className="text-2xl md:text-3xl font-bold">{t('client_dashboard.hired_freelancers.title')}</h1>
         <button onClick={openHire} className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition w-full md:w-auto">
-          Hire New Freelancer
+          {t('client_dashboard.hired_freelancers.hire_new')}
         </button>
       </div>
 
@@ -116,7 +118,7 @@ export default function HiredFreelancers() {
         {/* Search */}
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search freelancer or project..." />
+          <RCInput placeholder={t('client_dashboard.hired_freelancers.search_placeholder')} />
         </div>
 
         {/* Desktop Table */}
@@ -126,13 +128,13 @@ export default function HiredFreelancers() {
               <RCTableRow>
                 <RCTableHead className="min-w-[160px]">
                   <div className="flex items-center gap-1">
-                    Freelancer Name <ArrowUpDown className="h-4 w-4" />
+                    {t('client_dashboard.hired_freelancers.table.name')} <ArrowUpDown className="h-4 w-4" />
                   </div>
                 </RCTableHead>
-                <RCTableHead className="min-w-[160px]">Project</RCTableHead>
-                <RCTableHead className="min-w-[120px]">Status</RCTableHead>
-                <RCTableHead className="min-w-[140px]">Completion Date</RCTableHead>
-                <RCTableHead className="min-w-[100px]">Amount</RCTableHead>
+                <RCTableHead className="min-w-[160px]">{t('client_dashboard.hired_freelancers.table.project')}</RCTableHead>
+                <RCTableHead className="min-w-[120px]">{t('client_dashboard.hired_freelancers.table.status')}</RCTableHead>
+                <RCTableHead className="min-w-[140px]">{t('client_dashboard.hired_freelancers.table.completion_date')}</RCTableHead>
+                <RCTableHead className="min-w-[100px]">{t('client_dashboard.hired_freelancers.table.amount')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -143,8 +145,8 @@ export default function HiredFreelancers() {
                   <RCTableCell>
                     <div
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
                         }`}
                     >
                       <span
@@ -171,8 +173,8 @@ export default function HiredFreelancers() {
               <div className="mt-2 flex items-center justify-between">
                 <span
                   className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
                     }`}
                 >
                   <span
@@ -184,7 +186,7 @@ export default function HiredFreelancers() {
                 <span className="text-sm text-gray-500">{freelancer.amount}</span>
               </div>
               <div className="mt-1 text-xs text-gray-500">
-                Completion: {freelancer.completionDate}
+                {t('client_dashboard.hired_freelancers.table.completion_date')}: {freelancer.completionDate}
               </div>
             </div>
           ))}
@@ -192,9 +194,9 @@ export default function HiredFreelancers() {
 
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
-          <RCButton variant="outline" className="w-full sm:w-auto">Previous</RCButton>
-          <span className="text-sm text-gray-500">Page 1 of 1</span>
-          <RCButton className="w-full sm:w-auto">Next</RCButton>
+          <RCButton variant="outline" className="w-full sm:w-auto">{t('client_dashboard.hired_freelancers.buttons.previous')}</RCButton>
+          <span className="text-sm text-gray-500">{t('client_dashboard.hired_freelancers.page_info')}</span>
+          <RCButton className="w-full sm:w-auto">{t('client_dashboard.hired_freelancers.buttons.next')}</RCButton>
         </div>
       </RCCard>
 
@@ -202,32 +204,32 @@ export default function HiredFreelancers() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
             <div className="p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold">Hire Freelancer</h3>
+              <h3 className="text-lg font-semibold">{t('client_dashboard.hired_freelancers.modal.title')}</h3>
             </div>
             <form onSubmit={handleHireSubmit} className="p-4 space-y-3">
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Freelancer Name</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.name_label')}</label>
                 <input
                   value={hireForm.name}
                   onChange={(e) => setHireForm({ ...hireForm, name: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter name"
+                  placeholder={t('client_dashboard.hired_freelancers.modal.name_placeholder')}
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Project</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.project_label')}</label>
                 <input
                   value={hireForm.project}
                   onChange={(e) => setHireForm({ ...hireForm, project: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder="Enter project"
+                  placeholder={t('client_dashboard.hired_freelancers.modal.project_placeholder')}
                   required
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.status_label')}</label>
                   <select
                     value={hireForm.status}
                     onChange={(e) => setHireForm({ ...hireForm, status: e.target.value })}
@@ -238,31 +240,31 @@ export default function HiredFreelancers() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-700 mb-1">Completion Date</label>
+                  <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.completion_label')}</label>
                   <input
                     type="text"
                     value={hireForm.completionDate}
                     onChange={(e) => setHireForm({ ...hireForm, completionDate: e.target.value })}
-                    placeholder="e.g., 25 May 2025"
+                    placeholder={t('client_dashboard.hired_freelancers.modal.completion_placeholder')}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm text-gray-700 mb-1">Amount (GNF)</label>
+                <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.amount_label')}</label>
                 <input
                   type="text"
                   value={hireForm.amount}
                   onChange={(e) => setHireForm({ ...hireForm, amount: e.target.value })}
-                  placeholder="e.g., 1760 GNF"
+                  placeholder={t('client_dashboard.hired_freelancers.modal.amount_placeholder')}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
               <div className="flex gap-2 pt-2">
-                <button type="submit" className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">Hire</button>
-                <button type="button" onClick={closeHire} className="flex-1 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-50">Cancel</button>
+                <button type="submit" className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">{t('client_dashboard.hired_freelancers.modal.hire_btn')}</button>
+                <button type="button" onClick={closeHire} className="flex-1 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-50">{t('client_dashboard.hired_freelancers.modal.cancel_btn')}</button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">Note: This action updates UI only and does not write to Firestore.</p>
+              <p className="text-xs text-gray-500 mt-2">{t('client_dashboard.hired_freelancers.modal.note')}</p>
             </form>
           </div>
         </div>

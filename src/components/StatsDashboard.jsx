@@ -3,7 +3,10 @@ import chartImage from "../assets/Chart.png";
 import illustrationImage from "../assets/illustration.png";
 import testimonialImage from "../assets/Testimonial_image2.jpg";
 
+import { useTranslation } from "react-i18next";
+
 const StatsDashboard = () => {
+  const { t } = useTranslation();
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 overflow-hidden">
       {/* Background Pattern */}
@@ -36,10 +39,10 @@ const StatsDashboard = () => {
                 <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-2">
                   <Award className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-sm font-semibold text-gray-800">Illustration</h4>
+                <h4 className="text-sm font-semibold text-gray-800">{t('home.stats.illustration')}</h4>
                 <img src={illustrationImage} alt="Illustration" className="w-10 h-10 mt-1" />
                 <button className="text-xs bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full transition-colors mt-2">
-                  View All
+                  {t('home.stats.view_all')}
                 </button>
               </div>
             </div>
@@ -60,7 +63,7 @@ const StatsDashboard = () => {
                 <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
                   963,237<span className="text-2xl">+</span>
                 </div>
-                <p className="text-white/80 text-sm lg:text-base">Daily Active Users</p>
+                <p className="text-white/80 text-sm lg:text-base">{t('home.stats.daily_users')}</p>
               </div>
 
               <div>
@@ -71,7 +74,7 @@ const StatsDashboard = () => {
                   20<span className="text-2xl">+</span>
                 </div>
                 <p className="text-white/80 text-sm lg:text-base">
-                  Trusted by 20+ NGOs in Guinea for tech and training solutions.
+                  {t('home.stats.trusted_by')}
                 </p>
               </div>
             </div>
@@ -84,7 +87,7 @@ const StatsDashboard = () => {
                 <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
                   1,000<span className="text-2xl">+</span>
                 </div>
-                <p className="text-white/80 text-sm lg:text-base">Freelancers in Conakry</p>
+                <p className="text-white/80 text-sm lg:text-base">{t('home.stats.freelancers_count')}</p>
               </div>
 
               <div>
@@ -92,10 +95,10 @@ const StatsDashboard = () => {
                   <Shield className="w-8 h-8 text-white/80 mr-2" />
                 </div>
                 <div className="text-2xl lg:text-3xl font-bold text-white mb-2">
-                  Powered By
+                  {t('home.stats.powered_by')}
                 </div>
                 <div className="text-3xl lg:text-4xl font-bold text-white">TLS 1.3</div>
-                <p className="text-white/80 text-xs lg:text-sm mt-1">Security Badge</p>
+                <p className="text-white/80 text-xs lg:text-sm mt-1">{t('home.stats.security_badge')}</p>
               </div>
             </div>
           </div>

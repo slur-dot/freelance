@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 // Reusable Button
 function RCButton({
@@ -87,6 +88,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function ProductListing() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
@@ -110,7 +112,7 @@ export default function ProductListing() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product?")) {
+    if (!window.confirm(t('admin_dashboard.listings.product.actions.delete_confirm'))) {
       return;
     }
 
@@ -121,7 +123,7 @@ export default function ProductListing() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error deleting product:", e);
-      setError(`Failed to delete product: ${e.message}`);
+      setError(t('admin_dashboard.listings.product.errors.delete_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -141,7 +143,7 @@ export default function ProductListing() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error activating product:", e);
-      setError(`Failed to activate product: ${e.message}`);
+      setError(t('admin_dashboard.listings.product.errors.activate_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -161,7 +163,7 @@ export default function ProductListing() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error deactivating product:", e);
-      setError(`Failed to deactivate product: ${e.message}`);
+      setError(t('admin_dashboard.listings.product.errors.deactivate_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -176,14 +178,14 @@ export default function ProductListing() {
       {/* Heading with button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
-          Product Listing
+          {t('admin_dashboard.listings.product.title')}
         </h1>
         <RCButton
           variant="custom"
           className="bg-green-600 text-white px-4 py-2 rounded-md"
           onClick={handleAddNewProduct}
         >
-          Add New Product
+          {t('admin_dashboard.listings.product.add_button')}
         </RCButton>
       </div>
 
@@ -193,7 +195,7 @@ export default function ProductListing() {
           {error && <div className="mb-3 text-red-600 text-sm">{error}</div>}
           {loading && <div className="mb-3 text-gray-500 text-sm">Loading...</div>}
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search products..." />
+          <RCInput placeholder={t('admin_dashboard.listings.product.search_placeholder')} />
         </div>
 
         {/* Table */}
@@ -201,12 +203,12 @@ export default function ProductListing() {
           <RCTable>
             <RCTableHeader>
               <RCTableRow>
-                <RCTableHead>S.No</RCTableHead>
-                <RCTableHead>Product Name</RCTableHead>
-                <RCTableHead>Product Description</RCTableHead>
-                <RCTableHead>Price</RCTableHead>
-                <RCTableHead>Status</RCTableHead>
-                <RCTableHead>Actions</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.s_no')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.name')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.description')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.price')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.status')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.product.table.headers.actions')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -219,17 +221,17 @@ export default function ProductListing() {
                   <RCTableCell>
                     <span
                       className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-medium ${product.listed
-                          ? "bg-green-100 text-green-800"
-                          : "bg-red-100 text-red-700"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-700"
                         }`}
                     >
                       <span
                         className={`h-2 w-2 rounded-full ${product.listed
-                            ? "bg-green-500"
-                            : "bg-red-500"
+                          ? "bg-green-500"
+                          : "bg-red-500"
                           }`}
                       />
-                      {product.listed ? "Active" : "Inactive"}
+                      {product.listed ? t('admin_dashboard.listings.product.status.active') : t('admin_dashboard.listings.product.status.inactive')}
                     </span>
                   </RCTableCell>
                   <RCTableCell>
@@ -249,7 +251,7 @@ export default function ProductListing() {
                           onClick={() => handleDeactivate(product.id)}
                           disabled={loading}
                         >
-                          Deactivate
+                          {t('admin_dashboard.listings.product.actions.deactivate')}
                         </RCButton>
                       ) : (
                         <RCButton
@@ -258,7 +260,7 @@ export default function ProductListing() {
                           onClick={() => handleActivate(product.id)}
                           disabled={loading}
                         >
-                          Activate
+                          {t('admin_dashboard.listings.product.actions.activate')}
                         </RCButton>
                       )}
                     </div>
@@ -280,12 +282,12 @@ export default function ProductListing() {
                 {index + 1}. {product.name}
               </h2>
               <p className="text-xs text-gray-500 mb-1">{product.description}</p>
-              <p className="text-xs text-gray-500 mb-1">Price: {product.price}</p>
+              <p className="text-xs text-gray-500 mb-1">{t('admin_dashboard.listings.product.mobile.price')} {product.price}</p>
               <p
                 className={`text-xs font-medium mb-2 ${product.listed ? "text-green-600" : "text-red-600"
                   }`}
               >
-                Status: {product.listed ? "Active" : "Inactive"}
+                {t('admin_dashboard.listings.product.mobile.status')} {product.listed ? t('admin_dashboard.listings.product.status.active') : t('admin_dashboard.listings.product.status.inactive')}
               </p>
               <div className="flex items-center gap-2">
                 <RCButton
@@ -303,7 +305,7 @@ export default function ProductListing() {
                     onClick={() => handleDeactivate(product.id)}
                     disabled={loading}
                   >
-                    Deactivate
+                    {t('admin_dashboard.listings.product.actions.deactivate')}
                   </RCButton>
                 ) : (
                   <RCButton
@@ -312,7 +314,7 @@ export default function ProductListing() {
                     onClick={() => handleActivate(product.id)}
                     disabled={loading}
                   >
-                    Activate
+                    {t('admin_dashboard.listings.product.actions.activate')}
                   </RCButton>
                 )}
               </div>
@@ -322,11 +324,11 @@ export default function ProductListing() {
 
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-3 border-t border-gray-300 pt-4">
-          <RCButton variant="outline">Previous</RCButton>
+          <RCButton variant="outline">{t('admin_dashboard.pagination.previous')}</RCButton>
           <span className="text-xs sm:text-sm text-gray-500">
-            Page 1 of 10
+            {t('admin_dashboard.pagination.page_info', { current: 1, total: 10 })}
           </span>
-          <RCButton>Next</RCButton>
+          <RCButton>{t('admin_dashboard.pagination.next')}</RCButton>
         </div>
       </RCCard>
     </div>

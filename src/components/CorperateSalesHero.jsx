@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import CooperateSalesHeroBg from "../assets/CooporateSaleshero.jpg";
+import { useTranslation } from "react-i18next";
 
 export default function CorperateSalesHero() {
+  const { t } = useTranslation();
   return (
     <section className="relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] overflow-hidden">
       {/* Background Image */}
@@ -18,10 +20,12 @@ export default function CorperateSalesHero() {
       <div className="relative z-20 flex flex-col items-center justify-center h-full text-center px-4 sm:px-6">
         <div className="max-w-3xl sm:max-w-4xl space-y-3 sm:space-y-4">
           <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
-            Devices Sales and Rental For <br/> Your Business & NGO
+            {t('corporate_sales.hero.title').split(" ").map((word, index) => (
+              index === 5 ? <><br /> {word}</> : ` ${word}`
+            ))}
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-200 leading-snug">
-            Equip Your Team with Smartphones and Laptops Across Guinea - Perfect for Companies, NGOs, and Organizations in Conakry and All Prefectures
+            {t('corporate_sales.hero.subtitle')}
           </p>
         </div>
       </div>

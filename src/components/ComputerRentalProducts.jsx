@@ -3,35 +3,37 @@ import { useNavigate } from "react-router-dom";
 import LaptopImage from "../assets/Laptop.jpg";
 // Ideally import a printer image, falling back to LaptopImage or a placeholder if not available
 // import PrinterImage from "../assets/Printer.jpg"; 
+import { useTranslation } from "react-i18next";
 
 const ComputerRentalProducts = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Laptop Data with Weekly/Monthly pricing
   const products = [
     {
       id: 1,
-      name: "Basic Laptop",
+      name: t('computer_rental.products.items.basic_laptop.name'),
       weeklyPrice: "250,000 GNF",
       monthlyPrice: "900,000 GNF",
       image: LaptopImage,
-      specs: "Core i5, 8GB RAM, 256GB SSD"
+      specs: t('computer_rental.products.items.basic_laptop.specs')
     },
     {
       id: 2,
-      name: "Standard Laptop",
+      name: t('computer_rental.products.items.standard_laptop.name'),
       weeklyPrice: "350,000 GNF",
       monthlyPrice: "1,200,000 GNF",
       image: LaptopImage,
-      specs: "Core i7, 16GB RAM, 512GB SSD"
+      specs: t('computer_rental.products.items.standard_laptop.specs')
     },
     {
       id: 3,
-      name: "Premium Laptop",
+      name: t('computer_rental.products.items.premium_laptop.name'),
       weeklyPrice: "500,000 GNF",
       monthlyPrice: "1,800,000 GNF",
       image: LaptopImage,
-      specs: "M1 MacBook Air / High-end Windows"
+      specs: t('computer_rental.products.items.premium_laptop.specs')
     },
   ];
 
@@ -39,27 +41,27 @@ const ComputerRentalProducts = () => {
   const printers = [
     {
       id: 101,
-      name: "LaserJet Pro M404n",
+      name: t('computer_rental.products.items.laserjet.name'),
       weeklyPrice: "150,000 GNF",
       monthlyPrice: "500,000 GNF",
       image: LaptopImage, // Placeholder, replace with actual printer image if available
-      specs: "Monochrome Laser, Fast Printing"
+      specs: t('computer_rental.products.items.laserjet.specs')
     },
     {
       id: 102,
-      name: "Color LaserJet Pro MFP",
+      name: t('computer_rental.products.items.color_laserjet.name'),
       weeklyPrice: "250,000 GNF",
       monthlyPrice: "850,000 GNF",
       image: LaptopImage, // Placeholder
-      specs: "Color, Scan, Copy, Print"
+      specs: t('computer_rental.products.items.color_laserjet.specs')
     },
     {
       id: 103,
-      name: "High-Volume Office Printer",
+      name: t('computer_rental.products.items.office_printer.name'),
       weeklyPrice: "400,000 GNF",
       monthlyPrice: "1,400,000 GNF",
       image: LaptopImage, // Placeholder
-      specs: "Heavy Duty, Network Ready"
+      specs: t('computer_rental.products.items.office_printer.specs')
     }
   ];
 
@@ -73,9 +75,9 @@ const ComputerRentalProducts = () => {
       {/* Full-Width Breadcrumb */}
       <div className="w-full border-b border-gray-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-20 py-2 sm:py-3 flex items-center text-xs sm:text-sm text-gray-500">
-          <span className="cursor-pointer hover:text-green-600" onClick={() => navigate('/')}>Home</span>
+          <span className="cursor-pointer hover:text-green-600" onClick={() => navigate('/')}>{t('computer_rental.products.breadcrumbs.home')}</span>
           <span className="mx-1 sm:mx-2">{">"}</span>
-          <span className="font-semibold text-gray-800">Computer Rentals</span>
+          <span className="font-semibold text-gray-800">{t('computer_rental.products.breadcrumbs.computer_rentals')}</span>
         </div>
       </div>
 
@@ -84,8 +86,8 @@ const ComputerRentalProducts = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">IT Equipment Rental</h1>
-            <p className="text-gray-500 mt-1">Flexible rentals for your business needs</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t('computer_rental.products.header.title')}</h1>
+            <p className="text-gray-500 mt-1">{t('computer_rental.products.header.subtitle')}</p>
           </div>
         </div>
 
@@ -93,7 +95,7 @@ const ComputerRentalProducts = () => {
         <div className="mb-12">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
             <span className="w-2 h-8 bg-green-500 rounded-full"></span>
-            Laptops & Workstations
+            {t('computer_rental.products.sections.laptops')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
@@ -118,12 +120,12 @@ const ComputerRentalProducts = () => {
 
                   <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500 font-medium">Weekly</span>
+                      <span className="text-sm text-gray-500 font-medium">{t('computer_rental.products.labels.weekly')}</span>
                       <span className="text-green-600 font-bold text-lg">{product.weeklyPrice}</span>
                     </div>
                     <div className="flex justify-between items-center">
 
-                      <span className="text-sm text-gray-500 font-medium">Monthly</span>
+                      <span className="text-sm text-gray-500 font-medium">{t('computer_rental.products.labels.monthly')}</span>
                       <span className="text-green-600 font-bold text-lg">{product.monthlyPrice}</span>
                     </div>
 
@@ -134,7 +136,7 @@ const ComputerRentalProducts = () => {
                         handleBooking(product);
                       }}
                     >
-                      Rent Now
+                      {t('computer_rental.products.labels.rent_now')}
                     </button>
                   </div>
                 </div>
@@ -147,7 +149,7 @@ const ComputerRentalProducts = () => {
         <div>
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
             <span className="w-2 h-8 bg-blue-500 rounded-full"></span>
-            Printers & Scanners
+            {t('computer_rental.products.sections.printers')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {printers.map((printer) => (
@@ -173,11 +175,11 @@ const ComputerRentalProducts = () => {
 
                   <div className="mt-auto pt-4 border-t border-gray-100 flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500 font-medium">Weekly</span>
+                      <span className="text-sm text-gray-500 font-medium">{t('computer_rental.products.labels.weekly')}</span>
                       <span className="text-blue-600 font-bold text-lg">{printer.weeklyPrice}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-500 font-medium">Monthly</span>
+                      <span className="text-sm text-gray-500 font-medium">{t('computer_rental.products.labels.monthly')}</span>
                       <span className="text-blue-600 font-bold text-lg">{printer.monthlyPrice}</span>
                     </div>
 
@@ -188,7 +190,7 @@ const ComputerRentalProducts = () => {
                         handleBooking(printer);
                       }}
                     >
-                      Rent Now
+                      {t('computer_rental.products.labels.rent_now')}
                     </button>
                   </div>
                 </div>

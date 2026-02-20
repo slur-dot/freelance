@@ -2,8 +2,10 @@ import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import QRCode from "react-qr-code";
+import { useTranslation, Trans } from "react-i18next";
 
 export default function DownloadInvoicePage({ invoiceData }) {
+  const { t } = useTranslation();
   // Default invoice data (for demo purposes, can be overridden by props)
   const defaultInvoiceData = {
     invoiceNumber: "17-18/JH/97",
@@ -206,18 +208,18 @@ export default function DownloadInvoicePage({ invoiceData }) {
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 md:px-8 lg:px-16 py-6 invoice-container">
         {/* Breadcrumb Navigation */}
         <nav className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 flex flex-wrap gap-1 no-print">
-          <Link to="/" className="hover:underline">Home</Link>
+          <Link to="/" className="hover:underline">{t('home.title')}</Link>
           <span>{">"}</span>
-          <Link to="/cart" className="hover:underline">Cart</Link>
+          <Link to="/cart" className="hover:underline">{t('cart.breadcrumb')}</Link>
           <span>{">"}</span>
-          <Link to="/details" className="hover:underline">Details</Link>
+          <Link to="/details" className="hover:underline">{t('shipping.breadcrumb')}</Link>
           <span>{">"}</span>
-          <span className="font-medium text-gray-700">Download Invoice</span>
+          <span className="font-medium text-gray-700">{t('invoice.breadcrumb')}</span>
         </nav>
 
         {/* Main Heading */}
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 sm:mb-6 break-inside">
-          {paid ? "Tax Invoice" : "Checkout Summary"}
+          {paid ? t('invoice.tax_invoice') : t('invoice.checkout_summary')}
         </h1>
 
         <div className="flex flex-col lg:flex-row items-start gap-6 sm:gap-8">
@@ -227,11 +229,11 @@ export default function DownloadInvoicePage({ invoiceData }) {
               <div ref={invoiceRef}>
                 <div className="flex items-start justify-between">
                   <div>
-                    <h2 className="text-lg sm:text-xl font-semibold">Tax Invoice</h2>
-                    <p className="text-xs text-gray-500 mt-1">Invoice Number: <span className="font-medium">{INVOICE_DATA.invoiceNumber}</span></p>
-                    <p className="text-xs text-gray-500">Invoice Date: <span className="font-medium">{INVOICE_DATA.invoiceDate}</span></p>
-                    <p className="text-xs text-gray-500">Verification Code: <span className="font-semibold tracking-wider">{verificationCode}</span></p>
-                    <p className="text-xs text-gray-500">Reverse Charge Applicable: <span className="font-medium">{INVOICE_DATA.reverseCharge ? "Yes" : "No"}</span></p>
+                    <h2 className="text-lg sm:text-xl font-semibold">{t('invoice.tax_invoice')}</h2>
+                    <p className="text-xs text-gray-500 mt-1">{t('invoice.number')} <span className="font-medium">{INVOICE_DATA.invoiceNumber}</span></p>
+                    <p className="text-xs text-gray-500">{t('invoice.date')} <span className="font-medium">{INVOICE_DATA.invoiceDate}</span></p>
+                    <p className="text-xs text-gray-500">{t('invoice.verification_code')} <span className="font-semibold tracking-wider">{verificationCode}</span></p>
+                    <p className="text-xs text-gray-500">{t('invoice.reverse_charge')} <span className="font-medium">{INVOICE_DATA.reverseCharge ? t('invoice.yes') : t('invoice.no')}</span></p>
                   </div>
                   <div className="bg-gray-50 p-2 rounded-lg">
                     <QRCode value={qrPayload || " "} size={110} />
@@ -241,25 +243,25 @@ export default function DownloadInvoicePage({ invoiceData }) {
                 {/* Supplier and Buyer Details */}
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <h3 className="font-semibold">Supplier:</h3>
+                    <h3 className="font-semibold">{t('invoice.supplier')}</h3>
                     <p>{INVOICE_DATA.supplier.name}</p>
-                    <p>State: {INVOICE_DATA.supplier.state}</p>
-                    <p>State Code: {INVOICE_DATA.supplier.stateCode}</p>
-                    <p>GSTIN: {INVOICE_DATA.supplier.gstin}</p>
+                    <p>{t('invoice.state')} {INVOICE_DATA.supplier.state}</p>
+                    <p>{t('invoice.state_code')} {INVOICE_DATA.supplier.stateCode}</p>
+                    <p>{t('invoice.gstin')} {INVOICE_DATA.supplier.gstin}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold">Details of Buyer (Bill To):</h3>
+                    <h3 className="font-semibold">{t('invoice.buyer')}</h3>
                     <p>{INVOICE_DATA.buyer.name}</p>
-                    <p>State: {INVOICE_DATA.buyer.state}</p>
-                    <p>State Code: {INVOICE_DATA.buyer.stateCode}</p>
-                    <p>GSTIN: {INVOICE_DATA.buyer.gstin}</p>
+                    <p>{t('invoice.state')} {INVOICE_DATA.buyer.state}</p>
+                    <p>{t('invoice.state_code')} {INVOICE_DATA.buyer.stateCode}</p>
+                    <p>{t('invoice.gstin')} {INVOICE_DATA.buyer.gstin}</p>
                   </div>
                   <div>
-                    <h3 className="font-semibold">Details of Consignee (Shipped To):</h3>
+                    <h3 className="font-semibold">{t('invoice.consignee')}</h3>
                     <p>{INVOICE_DATA.consignee.name}</p>
-                    <p>State: {INVOICE_DATA.consignee.state}</p>
-                    <p>State Code: {INVOICE_DATA.consignee.stateCode}</p>
-                    <p>GSTIN: {INVOICE_DATA.consignee.gstin}</p>
+                    <p>{t('invoice.state')} {INVOICE_DATA.consignee.state}</p>
+                    <p>{t('invoice.state_code')} {INVOICE_DATA.consignee.stateCode}</p>
+                    <p>{t('invoice.gstin')} {INVOICE_DATA.consignee.gstin}</p>
                   </div>
                 </div>
 
@@ -268,16 +270,16 @@ export default function DownloadInvoicePage({ invoiceData }) {
                   <table className="w-full text-xs sm:text-sm min-w-[600px]">
                     <thead className="bg-gray-100">
                       <tr className="[&>th]:px-4 [&>th]:py-2 text-left border-b">
-                        <th className="border-r">HSN/SAC</th>
-                        <th className="border-r">Description</th>
-                        <th className="border-r">Qty</th>
-                        <th className="border-r">Unit</th>
-                        <th className="border-r">Unit Rate</th>
-                        <th className="border-r">Taxable Value</th>
-                        <th className="border-r">IGST Rate</th>
-                        <th className="border-r">IGST Amount</th>
-                        <th className="border-r">Total</th>
-                        <th>Serial Number</th>
+                        <th className="border-r">{t('invoice.table.hsn')}</th>
+                        <th className="border-r">{t('invoice.table.desc')}</th>
+                        <th className="border-r">{t('invoice.table.qty')}</th>
+                        <th className="border-r">{t('invoice.table.unit')}</th>
+                        <th className="border-r">{t('invoice.table.rate')}</th>
+                        <th className="border-r">{t('invoice.table.taxable')}</th>
+                        <th className="border-r">{t('invoice.table.igst_rate')}</th>
+                        <th className="border-r">{t('invoice.table.igst_amount')}</th>
+                        <th className="border-r">{t('invoice.table.total')}</th>
+                        <th>{t('invoice.table.serial')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -296,7 +298,7 @@ export default function DownloadInvoicePage({ invoiceData }) {
                         </tr>
                       ))}
                       <tr className="bg-gray-100 font-bold border-t">
-                        <td colSpan={5} className="border-r px-4 py-3">Total Amounts</td>
+                        <td colSpan={5} className="border-r px-4 py-3">{t('invoice.total_amounts')}</td>
                         <td className="border-r px-4 py-3">{formatINR(INVOICE_DATA.totals.taxableValue)}</td>
                         <td className="border-r px-4 py-3"></td>
                         <td className="border-r px-4 py-3">{formatINR(INVOICE_DATA.totals.igstAmount)}</td>
@@ -304,7 +306,7 @@ export default function DownloadInvoicePage({ invoiceData }) {
                         <td className="px-4 py-3"></td>
                       </tr>
                       <tr className="border-t">
-                        <td colSpan={8} className="border-r px-4 py-3">Rounding</td>
+                        <td colSpan={8} className="border-r px-4 py-3">{t('invoice.rounding')}</td>
                         <td className="border-r px-4 py-3">{formatINR(INVOICE_DATA.totals.rounding)}</td>
                         <td className="px-4 py-3"></td>
                       </tr>
@@ -313,22 +315,22 @@ export default function DownloadInvoicePage({ invoiceData }) {
                 </div>
 
                 {/* Total in Words */}
-                <p className="text-sm mt-3 break-inside">Invoice Total Amount in Words: {amountInWords(INVOICE_DATA.totals.total)}</p>
+                <p className="text-sm mt-3 break-inside">{t('invoice.amount_words')} {amountInWords(INVOICE_DATA.totals.total)}</p>
 
                 {/* Delivery Information */}
                 <div className="mt-4 p-4 bg-blue-50 rounded-lg break-inside">
-                  <h3 className="font-semibold text-blue-900 mb-2">Delivery Information</h3>
+                  <h3 className="font-semibold text-blue-900 mb-2">{t('invoice.delivery_info')}</h3>
                   <div className="text-sm text-blue-800 space-y-1">
-                    <p><strong>Pickup Location:</strong> Conakry Tech Hub - Hamdallaye, Conakry</p>
-                    <p><strong>Delivery Method:</strong> Free Delivery in Conakry</p>
+                    <p><strong>{t('invoice.pickup_loc')}</strong> Conakry Tech Hub - Hamdallaye, Conakry</p>
+                    <p><strong>{t('invoice.delivery_method')}</strong> {t('shipping.free_notice_title')}</p>
                   </div>
                 </div>
 
                 {/* Footer Notes */}
                 <div className="mt-4 text-xs text-gray-500 break-inside">
-                  <p>Original for Recipient</p>
+                  <p>{t('invoice.original_recipient')}</p>
                   <p>E&OE</p>
-                  <p>Authorized Signatory: CloudZen Software Labs Pvt. Ltd.</p>
+                  <p>{t('invoice.auth_signatory')} CloudZen Software Labs Pvt. Ltd.</p>
                   <p>CIN: ABCD....</p>
                   <p>Website: <a href="https://www.cloudzen.in" className="underline">www.cloudzen.in</a></p>
                   <p>
@@ -340,9 +342,7 @@ export default function DownloadInvoicePage({ invoiceData }) {
                 </div>
 
                 <p className="text-xs text-gray-500 mt-3 break-inside">
-                  Present this QR code and/or share the verification code with the vendor. The vendor
-                  can scan the code or enter the alphanumeric code in their dashboard to verify payment
-                  before handing over the goods.
+                  {t('invoice.qr_instruction')}
                 </p>
 
                 <div className="mt-4 flex flex-col sm:flex-row gap-3 no-print">
@@ -350,36 +350,36 @@ export default function DownloadInvoicePage({ invoiceData }) {
                     onClick={handlePrint}
                     className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-full"
                   >
-                    Print / Save as PDF
+                    {t('invoice.print_btn')}
                   </button>
                 </div>
               </div>
             ) : (
               <div className="text-sm text-gray-600">
-                <p className="mb-2">Complete the payment to generate your invoice and proof of payment QR code.</p>
-                <p>IGST will be applied automatically at checkout.</p>
+                <p className="mb-2">{t('invoice.complete_payment_msg')}</p>
+                <p>{t('invoice.igst_msg')}</p>
               </div>
             )}
           </div>
 
           {/* Right: Order Summary + Payment */}
           <div className="w-full lg:w-1/3 bg-white rounded-lg shadow p-4 sm:p-6 break-inside no-print">
-            <h2 className="text-lg sm:text-xl font-semibold mb-4">Order Summary</h2>
+            <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('cart.summary_title')}</h2>
             <div className="space-y-3 sm:space-y-4 text-sm sm:text-base">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Taxable Value</span>
+                <span className="text-gray-600">{t('invoice.table.taxable')}</span>
                 <span className="font-medium">{formatINR(amounts.taxable)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">IGST</span>
+                <span className="text-gray-600">{t('invoice.table.igst_amount')}</span>
                 <span className="font-medium">{formatINR(amounts.igst)}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">Rounding</span>
+                <span className="text-gray-600">{t('invoice.rounding')}</span>
                 <span className="font-medium">{formatINR(INVOICE_DATA.totals.rounding)}</span>
               </div>
               <div className="border-t pt-3 sm:pt-4 flex justify-between font-bold text-base sm:text-lg">
-                <span>Total</span>
+                <span>{t('invoice.table.total')}</span>
                 <span>{formatINR(amounts.total)}</span>
               </div>
 
@@ -389,19 +389,18 @@ export default function DownloadInvoicePage({ invoiceData }) {
                   disabled={isPaying}
                   className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white py-2 sm:py-3 rounded-full text-base sm:text-lg flex items-center justify-center gap-2 mt-3 sm:mt-4"
                 >
-                  {isPaying ? "Processing..." : "Pay Now"}
+                  {isPaying ? t('shipping.processing') : t('invoice.pay_now')}
                   {!isPaying && <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />}
                 </button>
               ) : (
                 <div className="mt-3 text-green-600 text-sm font-medium">
-                  Payment completed. Your invoice is ready.
+                  {t('invoice.payment_completed')}
                 </div>
               )}
             </div>
 
             <div className="mt-4 p-3 rounded-md bg-green-50 text-xs text-green-800">
-              Vendors: use the dashboard to <strong>scan the QR</strong> or
-              enter the <strong>Verification Code</strong> to validate payment.
+              <Trans i18nKey="invoice.vendor_instruction" components={{ strong: <strong /> }} />
             </div>
           </div>
         </div>

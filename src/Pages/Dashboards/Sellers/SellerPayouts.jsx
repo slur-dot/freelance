@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Trash2, Edit, Loader2, DollarSign } from "lucide-react";
 import { PayoutService } from "../../../services/payoutService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 export default function SellerPayouts() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("amount");
@@ -183,7 +185,7 @@ export default function SellerPayouts() {
       <div className="w-full">
         {/* Header */}
         <div className="p-6 pb-4">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">Payouts</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('seller_dashboard.payouts.title')}</h1>
 
           {error && (
             <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
@@ -199,7 +201,7 @@ export default function SellerPayouts() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-green-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Total Payouts</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.payouts.stats.total_payouts')}</p>
                   <p className="text-lg font-semibold text-gray-900">{stats.total || 0}</p>
                 </div>
               </div>
@@ -208,7 +210,7 @@ export default function SellerPayouts() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-green-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Completed</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.payouts.stats.completed')}</p>
                   <p className="text-lg font-semibold text-gray-900">{stats.completed || 0}</p>
                 </div>
               </div>
@@ -217,7 +219,7 @@ export default function SellerPayouts() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-yellow-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Pending</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.payouts.stats.pending')}</p>
                   <p className="text-lg font-semibold text-gray-900">{stats.pending || 0}</p>
                 </div>
               </div>
@@ -226,7 +228,7 @@ export default function SellerPayouts() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-blue-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Total Amount</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.payouts.stats.total_amount')}</p>
                   <p className="text-lg font-semibold text-gray-900">{formatPrice(stats.totalAmount)}</p>
                 </div>
               </div>
@@ -238,7 +240,7 @@ export default function SellerPayouts() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search payouts..."
+              placeholder={t('seller_dashboard.payouts.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-700 placeholder-gray-400"
@@ -257,26 +259,26 @@ export default function SellerPayouts() {
                     onClick={() => handleSort("amount")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Amount</span>
+                      <span>{t('seller_dashboard.payouts.table.amount')}</span>
                       {sortField === "amount" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Payment Method
+                    {t('seller_dashboard.payouts.table.method')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Payment Number
+                    {t('seller_dashboard.payouts.table.number')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Status
+                    {t('seller_dashboard.payouts.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Processed Date
+                    {t('seller_dashboard.payouts.table.date')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('seller_dashboard.payouts.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -286,13 +288,13 @@ export default function SellerPayouts() {
                     <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                       {payouts.length === 0 ? (
                         <div>
-                          <p className="text-lg font-medium mb-2">No payouts found</p>
-                          <p className="text-sm">Payouts will appear here once you start earning from sales.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.payouts.empty.title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.payouts.empty.desc')}</p>
                         </div>
                       ) : (
                         <div>
-                          <p className="text-lg font-medium mb-2">No payouts match your search</p>
-                          <p className="text-sm">Try adjusting your search terms.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.payouts.empty.search_title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.payouts.empty.search_desc')}</p>
                         </div>
                       )}
                     </td>
@@ -348,11 +350,11 @@ export default function SellerPayouts() {
         {showEditModal && editingPayout && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-              <h3 className="text-lg font-semibold mb-4">Edit Payout</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.payouts.modal.title')}</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Payout ID</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.id')}</label>
                   <input
                     type="text"
                     value={editingPayout.id || ''}
@@ -362,7 +364,7 @@ export default function SellerPayouts() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Amount (GNF)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.amount')}</label>
                   <input
                     type="number"
                     value={editingPayout.amount || ''}
@@ -372,7 +374,7 @@ export default function SellerPayouts() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.method')}</label>
                   <select
                     value={editingPayout.paymentMethod || ''}
                     onChange={(e) => setEditingPayout({ ...editingPayout, paymentMethod: e.target.value })}
@@ -386,7 +388,7 @@ export default function SellerPayouts() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Payment Number</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.number')}</label>
                   <input
                     type="text"
                     value={editingPayout.paymentNumber || ''}
@@ -397,7 +399,7 @@ export default function SellerPayouts() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.status')}</label>
                   <select
                     value={editingPayout.status || ''}
                     onChange={(e) => setEditingPayout({ ...editingPayout, status: e.target.value })}
@@ -410,7 +412,7 @@ export default function SellerPayouts() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Processed Date (Read Only)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.date')}</label>
                   <input
                     type="text"
                     value={editingPayout.processedAt && editingPayout.processedAt.seconds ?
@@ -426,13 +428,13 @@ export default function SellerPayouts() {
                   onClick={handleUpdate}
                   className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                 >
-                  Update Payout
+                  {t('seller_dashboard.payouts.modal.update')}
                 </button>
                 <button
                   onClick={handleCloseEditModal}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
                 >
-                  Cancel
+                  {t('seller_dashboard.payouts.modal.cancel')}
                 </button>
               </div>
             </div>

@@ -6,7 +6,11 @@ import iphoneProduct from "../assets/iphoneProduct.jpg";
 import laptop from "../assets/Laptop.jpg";
 import mobile from "../assets/mobile.jpg";
 
-// Local product data
+import { useTranslation } from "react-i18next";
+
+// Local product data with translation keys or logic to translate
+// Since this is outside the component, we might need to move it inside or translate it inside the component.
+// For now, let's keep data structure but we will handle translation in the component mapping.
 const productData = [
   {
     id: 1,
@@ -48,6 +52,7 @@ const imageMap = {
 };
 
 const ProductList = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -60,7 +65,7 @@ const ProductList = () => {
 
   const handleAddToCart = (id) => {
     const product = products.find((p) => p.id === id);
-    alert(`${product.name} added to cart.`);
+    alert(`${product.name} ${t('home.product_list.added_to_cart')}`);
   };
 
   return (
@@ -69,7 +74,11 @@ const ProductList = () => {
         {products.map((product) => (
           <ProductCard
             key={product.id}
-            product={product}
+            product={{
+              ...product,
+              condition: product.condition === "New" ? t('home.product_list.new') : t('home.product_list.used'),
+              badge: product.badge === "Best Selling" ? t('home.product_list.best_selling') : product.badge
+            }}
             onAddToCart={handleAddToCart}
           />
         ))}

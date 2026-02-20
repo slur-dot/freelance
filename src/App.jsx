@@ -51,7 +51,7 @@ import CompanyTrainingProgress from './Pages/Dashboards/Company/CompanyTrainingP
 import TrainingQuotes from './Pages/Dashboards/Company/TrainingQuotes';
 import VendorSidebar from './Pages/Dashboards/VendorModule/VendorSidebar';
 import Orders from './Pages/Dashboards/VendorModule/Orders';
-import VendorDashbaord from './Pages/Dashboards/VendorModule/VendorDashbaord';
+import VendorDashboard from './Pages/Dashboards/VendorModule/VendorDashboard';
 import Listings from './Pages/Dashboards/VendorModule/Listings';
 import Payouts from './Pages/Dashboards/VendorModule/Payouts';
 import AdsManagement from './Pages/Dashboards/VendorModule/AdsManagement';
@@ -182,7 +182,7 @@ function AppContent() {
 
           {/* Vendor Dashboard  */}
           <Route path="/vendor/dashboard" element={<VendorSidebar />}>
-            <Route index element={<VendorDashbaord />} />
+            <Route index element={<VendorDashboard />} />
             <Route path="listings" element={<Listings />}></Route>
             <Route path="orders" element={<Orders />}></Route>
             <Route path="payouts" element={<Payouts />}></Route>

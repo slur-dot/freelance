@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Info, Upload, Loader2, Landmark, DollarSign, Lock } from "lucide-react";
 import { storage, auth } from "../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -51,6 +52,7 @@ function AvatarImage({ src, alt }) {
 }
 
 export default function FreelancerDashboard() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const [user, setUser] = useState(auth.currentUser);
   const FREELANCER_ID = user?.uid;
@@ -80,28 +82,28 @@ export default function FreelancerDashboard() {
   const [saving, setSaving] = useState(false);
 
   const text = {
-    manageMessages: "MANAGE MESSAGES",
-    workHistory: "Work History",
-    getStarted: "Get Started!",
-    earningsSoon: "You'll find all your Earnings info here once you complete your first job.",
-    projects: "Active Projects",
-    activeCompleted: "Active & Completed",
-    bids: "Recent Bids",
-    activeBids: "Active Bids",
-    payments: "Payments & Escrow",
-    escrowHeld: "Funds held in Escrow until job is marked complete",
-    earnings: "Earnings History",
-    notifications: "Notifications",
-    security: "Security & Verification",
-    verifiedPhone: "Phone Verified",
-    profileProgress: "Profile 80% Complete",
-    portfolioItem: "Portfolio Item Added",
-    availableFunds: "Available Funds",
-    balanceAvailable: "Balance Available",
-    withdraw: "Withdraw",
-    requestedCourses: "Requested Courses",
-    coursesUnderReview: "Courses Under Review",
-    viewRequested: "View Requested"
+    manageMessages: t('freelancer_dashboard.messages.manage'),
+    workHistory: t('freelancer_dashboard.work_history.title'),
+    getStarted: t('freelancer_dashboard.work_history.get_started'),
+    earningsSoon: t('freelancer_dashboard.work_history.earnings_soon'),
+    projects: t('freelancer_dashboard.projects.title'),
+    activeCompleted: t('freelancer_dashboard.projects.subtitle'),
+    bids: t('freelancer_dashboard.bids.title'),
+    activeBids: t('freelancer_dashboard.bids.subtitle'),
+    payments: t('freelancer_dashboard.payments.title'),
+    escrowHeld: t('freelancer_dashboard.payments.escrow_held'),
+    earnings: t('freelancer_dashboard.earnings.title'),
+    notifications: t('freelancer_dashboard.notifications.title'),
+    security: t('freelancer_dashboard.security.title'),
+    verifiedPhone: t('freelancer_dashboard.security.verified_phone'),
+    profileProgress: t('freelancer_dashboard.security.profile_progress'),
+    portfolioItem: t('freelancer_dashboard.security.portfolio_item'),
+    availableFunds: t('freelancer_dashboard.funds.title'),
+    balanceAvailable: t('freelancer_dashboard.funds.balance_available'),
+    withdraw: t('freelancer_dashboard.funds.withdraw'),
+    requestedCourses: t('freelancer_dashboard.courses.title'),
+    coursesUnderReview: t('freelancer_dashboard.courses.under_review'),
+    viewRequested: t('freelancer_dashboard.courses.view_requested')
   };
   const [form, setForm] = useState({
     name: '', skills: '', experience: '', email: '', phone: '',
@@ -247,25 +249,25 @@ export default function FreelancerDashboard() {
       <div className="max-w-7xl mx-auto mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="p-4">
-            <div className="text-xs text-gray-500">Total Earned (net)</div>
+            <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.total_earned')}</div>
             <div className="text-xl font-semibold mt-1">{(mainStats.totalEarned || 0).toLocaleString()} GNF</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-xs text-gray-500">Projects Posted</div>
+            <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.projects_posted')}</div>
             <div className="text-xl font-semibold mt-1">{mainStats.projectsPosted || 0}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-xs text-gray-500">JDs Applied</div>
+            <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.jds_applied')}</div>
             <div className="text-xl font-semibold mt-1">{mainStats.jdsApplied || 0}</div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-xs text-gray-500">Hires</div>
+            <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.hires')}</div>
             <div className="text-xl font-semibold mt-1">{mainStats.hires || 0}</div>
           </CardContent>
         </Card>
@@ -298,7 +300,7 @@ export default function FreelancerDashboard() {
               <Info className="h-4 w-4 text-gray-500 flex-shrink-0" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{loading ? '...' : `${requestedCount} Courses`}</div>
+              <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{loading ? '...' : `${requestedCount} ${t('freelancer_dashboard.courses.count_suffix')}`}</div>
               <Link to="/freelancer/dashboard/requested-courses">
                 <Button className="mt-4 w-fit">{text.viewRequested}</Button>
               </Link>
@@ -308,23 +310,23 @@ export default function FreelancerDashboard() {
 
         {/* Messages Section */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col">
-          <h3 className="text-lg font-semibold mb-2">{text.messages}</h3>
+          <h3 className="text-lg font-semibold mb-2">{t('freelancer_dashboard.messages.title')}</h3>
           <Card className="flex-grow h-fit">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto">
                 {error && (
                   <div className="p-4 text-red-600 bg-red-50 border border-red-200 rounded-md m-2">
-                    <div className="font-semibold">Error loading data:</div>
+                    <div className="font-semibold">{t('freelancer_dashboard.messages.error')}</div>
                     <div className="text-sm">{error}</div>
                     <button
                       onClick={() => window.location.reload()}
                       className="mt-2 px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
                     >
-                      Retry
+                      {t('freelancer_dashboard.messages.retry')}
                     </button>
                   </div>
                 )}
-                {loading && <div className="p-4">Loading...</div>}
+                {loading && <div className="p-4">{t('freelancer_dashboard.messages.loading')}</div>}
                 {!loading && messages.map((m, i) => (
                   <div key={m.id || i} className="flex items-center gap-3 p-4 border-b last:border-b-0">
                     <Avatar>
@@ -357,10 +359,10 @@ export default function FreelancerDashboard() {
             <CardContent className="flex flex-col items-center justify-center p-4 text-center h-full">
               <div className="w-full text-left mb-4 bg-gray-50 overflow-x-auto">
                 <div className="grid grid-cols-4 gap-4 font-semibold text-sm text-gray-600 border-b pb-2 p-4 border-gray-100 min-w-[400px]">
-                  <div>Date</div>
-                  <div>Activity</div>
-                  <div>Order</div>
-                  <div>Amount</div>
+                  <div>{t('freelancer_dashboard.work_history.date')}</div>
+                  <div>{t('freelancer_dashboard.work_history.activity')}</div>
+                  <div>{t('freelancer_dashboard.work_history.order')}</div>
+                  <div>{t('freelancer_dashboard.work_history.amount')}</div>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center flex-grow">
@@ -381,21 +383,21 @@ export default function FreelancerDashboard() {
             <CardContent className="p-4">
               <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2">
                 {recentProjects.length === 0 ? (
-                  <div className="text-sm text-gray-500">No recent projects</div>
+                  <div className="text-sm text-gray-500">{t('freelancer_dashboard.projects.no_recent')}</div>
                 ) : (
                   recentProjects.map((p, i) => (
                     <div key={p.id || i} className="min-w-[200px] md:min-w-[240px] lg:min-w-[260px] snap-start bg-gray-50 rounded-md p-4 border">
                       <p className="font-semibold md:truncate">{p.title}</p>
-                      <p className="text-xs text-gray-500 mt-1">Client: {p.client}</p>
-                      <p className="text-xs text-gray-500 mt-1">Amount: {(p.netAmount || p.amount || 0).toLocaleString()} GNF</p>
-                      <p className="text-xs text-gray-500 mt-1">Status: {p.status}</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.client')}: {p.client}</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.amount')}: {(p.netAmount || p.amount || 0).toLocaleString()} GNF</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.status')}: {p.status}</p>
                     </div>
                   ))
                 )}
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowProjectModal(true)}>Post New Project</Button>
-                <Button variant="outline" className="border-green-600 text-green-700">View All Projects</Button>
+                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowProjectModal(true)}>{t('freelancer_dashboard.projects.post_new')}</Button>
+                <Button variant="outline" className="border-green-600 text-green-700">{t('freelancer_dashboard.projects.view_all')}</Button>
               </div>
             </CardContent>
           </Card>
@@ -408,7 +410,7 @@ export default function FreelancerDashboard() {
             <CardContent className="p-4">
               <div className="flex flex-col gap-3">
                 {jdApplications.length === 0 ? (
-                  <div className="text-sm text-gray-500">No applications yet</div>
+                  <div className="text-sm text-gray-500">{t('freelancer_dashboard.bids.no_applications')}</div>
                 ) : (
                   jdApplications.map((b, i) => (
                     <div key={b.id || i} className="flex items-center justify-between border rounded-md p-3">
@@ -421,8 +423,8 @@ export default function FreelancerDashboard() {
                 )}
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowJDModal(true)}>Apply to JD</Button>
-                <Button variant="outline" className="border-green-600 text-green-700" onClick={() => setShowJDList((v) => !v)}>View Application Status</Button>
+                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowJDModal(true)}>{t('freelancer_dashboard.bids.apply')}</Button>
+                <Button variant="outline" className="border-green-600 text-green-700" onClick={() => setShowJDList((v) => !v)}>{t('freelancer_dashboard.bids.view_status')}</Button>
               </div>
             </CardContent>
           </Card>
@@ -462,7 +464,7 @@ export default function FreelancerDashboard() {
                   <div key={i} className="flex-1 bg-green-600/20 rounded-sm" style={{ height: `${h}%` }}></div>
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-2">Chart.js ready — lightweight preview shown</p>
+              <p className="text-xs text-gray-500 mt-2">{t('freelancer_dashboard.earnings.chart_preview')}</p>
             </CardContent>
           </Card>
         </div>
@@ -477,20 +479,20 @@ export default function FreelancerDashboard() {
               <div className="p-4 border-b flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <input type="checkbox" defaultChecked className="h-4 w-4" id="notif-inapp" />
-                  <label htmlFor="notif-inapp">In-app</label>
+                  <label htmlFor="notif-inapp">{t('freelancer_dashboard.notifications.in_app')}</label>
                 </div>
                 <div className="flex items-center gap-2">
                   <input type="checkbox" defaultChecked className="h-4 w-4" id="notif-email" />
-                  <label htmlFor="notif-email">Email</label>
+                  <label htmlFor="notif-email">{t('freelancer_dashboard.notifications.email')}</label>
                 </div>
                 <div className="flex items-center gap-2">
                   <input type="checkbox" className="h-4 w-4" id="notif-phone" />
-                  <label htmlFor="notif-phone">Phone</label>
+                  <label htmlFor="notif-phone">{t('freelancer_dashboard.notifications.phone')}</label>
                 </div>
               </div>
               <ul className="divide-y">
                 {notifications.length === 0 ? (
-                  <li className="p-4 text-sm text-gray-500">No notifications</li>
+                  <li className="p-4 text-sm text-gray-500">{t('freelancer_dashboard.notifications.none')}</li>
                 ) : (
                   notifications.map((n, i) => (
                     <li key={n.id || i} className="p-4 text-sm">
@@ -509,12 +511,12 @@ export default function FreelancerDashboard() {
           <Card>
             <CardContent className="p-4">
               <ul className="space-y-2 text-sm">
-                <li>✅ {text.verifiedPhone}</li>
-                <li>✅ {text.profileProgress}</li>
-                <li>✅ {text.portfolioItem}</li>
-                <li>🛡️ Escrow (Web ID: 1)</li>
-                <li>🚫 Rate limit: 5 bids/project, 10 bids/month</li>
-                <li>🧑‍⚖️ Dispute: report in-app, admin mediation ≤ 48h</li>
+                <li>✅ {t('freelancer_dashboard.security.verified_phone')}</li>
+                <li>✅ {t('freelancer_dashboard.security.profile_progress')}</li>
+                <li>✅ {t('freelancer_dashboard.security.portfolio_item')}</li>
+                <li>🛡️ {t('freelancer_dashboard.security.escrow')}</li>
+                <li>🚫 {t('freelancer_dashboard.security.rate_limit')}</li>
+                <li>🧑‍⚖️ {t('freelancer_dashboard.security.dispute')}</li>
               </ul>
             </CardContent>
           </Card>
@@ -536,8 +538,8 @@ export default function FreelancerDashboard() {
                 <div className="text-sm text-gray-700 mt-1">{plan.price}</div>
                 <p className="text-sm text-gray-600 mt-2">{plan.desc}</p>
                 <div className="flex items-center gap-2 mt-3">
-                  <Button className="bg-green-600 hover:bg-green-700">Buy Now</Button>
-                  <Button variant="outline" className="border-green-600 text-green-700">View Plan Benefits</Button>
+                  <Button className="bg-green-600 hover:bg-green-700">{t('freelancer_dashboard.plans.buy_now')}</Button>
+                  <Button variant="outline" className="border-green-600 text-green-700">{t('freelancer_dashboard.plans.view_benefits')}</Button>
                 </div>
               </CardContent>
             </Card>
@@ -553,26 +555,26 @@ export default function FreelancerDashboard() {
         showProjectModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">Post New Project</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.post_project.title')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">Title</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.title')}</label>
                   <input className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">Description</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.description')}</label>
                   <textarea className="w-full border rounded-md px-3 py-2 mt-1" rows={3} value={projectForm.description} onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Budget (GNF)</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.budget')}</label>
                   <input type="number" className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.amount} onChange={(e) => setProjectForm({ ...projectForm, amount: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Client</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.client')}</label>
                   <input className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.client} onChange={(e) => setProjectForm({ ...projectForm, client: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Status</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.status')}</label>
                   <select className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.status} onChange={(e) => setProjectForm({ ...projectForm, status: e.target.value })}>
                     <option value="in_progress">in_progress</option>
                     <option value="completed">completed</option>
@@ -581,7 +583,7 @@ export default function FreelancerDashboard() {
                 </div>
               </div>
               <div className="mt-6 flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowProjectModal(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setShowProjectModal(false)}>{t('freelancer_dashboard.modals.post_project.cancel')}</Button>
                 <Button disabled={projectSaving} onClick={async () => {
                   try {
                     setProjectSaving(true);
@@ -609,7 +611,7 @@ export default function FreelancerDashboard() {
                   } finally {
                     setProjectSaving(false);
                   }
-                }}>{projectSaving ? 'Saving...' : 'Post Project'}</Button>
+                }}>{projectSaving ? t('freelancer_dashboard.modals.post_project.saving') : t('freelancer_dashboard.modals.post_project.save')}</Button>
               </div>
             </div>
           </div>
@@ -621,22 +623,22 @@ export default function FreelancerDashboard() {
         showJDModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">Apply to JD</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.apply_jd.title')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">JD Title</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.title')}</label>
                   <input className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.title} onChange={(e) => setJdForm({ ...jdForm, title: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Budget (GNF)</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.budget')}</label>
                   <input type="number" className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.budget} onChange={(e) => setJdForm({ ...jdForm, budget: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Client</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.client')}</label>
                   <input className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.client} onChange={(e) => setJdForm({ ...jdForm, client: e.target.value })} />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Status</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.status')}</label>
                   <select className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.status} onChange={(e) => setJdForm({ ...jdForm, status: e.target.value })}>
                     <option value="pending">pending</option>
                     <option value="shortlisted">shortlisted</option>
@@ -645,7 +647,7 @@ export default function FreelancerDashboard() {
                 </div>
               </div>
               <div className="mt-6 flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowJDModal(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setShowJDModal(false)}>{t('freelancer_dashboard.modals.apply_jd.cancel')}</Button>
                 <Button disabled={jdSaving} onClick={async () => {
                   try {
                     setJdSaving(true);
@@ -668,7 +670,7 @@ export default function FreelancerDashboard() {
                   } finally {
                     setJdSaving(false);
                   }
-                }}>{jdSaving ? 'Submitting...' : 'Apply'}</Button>
+                }}>{jdSaving ? t('freelancer_dashboard.modals.apply_jd.submitting') : t('freelancer_dashboard.modals.apply_jd.apply')}</Button>
               </div>
             </div>
           </div>
@@ -680,7 +682,7 @@ export default function FreelancerDashboard() {
         showJDList && (
           <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30" onClick={() => setShowJDList(false)}>
             <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-lg font-semibold mb-4">JD Applications</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.jd_list.title')}</h3>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {jdApplications.map((b) => (
                   <div key={b.id} className="border rounded-md p-3 text-sm">
@@ -690,7 +692,7 @@ export default function FreelancerDashboard() {
                 ))}
               </div>
               <div className="mt-4 flex items-center justify-end">
-                <Button variant="outline" onClick={() => setShowJDList(false)}>Close</Button>
+                <Button variant="outline" onClick={() => setShowJDList(false)}>{t('freelancer_dashboard.modals.jd_list.close')}</Button>
               </div>
             </div>
           </div>
@@ -702,10 +704,10 @@ export default function FreelancerDashboard() {
         showEdit && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.edit_profile.title')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm text-gray-600">Name</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.name')}</label>
                   <input
                     className="w-full border rounded-md px-3 py-2 mt-1"
                     value={form.name}
@@ -713,7 +715,7 @@ export default function FreelancerDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Experience</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.experience')}</label>
                   <input
                     className="w-full border rounded-md px-3 py-2 mt-1"
                     value={form.experience}
@@ -721,7 +723,7 @@ export default function FreelancerDashboard() {
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">Skills (comma separated)</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.skills')}</label>
                   <input
                     className="w-full border rounded-md px-3 py-2 mt-1"
                     value={form.skills}
@@ -729,7 +731,7 @@ export default function FreelancerDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Email</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.email')}</label>
                   <input
                     type="email"
                     className="w-full border rounded-md px-3 py-2 mt-1"
@@ -738,7 +740,7 @@ export default function FreelancerDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Phone</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.phone')}</label>
                   <input
                     className="w-full border rounded-md px-3 py-2 mt-1"
                     value={form.phone}
@@ -747,7 +749,7 @@ export default function FreelancerDashboard() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600">Payment Type</label>
+                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.payment_type')}</label>
                   <select
                     className="w-full border rounded-md px-3 py-2 mt-1"
                     value={form.paymentType}
@@ -764,29 +766,29 @@ export default function FreelancerDashboard() {
                     <div className="md:col-span-2">
                       <div className="bg-blue-50 p-3 rounded-md text-sm text-blue-700 mb-2 flex items-center gap-2">
                         <Lock className="h-4 w-4" />
-                        <span>Your bank details are encrypted and secure.</span>
+                        <span>{t('freelancer_dashboard.modals.edit_profile.form.secure_msg')}</span>
                       </div>
                     </div>
                     <div>
-                      <label className="text-sm text-gray-600">Bank Name</label>
+                      <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.bank_name')}</label>
                       <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.bankName} onChange={(e) => setForm({ ...form, bankName: e.target.value })} placeholder="e.g. Ecobank" />
                     </div>
                     <div>
-                      <label className="text-sm text-gray-600">Account Holder Name</label>
+                      <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.account_holder')}</label>
                       <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountHolder} onChange={(e) => setForm({ ...form, accountHolder: e.target.value })} placeholder="Name on account" />
                     </div>
                     <div>
-                      <label className="text-sm text-gray-600">IBAN / Account Number</label>
+                      <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.account_number')}</label>
                       <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountNumber} onChange={(e) => setForm({ ...form, accountNumber: e.target.value })} placeholder="GN..." />
                     </div>
                     <div>
-                      <label className="text-sm text-gray-600">SWIFT / BIC Code</label>
+                      <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.swift_code')}</label>
                       <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.swiftCode} onChange={(e) => setForm({ ...form, swiftCode: e.target.value })} placeholder="ECOBGN..." />
                     </div>
                   </>
                 ) : (
                   <div>
-                    <label className="text-sm text-gray-600">Payment Number</label>
+                    <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.payment_number')}</label>
                     <input
                       className="w-full border rounded-md px-3 py-2 mt-1"
                       value={form.paymentNumber}
@@ -797,7 +799,7 @@ export default function FreelancerDashboard() {
                 )}
               </div>
               <div className="mt-6 flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowEdit(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setShowEdit(false)}>{t('freelancer_dashboard.modals.edit_profile.cancel')}</Button>
                 <Button
                   disabled={saving}
                   onClick={async () => {
@@ -838,7 +840,7 @@ export default function FreelancerDashboard() {
                     }
                   }}
                 >
-                  {saving ? 'Saving...' : 'Save Changes'}
+                  {saving ? t('freelancer_dashboard.modals.edit_profile.saving') : t('freelancer_dashboard.modals.edit_profile.save')}
                 </Button>
               </div>
             </div>
@@ -850,57 +852,57 @@ export default function FreelancerDashboard() {
         showWithdrawModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-              <h3 className="text-lg font-semibold mb-4">Request Withdrawal</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.withdrawal.title')}</h3>
 
               {freelancer?.paymentMethod?.type === 'SWIFT' ? (
                 <div className="mb-4 space-y-3">
                   <div className="bg-gray-50 p-3 rounded text-sm">
-                    <p className="font-semibold text-gray-700">Receiving Bank:</p>
+                    <p className="font-semibold text-gray-700">{t('freelancer_dashboard.modals.withdrawal.receiving_bank')}</p>
                     <p>{freelancer.paymentMethod.swift.bankName} ••• {freelancer.paymentMethod.swift.accountNumber.slice(-4)}</p>
                   </div>
 
                   <div>
-                    <label className="text-sm text-gray-600">Amount to Withdraw (GNF)</label>
+                    <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.withdrawal.amount_label')}</label>
                     <input
                       type="number"
                       className="w-full border rounded-md px-3 py-2 mt-1"
                       value={withdrawAmount}
                       onChange={(e) => setWithdrawAmount(e.target.value)}
-                      placeholder="Min. 500,000 GNF"
+                      placeholder={t('freelancer_dashboard.modals.withdrawal.min_amount')}
                     />
                   </div>
 
                   {withdrawAmount && !isNaN(withdrawAmount) && (
                     <div className="bg-green-50 p-3 rounded border border-green-100 space-y-1 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-600">Requested:</span>
+                        <span className="text-gray-600">{t('freelancer_dashboard.modals.withdrawal.requested')}</span>
                         <span className="font-medium">{Number(withdrawAmount).toLocaleString()} GNF</span>
                       </div>
                       <div className="flex justify-between text-red-600">
-                        <span>Bank Fee:</span>
+                        <span>{t('freelancer_dashboard.modals.withdrawal.bank_fee')}</span>
                         <span>- 150,000 GNF</span>
                       </div>
                       <div className="border-t pt-1 mt-1 flex justify-between font-bold text-gray-800">
-                        <span>Net Receipt:</span>
+                        <span>{t('freelancer_dashboard.modals.withdrawal.net_receipt')}</span>
                         <span>{(Math.max(0, Number(withdrawAmount) - 150000)).toLocaleString()} GNF</span>
                       </div>
                       <div className="text-xs text-gray-500 mt-1 text-right">
-                        Est. ~${(Math.max(0, Number(withdrawAmount) - 150000) / 8600).toFixed(2)} USD
+                        {t('freelancer_dashboard.modals.withdrawal.est_usd')} {(Math.max(0, Number(withdrawAmount) - 150000) / 8600).toFixed(2)} USD
                       </div>
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="mb-4 text-center py-4">
-                  <p className="text-gray-600 mb-4">Please set up a SWIFT bank account in your profile to withdraw large amounts.</p>
+                  <p className="text-gray-600 mb-4">{t('freelancer_dashboard.modals.withdrawal.setup_swift')}</p>
                   <Button variant="outline" onClick={() => { setShowWithdrawModal(false); setShowEdit(true); }}>
-                    Update Profile
+                    {t('freelancer_dashboard.modals.withdrawal.update_profile')}
                   </Button>
                 </div>
               )}
 
               <div className="flex justify-end gap-2 mt-2">
-                <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>Cancel</Button>
+                <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>{t('freelancer_dashboard.modals.withdrawal.cancel')}</Button>
                 {freelancer?.paymentMethod?.type === 'SWIFT' && (
                   <Button
                     disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000}
@@ -909,12 +911,12 @@ export default function FreelancerDashboard() {
                       setTimeout(() => {
                         setWithdrawProcessing(false);
                         setShowWithdrawModal(false);
-                        alert("Withdrawal request submitted successfully! It will be processed within 3-5 business days.");
+                        alert(t('freelancer_dashboard.modals.withdrawal.success_alert'));
                         setWithdrawAmount('');
                       }, 2000);
                     }}
                   >
-                    {withdrawProcessing ? 'Processing...' : 'Confirm Withdrawal'}
+                    {withdrawProcessing ? t('freelancer_dashboard.modals.withdrawal.processing') : t('freelancer_dashboard.modals.withdrawal.confirm')}
                   </Button>
                 )}
               </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Trash2, Plus, X } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 export default function AdvertisementManagement() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("adTitle");
@@ -37,8 +39,6 @@ export default function AdvertisementManagement() {
     fetchAdvertisements();
   }, []);
 
-
-
   const itemsPerPage = 9; // Show 9 items per page as shown in the screenshot
   const totalPages = Math.ceil(advertisements.length / itemsPerPage);
 
@@ -69,7 +69,7 @@ export default function AdvertisementManagement() {
       // Optimistic update
       setAdvertisements(prev => prev.filter(ad => ad.id !== deletingAd.id));
 
-      setToastMessage("Advertisement deleted successfully!");
+      setToastMessage(t('admin_dashboard.ad_management.toasts.deleted'));
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (e) {
@@ -86,7 +86,7 @@ export default function AdvertisementManagement() {
 
       setAdvertisements(prev => prev.map(ad => ad.id === id ? { ...ad, status: "Active" } : ad));
 
-      setToastMessage("Advertisement activated successfully!");
+      setToastMessage(t('admin_dashboard.ad_management.toasts.activated'));
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (e) {
@@ -100,7 +100,7 @@ export default function AdvertisementManagement() {
 
       setAdvertisements(prev => prev.map(ad => ad.id === id ? { ...ad, status: "Inactive" } : ad));
 
-      setToastMessage("Advertisement deactivated successfully!");
+      setToastMessage(t('admin_dashboard.ad_management.toasts.deactivated'));
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (e) {
@@ -132,7 +132,7 @@ export default function AdvertisementManagement() {
         status: "Active"
       });
       fetchAdvertisements();
-      setToastMessage("Advertisement added successfully!");
+      setToastMessage(t('admin_dashboard.ad_management.toasts.added'));
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
     } catch (e) {
@@ -173,13 +173,13 @@ export default function AdvertisementManagement() {
         {/* Header */}
         <div className="p-6 pb-4">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-800">Ads Management</h1>
+            <h1 className="text-4xl font-bold text-gray-800">{t('admin_dashboard.ad_management.title')}</h1>
             <button
               onClick={handleAddNewAd}
               className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-5 w-5" />
-              Add new Ad
+              {t('admin_dashboard.ad_management.add_button')}
             </button>
           </div>
 
@@ -188,7 +188,7 @@ export default function AdvertisementManagement() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('admin_dashboard.ad_management.search_placeholder')}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -208,30 +208,30 @@ export default function AdvertisementManagement() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Image
+                    {t('admin_dashboard.ad_management.table.headers.image')}
                   </th>
                   <th
                     className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSort("type")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Add Title</span>
+                      <span>{t('admin_dashboard.ad_management.table.headers.title')}</span>
                       {sortField === "type" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Add Subtitle
+                    {t('admin_dashboard.ad_management.table.headers.subtitle')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    CTA
+                    {t('admin_dashboard.ad_management.table.headers.cta')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Status
+                    {t('admin_dashboard.ad_management.table.headers.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('admin_dashboard.ad_management.table.headers.actions')}
                   </th>
                 </tr>
               </thead>
@@ -254,7 +254,7 @@ export default function AdvertisementManagement() {
                       <div className="flex items-center space-x-2">
                         <div className={`w-2 h-2 rounded-full ${getStatusDotColor(ad.status)}`}></div>
                         <span className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${getStatusPillColor(ad.status)}`}>
-                          {ad.status}
+                          {ad.status === "Active" ? t('admin_dashboard.ad_management.actions.activate') : (ad.status === "Inactive" ? t('admin_dashboard.ad_management.actions.deactivate') : ad.status)}
                         </span>
                       </div>
                     </td>
@@ -272,14 +272,14 @@ export default function AdvertisementManagement() {
                             onClick={() => handleDeactivate(ad.id)}
                             className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors"
                           >
-                            Deactivate
+                            {t('admin_dashboard.ad_management.actions.deactivate')}
                           </button>
                         ) : (
                           <button
                             onClick={() => handleActivate(ad.id)}
                             className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
                           >
-                            Activate
+                            {t('admin_dashboard.ad_management.actions.activate')}
                           </button>
                         )}
                       </div>
@@ -298,11 +298,11 @@ export default function AdvertisementManagement() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {t('admin_dashboard.pagination.previous')}
               </button>
 
               <span className="text-sm font-medium text-gray-700">
-                Page {currentPage} of {totalPages}
+                {t('admin_dashboard.pagination.page_info', { current: currentPage, total: totalPages })}
               </span>
 
               <button
@@ -310,7 +310,7 @@ export default function AdvertisementManagement() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {t('admin_dashboard.pagination.next')}
               </button>
             </div>
           </div>
@@ -323,20 +323,20 @@ export default function AdvertisementManagement() {
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Add Advertisement</h2>
-              <p className="text-gray-600">Complete the Advertisement for to add your Ad</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('admin_dashboard.ad_management.modals.add.title')}</h2>
+              <p className="text-gray-600">{t('admin_dashboard.ad_management.modals.add.subtitle')}</p>
             </div>
 
             {/* Modal Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Title Field */}
               <div className="flex items-center">
-                <label className="w-20 text-sm font-medium text-gray-700">Title:</label>
+                <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.ad_management.modals.add.form.title')}</label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => handleInputChange("title", e.target.value)}
-                  placeholder="Get the best services online"
+                  placeholder={t('admin_dashboard.ad_management.modals.add.form.placeholders.title')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
@@ -344,11 +344,11 @@ export default function AdvertisementManagement() {
 
               {/* Subtitle Field */}
               <div className="flex items-start">
-                <label className="w-20 text-sm font-medium text-gray-700 mt-2">Subtitle:</label>
+                <label className="w-20 text-sm font-medium text-gray-700 mt-2">{t('admin_dashboard.ad_management.modals.add.form.subtitle')}</label>
                 <textarea
                   value={formData.subtitle}
                   onChange={(e) => handleInputChange("subtitle", e.target.value)}
-                  placeholder="We will make sure..."
+                  placeholder={t('admin_dashboard.ad_management.modals.add.form.placeholders.subtitle')}
                   rows={3}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none"
                   required
@@ -357,12 +357,12 @@ export default function AdvertisementManagement() {
 
               {/* CTA Field */}
               <div className="flex items-center">
-                <label className="w-20 text-sm font-medium text-gray-700">CTA:</label>
+                <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.ad_management.modals.add.form.cta')}</label>
                 <input
                   type="text"
                   value={formData.cta}
                   onChange={(e) => handleInputChange("cta", e.target.value)}
-                  placeholder="Join Now"
+                  placeholder={t('admin_dashboard.ad_management.modals.add.form.placeholders.cta')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
@@ -374,7 +374,7 @@ export default function AdvertisementManagement() {
                   type="submit"
                   className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors"
                 >
-                  Add Advertisment
+                  {t('admin_dashboard.ad_management.modals.add.submit')}
                 </button>
               </div>
             </form>
@@ -396,8 +396,8 @@ export default function AdvertisementManagement() {
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Confirm Deletion</h2>
-              <p className="text-gray-600">Are you sure you want to delete this advertisement?</p>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{t('admin_dashboard.ad_management.modals.delete.title')}</h2>
+              <p className="text-gray-600">{t('admin_dashboard.ad_management.modals.delete.message')}</p>
             </div>
 
             {/* Advertisement Info */}
@@ -412,13 +412,13 @@ export default function AdvertisementManagement() {
                 onClick={handleCloseDeleteModal}
                 className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors"
               >
-                Cancel
+                {t('admin_dashboard.ad_management.modals.delete.cancel')}
               </button>
               <button
                 onClick={handleConfirmDelete}
                 className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors"
               >
-                Delete
+                {t('admin_dashboard.ad_management.modals.delete.confirm')}
               </button>
             </div>
           </div>

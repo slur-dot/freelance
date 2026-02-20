@@ -4,7 +4,10 @@ import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
 
+import { useTranslation } from "react-i18next";
+
 const AccessoriesStore = () => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
@@ -219,7 +222,7 @@ const AccessoriesStore = () => {
       <div className={`lg:w-64 ${isFilterOpen ? 'block' : 'hidden lg:block'}`}>
         <div className="bg-[#E5E7EB] p-6 rounded-lg shadow-sm border">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Filters</h3>
+            <h3 className="text-lg font-semibold">{t('shop.filters.title')}</h3>
             <button
               onClick={() => setIsFilterOpen(false)}
               className="lg:hidden text-gray-500 hover:text-gray-700"
@@ -230,7 +233,7 @@ const AccessoriesStore = () => {
 
           {/* Category Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Category</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.category')}</h4>
             {['Keyboards', 'Mice', 'Monitors', 'Audio', 'Adapters', 'Stylus', 'Power'].map((category) => (
               <label key={category} className="flex items-center mb-2">
                 <input
@@ -239,14 +242,14 @@ const AccessoriesStore = () => {
                   onChange={() => handleFilterChange('categories', category)}
                   className="mr-2 rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                 />
-                <span className="text-sm">{category}</span>
+                <span className="text-sm">{t(`shop.categories.${category.toLowerCase()}`)}</span>
               </label>
             ))}
           </div>
 
           {/* Brand Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Brand</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.brand')}</h4>
             {['Apple', 'Logitech', 'Samsung', 'JBL', 'Dell', 'Corsair', 'Anker', 'Microsoft'].map((brand) => (
               <label key={brand} className="flex items-center mb-2">
                 <input
@@ -262,7 +265,7 @@ const AccessoriesStore = () => {
 
           {/* Compatibility Filter */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Compatibility</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.compatibility')}</h4>
             {['Windows', 'Mac', 'iPhone', 'Android', 'iPad', 'Gaming Consoles', 'Bluetooth', 'USB-C'].map((compatibility) => (
               <label key={compatibility} className="flex items-center mb-2">
                 <input
@@ -278,7 +281,7 @@ const AccessoriesStore = () => {
 
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="font-medium mb-3">Price Range</h4>
+            <h4 className="font-medium mb-3">{t('shop.filters.price_range')}</h4>
             <input
               type="range"
               min="0"
@@ -301,8 +304,8 @@ const AccessoriesStore = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
           <div className="mb-4 sm:mb-0">
-            <h2 className="text-2xl font-bold text-gray-900">Accessories</h2>
-            <p className="text-gray-600">{filteredAccessories.length} accessories found</p>
+            <h2 className="text-2xl font-bold text-gray-900">{t('shop.accessories.title')}</h2>
+            <p className="text-gray-600">{t('shop.accessories.found', { count: filteredAccessories.length })}</p>
           </div>
 
           <div className="flex items-center gap-4">
@@ -311,7 +314,7 @@ const AccessoriesStore = () => {
               className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <Filter className="h-4 w-4" />
-              Filters
+              {t('shop.filters.title')}
             </button>
 
             <div className="flex items-center gap-2">
@@ -321,11 +324,11 @@ const AccessoriesStore = () => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                <option value="Most Popular">Most Popular</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-                <option value="Newest First">Newest First</option>
-                <option value="Best Rating">Best Rating</option>
+                <option value="Most Popular">{t('shop.sorting.most_popular')}</option>
+                <option value="Price: Low to High">{t('shop.sorting.price_low_high')}</option>
+                <option value="Price: High to Low">{t('shop.sorting.price_high_low')}</option>
+                <option value="Newest First">{t('shop.sorting.newest_first')}</option>
+                <option value="Best Rating">{t('shop.sorting.best_rating')}</option>
               </select>
             </div>
           </div>
@@ -337,34 +340,34 @@ const AccessoriesStore = () => {
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               <span className="text-white font-bold text-sm">NGO</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900">NGO Project Special Rates</h3>
+            <h3 className="text-xl font-bold text-gray-900">{t('shop.accessories.ngo_title')}</h3>
           </div>
           <p className="text-gray-700 mb-4">
-            Supporting NGOs with affordable accessories for technology projects. Special pricing available for qualified organizations.
+            {t('shop.accessories.ngo_desc')}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded-lg border border-green-200">
-              <h4 className="font-semibold text-green-800 mb-2">USB-C Cable</h4>
+              <h4 className="font-semibold text-green-800 mb-2">{t('shop.accessories.usb_cable')}</h4>
               <div className="text-2xl font-bold text-green-600 mb-1">88,000 GNF</div>
               <div className="text-sm text-gray-600">$10 USD</div>
-              <div className="text-xs text-blue-600 mt-2">Perfect for NGO projects</div>
+              <div className="text-xs text-blue-600 mt-2">{t('shop.accessories.perfect_ngo')}</div>
             </div>
             <div className="bg-white p-4 rounded-lg border border-green-200">
-              <h4 className="font-semibold text-green-800 mb-2">Power Adapter</h4>
+              <h4 className="font-semibold text-green-800 mb-2">{t('shop.accessories.power_adapter')}</h4>
               <div className="text-2xl font-bold text-green-600 mb-1">132,000 GNF</div>
               <div className="text-sm text-gray-600">$15 USD</div>
-              <div className="text-xs text-blue-600 mt-2">Universal compatibility</div>
+              <div className="text-xs text-blue-600 mt-2">{t('shop.accessories.universal_comp')}</div>
             </div>
             <div className="bg-white p-4 rounded-lg border border-green-200">
-              <h4 className="font-semibold text-green-800 mb-2">Basic Headphones</h4>
+              <h4 className="font-semibold text-green-800 mb-2">{t('shop.accessories.headphones')}</h4>
               <div className="text-2xl font-bold text-green-600 mb-1">176,000 GNF</div>
               <div className="text-sm text-gray-600">$20 USD</div>
-              <div className="text-xs text-blue-600 mt-2">Training sessions ready</div>
+              <div className="text-xs text-blue-600 mt-2">{t('shop.accessories.training_ready')}</div>
             </div>
           </div>
           <div className="mt-4 p-3 bg-blue-100 rounded-lg">
             <p className="text-sm text-blue-800">
-              <strong>NGO Qualification:</strong> Contact us with your organization details to access special rates for technology projects.
+              {t('shop.accessories.ngo_qualification')}
             </p>
           </div>
         </div>
@@ -382,7 +385,7 @@ const AccessoriesStore = () => {
 
         {filteredAccessories.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No accessories found matching your criteria.</p>
+            <p className="text-gray-500 text-lg">{t('shop.accessories.no_results')}</p>
           </div>
         )}
       </div>

@@ -5,7 +5,10 @@ import { ProductService } from '../../services/productService';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
 
+import { useTranslation } from "react-i18next";
+
 const SmartphoneStore = () => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const [sortBy, setSortBy] = useState('Most Popular');
   const [filters, setFilters] = useState({
@@ -158,7 +161,7 @@ const SmartphoneStore = () => {
           onClick={() => setIsFilterOpen(!isFilterOpen)}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
         >
-          {isFilterOpen ? 'Close Filters' : 'Open Filters'}
+          {isFilterOpen ? t('shop.filters.close') : t('shop.filters.open')}
         </button>
       </div>
 
@@ -168,10 +171,10 @@ const SmartphoneStore = () => {
       >
         <div className="bg-[#E5E7EB] rounded-lg shadow-sm p-4 sm:p-6 space-y-6">
           <div className="flex items-center space-x-2">
-            <h3 className="font-semibold text-sm sm:text-base">Filters</h3>
+            <h3 className="font-semibold text-sm sm:text-base">{t('shop.filters.title')}</h3>
           </div>
           <div>
-            <h4 className="font-medium text-sm sm:text-base mb-3">Condition</h4>
+            <h4 className="font-medium text-sm sm:text-base mb-3">{t('shop.filters.condition')}</h4>
             <div className="space-y-2">
               {['New', 'Used'].map((condition) => (
                 <label key={condition} className="flex items-center">
@@ -181,13 +184,13 @@ const SmartphoneStore = () => {
                     onChange={() => handleConditionChange(condition)}
                     className="rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                   />
-                  <span className="ml-2 text-xs sm:text-sm text-gray-600">{condition}</span>
+                  <span className="ml-2 text-xs sm:text-sm text-gray-600">{t(`shop.filters.conditions.${condition.toLowerCase()}`)}</span>
                 </label>
               ))}
             </div>
           </div>
           <div>
-            <h4 className="font-medium text-sm sm:text-base mb-3">Brand</h4>
+            <h4 className="font-medium text-sm sm:text-base mb-3">{t('shop.filters.brand')}</h4>
             <div className="space-y-2">
               {['Apple', 'Samsung', 'Google', 'OnePlus', 'Xiaomi', 'Huawei', 'Oppo'].map((brand) => (
                 <label key={brand} className="flex items-center">
@@ -203,7 +206,7 @@ const SmartphoneStore = () => {
             </div>
           </div>
           <div>
-            <h4 className="font-medium text-sm sm:text-base mb-3">Availability</h4>
+            <h4 className="font-medium text-sm sm:text-base mb-3">{t('shop.filters.availability')}</h4>
             <div className="space-y-2">
               {['Conakry', 'Global'].map((availability) => (
                 <label key={availability} className="flex items-center">
@@ -213,13 +216,13 @@ const SmartphoneStore = () => {
                     onChange={() => handleAvailabilityChange(availability)}
                     className="rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                   />
-                  <span className="ml-2 text-xs sm:text-sm text-gray-600">{availability}</span>
+                  <span className="ml-2 text-xs sm:text-sm text-gray-600">{t(`shop.filters.availabilities.${availability.toLowerCase()}`)}</span>
                 </label>
               ))}
             </div>
           </div>
           <div>
-            <h4 className="font-medium text-sm sm:text-base mb-3">Minimum Rating</h4>
+            <h4 className="font-medium text-sm sm:text-base mb-3">{t('shop.filters.min_rating')}</h4>
             <div className="space-y-2">
               {[1, 2, 3, 4, 5].map((rating) => (
                 <label key={rating} className="flex items-center">
@@ -230,14 +233,14 @@ const SmartphoneStore = () => {
                     className="rounded border-gray-300 text-[#15803D] focus:ring-[#15803D]"
                   />
                   <span className="ml-2 text-xs sm:text-sm text-gray-600">
-                    {rating} star{rating > 1 ? 's' : ''} & up
+                    {t('shop.filters.stars_up_plural', { count: rating })}
                   </span>
                 </label>
               ))}
             </div>
           </div>
           <div>
-            <h4 className="font-medium text-sm sm:text-base mb-3">Price Range</h4>
+            <h4 className="font-medium text-sm sm:text-base mb-3">{t('shop.filters.price_range')}</h4>
             <div className="space-y-3">
               <input
                 type="range"
@@ -260,23 +263,23 @@ const SmartphoneStore = () => {
       <div className="flex-1">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Smartphones</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{t('shop.smartphones.title')}</h1>
             <p className="text-gray-600 text-sm sm:text-base">
-              Showing {filteredSmartphones.length} of {smartphones.length} Products
+              {t('shop.smartphones.showing_results', { filtered: filteredSmartphones.length, total: smartphones.length })}
             </p>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-xs sm:text-sm text-gray-600">Sort by:</span>
+            <span className="text-xs sm:text-sm text-gray-600">{t('shop.sorting.sort_by')}</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className="border border-gray-300 rounded-lg px-3 py-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option>Most Popular</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Newest First</option>
-              <option>Best Rating</option>
+              <option value="Most Popular">{t('shop.sorting.most_popular')}</option>
+              <option value="Price: Low to High">{t('shop.sorting.price_low_high')}</option>
+              <option value="Price: High to Low">{t('shop.sorting.price_high_low')}</option>
+              <option value="Newest First">{t('shop.sorting.newest_first')}</option>
+              <option value="Best Rating">{t('shop.sorting.best_rating')}</option>
             </select>
           </div>
         </div>
@@ -296,12 +299,12 @@ const SmartphoneStore = () => {
         <div className="flex justify-center mt-6 sm:mt-8 md:mt-12">
           <div className="flex space-x-2">
             <button className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg text-gray-500 cursor-not-allowed text-xs sm:text-sm">
-              Previous
+              {t('shop.pagination.previous')}
             </button>
             <button className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white rounded-lg text-xs sm:text-sm">1</button>
             <button className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-xs sm:text-sm">2</button>
             <button className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-xs sm:text-sm">3</button>
-            <button className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-xs sm:text-sm">Next</button>
+            <button className="px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-xs sm:text-sm">{t('shop.pagination.next')}</button>
           </div>
         </div>
 

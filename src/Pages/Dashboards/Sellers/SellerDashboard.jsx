@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2, ExternalLink, TrendingUp, Package, DollarSign, Users } from "lucide-react";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
@@ -43,6 +44,7 @@ const DefaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 // Edit Profile Modal Component
 function EditProfileModal({ sellerData, onClose, onUpdate }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: sellerData?.name || '',
     businessName: sellerData?.businessName || '',
@@ -102,12 +104,12 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">Edit Profile</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.modal.edit_title')}</h3>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.name')}</label>
               <input
                 type="text"
                 name="name"
@@ -119,7 +121,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.business_name')}</label>
               <input
                 type="text"
                 name="businessName"
@@ -131,7 +133,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.location')}</label>
               <input
                 type="text"
                 name="location"
@@ -143,7 +145,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.email')}</label>
               <input
                 type="email"
                 name="email"
@@ -155,7 +157,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.phone')}</label>
               <input
                 type="tel"
                 name="phone"
@@ -167,7 +169,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Payment Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.payment_number')}</label>
               <input
                 type="tel"
                 name="paymentNumber"
@@ -180,14 +182,14 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Social Links</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('seller_dashboard.modal.social_links')}</label>
             <div className="space-y-2">
               <input
                 type="url"
                 name="linkedin"
                 value={formData.linkedin}
                 onChange={handleInputChange}
-                placeholder="LinkedIn URL"
+                placeholder={t('seller_dashboard.modal.linkedin')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
@@ -195,7 +197,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 name="facebook"
                 value={formData.facebook}
                 onChange={handleInputChange}
-                placeholder="Facebook URL"
+                placeholder={t('seller_dashboard.modal.facebook')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
@@ -203,7 +205,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 name="website"
                 value={formData.website}
                 onChange={handleInputChange}
-                placeholder="Website URL"
+                placeholder={t('seller_dashboard.modal.website')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
@@ -215,7 +217,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
               className="flex-1"
               disabled={loading}
             >
-              {loading ? 'Updating...' : 'Update Profile'}
+              {loading ? t('seller_dashboard.modal.updating_btn') : t('seller_dashboard.modal.update_btn')}
             </Button>
             <Button
               type="button"
@@ -224,7 +226,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
               onClick={onClose}
               disabled={loading}
             >
-              Cancel
+              {t('seller_dashboard.modal.cancel_btn')}
             </Button>
           </div>
         </form>
@@ -235,6 +237,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
 
 // Profile Card
 function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
+  const { t } = useTranslation();
   const [avatar, setAvatar] = useState(DefaultAvatar);
   const [progress, setProgress] = useState(70);
   const [uploading, setUploading] = useState(false);
@@ -365,7 +368,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
       {/* Avatar Upload Prompt */}
       <div className="mt-2">
         <p className="text-xs text-gray-500 italic">
-          Add a photo to build trust! (Firebase Storage, max 2MB)
+          {t('seller_dashboard.profile.add_photo')}
         </p>
       </div>
 
@@ -377,7 +380,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
         {/* Social Links */}
         {sellerData?.socialLinks && (
           <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600 mb-1">Social Links:</p>
+            <p className="text-xs font-medium text-gray-600 mb-1">{t('seller_dashboard.profile.social_links')}</p>
             <div className="flex gap-2 text-xs">
               {sellerData.socialLinks.linkedin && (
                 <a href={sellerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer"
@@ -428,10 +431,10 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
         {/* Payment Method */}
         {sellerData?.paymentMethod && (
           <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600">Payment Method:</p>
+            <p className="text-xs font-medium text-gray-600">{t('seller_dashboard.profile.payment_method')}</p>
             <p className="text-sm text-gray-500">
               {sellerData.paymentMethod.type}: {sellerData.paymentMethod.number}
-              {sellerData.paymentMethod.verified && <span className="text-green-600 ml-1">✓ Verified</span>}
+              {sellerData.paymentMethod.verified && <span className="text-green-600 ml-1">✓ {t('seller_dashboard.profile.verified')}</span>}
             </p>
           </div>
         )}
@@ -439,10 +442,10 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
         {/* Business License */}
         {sellerData?.businessLicense && (
           <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600">Business License:</p>
+            <p className="text-xs font-medium text-gray-600">{t('seller_dashboard.profile.business_license')}</p>
             <p className="text-sm text-gray-500">
               {sellerData.businessLicense.licenseNumber}
-              {sellerData.businessLicense.verified && <span className="text-green-600 ml-1">✓ Verified</span>}
+              {sellerData.businessLicense.verified && <span className="text-green-600 ml-1">✓ {t('seller_dashboard.profile.verified')}</span>}
             </p>
           </div>
         )}
@@ -450,7 +453,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
 
       {/* Progress */}
       <div className="mt-3">
-        <div className="text-sm mb-1">Profile {progress}% complete</div>
+        <div className="text-sm mb-1">{t('seller_dashboard.profile.profile_complete')} {progress}%</div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div className="bg-green-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
         </div>
@@ -459,13 +462,13 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
       {/* Badges */}
       <div className="flex gap-2 mt-3">
         <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-          {sellerData?.status?.verified ? "Verified Seller" : "Profile Complete"}
+          {sellerData?.status?.verified ? t('seller_dashboard.profile.verified_seller') : t('seller_dashboard.profile.profile_complete')}
         </span>
         {sellerData?.subscription?.plan === 'Premium' && (
-          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">Premium Plan</span>
+          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">{t('seller_dashboard.profile.premium_plan')}</span>
         )}
         {sellerData?.subscription?.plan === 'Basic' && (
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">Basic Plan</span>
+          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('seller_dashboard.profile.basic_plan')}</span>
         )}
       </div>
 
@@ -481,7 +484,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
           ({sellerData?.status?.rating || 0} / 5)
         </span>
         <span className="ml-2 text-sm text-gray-500">
-          • {sellerData?.status?.transactions || 0} transactions
+          • {t('seller_dashboard.profile.transactions', { count: sellerData?.status?.transactions || 0 })}
         </span>
       </div>
 
@@ -494,7 +497,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
             onClick={() => setShowEditModal(true)}
           >
             <Edit className="h-3 w-3 mr-1" />
-            Edit Profile
+            {t('seller_dashboard.profile.edit')}
           </Button>
           <Button
             variant="outline"
@@ -502,7 +505,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
             onClick={() => alert('Change Password functionality - Coming Soon!')}
           >
             <Lock className="h-3 w-3 mr-1" />
-            Change Password
+            {t('seller_dashboard.profile.change_password')}
           </Button>
         </div>
 
@@ -510,7 +513,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
           className="w-full text-xs"
           onClick={onContact}
         >
-          Contact Freelance-224
+          {t('seller_dashboard.profile.contact_admin')}
         </Button>
 
         <Button
@@ -519,7 +522,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
           onClick={() => alert('Delete Seller Account functionality - Coming Soon!')}
         >
           <Trash2 className="h-3 w-3 mr-1" />
-          Delete Seller Account
+          {t('seller_dashboard.profile.delete_account')}
         </Button>
       </div>
 
@@ -536,6 +539,7 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
 }
 
 export default function SellerDashboard() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const [sellers, setSellers] = useState([]);
   const [selectedSeller, setSelectedSeller] = useState(null);
@@ -628,7 +632,7 @@ export default function SellerDashboard() {
       <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-            <h3 className="text-yellow-800 font-medium">Using Offline Mode</h3>
+            <h3 className="text-yellow-800 font-medium">{t('seller_dashboard.offline_mode')}</h3>
             <p className="text-yellow-600 text-sm mt-1">{error}</p>
           </div>
         </div>
@@ -639,12 +643,12 @@ export default function SellerDashboard() {
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
       <div className="mb-6 max-w-7xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2">Sellers Dashboard</h1>
-        <p className="text-gray-600">Welcome, {selectedSeller?.name || "Seller"}! Sell Samsung, iPhone, Dell, earn via OM/MoMo! On est ensemble!</p>
+        <h1 className="text-2xl md:text-3xl font-bold mb-2">{t('seller_dashboard.title')}</h1>
+        <p className="text-gray-600">{t('seller_dashboard.welcome', { name: selectedSeller?.name || "Seller" })}</p>
         {error && (
           <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-md p-2">
             <p className="text-yellow-700 text-sm">
-              ⚠️ Using offline mode - {error}
+              ⚠️ {t('seller_dashboard.offline_mode')} - {error}
             </p>
           </div>
         )}
@@ -660,10 +664,10 @@ export default function SellerDashboard() {
 
         {/* Total Sales Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Total Sales</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.cards.total_sales')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Revenue After Commission</p>
+              <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.cards.revenue_after_commission')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
@@ -673,7 +677,7 @@ export default function SellerDashboard() {
                   '0'} GNF
               </div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/analytics")}>
-                View Analytics
+                {t('seller_dashboard.cards.view_analytics')}
               </Button>
             </CardContent>
           </Card>
@@ -681,16 +685,16 @@ export default function SellerDashboard() {
 
         {/* Active Listings Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Active Listings</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.cards.active_listings')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Products Available for Sale</p>
+              <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.cards.products_available')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.activeListings || 0} Products</div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/listings")}>
-                Manage Listings
+                {t('seller_dashboard.cards.manage_listings')}
               </Button>
             </CardContent>
           </Card>
@@ -698,16 +702,16 @@ export default function SellerDashboard() {
 
         {/* Orders Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Total Orders</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.cards.total_orders')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Completed Transactions</p>
+              <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.cards.completed_transactions')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.transactions || 0} Orders</div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/orders")}>
-                View Orders
+                {t('seller_dashboard.cards.view_orders')}
               </Button>
             </CardContent>
           </Card>
@@ -715,10 +719,10 @@ export default function SellerDashboard() {
 
         {/* Payouts Card */}
         <div className="md:col-span-1">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Pending Payouts</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.cards.payouts')}</h3>
           <Card className="h-auto md:h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm font-medium text-gray-500">Money Ready for Withdrawal</p>
+              <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.cards.money_ready')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
@@ -726,7 +730,7 @@ export default function SellerDashboard() {
                 {selectedSeller?.status?.pendingPayouts?.toLocaleString() || '0'} GNF
               </div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/payouts")}>
-                View Payouts
+                {t('seller_dashboard.cards.view_payouts')}
               </Button>
             </CardContent>
           </Card>
@@ -734,14 +738,14 @@ export default function SellerDashboard() {
 
         {/* Recent Activity Section */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Recent Activity</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.recent_activity.title')}</h3>
           <Card className="flex-grow">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
                 <div className="p-4 text-center text-gray-500">
-                  <h4 className="text-lg font-bold mb-2">Welcome to Your Seller Dashboard!</h4>
+                  <h4 className="text-lg font-bold mb-2">{t('seller_dashboard.recent_activity.welcome_title')}</h4>
                   <p className="text-sm">
-                    You'll find all your sales activity, orders, and earnings here once you start selling.
+                    {t('seller_dashboard.recent_activity.welcome_desc')}
                   </p>
                 </div>
               </div>
@@ -751,7 +755,7 @@ export default function SellerDashboard() {
                   className="w-full"
                   onClick={() => navigate("/seller/dashboard/listings")}
                 >
-                  CREATE NEW LISTING
+                  {t('seller_dashboard.recent_activity.create_listing')}
                 </Button>
               </div>
             </CardContent>
@@ -760,26 +764,26 @@ export default function SellerDashboard() {
 
         {/* Performance Overview */}
         <div className="md:col-span-2 flex flex-col w-full">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Performance Overview</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('seller_dashboard.performance.title')}</h3>
           <Card className="h-[300px]">
             <CardContent className="flex flex-col items-center justify-center p-4 text-center h-full">
               <div className="w-full text-left mb-4 bg-gray-50 overflow-x-auto">
                 <div className="grid grid-cols-4 gap-4 font-semibold text-xs sm:text-sm text-gray-600 border-b border-gray-100 pb-3 p-2 sm:p-4 min-w-[400px]">
-                  <div>Metric</div>
-                  <div>Value</div>
-                  <div>Plan</div>
-                  <div>Commission</div>
+                  <div>{t('seller_dashboard.performance.metric')}</div>
+                  <div>{t('seller_dashboard.performance.value')}</div>
+                  <div>{t('seller_dashboard.performance.plan')}</div>
+                  <div>{t('seller_dashboard.performance.commission')}</div>
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center flex-grow px-2">
-                <h4 className="text-lg sm:text-xl font-bold mb-2">Seller Performance</h4>
+                <h4 className="text-lg sm:text-xl font-bold mb-2">{t('seller_dashboard.performance.seller_performance')}</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="text-left">
-                    <p className="font-semibold">Total Revenue:</p>
+                    <p className="font-semibold">{t('seller_dashboard.performance.total_revenue')}</p>
                     <p className="text-gray-600">{selectedSeller?.status?.totalSales?.toLocaleString() || '0'} GNF</p>
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold">Net Earnings:</p>
+                    <p className="font-semibold">{t('seller_dashboard.performance.net_earnings')}</p>
                     <p className="text-gray-600">
                       {selectedSeller?.status?.totalSales ?
                         (selectedSeller.status.totalSales * (selectedSeller.subscription?.plan === 'Premium' ? 0.9 : 0.85)).toLocaleString() :
@@ -787,11 +791,11 @@ export default function SellerDashboard() {
                     </p>
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold">Plan:</p>
+                    <p className="font-semibold">{t('seller_dashboard.performance.plan')}</p>
                     <p className="text-gray-600">{selectedSeller?.subscription?.plan || 'Basic'}</p>
                   </div>
                   <div className="text-left">
-                    <p className="font-semibold">Commission Rate:</p>
+                    <p className="font-semibold">{t('seller_dashboard.performance.commission_rate')}</p>
                     <p className="text-gray-600">{selectedSeller?.subscription?.plan === 'Premium' ? '10%' : '15%'}</p>
                   </div>
                 </div>

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Search, Trash2 } from "lucide-react";
 import ChatPopup from "../../../components/ChatPopup";
 import { auth } from "../../../firebaseConfig";
@@ -41,6 +42,7 @@ function TPInput({ className = "", ...props }) {
 import { FreelancerService } from "../../../services/freelancerService";
 
 export default function TrainingProgress() {
+  const { t } = useTranslation();
   const [user, setUser] = useState(auth.currentUser);
   const FREELANCER_ID = user?.uid;
 
@@ -76,7 +78,7 @@ export default function TrainingProgress() {
           id: c.id,
           title: c.title,
           completion: c.progress || c.completion || 0,
-          status: c.status === 'completed' ? 'Completed' : c.status === 'in_progress' ? 'Active' : 'Not started',
+          status: c.status === 'completed' ? t('training_progress_page.status.completed') : c.status === 'in_progress' ? t('training_progress_page.status.active') : t('training_progress_page.status.not_started'),
           // Handle Firestore Timestamp or Date or string
           lastAccessed: c.lastAccessed
             ? (c.lastAccessed.seconds
@@ -84,7 +86,7 @@ export default function TrainingProgress() {
               : new Date(c.lastAccessed).toLocaleDateString())
             : "-",
           timeRemaining: (() => {
-            if (c.status === 'completed') return 'Done';
+            if (c.status === 'completed') return t('training_progress_page.done');
             // Handle Firestore Timestamp
             const end = c.expectedCompletion
               ? (c.expectedCompletion.seconds
@@ -94,7 +96,7 @@ export default function TrainingProgress() {
 
             if (!end) return '';
             const diffDays = Math.max(0, Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24)));
-            return `by ${end.toLocaleDateString()} (${diffDays} days)`;
+            return t('training_progress_page.time_remaining_format', { date: end.toLocaleDateString(), days: diffDays });
           })()
         }));
 
@@ -102,7 +104,7 @@ export default function TrainingProgress() {
       } catch (e) {
         if (isMounted) {
           console.error("Error loading training:", e);
-          setError("Failed to load training progress");
+          setError(t('training_progress_page.error'));
         }
       } finally {
         if (isMounted) setLoading(false);
@@ -127,7 +129,7 @@ export default function TrainingProgress() {
     <div className="flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Header */}
       <header className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Training Progress</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t('training_progress_page.title')}</h1>
       </header>
 
       {/* Search */}
@@ -135,7 +137,7 @@ export default function TrainingProgress() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
         <TPInput
           type="search"
-          placeholder="Search"
+          placeholder={t('training_progress_page.search_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           aria-label="Search courses"
@@ -144,17 +146,17 @@ export default function TrainingProgress() {
 
       {/* Table - Large screens */}
       <div className="hidden xl:block flex-1 overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white">
-        {loading && <div className="p-4">Loading...</div>}
+        {loading && <div className="p-4">{t('training_progress_page.loading')}</div>}
         {error && !loading && <div className="p-4 text-red-600">{error}</div>}
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Course Title</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Completion</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Last Accessed</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Time Remaining</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.course_title')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.completion')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.status')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.last_accessed')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.time_remaining')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -182,7 +184,7 @@ export default function TrainingProgress() {
                     <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                       <Trash2 className="h-4 w-4 text-gray-500" />
                     </TPButton>
-                    <TPButton onClick={() => handleOpenChat(course.id)}>Continue</TPButton>
+                    <TPButton onClick={() => handleOpenChat(course.id)}>{t('training_progress_page.actions.continue')}</TPButton>
                   </div>
                 </td>
               </tr>
@@ -196,10 +198,10 @@ export default function TrainingProgress() {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Course Title</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Completion</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.course_title')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.completion')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.status')}</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">{t('training_progress_page.table.actions')}</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -213,7 +215,7 @@ export default function TrainingProgress() {
                     <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                       <Trash2 className="h-4 w-4 text-gray-500" />
                     </TPButton>
-                    <TPButton onClick={() => handleOpenChat(course.id)}>Continue</TPButton>
+                    <TPButton onClick={() => handleOpenChat(course.id)}>{t('training_progress_page.actions.continue')}</TPButton>
                   </div>
                 </td>
               </tr>
@@ -227,15 +229,15 @@ export default function TrainingProgress() {
         {filteredCourses.map((course) => (
           <div key={course.id} className="bg-white p-4 rounded-lg shadow border border-gray-200">
             <h2 className="font-semibold text-gray-800 mb-2">{course.title}</h2>
-            <p className="text-sm text-gray-600 mb-1">Completion: {course.completion}%</p>
-            <p className="text-sm text-gray-600 mb-1">Status: {course.status}</p>
-            <p className="text-sm text-gray-600 mb-1">Last Accessed: {course.lastAccessed}</p>
-            <p className="text-sm text-gray-600 mb-3">Time Remaining: {course.timeRemaining}</p>
+            <p className="text-sm text-gray-600 mb-1">{t('training_progress_page.mobile.completion')} {course.completion}%</p>
+            <p className="text-sm text-gray-600 mb-1">{t('training_progress_page.mobile.status')} {course.status}</p>
+            <p className="text-sm text-gray-600 mb-1">{t('training_progress_page.mobile.last_accessed')} {course.lastAccessed}</p>
+            <p className="text-sm text-gray-600 mb-3">{t('training_progress_page.mobile.time_remaining')} {course.timeRemaining}</p>
             <div className="flex space-x-2">
               <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                 <Trash2 className="h-4 w-4 text-gray-500" />
               </TPButton>
-              <TPButton onClick={() => handleOpenChat(course.id)}>Continue</TPButton>
+              <TPButton onClick={() => handleOpenChat(course.id)}>{t('training_progress_page.actions.continue')}</TPButton>
             </div>
           </div>
         ))}
@@ -243,9 +245,9 @@ export default function TrainingProgress() {
 
       {/* Pagination */}
       <div className="flex justify-between items-center mt-6 px-4 py-3 bg-white rounded-lg border border-gray-200 shadow-sm">
-        <TPButton variant="outline">Previous</TPButton>
-        <span className="text-sm text-gray-700">Page 1 of 10</span>
-        <TPButton variant="outline">Next</TPButton>
+        <TPButton variant="outline">{t('training_progress_page.pagination.previous')}</TPButton>
+        <span className="text-sm text-gray-700">{t('training_progress_page.pagination.page_info', { current: 1, total: 10 })}</span>
+        <TPButton variant="outline">{t('training_progress_page.pagination.next')}</TPButton>
       </div>
 
       {/* Chat Popup */}

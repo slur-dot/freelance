@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CompanyTrainingRequestForm() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     companyName: "",
     phoneNumber: "",
@@ -25,9 +27,9 @@ export default function CompanyTrainingRequestForm() {
       <div className="max-w-3xl w-full space-y-8 p-8 shadow-lg bg-white">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Custom Training Request</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('training.forms.request.title')}</h1>
           <p className="mt-2 text-gray-600">
-            Complete this training request form so that we can contact you for detailed courses.
+            {t('training.forms.request.subtitle')}
           </p>
         </div>
 
@@ -38,16 +40,16 @@ export default function CompanyTrainingRequestForm() {
             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
               <div className="sm:w-40 flex-shrink-0">
                 <label htmlFor="company-name" className="block text-sm font-medium text-gray-700">
-                  Company Name:
+                  {t('training.forms.request.company_name')}
                 </label>
-                <p className="text-xs text-gray-500 mt-1">Enter your company name</p>
+                <p className="text-xs text-gray-500 mt-1">{t('training.forms.request.helpers.company')}</p>
               </div>
               <input
                 id="company-name"
                 name="companyName"
                 type="text"
                 autoComplete="organization"
-                placeholder="Urban Company & Co."
+                placeholder={t('training.forms.request.placeholders.company_name')}
                 value={formData.companyName}
                 onChange={handleChange}
                 className="flex-grow rounded-md border border-gray-300 shadow-sm bg-gray-200 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
@@ -60,7 +62,7 @@ export default function CompanyTrainingRequestForm() {
             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
               <div className="sm:w-40 flex-shrink-0">
                 <label htmlFor="phone-number" className="block text-sm font-medium text-gray-700">
-                  Phone Number:
+                  {t('training.forms.request.phone')}
                 </label>
               </div>
               <input
@@ -68,7 +70,7 @@ export default function CompanyTrainingRequestForm() {
                 name="phoneNumber"
                 type="tel"
                 autoComplete="tel"
-                placeholder="+1 232 123 3213"
+                placeholder={t('training.forms.request.placeholders.phone')}
                 value={formData.phoneNumber}
                 onChange={handleChange}
                 className="flex-grow rounded-md border border-gray-300 shadow-sm bg-gray-200 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
@@ -81,17 +83,17 @@ export default function CompanyTrainingRequestForm() {
             <div className="flex flex-col sm:flex-row sm:items-start gap-4">
               <div className="sm:w-40 flex-shrink-0">
                 <label htmlFor="looking-for" className="block text-sm font-medium text-gray-700">
-                  Looking for?:
+                  {t('training.forms.request.looking_for')}
                 </label>
                 <p className="text-xs text-gray-500 mt-1">
-                  Enter the Training request you what looking For
+                  {t('training.forms.request.helpers.looking')}
                 </p>
               </div>
               <textarea
                 id="looking-for"
                 name="lookingFor"
                 rows={3}
-                placeholder="Custom ERP request"
+                placeholder={t('training.forms.request.placeholders.looking_for')}
                 value={formData.lookingFor}
                 onChange={handleChange}
                 className="flex-grow rounded-md border border-gray-300 bg-gray-200 shadow-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
@@ -105,10 +107,10 @@ export default function CompanyTrainingRequestForm() {
               <div className="flex flex-col sm:flex-row sm:items-start gap-2">
                 <div className="sm:w-48 flex-shrink-0">
                   <label htmlFor="num-employees" className="block text-sm font-medium text-gray-700">
-                    Number of Employees:
+                    {t('training.forms.request.employees')}
                   </label>
                   <p className="text-xs text-gray-500 mt-1">
-                    Enter the total number of employees in the company
+                    {t('training.forms.request.helpers.employees')}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -117,7 +119,7 @@ export default function CompanyTrainingRequestForm() {
                     name="numEmployees"
                     type="number"
                     min="1"
-                    placeholder="10000000"
+                    placeholder={t('training.forms.request.placeholders.employees')}
                     value={formData.numEmployees}
                     onChange={handleChange}
                     className="w-28 rounded-md border border-gray-300 bg-gray-200 shadow-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
@@ -132,10 +134,10 @@ export default function CompanyTrainingRequestForm() {
               <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                 <div className="sm:w-32 flex-shrink-0">
                   <label htmlFor="preferred-duration" className="block text-sm font-medium text-gray-700">
-                    Preferred Duration:
+                    {t('training.forms.request.duration')}
                   </label>
                   <p className="text-xs text-gray-500 mt-1">
-                    Choose the final date by which the work should be completed
+                    {t('training.forms.request.helpers.duration')}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -144,7 +146,7 @@ export default function CompanyTrainingRequestForm() {
                     name="preferredDuration"
                     type="number"
                     min="1"
-                    placeholder="20"
+                    placeholder={t('training.forms.request.placeholders.duration')}
                     value={formData.preferredDuration}
                     onChange={handleChange}
                     className="w-28 rounded-md border border-gray-300 bg-gray-200 shadow-sm focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
@@ -161,7 +163,7 @@ export default function CompanyTrainingRequestForm() {
               type="submit"
               className="py-2 px-8 rounded-full text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition"
             >
-              Message Freelancer
+              {t('training.forms.request.submit')}
             </button>
           </div>
         </form>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, Trash2, Plus, Loader2, Megaphone } from "lucide-react";
 import { AdService } from "../../../services/adService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 export default function SellerAds() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("title");
@@ -249,13 +251,13 @@ export default function SellerAds() {
         {/* Header */}
         <div className="p-6 pb-4">
           <div className="flex items-center justify-between mb-6">
-            <h1 className="text-4xl font-bold text-gray-800">Ads Management</h1>
+            <h1 className="text-4xl font-bold text-gray-800">{t('seller_dashboard.ads.title')}</h1>
             <button
               onClick={openModal}
               className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
             >
               <Plus className="h-5 w-5" />
-              Add new Ad
+              {t('seller_dashboard.ads.add_btn')}
             </button>
           </div>
 
@@ -273,7 +275,7 @@ export default function SellerAds() {
               <div className="flex items-center">
                 <Megaphone className="h-8 w-8 text-green-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Total Ads</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.ads.stats.total')}</p>
                   <p className="text-lg font-semibold text-gray-900">{stats.total || ads.length}</p>
                 </div>
               </div>
@@ -282,7 +284,7 @@ export default function SellerAds() {
               <div className="flex items-center">
                 <Megaphone className="h-8 w-8 text-green-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Active</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.ads.stats.active')}</p>
                   <p className="text-lg font-semibold text-gray-900">{stats.active || 0}</p>
                 </div>
               </div>
@@ -291,7 +293,7 @@ export default function SellerAds() {
               <div className="flex items-center">
                 <Megaphone className="h-8 w-8 text-red-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Inactive</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.ads.stats.inactive')}</p>
                   {/* Fallback calculation if stats don't return detail */}
                   <p className="text-lg font-semibold text-gray-900">{ads.filter(a => a.status !== 'active').length}</p>
                 </div>
@@ -301,7 +303,7 @@ export default function SellerAds() {
               <div className="flex items-center">
                 <Megaphone className="h-8 w-8 text-blue-600" />
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-500">Total Spent</p>
+                  <p className="text-sm font-medium text-gray-500">{t('seller_dashboard.ads.stats.spent')}</p>
                   <p className="text-lg font-semibold text-gray-900">{formatPrice(stats.totalSpent)}</p>
                 </div>
               </div>
@@ -328,14 +330,14 @@ export default function SellerAds() {
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Image
+                    {t('seller_dashboard.ads.table.image')}
                   </th>
                   <th
                     className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100"
                     onClick={() => handleSort("title")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Ad Title</span>
+                      <span>{t('seller_dashboard.ads.table.title')}</span>
                       {sortField === "title" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
@@ -346,7 +348,7 @@ export default function SellerAds() {
                     onClick={() => handleSort("subtitle")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Ad subtitle</span>
+                      <span>{t('seller_dashboard.ads.table.subtitle')}</span>
                       {sortField === "subtitle" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
@@ -357,20 +359,20 @@ export default function SellerAds() {
                     onClick={() => handleSort("cta")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>CTA</span>
+                      <span>{t('seller_dashboard.ads.table.cta')}</span>
                       {sortField === "cta" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Cost
+                    {t('seller_dashboard.ads.table.cost')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Status
+                    {t('seller_dashboard.ads.table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('seller_dashboard.ads.table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -380,13 +382,13 @@ export default function SellerAds() {
                     <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
                       {ads.length === 0 ? (
                         <div>
-                          <p className="text-lg font-medium mb-2">No ads found</p>
-                          <p className="text-sm">Create your first ad to promote your products and increase sales.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.ads.empty.title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.ads.empty.desc')}</p>
                         </div>
                       ) : (
                         <div>
-                          <p className="text-lg font-medium mb-2">No ads match your search</p>
-                          <p className="text-sm">Try adjusting your search terms.</p>
+                          <p className="text-lg font-medium mb-2">{t('seller_dashboard.ads.empty.search_title')}</p>
+                          <p className="text-sm">{t('seller_dashboard.ads.empty.search_desc')}</p>
                         </div>
                       )}
                     </td>
@@ -466,8 +468,8 @@ export default function SellerAds() {
                           <button
                             onClick={() => handleToggleAdStatus(ad.id, ad.status)}
                             className={`px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors ${ad.status === "active"
-                                ? "bg-red-600 hover:bg-red-700"
-                                : "bg-green-600 hover:bg-green-700"
+                              ? "bg-red-600 hover:bg-red-700"
+                              : "bg-green-600 hover:bg-green-700"
                               }`}
                             title={ad.status === "active" ? "Deactivate Ad" : "Activate Ad"}
                           >
@@ -497,8 +499,8 @@ export default function SellerAds() {
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-start">
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Add Advertisement</h2>
-                <p className="text-gray-600 mt-1">Complete the Advertisement form to add your Ad</p>
+                <h2 className="text-2xl font-bold text-gray-800">{t('seller_dashboard.ads.form.title')}</h2>
+                <p className="text-gray-600 mt-1">{t('seller_dashboard.ads.form.desc')}</p>
               </div>
               <button
                 onClick={closeModal}
@@ -515,7 +517,7 @@ export default function SellerAds() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-2">
-                      Ad Type
+                      {t('seller_dashboard.ads.form.type')}
                     </label>
                     <select
                       id="type"
@@ -531,7 +533,7 @@ export default function SellerAds() {
                   </div>
                   <div>
                     <label htmlFor="target" className="block text-sm font-medium text-gray-700 mb-2">
-                      Target
+                      {t('seller_dashboard.ads.form.target')}
                     </label>
                     <select
                       id="target"
@@ -550,7 +552,7 @@ export default function SellerAds() {
                 {/* Title Field */}
                 <div>
                   <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                    Title
+                    {t('seller_dashboard.ads.form.title_label')}
                   </label>
                   <input
                     type="text"
@@ -567,7 +569,7 @@ export default function SellerAds() {
                 {/* Subtitle Field */}
                 <div>
                   <label htmlFor="subtitle" className="block text-sm font-medium text-gray-700 mb-2">
-                    Subtitle
+                    {t('seller_dashboard.ads.form.subtitle_label')}
                   </label>
                   <textarea
                     id="subtitle"
@@ -584,7 +586,7 @@ export default function SellerAds() {
                 {/* CTA Field */}
                 <div>
                   <label htmlFor="cta" className="block text-sm font-medium text-gray-700 mb-2">
-                    CTA
+                    {t('seller_dashboard.ads.form.cta_label')}
                   </label>
                   <input
                     type="text"
@@ -601,7 +603,7 @@ export default function SellerAds() {
                 {/* Media Upload */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {formData.type === 'reel' ? 'Upload Video (max 5MB)' : formData.type === 'carousel' ? 'Upload Images (multiple, max 5MB each)' : 'Upload Image (max 5MB)'}
+                    {formData.type === 'reel' ? t('seller_dashboard.ads.form.upload_video') : formData.type === 'carousel' ? t('seller_dashboard.ads.form.upload_images') : t('seller_dashboard.ads.form.upload_image')}
                   </label>
                   <input
                     type="file"
@@ -616,7 +618,7 @@ export default function SellerAds() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
-                      Duration (weeks)
+                      {t('seller_dashboard.ads.form.duration')}
                     </label>
                     <input
                       type="number"
@@ -631,7 +633,7 @@ export default function SellerAds() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Cost (auto)
+                      {t('seller_dashboard.ads.form.cost')}
                     </label>
                     <div className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-100 text-gray-700">
                       {recomputeCost(formData.type, formData.duration).toLocaleString()} GNF
@@ -647,13 +649,13 @@ export default function SellerAds() {
                   onClick={closeModal}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition-colors"
                 >
-                  Cancel
+                  {t('seller_dashboard.ads.form.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
                 >
-                  Create Ad
+                  {t('seller_dashboard.ads.form.create')}
                 </button>
               </div>
             </form>

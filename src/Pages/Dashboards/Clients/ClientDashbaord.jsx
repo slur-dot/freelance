@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Info, Upload, Star, Edit, MapPin, Phone, ShoppingBag, TrendingUp, Bell, Globe, Shield, Users, Package, MessageCircle } from "lucide-react";
 import AlexandraImg from "../../../assets/Alexandra.png";
@@ -50,6 +51,7 @@ const DefaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 
 // Profile Card Component
 function ProfileCard({ profileData, onContact, onRefresh }) {
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [uploading, setUploading] = useState(false);
@@ -93,7 +95,7 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
   };
 
   // Provide defaults if profileData is null (loading)
-  const displayProfile = profileData || { name: "Loading...", bio: "", location: "", whatsapp: "", verificationStatus: false };
+  const displayProfile = profileData || { name: t('client_dashboard.profile.your_name'), bio: "", location: "", whatsapp: "", verificationStatus: false };
   const avatarSrc = displayProfile.avatar || DefaultAvatar;
 
   const progress = displayProfile.name && displayProfile.bio && displayProfile.whatsapp ? 100 :
@@ -125,21 +127,21 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="text-xl font-bold border border-gray-300 rounded px-2 py-1 block w-full"
-                  placeholder="Your Name"
+                  placeholder={t('client_dashboard.profile.your_name')}
                 />
                 <textarea
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                   className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 w-full block"
                   rows={2}
-                  placeholder="Tell us about yourself..."
+                  placeholder={t('client_dashboard.profile.bio_placeholder')}
                 />
               </div>
             ) : (
               <div>
-                <h2 className="text-xl font-bold">{displayProfile.name || displayProfile.fullName || "Your Name"}</h2>
-                <p className="text-sm text-gray-600">{displayProfile.bio || "No bio set yet."}</p>
-                {!displayProfile.avatar && <p className="text-sm text-blue-600 mt-1">Add a photo to inspire trust!</p>}
+                <h2 className="text-xl font-bold">{displayProfile.name || displayProfile.fullName || t('client_dashboard.profile.your_name')}</h2>
+                <p className="text-sm text-gray-600">{displayProfile.bio || t('client_dashboard.profile.no_bio')}</p>
+                {!displayProfile.avatar && <p className="text-sm text-blue-600 mt-1">{t('client_dashboard.profile.add_photo')}</p>}
               </div>
             )}
           </div>
@@ -147,11 +149,11 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
             <Edit className="w-4 h-4 mr-1" />
-            {isEditing ? "Cancel" : "Edit Profile"}
+            {isEditing ? t('client_dashboard.profile.cancel') : t('client_dashboard.profile.edit_profile')}
           </Button>
           {isEditing && (
             <Button onClick={handleSaveProfile}>
-              Save
+              {t('client_dashboard.profile.save')}
             </Button>
           )}
         </div>
@@ -167,10 +169,10 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               className="border border-gray-300 rounded px-2 py-1"
-              placeholder="Location (e.g. Conakry)"
+              placeholder={t('client_dashboard.profile.location_placeholder')}
             />
           ) : (
-            <span>{displayProfile.location || "Location not set"}</span>
+            <span>{displayProfile.location || t('client_dashboard.profile.location_not_set')}</span>
           )}
         </div>
         <div className="flex items-center gap-1">
@@ -181,17 +183,17 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
               className="border border-gray-300 rounded px-2 py-1"
-              placeholder="WhatsApp Number"
+              placeholder={t('client_dashboard.profile.whatsapp_placeholder')}
             />
           ) : (
-            <span>{displayProfile.whatsapp || displayProfile.phone || "Phone not set"}</span>
+            <span>{displayProfile.whatsapp || displayProfile.phone || t('client_dashboard.profile.phone_not_set')}</span>
           )}
         </div>
       </div>
 
       {/* Progress Bar & Badges */}
       <div className="mb-4">
-        <div className="text-sm mb-1">Profile {progress}% complete</div>
+        <div className="text-sm mb-1">{t('client_dashboard.profile.profile_complete', { progress })}</div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div className="bg-green-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
         </div>
@@ -199,12 +201,12 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
 
       {/* Static Rating for MVP */}
       <div className="flex gap-2 mb-4">
-        {displayProfile.verified && <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">Verified</span>}
+        {displayProfile.verified && <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('client_dashboard.profile.verified')}</span>}
       </div>
 
       <div className="flex gap-2">
         <Button onClick={onContact}>
-          Contact Support
+          {t('client_dashboard.profile.contact_support')}
         </Button>
       </div>
     </Card>
@@ -213,13 +215,14 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
 
 // Recent Orders Component
 function RecentOrders({ orders }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   // Ensure orders is an array
   const safeOrders = Array.isArray(orders) ? orders : [];
 
   return (
     <div className="md:col-span-1">
-      <h3 className="text-lg font-semibold mb-2">Recent Purchases</h3>
+      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.recent_orders.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
           {safeOrders.length > 0 ? (
@@ -237,7 +240,7 @@ function RecentOrders({ orders }) {
                     </div>
                     <span className={`px-2 py-1 rounded text-xs ${order.status === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                       }`}>
-                      {order.status || 'Pending'}
+                      {order.status || t('client_dashboard.recent_orders.pending')}
                     </span>
                   </div>
                 );
@@ -245,11 +248,11 @@ function RecentOrders({ orders }) {
             </div>
           ) : (
             <div className="text-center text-gray-500 text-sm py-4">
-              No recent orders found.
+              {t('client_dashboard.recent_orders.no_orders')}
             </div>
           )}
           <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
-            View all purchases
+            {t('client_dashboard.recent_orders.view_all')}
           </Button>
         </CardContent>
       </Card>
@@ -259,10 +262,11 @@ function RecentOrders({ orders }) {
 
 // Statistics Component
 function Statistics({ stats }) {
+  const { t } = useTranslation();
   const realStats = [
-    { label: "Total spent", value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp },
-    { label: "Orders", value: stats?.totalOrders || 0, icon: ShoppingBag },
-    { label: "Freelancers hired", value: stats?.freelancersHired || 0, icon: Users }
+    { label: t('client_dashboard.stats.total_spent'), value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp },
+    { label: t('client_dashboard.stats.orders'), value: stats?.totalOrders || 0, icon: ShoppingBag },
+    { label: t('client_dashboard.stats.freelancers_hired'), value: stats?.freelancersHired || 0, icon: Users }
   ];
 
   return (
@@ -278,7 +282,7 @@ function Statistics({ stats }) {
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{stat.value}</div>
               <Button className="mt-4 w-fit" onClick={() => { }}>
-                View details
+                {t('client_dashboard.stats.view_details')}
               </Button>
             </CardContent>
           </Card>
@@ -290,10 +294,11 @@ function Statistics({ stats }) {
 
 // Device Tracking Component
 function DeviceTracking({ devices = [] }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="md:col-span-1">
-      <h3 className="text-lg font-semibold mb-2">Device Tracking</h3>
+      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.device_tracking.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
           <div className="space-y-2 overflow-y-auto max-h-[100px]">
@@ -312,12 +317,12 @@ function DeviceTracking({ devices = [] }) {
               ))
             ) : (
               <div className="text-center text-gray-500 text-sm py-4">
-                No active tracking.
+                {t('client_dashboard.device_tracking.no_tracking')}
               </div>
             )}
           </div>
           <Button className="mt-4 w-fit" onClick={() => navigate("#")}>
-            View map
+            {t('client_dashboard.device_tracking.view_map')}
           </Button>
         </CardContent>
       </Card>
@@ -327,31 +332,32 @@ function DeviceTracking({ devices = [] }) {
 
 // Digital Growth Bundle Component
 function DigitalGrowthBundle() {
+  const { t } = useTranslation();
   const [selectedPlan, setSelectedPlan] = useState('monthly');
 
   return (
     <div className="md:col-span-2">
-      <h3 className="text-lg font-semibold mb-2">Digital Growth Bundle</h3>
+      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.growth_bundle.title')}</h3>
       <Card className="p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Basic Plan */}
           <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="text-lg font-semibold mb-2">Free Plan</h4>
+            <h4 className="text-lg font-semibold mb-2">{t('client_dashboard.growth_bundle.free_plan.title')}</h4>
             <ul className="text-sm text-gray-600 space-y-1 mb-4">
-              <li>• 2 purchases/month</li>
-              <li>• No social monitoring</li>
-              <li>• Basic support</li>
+              <li>• {t('client_dashboard.growth_bundle.free_plan.purchases')}</li>
+              <li>• {t('client_dashboard.growth_bundle.free_plan.no_monitoring')}</li>
+              <li>• {t('client_dashboard.growth_bundle.free_plan.support')}</li>
             </ul>
             <Button variant="outline" className="w-full" disabled>
-              Current Plan
+              {t('client_dashboard.growth_bundle.free_plan.current')}
             </Button>
           </div>
 
           {/* Premium Plan */}
           <div className="border-2 border-green-500 rounded-lg p-4 bg-green-50">
             <div className="flex justify-between items-center mb-2">
-              <h4 className="text-lg font-semibold">Premium Plan</h4>
-              <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">Limited to 50 slots!</span>
+              <h4 className="text-lg font-semibold">{t('client_dashboard.growth_bundle.premium_plan.title')}</h4>
+              <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">{t('client_dashboard.growth_bundle.premium_plan.limited_slots')}</span>
             </div>
 
             <div className="mb-4">
@@ -360,35 +366,35 @@ function DigitalGrowthBundle() {
                   {selectedPlan === 'monthly' ? '40,000 GNF' : '200,000 GNF'}
                 </span>
                 <span className="text-sm text-gray-500">
-                  /{selectedPlan === 'monthly' ? 'month' : '6 months'}
+                  /{selectedPlan === 'monthly' ? t('client_dashboard.growth_bundle.premium_plan.month') : t('client_dashboard.growth_bundle.premium_plan.six_months')}
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-sm line-through text-gray-500">Regular price: 60,000 GNF/month</span>
-                <span className="text-xs bg-green-100 text-green-700 px-1 rounded">17% discount</span>
+                <span className="text-sm line-through text-gray-500">{t('client_dashboard.growth_bundle.premium_plan.regular_price')}</span>
+                <span className="text-xs bg-green-100 text-green-700 px-1 rounded">{t('client_dashboard.growth_bundle.premium_plan.discount')}</span>
               </div>
             </div>
 
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Total value: 265,000 GNF</p>
+              <p className="text-sm text-gray-600 mb-2">{t('client_dashboard.growth_bundle.premium_plan.total_value')}</p>
               <ul className="text-sm text-gray-600 space-y-1">
-                <li>• Unlimited purchases</li>
-                <li>• Social media monitoring</li>
-                <li>• Priority support</li>
-                <li>• 14-day guarantee</li>
+                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.unlimited')}</li>
+                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.monitoring')}</li>
+                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.priority')}</li>
+                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.guarantee')}</li>
               </ul>
             </div>
 
             <div className="space-y-2">
               <Button className="w-full">
-                Buy Now
+                {t('client_dashboard.growth_bundle.premium_plan.buy_now')}
               </Button>
               <div className="flex gap-2">
                 <Button variant="outline" className="flex-1" onClick={() => setSelectedPlan('monthly')}>
-                  Monthly
+                  {t('client_dashboard.growth_bundle.premium_plan.monthly_btn')}
                 </Button>
                 <Button variant="outline" className="flex-1" onClick={() => setSelectedPlan('semiannual')}>
-                  6 months
+                  {t('client_dashboard.growth_bundle.premium_plan.semiannual_btn')}
                 </Button>
               </div>
             </div>
@@ -401,10 +407,11 @@ function DigitalGrowthBundle() {
 
 // Notifications Component
 function Notifications({ notifications = [] }) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="md:col-span-1">
-      <h3 className="text-lg font-semibold mb-2">Notifications</h3>
+      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.notifications.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
           <div className="space-y-2 overflow-y-auto max-h-[100px]">
@@ -420,12 +427,12 @@ function Notifications({ notifications = [] }) {
               ))
             ) : (
               <div className="text-center text-gray-500 text-sm py-4">
-                No new notifications.
+                {t('client_dashboard.notifications.none')}
               </div>
             )}
           </div>
           <Button className="mt-4 w-fit" onClick={() => navigate("#")}>
-            View all
+            {t('client_dashboard.notifications.view_all')}
           </Button>
         </CardContent>
       </Card>
@@ -434,6 +441,7 @@ function Notifications({ notifications = [] }) {
 }
 
 export default function ClientDashbaord() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
@@ -480,7 +488,7 @@ export default function ClientDashbaord() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6 max-w-7xl mx-auto">Client Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-6 max-w-7xl mx-auto">{t('sidebar.dashboard')}</h1>
 
       <div className="max-w-7xl mx-auto">
         {/* Profile Card */}
@@ -508,23 +516,22 @@ export default function ClientDashbaord() {
         <DigitalGrowthBundle />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          {/* Work History Section (left) */}
           <div className="md:col-span-2 flex flex-col">
-            <h3 className="text-lg font-semibold">Purchase History</h3>
+            <h3 className="text-lg font-semibold">{t('client_dashboard.purchase_history.title')}</h3>
             <Card className="h-[520px]">
               <CardContent className="flex flex-col items-center justify-center p-4 text-center h-full">
                 <div className="w-full text-left mb-4 bg-gray-50">
                   <div className="grid grid-cols-4 gap-4 font-semibold text-sm text-gray-600 border-b border-gray-100 pb-5 p-4">
-                    <div>Date</div>
-                    <div>Product</div>
-                    <div>Status</div>
-                    <div>Amount</div>
+                    <div>{t('client_dashboard.purchase_history.date')}</div>
+                    <div>{t('client_dashboard.purchase_history.product')}</div>
+                    <div>{t('client_dashboard.purchase_history.status')}</div>
+                    <div>{t('client_dashboard.purchase_history.amount')}</div>
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center flex-grow">
-                  <h4 className="text-xl font-bold mb-2">Start your purchases!</h4>
+                  <h4 className="text-xl font-bold mb-2">{t('client_dashboard.purchase_history.start')}</h4>
                   <p className="text-gray-500 w-full">
-                    You’ll find all your purchases here after you place your first order.
+                    {t('client_dashboard.purchase_history.desc')}
                   </p>
                 </div>
               </CardContent>
@@ -533,12 +540,12 @@ export default function ClientDashbaord() {
 
           {/* Messages Section (right) */}
           <div className="md:col-span-1 md:row-span-2 flex flex-col">
-            <h3 className="text-lg font-semibold mb-2">Current Queries</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.messages.title')}</h3>
             <Card className="flex-grow">
               <CardContent className="flex flex-col h-full p-0">
                 <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none flex items-center justify-center">
                   <div className="text-gray-500 text-sm p-4 text-center">
-                    No active queries or messages.
+                    {t('client_dashboard.messages.none')}
                   </div>
                 </div>
                 <div className="p-4 border-t">
@@ -547,7 +554,7 @@ export default function ClientDashbaord() {
                     className="w-full"
                     onClick={() => setShowChatWidget(true)}
                   >
-                    START NEW CHAT
+                    {t('client_dashboard.messages.start_chat')}
                   </Button>
                 </div>
               </CardContent>

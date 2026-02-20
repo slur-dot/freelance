@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Search, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 // Reusable Button
 function RCButton({
@@ -85,6 +86,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function CourseListing() {
+  const { t } = useTranslation();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -108,7 +110,7 @@ export default function CourseListing() {
   }, []);
 
   const handleDelete = async (course) => {
-    if (!window.confirm("Are you sure you want to delete this course?")) {
+    if (!window.confirm(t('admin_dashboard.listings.course.actions.delete_confirm'))) {
       return;
     }
 
@@ -119,11 +121,11 @@ export default function CourseListing() {
         setCourses((prev) => prev.filter((c) => c.id !== course.id));
         setError(""); // Clear any previous errors
       } else {
-        setError("Cannot delete course: missing path reference.");
+        setError(t('admin_dashboard.listings.course.errors.missing_path'));
       }
     } catch (e) {
       console.error("Error deleting course:", e);
-      setError(`Failed to delete course: ${e.message}`);
+      setError(t('admin_dashboard.listings.course.errors.delete_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -133,7 +135,7 @@ export default function CourseListing() {
     try {
       setLoading(true);
       if (!course.path) {
-        setError("Cannot activate course: missing path reference.");
+        setError(t('admin_dashboard.listings.course.errors.missing_path'));
         return;
       }
 
@@ -147,7 +149,7 @@ export default function CourseListing() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error activating course:", e);
-      setError(`Failed to activate course: ${e.message}`);
+      setError(t('admin_dashboard.listings.course.errors.activate_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -157,7 +159,7 @@ export default function CourseListing() {
     try {
       setLoading(true);
       if (!course.path) {
-        setError("Cannot deactivate course: missing path reference.");
+        setError(t('admin_dashboard.listings.course.errors.missing_path'));
         return;
       }
 
@@ -171,7 +173,7 @@ export default function CourseListing() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error deactivating course:", e);
-      setError(`Failed to deactivate course: ${e.message}`);
+      setError(t('admin_dashboard.listings.course.errors.deactivate_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -187,14 +189,14 @@ export default function CourseListing() {
       {/* Heading with button */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
-          Course Listing
+          {t('admin_dashboard.listings.course.title')}
         </h1>
         <RCButton
           variant="custom"
           className="bg-green-600 text-white px-4 py-2 rounded-md"
           onClick={handleAddNewCourse}
         >
-          Add New Course
+          {t('admin_dashboard.listings.course.add_button')}
         </RCButton>
       </div>
 
@@ -208,7 +210,7 @@ export default function CourseListing() {
         {/* Search */}
         <div className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput placeholder="Search" />
+          <RCInput placeholder={t('admin_dashboard.listings.course.search_placeholder')} />
         </div>
 
         {/* Table */}
@@ -216,12 +218,12 @@ export default function CourseListing() {
           <RCTable>
             <RCTableHeader>
               <RCTableRow>
-                <RCTableHead>S.No</RCTableHead>
-                <RCTableHead>Course Name</RCTableHead>
-                <RCTableHead>Course Description</RCTableHead>
-                <RCTableHead>Price</RCTableHead>
-                <RCTableHead>Status</RCTableHead>
-                <RCTableHead>Actions</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.s_no')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.name')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.description')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.price')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.status')}</RCTableHead>
+                <RCTableHead>{t('admin_dashboard.listings.course.table.headers.actions')}</RCTableHead>
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
@@ -244,7 +246,7 @@ export default function CourseListing() {
                           : "bg-red-500"
                           }`}
                       />
-                      {course.published ? "Active" : "Inactive"}
+                      {course.published ? t('admin_dashboard.listings.course.status.active') : t('admin_dashboard.listings.course.status.inactive')}
                     </span>
                   </RCTableCell>
                   <RCTableCell>
@@ -264,7 +266,7 @@ export default function CourseListing() {
                           onClick={() => handleDeactivate(course)}
                           disabled={loading}
                         >
-                          Deactivate
+                          {t('admin_dashboard.listings.course.actions.deactivate')}
                         </RCButton>
                       ) : (
                         <RCButton
@@ -273,7 +275,7 @@ export default function CourseListing() {
                           onClick={() => handleActivate(course)}
                           disabled={loading}
                         >
-                          Activate
+                          {t('admin_dashboard.listings.course.actions.activate')}
                         </RCButton>
                       )}
                     </div>
@@ -295,14 +297,14 @@ export default function CourseListing() {
                 {index + 1}. {course.title}
               </h2>
               <p className="text-xs text-gray-500 mb-1">{course.description}</p>
-              <p className="text-xs text-gray-500 mb-1">Price: {course.price}</p>
+              <p className="text-xs text-gray-500 mb-1">{t('admin_dashboard.listings.course.mobile.price')} {course.price}</p>
               <p
                 className={`text-xs font-medium mb-2 ${course.published
                   ? "text-green-600"
                   : "text-red-600"
                   }`}
               >
-                Status: {course.published ? "Active" : "Inactive"}
+                {t('admin_dashboard.listings.course.mobile.status')} {course.published ? t('admin_dashboard.listings.course.status.active') : t('admin_dashboard.listings.course.status.inactive')}
               </p>
               <div className="flex items-center gap-2">
                 <RCButton
@@ -320,7 +322,7 @@ export default function CourseListing() {
                     onClick={() => handleDeactivate(course)}
                     disabled={loading}
                   >
-                    Deactivate
+                    {t('admin_dashboard.listings.course.actions.deactivate')}
                   </RCButton>
                 ) : (
                   <RCButton
@@ -329,7 +331,7 @@ export default function CourseListing() {
                     onClick={() => handleActivate(course)}
                     disabled={loading}
                   >
-                    Activate
+                    {t('admin_dashboard.listings.course.actions.activate')}
                   </RCButton>
                 )}
               </div>
@@ -339,11 +341,11 @@ export default function CourseListing() {
 
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-3 border-t border-gray-300 pt-4">
-          <RCButton variant="outline">Previous</RCButton>
+          <RCButton variant="outline">{t('admin_dashboard.pagination.previous')}</RCButton>
           <span className="text-xs sm:text-sm text-gray-500">
-            Page 1 of 10
+            {t('admin_dashboard.pagination.page_info', { current: 1, total: 10 })}
           </span>
-          <RCButton>Next</RCButton>
+          <RCButton>{t('admin_dashboard.pagination.next')}</RCButton>
         </div>
       </RCCard>
     </div>

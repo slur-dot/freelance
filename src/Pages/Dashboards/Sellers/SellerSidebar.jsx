@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   BarChart3,
   Package,
@@ -60,8 +61,8 @@ function SidebarMenuButton({ children, isActive, to }) {
     <Link
       to={to}
       className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg text-sm font-medium transition ${isActive
-          ? "bg-gray-100 text-gray-900"
-          : "text-gray-700 hover:bg-gray-100"
+        ? "bg-gray-100 text-gray-900"
+        : "text-gray-700 hover:bg-gray-100"
         }`}
     >
       {children}
@@ -70,6 +71,7 @@ function SidebarMenuButton({ children, isActive, to }) {
 }
 
 export default function SellerSidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const activePath = location.pathname;
@@ -118,42 +120,42 @@ export default function SellerSidebar() {
 
   const navItems = [
     {
-      section: "HOME",
+      section: t('sidebar.home'),
       items: [
-        { title: "Dashboard", url: "/seller/dashboard", icon: BarChart3 },
+        { title: t('sidebar.dashboard'), url: "/seller/dashboard", icon: BarChart3 },
       ],
     },
     {
-      section: "SELLING",
+      section: t('sidebar.selling'),
       items: [
         {
-          title: "Listings",
+          title: t('sidebar.listings'),
           url: "/seller/dashboard/listings",
           icon: Package,
         },
         {
-          title: "Orders",
+          title: t('sidebar.orders'),
           url: "/seller/dashboard/orders",
           icon: ShoppingCart,
         },
         {
-          title: "Payouts",
+          title: t('sidebar.payouts'),
           url: "/seller/dashboard/payouts",
           icon: Wallet,
         },
       ],
     },
     {
-      section: "MARKETING",
+      section: t('sidebar.marketing'),
       items: [
-        { title: "Ads", url: "/seller/dashboard/ads", icon: Megaphone },
-        { title: "Notifications", url: "/seller/dashboard/notifications", icon: Bell },
+        { title: t('sidebar.ads'), url: "/seller/dashboard/ads", icon: Megaphone },
+        { title: t('sidebar.notifications'), url: "/seller/dashboard/notifications", icon: Bell },
       ],
     },
     {
-      section: "ACCOUNT",
+      section: t('sidebar.account'),
       items: [
-        { title: "Settings", url: "/seller/dashboard/settings", icon: Settings },
+        { title: t('sidebar.settings'), url: "/seller/dashboard/settings", icon: Settings },
       ],
     },
   ];
@@ -225,7 +227,7 @@ export default function SellerSidebar() {
                     {user.email}
                   </span>
                 </div>
-                <button onClick={handleLogout} className="ml-auto text-gray-500 hover:text-red-600 transition-colors" title="Logout">
+                <button onClick={handleLogout} className="ml-auto text-gray-500 hover:text-red-600 transition-colors" title={t('sidebar.logout')}>
                   <LogOut className="h-5 w-5" />
                 </button>
               </div>

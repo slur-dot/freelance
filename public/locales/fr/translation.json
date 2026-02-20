@@ -1,0 +1,3226 @@
+{
+    "navbar": {
+        "home": "Accueil",
+        "shop": "Boutique",
+        "hire_freelancers": "Recruter des Freelances",
+        "locations": "Emplacements",
+        "tech_services": "Services Techniques",
+        "dashboards": "Tableaux de bord",
+        "freelancer_dashboard": "Tableau de bord Freelance",
+        "clients_dashboard": "Tableau de bord Clients",
+        "company_dashboard": "Tableau de bord Entreprise",
+        "admin_dashboard": "Tableau de bord Admin",
+        "vendor_modules": "Modules Vendeur",
+        "seller_dashboard": "Tableau de bord Vendeur",
+        "more": "Plus",
+        "device_rental": "Location d'appareils",
+        "training_upskilling": "Formation & Perfectionnement",
+        "corporate_sales": "Ventes Corporatives & ONG",
+        "faq": "FAQ",
+        "blog": "Blog",
+        "contact_us": "Nous contacter",
+        "vendor_profiles": "Profils Vendeurs",
+        "logout": "Déconnexion",
+        "login": "Connexion",
+        "signup": "S'inscrire"
+    },
+    "footer": {
+        "description": "Freelance-224 connecte les entreprises avec des professionnels talentueux, offrant une collaboration flexible et à distance pour des projets de toutes tailles.",
+        "explore": "Explorer",
+        "what_we_do": "Ce que nous faisons",
+        "our_services": "Nos services",
+        "user_strategy": "Stratégie utilisateur",
+        "blog": "Blog",
+        "faqs": "FAQ",
+        "company": "Entreprise",
+        "about_freelance": "À propos de Freelance",
+        "contact_support": "Contact & Support",
+        "success_stories": "Histoires de réussite",
+        "privacy_policy": "Politique de confidentialité",
+        "join_chamber": "Rejoindre la Chambre de Commerce de Guinée",
+        "contact": "Contact",
+        "address": "Conakry, République de Guinée",
+        "whatsapp_support": "Support WhatsApp",
+        "stay_updated": "Restez informé – Inscrivez-vous à notre newsletter !",
+        "enter_email": "Entrez votre email",
+        "newsletter_success": "Merci de vous être abonné à notre newsletter !",
+        "all_rights_reserved": "Tous droits réservés"
+    },
+    "contact": {
+        "title": "Contactez-nous",
+        "subtitle": "Envoyez-nous un message et nous serons là pour vous aider.",
+        "home_breadcrumb": "Accueil",
+        "contact_breadcrumb": "Contact",
+        "contact_form_tab": "Formulaire de contact",
+        "support_tickets_tab": "Tickets de support",
+        "full_name": "Nom complet",
+        "company_name": "Nom de l'entreprise",
+        "job_title": "Titre du poste",
+        "select_option": "Sélectionnez une option",
+        "developer": "Développeur",
+        "designer": "Designer",
+        "manager": "Manager",
+        "address": "Adresse",
+        "email_address": "Adresse e-mail",
+        "message": "Message",
+        "message_us_now": "Envoyez-nous un message",
+        "schedule_call": "Planifier un appel",
+        "our_location": "Notre emplacement",
+        "location_details": "Conakry, Guinée",
+        "chat_with_us": "Discutez avec nous",
+        "need_instant_help": "Besoin d'aide instantanée ?",
+        "support_team_desc": "Notre équipe de support experte est en ligne 24/7 et prête à aider les habitants, expatriés, entreprises, ONG et freelances guinéens dans toutes les préfectures.",
+        "support_online": "L'équipe de support est en ligne",
+        "response_time": "Temps de réponse :",
+        "approx_time": "~2 min",
+        "available": "Disponible :",
+        "available_24_7": "24/7",
+        "start_live_chat": "Démarrer le chat en direct",
+        "no_registration": "Cliquez pour ouvrir la fenêtre de chat • Aucune inscription requise",
+        "select_purpose": "Sélectionnez un motif",
+        "business_inquiry": "Demande commerciale",
+        "partnership": "Discussion de partenariat",
+        "consultation": "Consultation",
+        "technical_support": "Support technique",
+        "other": "Autre",
+        "preferred_date": "Date préférée *",
+        "preferred_time": "Heure préférée *",
+        "select_time": "Sélectionnez une heure",
+        "cancel": "Annuler",
+        "fill_required": "Veuillez remplir tous les champs obligatoires",
+        "call_scheduled_success": "Appel planifié avec succès ! Nous vous contacterons pour confirmer le rendez-vous."
+    },
+    "faq": {
+        "hero_title": "Aide & Support",
+        "hero_subtitle": "Recherchez des questions ou des articles utiles",
+        "search_placeholder": "Que cherchez-vous ?",
+        "search_button": "Rechercher",
+        "q1": "Comment trouver des opportunités de travail en freelance en Guinée ?",
+        "a1": "Créez un profil sur notre plateforme et parcourez les projets disponibles dans votre préfecture. Nous connectons les freelances locaux avec les entreprises, les ONG et les expatriés à travers la Guinée.",
+        "q2": "Puis-je suivre une formation pour améliorer mes compétences ?",
+        "a2": "Oui ! Nous proposons des modules de formation en informatique, SAP, développement de logiciels et plus encore. Parfait pour la montée en compétences des talents locaux.",
+        "q3": "Comment mettre à jour mon profil de freelance ?",
+        "a3": "Accédez à votre Tableau de bord Freelance → section Profil pour mettre à jour vos compétences, votre emplacement et votre portfolio.",
+        "q4": "Fournissez-vous des services aux ONG opérant en Guinée ?",
+        "a4": "Absolument ! Nous sommes spécialisés dans le support technique pour les ONG, la location d'appareils, les programmes de formation et les solutions informatiques adaptées aux organisations de développement dans toutes les préfectures.",
+        "q5": "Les expatriés et les entreprises étrangères peuvent-ils accéder à vos services ?",
+        "a5": "Oui ! Nous fournissons des solutions technologiques, la location d'appareils et la mise en relation avec des freelances pour les expatriés et les entreprises internationales opérant en Guinée.",
+        "q6": "Proposez-vous la location d'appareils en gros pour les organisations ?",
+        "a6": "Oui, nous proposons des forfaits de location d'appareils d'entreprise parfaits pour les entreprises, les ONG et les organisations ayant besoin de plusieurs smartphones ou ordinateurs portables.",
+        "filters": "Filtres",
+        "role": "Rôle",
+        "role_placeholder": "ex : Développeur",
+        "apply_filter": "Appliquer le filtre",
+        "faq_title": "Questions Fréquemment Posées",
+        "still_questions": "Vous avez encore des questions ? Contactez notre équipe.",
+        "contact_us": "Contactez-nous",
+        "cat_freelancers": "Pour les Freelances Guinéens & Talents Locaux",
+        "cat_companies": "Pour les Entreprises, ONG, Expatriés & Organisations",
+        "cat_vendors": "Pour les Vendeurs & Prestataires de Services"
+    },
+    "blog": {
+        "categories": "Catégories",
+        "freelancing": "Freelance",
+        "tech": "Technologie",
+        "business": "Affaires",
+        "training": "Formation",
+        "explore_latest": "EXPLOREZ LES DERNIERS BLOGS",
+        "blogs": "Blogs",
+        "search_placeholder": "Recherchez n'importe quoi ici...",
+        "read_more": "LIRE LA SUITE",
+        "explore_more": "Explorer plus",
+        "referral_title": "Parrainez un ami & Gagnez des récompenses !",
+        "invite_friends": "Inviter des amis"
+    },
+    "home": {
+        "hero": {
+            "save_20": "Économisez 20%",
+            "faster_solutions": "Solutions plus rapides",
+            "shop": "Acheter.",
+            "book": "Réserver.",
+            "hire": "Recruter.",
+            "rent": "Louer.",
+            "transform": "Transformer.",
+            "partner_in": "- Votre Partenaire Tech en",
+            "guinea": "Guinée",
+            "subtitle": "Au service des Guinéens, expatriés, entreprises, ONG et freelances à Conakry et dans toutes les préfectures",
+            "btn_shop": "Acheter des Smartphones",
+            "btn_hire": "Recruter des Freelances",
+            "btn_tech": "Services Techniques",
+            "btn_rent": "Louer des Appareils",
+            "btn_training": "Commencer la Formation",
+            "timer_day": "jour",
+            "timer_hours": "heures restantes",
+            "timer_range": "du 14 Mai 2025 à 17h55 CEST, jusqu'au 16 Mai 2025 minuit",
+            "promo_title": "Obtenez 20% de réduction sur les smartphones et locations – Visitez notre boutique !",
+            "btn_explore": "Explorer la plateforme"
+        },
+        "services": {
+            "for_companies": "Pour les Entreprises",
+            "fuel_innovation": "Stimuler l'Innovation et la Transformation",
+            "transformation": "Numérique avec Freelance-224",
+            "subtitle": "Solutions technologiques complètes pour les Guinéens, expatriés, entreprises, ONG et freelances à Conakry et dans toutes les préfectures.",
+            "recruitment_title": "Services de Recrutement Technologique :",
+            "recruitment_subtitle": "Recrutez des freelances de haut niveau dans toutes les préfectures de Guinée pour vos projets tech.",
+            "erp_title": "Solutions ERP/SAP",
+            "erp_desc": "Implémentez, optimisez et personnalisez les systèmes SAP/ERP pour votre entreprise.",
+            "erp_btn": "Explorer les Services ERP →",
+            "it_support_title": "Support Informatique",
+            "it_support_desc": "Support informatique fiable pour les problèmes matériels, logiciels et réseaux.",
+            "it_support_btn": "Obtenir du Support →",
+            "integration_title": "Intégration de Solutions IT",
+            "integration_desc": "Intégrez parfaitement les solutions informatiques pour améliorer les opérations de l'entreprise.",
+            "integration_btn": "Intégrer Maintenant →",
+            "outsourcing_title": "Externalisation avec Freelance-224",
+            "outsourcing_desc": "Externalisez les tâches informatiques à notre équipe d'experts pour l'efficacité et les économies.",
+            "outsourcing_btn": "Externaliser Maintenant →",
+            "device_title": "Vente & Location d'Appareils",
+            "device_desc": "Vente de Smartphones",
+            "device_btn": "Acheter ou Louer pour votre Équipe →",
+            "rental": "Location",
+            "training_title": "Formation pour les Équipes",
+            "training_desc": "Perfectionnez votre équipe avec une formation personnalisée adaptée aux besoins de votre entreprise.",
+            "training_btn": "Former votre Équipe →"
+        },
+        "product_list": {
+            "new": "Neuf",
+            "used": "Occasion",
+            "best_selling": "Meilleure Vente",
+            "added_to_cart": "ajouté au panier."
+        },
+        "training": {
+            "for_freelancers": "Pour Freelances & Entreprises",
+            "title": "Développez vos compétences ou personnalisez la formation pour votre équipe",
+            "subtitle": "Demandez une formation personnalisée pour votre entreprise ou de nouveaux cours en tant que freelance !",
+            "btn_start": "Commencer à apprendre",
+            "btn_demo": "Voir la démo",
+            "c1_title": "Bases du développement Web",
+            "c1_desc": "Apprenez les bases du HTML, CSS et JavaScript",
+            "c2_title": "Implémentation SAP ERP",
+            "c2_desc": "Maîtrisez les systèmes SAP pour les solutions d'entreprise",
+            "c3_title": "Stratégie de marketing numérique",
+            "c3_desc": "Créez des campagnes de marketing en ligne efficaces"
+        },
+        "testimonials": {
+            "badge": "Nos Témoignages",
+            "title": "Ce que nos clients disent",
+            "subtitle": "de nos solutions",
+            "t1_quote": "Recruté 5 spécialistes IT en une semaine !",
+            "t2_quote": "Les programmes de formation ont transformé les capacités de notre équipe.",
+            "t3_quote": "Nous avons trouvé des talents freelances incroyables ici à Conakry."
+        },
+        "stats": {
+            "illustration": "Illustration",
+            "view_all": "Voir tout",
+            "daily_users": "Utilisateurs Actifs Quotidiens",
+            "trusted_by": "Approuvé par 20+ ONG en Guinée pour les solutions techniques et de formation.",
+            "freelancers_count": "Freelances à Conakry",
+            "powered_by": "Propulsé par",
+            "security_badge": "Badge de Sécurité"
+        }
+    },
+    "corporate_sales": {
+        "breadcrumbs": {
+            "home": "Accueil",
+            "corporate_sales": "Ventes et Locations Entreprises"
+        },
+        "tabs": {
+            "sales": "Options de Vente",
+            "rental": "Options de Location"
+        },
+        "hero": {
+            "title": "Vente et Location d'Appareils pour votre Entreprise & ONG",
+            "subtitle": "Équipez votre équipe avec des smartphones et ordinateurs portables à travers la Guinée - Parfait pour les entreprises, ONG et organisations à Conakry et toutes les préfectures"
+        },
+        "sales": {
+            "title": "Options de Vente",
+            "smartphones": "Smartphones",
+            "laptops": "Ordinateurs Portables",
+            "buy_now": "Acheter Maintenant",
+            "back_to_products": "Retour aux Produits",
+            "booking_title": "Réservation pour : {{product}}",
+            "discount_text": "/unité après remise",
+            "cta": {
+                "title": "Achetez 10 smartphones pour votre projet éducatif",
+                "button": "Acheter Maintenant"
+            },
+            "products": {
+                "iphone14": {
+                    "name": "iPhone 14"
+                },
+                "s23": {
+                    "name": "Samsung Galaxy S23"
+                },
+                "macbook_pro": {
+                    "name": "MacBook Pro M2"
+                },
+                "dell_xps": {
+                    "name": "Dell XPS 13"
+                }
+            }
+        },
+        "rental": {
+            "title": "Options de Location",
+            "smartphones": "Smartphones",
+            "laptops": "Ordinateurs & Portables",
+            "rent_now": "Louer Maintenant",
+            "back_to_rental": "Retour aux Options de Location",
+            "booking_title": "Réservation de location pour : {{product}}",
+            "weekly": "Hebdomadaire",
+            "monthly": "Mensuel",
+            "cta": {
+                "title": "Besoin de commandes en gros ? Contactez notre équipe commerciale.",
+                "button": "Contacter les Ventes"
+            },
+            "products": {
+                "iphone14": {
+                    "name": "iPhone 14"
+                },
+                "s23": {
+                    "name": "Samsung Galaxy S23"
+                },
+                "pixel7": {
+                    "name": "Google Pixel 7 Pro"
+                },
+                "basic_laptop": {
+                    "name": "Ordinateur Portable Basique (i5/8GB)"
+                },
+                "standard_laptop": {
+                    "name": "Ordinateur Portable Standard (i7/16GB)"
+                },
+                "premium_laptop": {
+                    "name": "Station de Travail Premium"
+                }
+            }
+        }
+    },
+    "computer_rental": {
+        "hero": {
+            "title": "Louez des Ordinateurs pour vos Besoins à Conakry",
+            "subtitle": "Locations horaires, journalières ou hebdomadaires – Parfait pour un usage à court terme"
+        },
+        "products": {
+            "breadcrumbs": {
+                "home": "Accueil",
+                "computer_rentals": "Location d'Ordinateurs"
+            },
+            "hero": {
+                "title": "Location d'Équipement Informatique",
+                "subtitle": "Locations flexibles pour vos besoins professionnels"
+            },
+            "sections": {
+                "laptops": "Ordinateurs Portables & Stations de Travail",
+                "printers": "Imprimantes & Scanners"
+            },
+            "labels": {
+                "weekly": "Hebdomadaire",
+                "monthly": "Mensuel",
+                "rent_now": "Louer Maintenant"
+            },
+            "items": {
+                "basic_laptop": {
+                    "name": "Ordinateur Portable Basique",
+                    "specs": "Core i5, 8GB RAM, 256GB SSD"
+                },
+                "standard_laptop": {
+                    "name": "Ordinateur Portable Standard",
+                    "specs": "Core i7, 16GB RAM, 512GB SSD"
+                },
+                "premium_laptop": {
+                    "name": "Ordinateur Portable Premium",
+                    "specs": "M1 MacBook Air / Windows Haut de Gamme"
+                },
+                "laserjet": {
+                    "name": "LaserJet Pro M404n",
+                    "specs": "Laser Monochrome, Impression Rapide"
+                },
+                "color_laserjet": {
+                    "name": "Color LaserJet Pro MFP",
+                    "specs": "Couleur, Scan, Copie, Impression"
+                },
+                "office_printer": {
+                    "name": "Imprimante de Bureau Haut Volume",
+                    "specs": "Usage Intensif, Prêt Réseau"
+                }
+            }
+        }
+    },
+    "freelancer": {
+        "hero": {
+            "title": "Engagez les Meilleurs Freelances en <1/><2>Guinée & dans le Monde</2>",
+            "subtitle": "Trouvez des talents locaux pour le support informatique, l'implémentation SAP, le développement logiciel et plus encore - Parfait pour les entreprises, ONG, expatriés et entreprises locales",
+            "search_placeholder": "Recherchez tout type de travail technique, compétences et lieu",
+            "search_button": "Rechercher",
+            "filter_label": "Filtrer Par :",
+            "filters": [
+                "Applications Métier",
+                "Cloud & Infrastructure",
+                "Cybersécurité",
+                "Données & Analytique",
+                "SAP",
+                "Développement Logiciel"
+            ],
+            "locations": [
+                "Conakry",
+                "Kankan",
+                "Labé",
+                "Nzérékoré",
+                "Kindia",
+                "Boké"
+            ],
+            "ad": {
+                "label": "Pub",
+                "title": "Besoin de Tech pour votre travail Freelance ? <1/> Achetez Maintenant !",
+                "button": "Acheter Maintenant"
+            }
+        },
+        "footer": {
+            "badge": "Pour les Freelances",
+            "title": "Rejoignez Notre Marketplace & Développez Vos Compétences",
+            "upskill": "Demander des Cours de Perfectionnement",
+            "join": "Rejoindre Maintenant"
+        },
+        "profile": {
+            "breadcrumbs": {
+                "home": "Accueil",
+                "hire": "Engager des Freelances"
+            },
+            "upload": "Télécharger",
+            "rating": "Évaluation",
+            "badges": {
+                "title": "Badges",
+                "complete": "Profil complet",
+                "top": "Top Freelance"
+            },
+            "progress": "Profil complété à {{percent}}%",
+            "edit": {
+                "title": "Modifier le profil",
+                "cancel": "Annuler",
+                "save": "Enregistrer"
+            },
+            "actions": {
+                "message": "Contacter le Freelance",
+                "hire": "Engager Maintenant",
+                "bid": "Enchérir sur le Projet",
+                "view_portfolio": "Voir le Portfolio",
+                "reviews": "{{count}} avis"
+            }
+        },
+        "filters": {
+            "title": "Filtres",
+            "work_mode": "Mode de Travail",
+            "specialized_skills": "Compétences Spécialisées",
+            "category": "Catégorie",
+            "company_field": "Nom de l'Entreprise & Domaine d'Activité",
+            "availability": "Disponibilité",
+            "ratings": "Évaluations",
+            "price": "Prix",
+            "apply": "Appliquer le Filtre",
+            "options": {
+                "remote": "Télétravail",
+                "in_person": "Sur Place",
+                "hybrid": "Hybride",
+                "full_time": "Temps Plein",
+                "part_time": "Temps Partiel",
+                "contract": "Contrat",
+                "stars_5": "5 Étoiles",
+                "stars_4_up": "4 Étoiles & Plus",
+                "stars_3_up": "3 Étoiles & Plus",
+                "groups": {
+                    "dev_tech": "Développement & Tech",
+                    "design": "Design & Créatif",
+                    "writing": "Rédaction & Traduction",
+                    "marketing": "Marketing & Vente",
+                    "business": "Affaires & Administration",
+                    "finance": "Finance & Comptabilité",
+                    "education": "Éducation & Formation",
+                    "local": "Services Locaux (pour la Guinée)"
+                }
+            }
+        },
+        "categories": {
+            "web_dev": "Développement Web",
+            "mobile_dev": "Développement d'Applications Mobiles",
+            "software_dev": "Développement Logiciel",
+            "game_dev": "Développement de Jeux",
+            "ai_ml": "IA & Machine Learning",
+            "data_science": "Science des Données & Analytique",
+            "cybersecurity": "Cybersécurité & Réseaux",
+            "blockchain": "Blockchain & Crypto",
+            "graphics": "Graphisme & Design de Marque",
+            "ui_ux": "Design UI/UX",
+            "web_design": "Design Web & App",
+            "3d_modeling": "Modélisation 3D & Animation",
+            "video_editing": "Montage Vidéo & Production",
+            "photography": "Photographie & Retouche d'Image",
+            "motion_graphics": "Motion Design",
+            "content_writing": "Rédaction de Contenu",
+            "copywriting": "Conception-Rédaction",
+            "technical_writing": "Rédaction Technique",
+            "blog_writing": "Rédaction de Blogs & Articles",
+            "translation": "Services de Traduction (FR ↔ EN, Langues Locales)",
+            "proofreading": "Relecture & Édition",
+            "research": "Recherche & Rédaction Académique",
+            "digital_marketing": "Marketing Digital",
+            "social_media": "Gestion des Médias Sociaux",
+            "seo": "SEO & SEM",
+            "email_marketing": "Marketing par Email",
+            "branding": "Stratégie de Marque",
+            "lead_gen": "Génération de Leads",
+            "influencer": "Marketing d'Influence",
+            "virtual_assist": "Assistance Virtuelle",
+            "project_mgmt": "Gestion de Projet",
+            "customer_support": "Support Client",
+            "hr": "RH & Recrutement",
+            "business_consulting": "Conseil aux Entreprises",
+            "legal": "Assistance Juridique",
+            "bookkeeping": "Tenue de Livres",
+            "financial_planning": "Planification Financière",
+            "tax": "Conseil Fiscal",
+            "payroll": "Gestion de la Paie",
+            "crypto": "Services Crypto & Fintech",
+            "tutoring": "Tutorat en Ligne",
+            "language": "Cours de Langues",
+            "it_training": "Formation IT & Tech",
+            "coaching": "Coaching d'Affaires",
+            "repair": "Réparation d'Appareils (PC, Smartphones, Bureaux)",
+            "network": "Installation Internet & Réseau",
+            "printing": "Impression & Matériel Publicitaire",
+            "event": "Planification & Promotion d'Événements",
+            "delivery": "Services de Livraison & Logistique"
+        },
+        "sort": {
+            "showing": "Affichage de {{start}}-{{end}} sur {{total}} Freelances",
+            "label": "Trier par :",
+            "options": {
+                "popular": "Plus Populaires",
+                "rated_high": "Mieux Notés",
+                "rated_low": "Moins Bien Notés",
+                "newest": "Plus Récents"
+            }
+        }
+    },
+    "training": {
+        "hero": {
+            "title": "Formation Sur Mesure pour Entreprises & Freelances",
+            "subtitle": "Solutions d'apprentissage personnalisées pour vos besoins ou",
+            "subtitle_2": "Demandez des cours pour monter en compétences !",
+            "cta": "Explorer les Cours"
+        },
+        "tabs": {
+            "freelancers": "Pour les Freelances",
+            "companies": "Pour les Entreprises"
+        },
+        "modules": {
+            "breadcrumb": "Modules de Formation",
+            "showing": "Affichage de {{start}}-{{end}} sur {{total}} Cours",
+            "sort": {
+                "label": "Trier par :",
+                "popular": "Plus Populaires",
+                "newest": "Plus Récents",
+                "price_low": "Prix : Bas à Élevé",
+                "price_high": "Prix : Élevé à Bas",
+                "duration_low": "Durée la Plus Courte",
+                "duration_high": "Durée la Plus Longue"
+            },
+            "card": {
+                "videos": "{{count}} Vidéos",
+                "hours": "{{count}} heures",
+                "enroll_now": "S'inscrire",
+                "enroll_team": "Inscrire l'Équipe",
+                "bulk_discount": "Remise de Gros Disponible",
+                "per_user": "/utilisateur",
+                "for_users": "pour {{count}} utilisateurs"
+            },
+            "custom_request": "Demande de Formation Personnalisée",
+            "title_company": "Cours Pré-établis",
+            "title_freelance": "Cours"
+        },
+        "detail_content": {
+            "lessons": {
+                "l1": "Cours Un - Fondamentaux HTML",
+                "l2": "Cours Deux - Stylisation CSS",
+                "l3": "Cours Trois - Bases de JavaScript",
+                "l4": "Cours Quatre - Design Responsif",
+                "l5": "Cours Cinq - Outils de Développement Web",
+                "l6": "Cours Six - Création de Projet"
+            },
+            "resources": {
+                "r1": {
+                    "name": "Aide-mémoire HTML",
+                    "desc": "Référence rapide pour les balises et attributs HTML"
+                },
+                "r2": {
+                    "name": "Guide de Référence CSS",
+                    "desc": "Guide complet des propriétés et valeurs CSS"
+                },
+                "r3": {
+                    "name": "Exercices JavaScript",
+                    "desc": "Exercices pratiques et défis de code"
+                },
+                "r4": {
+                    "name": "Modèles de Projet",
+                    "desc": "Modèles de projet prêts à l'emploi"
+                }
+            },
+            "certificates": {
+                "c1": "Certificat Fondamentaux HTML",
+                "c2": "Certificat Développement Web Complet",
+                "c3": "Certificat Stylisation CSS",
+                "c4": "Certificat Bases de JavaScript"
+            }
+        },
+        "progress": {
+            "course_progress": "Progression du Cours",
+            "lessons_progress": "Progression des Leçons",
+            "time_progress": "Progression du Temps",
+            "certificates": "Certificats",
+            "resources": "Ressources Téléchargeables",
+            "minutes": "minutes"
+        },
+        "status": {
+            "completed": "Terminé",
+            "current": "En cours",
+            "locked": "Verrouillé"
+        },
+        "forms": {
+            "request": {
+                "title": "Demande de Formation Personnalisée",
+                "subtitle": "Parlez-nous de vos besoins de formation et nous créerons un programme sur mesure pour votre équipe.",
+                "company_name": "Nom de l'Entreprise",
+                "phone": "Numéro de Téléphone",
+                "looking_for": "Que recherchez-vous ?",
+                "employees": "Nombre d'Employés",
+                "duration": "Durée Préférée",
+                "submit": "Envoyer le Message",
+                "helpers": {
+                    "company": "Entrez le nom de votre entreprise",
+                    "looking": "Entrez la demande de formation que vous recherchez",
+                    "employees": "Entrez le nombre total d'employés dans l'entreprise",
+                    "duration": "Choisissez la date finale à laquelle le travail doit être terminé"
+                },
+                "placeholders": {
+                    "company_name": "Entrez le Nom de l'Entreprise",
+                    "phone": "Entrez le Numéro de Téléphone",
+                    "looking_for": "ex. Formation React",
+                    "employees": "ex. 50",
+                    "duration": "ex. 2 semaines"
+                }
+            },
+            "enroll": {
+                "title": "Inscription d'Équipe",
+                "subtitle": "Inscrivez les membres de votre équipe via un téléchargement CSV ou une saisie manuelle.",
+                "tab_csv": "Téléchargement CSV",
+                "tab_manual": "Saisie Manuelle",
+                "upload_text": "Téléchargez votre fichier CSV ici",
+                "drag_drop": "Glissez et déposez votre fichier ici ou cliquez pour parcourir",
+                "manual_name": "Nom de l'Employé",
+                "manual_email": "Email de l'Employé",
+                "add_another": "Ajouter un Autre Employé",
+                "submit": "Inscrire votre Équipe",
+                "placeholders": {
+                    "name": "Entrez le nom complet",
+                    "email": "Entrez l'adresse email"
+                }
+            }
+        },
+        "courses": {
+            "company": {
+                "course_1": {
+                    "title": "Mise en Œuvre SAP ERP",
+                    "description": "Formation complète sur les systèmes SAP ERP. Apprenez la configuration, la personnalisation et les meilleures pratiques pour l'optimisation des processus d'affaires."
+                },
+                "course_2": {
+                    "title": "Compétences en Leadership d'Équipe",
+                    "description": "Développez des compétences essentielles en leadership pour gérer efficacement les équipes. Apprenez la communication, la motivation, la résolution de conflits et la planification stratégique."
+                },
+                "course_3": {
+                    "title": "Cybersécurité pour les Entreprises",
+                    "description": "Formation essentielle en cybersécurité pour les entreprises. Apprenez l'évaluation des menaces, les protocoles de sécurité, la protection des données et les stratégies de réponse aux incidents."
+                }
+            },
+            "freelance": {
+                "course_1": {
+                    "title": "Bases du Développement Web",
+                    "description": "Maîtrisez les compétences fondamentales du développement web. Apprenez HTML, CSS et JavaScript en partant de zéro avec des projets pratiques."
+                },
+                "course_2": {
+                    "title": "Conception Graphique pour Débutants",
+                    "description": "Apprenez les bases de la conception graphique, y compris la typographie, la théorie des couleurs et les principes de mise en page."
+                },
+                "course_3": {
+                    "title": "Marketing sur les Réseaux Sociaux",
+                    "description": "Maîtrisez les stratégies de marketing sur les réseaux sociaux, la création de contenu et l'analyse pour développer votre marque ou votre entreprise en ligne."
+                }
+            }
+        },
+        "subscription": {
+            "freelancer": {
+                "title": "Plan Accès Illimité",
+                "price": "880,000 GNF",
+                "price_usd": "$100 par an",
+                "features": [
+                    "✓ Accès illimité à tous les cours",
+                    "✓ Ressources téléchargeables et certificats",
+                    "✓ Suivi des progrès et support"
+                ]
+            },
+            "company": {
+                "title": "Plan Illimité Entreprise",
+                "price": "8,800,000 GNF",
+                "price_usd": "$1,000 par an",
+                "subtext": "Jusqu'à 10 utilisateurs",
+                "features": [
+                    "✓ Accès illimité à tous les cours",
+                    "✓ Jusqu'à 10 licences utilisateurs",
+                    "✓ Tableau de bord d'équipe et gestion",
+                    "✓ Priorité pour formations personnalisées"
+                ]
+            },
+            "pay_stripe": "S'abonner avec Stripe",
+            "pay_paypal": "S'abonner avec PayPal",
+            "secure": "Paiement Sécurisé",
+            "secure_text": "Vos informations de paiement sont cryptées et sécurisées",
+            "paypal_alert": "Intégration PayPal",
+            "paypal_text": "Vous serez redirigé vers PayPal pour compléter votre paiement",
+            "continue_paypal": "Continuer vers PayPal",
+            "cancel": "Annuler",
+            "pay_now": "Payer Maintenant",
+            "processing": "Traitement..."
+        },
+        "detail": {
+            "tabs": {
+                "videos": "Leçons Vidéo",
+                "progress": "Progrès",
+                "resources": "Ressources",
+                "certificate": "Certificats",
+                "notes": "Notes"
+            },
+            "lessons": {
+                "title": "Leçons du Cours",
+                "duration": "Durée : {{duration}}",
+                "watch": "Regarder la Vidéo",
+                "completed": "Terminé"
+            },
+            "resources": {
+                "title": "Ressources Téléchargeables",
+                "download": "Télécharger",
+                "downloaded": "Téléchargé"
+            },
+            "certificates": {
+                "title": "Certificats",
+                "earned_on": "Obtenu le {{date}}",
+                "download": "Télécharger le Certificat",
+                "complete_more": "Complétez plus de leçons pour obtenir ce certificat",
+                "progress": "Progrès : {{percent}}%"
+            },
+            "progress": {
+                "title": "Progression du Cours",
+                "lessons": "Progression Leçons",
+                "time": "Temps Passé",
+                "certs": "Certificats",
+                "complete": "{{percent}}% Terminé",
+                "watched": "{{percent}}% Visionné",
+                "earned": "Certificats Obtenus"
+            }
+        }
+    },
+    "chat": {
+        "camera": "Caméra",
+        "video": "Vidéo",
+        "document": "Document",
+        "gallery": "Galerie",
+        "type_message": "Écrivez un message...",
+        "send_sr": "Envoyer le message"
+    },
+    "toast": {
+        "added_to_cart": "Ajouté au panier"
+    },
+    "vendor_profile": {
+        "joined": "Rejoint",
+        "products_count": "Produits",
+        "verified_access": "Accès client vérifié",
+        "contact_hidden": "* Info contact masquée. Achetez un appareil pour révéler.",
+        "devices_for_sale": "Appareils à vendre",
+        "buy_now": "Acheter maintenant",
+        "warranty": "Garantie",
+        "purchase_success": "Achat réussi ! Infos contact vendeur vérifiées."
+    },
+    "sidebar": {
+        "home": "ACCUEIL",
+        "dashboard": "Tableau de bord",
+        "courses": "COURS",
+        "training_progress": "Progression de la formation",
+        "requested_courses": "Cours demandés",
+        "finance": "FINANCE",
+        "earnings": "Gains",
+        "work": "TRAVAIL",
+        "project_list": "Liste des projets",
+        "hired_freelancers": "Freelances embauchés",
+        "payments": "Paiements",
+        "logout": "Se déconnecter"
+    },
+    "freelancer_dashboard": {
+        "stats": {
+            "total_earned": "Total gagné",
+            "projects_posted": "Projets publiés",
+            "jds_applied": "JDs appliqués",
+            "hires": "Embauches"
+        },
+        "funds": {
+            "title": "Fonds disponibles",
+            "balance_available": "Solde disponible pour utilisation",
+            "withdraw": "Retirer"
+        },
+        "courses": {
+            "title": "Cours demandés",
+            "under_review": "Cours en cours d'examen",
+            "view_requested": "Voir les demandes",
+            "count_suffix": "Cours"
+        },
+        "messages": {
+            "title": "Messages",
+            "manage": "GÉRER LES MESSAGES",
+            "error": "Erreur lors du chargement des messages",
+            "retry": "Réessayer",
+            "loading": "Chargement des messages..."
+        },
+        "work_history": {
+            "title": "Historique de travail",
+            "get_started": "Commencez à travailler !",
+            "earnings_soon": "Vous verrez votre historique de travail ici une fois que vous commencerez à gagner.",
+            "date": "Date",
+            "activity": "Activité",
+            "order": "Commande",
+            "amount": "Montant"
+        },
+        "projects": {
+            "title": "Projets",
+            "subtitle": "Actifs et terminés",
+            "no_recent": "Aucun projet récent.",
+            "client": "Client",
+            "amount": "Montant",
+            "status": "Statut",
+            "post_new": "Nouveau projet",
+            "view_all": "Voir tout"
+        },
+        "bids": {
+            "title": "Offres",
+            "subtitle": "Offres actives",
+            "no_applications": "Aucune candidature active.",
+            "apply": "Postuler à un JD",
+            "view_status": "Voir le statut"
+        },
+        "payments": {
+            "title": "Paiements",
+            "escrow_held": "Escrow détenu"
+        },
+        "earnings": {
+            "title": "Gains",
+            "chart_preview": "Aperçu du graphique"
+        },
+        "notifications": {
+            "title": "Notifications",
+            "in_app": "In-App",
+            "email": "Email",
+            "phone": "Téléphone",
+            "none": "Aucune nouvelle notification."
+        },
+        "security": {
+            "title": "Sécurité",
+            "verified_phone": "Téléphone vérifié",
+            "profile_progress": "Progression du profil",
+            "portfolio_item": "Élément de portefeuille ajouté",
+            "escrow": "Escrow sécurisé",
+            "rate_limit": "Limite de taux",
+            "dispute": "Résolution des litiges"
+        },
+        "plans": {
+            "buy_now": "Acheter maintenant",
+            "view_benefits": "Voir les avantages"
+        },
+        "modals": {
+            "post_project": {
+                "title": "Publier un nouveau projet",
+                "form": {
+                    "title": "Titre du projet",
+                    "description": "Description",
+                    "budget": "Budget (GNF)",
+                    "client": "Nom du client",
+                    "status": "Statut"
+                },
+                "cancel": "Annuler",
+                "save": "Enregistrer le projet",
+                "saving": "Enregistrement..."
+            },
+            "apply_jd": {
+                "title": "Postuler à une description de poste",
+                "form": {
+                    "title": "Titre du poste",
+                    "budget": "Budget (GNF)",
+                    "client": "Nom du client",
+                    "status": "Statut"
+                },
+                "cancel": "Annuler",
+                "apply": "Postuler",
+                "submitting": "Soumission..."
+            },
+            "jd_list": {
+                "title": "Vos candidatures",
+                "close": "Fermer"
+            },
+            "edit_profile": {
+                "title": "Modifier le profil",
+                "form": {
+                    "name": "Nom complet",
+                    "experience": "Expérience (Années)",
+                    "skills": "Compétences (séparées par des virgules)",
+                    "email": "Adresse email",
+                    "phone": "Numéro de téléphone",
+                    "payment_type": "Type de paiement",
+                    "payment_number": "Numéro de paiement",
+                    "bank_name": "Nom de la banque",
+                    "account_holder": "Nom du titulaire du compte",
+                    "account_number": "Numéro de compte",
+                    "swift_code": "Code SWIFT",
+                    "secure_msg": "Les coordonnées bancaires sont stockées en toute sécurité."
+                }
+            }
+        },
+        "sidebar": {
+            "dashboard": "Tableau de bord",
+            "home": "ACCUEIL",
+            "courses": "COURS",
+            "finance": "FINANCE",
+            "training_progress": "Progression de la formation",
+            "requested_courses": "Cours demandés",
+            "earnings": "Gains"
+        }
+    },
+    "client_dashboard": {
+        "profile": {
+            "your_name": "Votre nom",
+            "bio_placeholder": "Parlez-nous de vous...",
+            "no_bio": "Aucune bio définie pour le moment.",
+            "add_photo": "Ajoutez une photo pour inspirer confiance !",
+            "edit_profile": "Modifier le profil",
+            "cancel": "Annuler",
+            "save": "Enregistrer",
+            "contact_support": "Contacter le support",
+            "location_placeholder": "Lieu (ex. Conakry)",
+            "location_not_set": "Lieu non défini",
+            "whatsapp_placeholder": "Numéro WhatsApp",
+            "phone_not_set": "Téléphone non défini",
+            "profile_complete": "Profil complété à {{progress}}%",
+            "verified": "Vérifié"
+        },
+        "recent_orders": {
+            "title": "Achats récents",
+            "pending": "En attente",
+            "no_orders": "Aucune commande récente trouvée.",
+            "view_all": "Voir tous les achats"
+        },
+        "stats": {
+            "total_spent": "Total dépensé",
+            "orders": "Commandes",
+            "freelancers_hired": "Freelances embauchés",
+            "view_details": "Voir les détails"
+        },
+        "device_tracking": {
+            "title": "Suivi des appareils",
+            "no_tracking": "Aucun suivi actif.",
+            "view_map": "Voir la carte"
+        },
+        "growth_bundle": {
+            "title": "Pack Croissance Numérique",
+            "free_plan": {
+                "title": "Plan Gratuit",
+                "purchases": "2 achats/mois",
+                "no_monitoring": "Pas de suivi social",
+                "support": "Support de base",
+                "current": "Plan actuel"
+            },
+            "premium_plan": {
+                "title": "Plan Premium",
+                "limited_slots": "Limité à 50 places !",
+                "month": "mois",
+                "six_months": "6 mois",
+                "regular_price": "Prix régulier : 60 000 GNF/mois",
+                "discount": "17% de réduction",
+                "total_value": "Valeur totale : 265 000 GNF",
+                "features": {
+                    "unlimited": "Achats illimités",
+                    "monitoring": "Suivi des réseaux sociaux",
+                    "priority": "Support prioritaire",
+                    "guarantee": "Garantie de 14 jours"
+                },
+                "buy_now": "Acheter maintenant",
+                "monthly_btn": "Mensuel",
+                "semiannual_btn": "6 mois"
+            }
+        },
+        "notifications": {
+            "title": "Notifications",
+            "none": "Aucune nouvelle notification.",
+            "view_all": "Voir tout"
+        },
+        "purchase_history": {
+            "title": "Historique des achats",
+            "date": "Date",
+            "product": "Produit",
+            "status": "Statut",
+            "amount": "Montant",
+            "start": "Commencez vos achats !",
+            "desc": "Vous trouverez tous vos achats ici une fois votre première commande passée."
+        },
+        "messages": {
+            "title": "Requêtes actuelles",
+            "none": "Aucune requête ou message actif.",
+            "start_chat": "COMMENCER UN NOUVEAU CHAT"
+        },
+        "project_list": {
+            "title": "Liste des projets",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "title": "Titre du cours",
+                "completion": "Achèvement",
+                "status": "Statut",
+                "milestone": "Jalon",
+                "time_remaining": "Temps restant",
+                "actions": "Actions",
+                "empty": "Aucun projet trouvé."
+            },
+            "buttons": {
+                "messages": "Messages",
+                "msg": "Msg",
+                "previous": "Précédent",
+                "next": "Suivant"
+            },
+            "page_info": "Page 1 sur 10"
+        },
+        "hired_freelancers": {
+            "title": "Freelances embauchés",
+            "hire_new": "Embaucher un nouveau freelance",
+            "search_placeholder": "Rechercher un freelance ou un projet...",
+            "table": {
+                "name": "Nom du freelance",
+                "project": "Projet",
+                "status": "Statut",
+                "completion_date": "Date d'achèvement",
+                "amount": "Montant"
+            },
+            "modal": {
+                "title": "Embaucher un freelance",
+                "name_label": "Nom du freelance",
+                "name_placeholder": "Entrez le nom",
+                "project_label": "Projet",
+                "project_placeholder": "Entrez le projet",
+                "status_label": "Statut",
+                "completion_label": "Date d'achèvement",
+                "completion_placeholder": "ex. 25 mai 2025",
+                "amount_label": "Montant (GNF)",
+                "amount_placeholder": "ex. 1760 GNF",
+                "hire_btn": "Embaucher",
+                "cancel_btn": "Annuler",
+                "note": "Note : Cette action met à jour l'interface utilisateur uniquement et n'écrit pas dans Firestore."
+            },
+            "buttons": {
+                "previous": "Précédent",
+                "next": "Suivant"
+            },
+            "page_info": "Page 1 of 1"
+        },
+        "payments": {
+            "title": "Gains",
+            "stats": {
+                "total_payments": "Paiements totaux",
+                "completed": "Paiements totaux terminés",
+                "last_month": "Le mois dernier",
+                "last_month_payments": "Paiements",
+                "last_month_desc": "Basé sur l'activité récente",
+                "summary": "Résumé",
+                "transactions": "Transactions",
+                "summary_desc": "Total des transactions effectuées."
+            },
+            "filters": {
+                "date_range": "Plage de dates",
+                "activity": "Activité",
+                "showing_results": "Affichage de {{count}} résultats."
+            },
+            "table": {
+                "date": "Date",
+                "activity": "Activité",
+                "description": "Description",
+                "from": "De",
+                "order": "Commande",
+                "amount": "Montant",
+                "empty_title": "Aucun paiement pour le moment",
+                "empty_desc": "Votre historique de paiement apparaîtra ici une fois que vous aurez effectué des achats."
+            }
+        },
+        "seller_dashboard": {
+            "title": "Tableau de bord Vendeur",
+            "welcome": "Bienvenue, {{name}} ! Vendez Samsung, iPhone, Dell, gagnez via OM/MoMo ! On est ensemble !",
+            "offline_mode": "Mode hors ligne",
+            "cards": {
+                "profile": "Profil",
+                "total_sales": "Ventes totales",
+                "revenue_after_commission": "Revenu après commission",
+                "view_analytics": "Voir les analyses",
+                "active_listings": "Annonces actives",
+                "products_available": "Produits disponibles à la vente",
+                "manage_listings": "Gérer les annonces",
+                "total_orders": "Commandes totales",
+                "completed_transactions": "Transactions terminées",
+                "view_orders": "Voir les commandes",
+                "payouts": "Paiements en attente",
+                "money_ready": "Argent prêt pour le retrait",
+                "view_payouts": "Voir les paiements"
+            },
+            "recent_activity": {
+                "title": "Activité récente",
+                "welcome_title": "Bienvenue sur votre tableau de bord vendeur !",
+                "welcome_desc": "Vous trouverez ici toutes vos activités de vente, vos commandes et vos gains une fois que vous commencerez à vendre.",
+                "create_listing": "CRÉER UNE NOUVELLE ANNONCE"
+            },
+            "performance": {
+                "title": "Aperçu des performances",
+                "metric": "Métrique",
+                "value": "Valeur",
+                "plan": "Plan",
+                "commission": "Commission",
+                "seller_performance": "Performance du vendeur",
+                "total_revenue": "Revenu total :",
+                "net_earnings": "Gains nets :",
+                "commission_rate": "Taux de commission :"
+            },
+            "profile": {
+                "edit": "Modifier le profil",
+                "change_password": "Changer le mot de passe",
+                "contact_admin": "Contacter Freelance-224",
+                "delete_account": "Supprimer le compte vendeur",
+                "social_links": "Liens sociaux :",
+                "payment_method": "Méthode de paiement :",
+                "verified": "Vérifié",
+                "business_license": "Licence commerciale :",
+                "verified_seller": "Vendeur vérifié",
+                "profile_complete": "Profil complet",
+                "premium_plan": "Plan Premium",
+                "basic_plan": "Plan Basique",
+                "transactions": "{{count}} transactions",
+                "add_photo": "Ajoutez une photo pour instaurer la confiance ! (Firebase Storage, max 2MB)"
+            },
+            "modal": {
+                "edit_title": "Modifier le profil",
+                "name": "Nom",
+                "business_name": "Nom de l'entreprise",
+                "location": "Lieu",
+                "email": "Email",
+                "phone": "Téléphone",
+                "payment_number": "Numéro de paiement",
+                "social_links": "Liens sociaux",
+                "linkedin": "URL LinkedIn",
+                "facebook": "URL Facebook",
+                "website": "URL Site Web",
+                "update_btn": "Mettre à jour le profil",
+                "updating_btn": "Mise à jour...",
+                "cancel_btn": "Annuler"
+            },
+            "ads": {
+                "title": "Gestion des publicités",
+                "add_btn": "Ajouter une publicité",
+                "stats": {
+                    "total": "Total publicités",
+                    "active": "Actives",
+                    "inactive": "Inactives",
+                    "spent": "Total dépensé"
+                },
+                "table": {
+                    "image": "Image",
+                    "title": "Titre",
+                    "subtitle": "Sous-titre",
+                    "cta": "CTA",
+                    "cost": "Coût",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "empty": {
+                    "title": "Aucune publicité trouvée",
+                    "desc": "Créez votre première publicité pour promouvoir vos produits et augmenter vos ventes.",
+                    "search_title": "Aucune publicité ne correspond à votre recherche",
+                    "search_desc": "Essayez d'ajuster vos termes de recherche."
+                },
+                "form": {
+                    "title": "Ajouter une publicité",
+                    "desc": "Remplissez le formulaire pour ajouter votre publicité",
+                    "type": "Type de publicité",
+                    "target": "Cible",
+                    "title_label": "Titre",
+                    "subtitle_label": "Sous-titre",
+                    "cta_label": "CTA",
+                    "upload_video": "Télécharger la vidéo (max 5 Mo)",
+                    "upload_images": "Télécharger les images (plusieurs, max 5 Mo chacune)",
+                    "upload_image": "Télécharger l'image (max 5 Mo)",
+                    "duration": "Durée (semaines)",
+                    "cost": "Coût (auto)",
+                    "cancel": "Annuler",
+                    "create": "Créer la publicité"
+                }
+            },
+            "listings": {
+                "title": "Mes annonces",
+                "subtitle": "Gérez vos listes de produits et suivez leurs performances",
+                "create_btn": "Créer une nouvelle annonce",
+                "stats": {
+                    "total": "Total des annonces",
+                    "active": "Annonces actives",
+                    "views": "Total des vues",
+                    "stock": "Stock total"
+                },
+                "filters": {
+                    "all": "Tout",
+                    "active": "Actif",
+                    "pending": "En attente"
+                },
+                "table": {
+                    "product": "Produit",
+                    "category": "Catégorie",
+                    "price": "Prix",
+                    "stock": "Stock",
+                    "views": "Vues",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "modal": {
+                    "edit_title": "Modifier l'annonce",
+                    "create_title": "Créer une nouvelle annonce",
+                    "product_name": "Nom du produit",
+                    "category": "Catégorie",
+                    "select_category": "Sélectionner une catégorie",
+                    "price": "Prix (GNF)",
+                    "stock": "Stock",
+                    "description": "Description",
+                    "image": "Image du produit",
+                    "update": "Mettre à jour",
+                    "create": "Créer l'annonce",
+                    "cancel": "Annuler",
+                    "creating": "Création...",
+                    "updating": "Mise à jour..."
+                }
+            },
+            "notifications": {
+                "title": "Notifications",
+                "subtitle": "Restez informé de vos activités de vendeur",
+                "mark_read": "Marquer comme lu",
+                "mark_all_read": "Tout marquer comme lu",
+                "empty": {
+                    "title": "Aucune notification pour le moment",
+                    "desc": "Vous recevrez ici des notifications sur les commandes, les paiements et les mises à jour importantes."
+                },
+                "settings": {
+                    "title": "Paramètres de notification",
+                    "email": "Notifications par e-mail",
+                    "email_desc": "Recevoir des notifications par e-mail",
+                    "sms": "Notifications par SMS",
+                    "sms_desc": "Recevoir des notifications par SMS",
+                    "push": "Notifications push",
+                    "push_desc": "Recevoir des notifications dans l'application"
+                }
+            },
+            "orders": {
+                "title": "Liste des commandes",
+                "search_placeholder": "Rechercher des commandes...",
+                "table": {
+                    "buyer": "Nom de l'acheteur",
+                    "product": "Produit",
+                    "quantity": "Quantité",
+                    "price": "Prix",
+                    "date": "Date de livraison",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "empty": {
+                    "title": "Aucune commande trouvée",
+                    "desc": "Les commandes apparaîtront ici une fois que les clients commenceront à acheter vos produits.",
+                    "search_title": "Aucune commande ne correspond à votre recherche",
+                    "search_desc": "Essayez d'ajuster vos termes de recherche."
+                },
+                "modal": {
+                    "title": "Modifier la commande",
+                    "id": "ID Commande",
+                    "buyer": "Nom de l'acheteur",
+                    "product": "Produit",
+                    "quantity": "Quantité",
+                    "total": "Montant total (GNF)",
+                    "status": "Statut",
+                    "date": "Date de livraison (Lecture seule)",
+                    "update": "Mettre à jour",
+                    "cancel": "Annuler"
+                }
+            },
+            "payouts": {
+                "title": "Paiements",
+                "stats": {
+                    "total": "Total des paiements",
+                    "completed": "Terminé",
+                    "pending": "En attente",
+                    "amount": "Montant total"
+                },
+                "table": {
+                    "amount": "Montant",
+                    "method": "Méthode de paiement",
+                    "number": "Numéro de paiement",
+                    "status": "Statut",
+                    "date": "Date de traitement",
+                    "actions": "Actions"
+                },
+                "empty": {
+                    "title": "Aucun paiement trouvé",
+                    "desc": "Les paiements apparaîtront ici une fois que vous aurez commencé à gagner de l'argent.",
+                    "search_title": "Aucun paiement ne correspond à votre recherche",
+                    "search_desc": "Essayez d'ajuster vos termes de recherche."
+                },
+                "modal": {
+                    "title": "Modifier le paiement",
+                    "id": "ID Paiement",
+                    "amount": "Montant (GNF)",
+                    "method": "Méthode de paiement",
+                    "number": "Numéro de paiement",
+                    "status": "Statut",
+                    "date": "Date de traitement (Lecture seule)",
+                    "update": "Mettre à jour",
+                    "cancel": "Annuler"
+                }
+            },
+            "settings": {
+                "title": "Paramètres du compte",
+                "subtitle": "Gérez les préférences et les paramètres de votre compte vendeur",
+                "tabs": {
+                    "profile": "Profil",
+                    "security": "Sécurité",
+                    "notifications": "Notifications",
+                    "privacy": "Confidentialité",
+                    "payment": "Paiement"
+                },
+                "section": {
+                    "profile": {
+                        "title": "Informations sur le profil",
+                        "desc": "Mettez à jour les informations de votre profil d'entreprise",
+                        "business_name": "Nom de l'entreprise",
+                        "contact_name": "Nom du contact",
+                        "location": "Lieu",
+                        "email": "Email",
+                        "phone": "Téléphone",
+                        "website": "Site Web",
+                        "save": "Enregistrer les modifications",
+                        "saving": "Enregistrement..."
+                    },
+                    "security": {
+                        "title": "Paramètres de sécurité",
+                        "desc": "Gérez votre mot de passe et vos préférences de sécurité",
+                        "current_pwd": "Mot de passe actuel",
+                        "new_pwd": "Nouveau mot de passe",
+                        "confirm_pwd": "Confirmer le nouveau mot de passe",
+                        "change": "Changer le mot de passe",
+                        "changing": "Changement..."
+                    },
+                    "notifications": {
+                        "title": "Préférences de notification",
+                        "desc": "Choisissez comment vous souhaitez recevoir les notifications",
+                        "email": "Notifications par e-mail",
+                        "email_desc": "Recevoir des notifications par e-mail",
+                        "sms": "Notifications par SMS",
+                        "sms_desc": "Recevoir des notifications par SMS",
+                        "push": "Notifications push",
+                        "push_desc": "Recevoir des notifications dans l'application",
+                        "order": "Notifications de commande",
+                        "order_desc": "Être notifié des nouvelles commandes",
+                        "payout": "Notifications de paiement",
+                        "payout_desc": "Être notifié des paiements",
+                        "stock": "Alertes de stock",
+                        "stock_desc": "Être notifié lorsque le stock est faible",
+                        "save": "Enregistrer les paramètres"
+                    },
+                    "privacy": {
+                        "title": "Paramètres de confidentialité",
+                        "desc": "Contrôlez quelles informations sont visibles par les autres",
+                        "email": "Afficher l'adresse e-mail",
+                        "email_desc": "Rendre votre e-mail visible aux clients",
+                        "phone": "Afficher le numéro de téléphone",
+                        "phone_desc": "Rendre votre numéro de téléphone visible aux clients",
+                        "social": "Afficher les liens sociaux",
+                        "social_desc": "Afficher vos liens vers les réseaux sociaux",
+                        "business": "Afficher les informations de l'entreprise",
+                        "business_desc": "Afficher les détails et l'emplacement de l'entreprise",
+                        "save": "Enregistrer les paramètres"
+                    },
+                    "payment": {
+                        "title": "Paramètres de paiement",
+                        "desc": "Gérez vos méthodes de paiement et vos préférences",
+                        "method": "Méthode de paiement",
+                        "number": "Numéro de paiement",
+                        "threshold": "Seuil de paiement (GNF)",
+                        "auto": "Paiement automatique",
+                        "auto_desc": "Demander automatiquement des paiements lorsque le seuil est atteint",
+                        "save": "Enregistrer les paramètres"
+                    }
+                }
+            }
+        },
+        "sidebar": {
+            "dashboard": "Tableau de bord",
+            "home": "ACCUEIL",
+            "selling": "VENTE",
+            "marketing": "MARKETING",
+            "account": "COMPTE",
+            "listings": "Annonces",
+            "orders": "Commandes",
+            "payouts": "Paiements",
+            "ads": "Publicités",
+            "notifications": "Notifications",
+            "settings": "Paramètres",
+            "logout": "Déconnexion"
+        },
+        "vendor_dashboard": {
+            "title": "Tableau de bord Vendeur",
+            "sidebar": {
+                "dashboard": "Tableau de bord",
+                "listings": "Annonces",
+                "orders": "Commandes",
+                "payouts": "Paiements",
+                "ads": "Publicités",
+                "logout": "Déconnexion",
+                "home": "ACCUEIL"
+            },
+            "overview": {
+                "title": "Tableau de bord",
+                "total_orders": "Commandes totales",
+                "orders_placed": "Commandes passées",
+                "view_orders": "Voir les commandes",
+                "total_listings": "Total des annonces",
+                "active_listings": "Annonces actives",
+                "view_listings": "Voir les annonces",
+                "serial_numbers": "Numéros de série",
+                "manage_serials": "Gérer les numéros de série des produits",
+                "products_count": "{{count}} Produits",
+                "manage_serials_btn": "Gérer les numéros de série",
+                "current_order_status": "Statut actuel de la commande",
+                "get_started_orders": "Commencez avec les commandes !",
+                "orders_info": "Vous trouverez ici toutes les informations sur vos commandes une fois que vous aurez terminé votre première commande.",
+                "reviews": "Avis",
+                "no_reviews": "Pas encore d'avis.",
+                "manage_messages": "GÉRER LES MESSAGES",
+                "table": {
+                    "date": "Date",
+                    "name": "Nom",
+                    "product": "Produit",
+                    "serial": "Numéro de série",
+                    "status": "Statut",
+                    "price": "Prix"
+                }
+            },
+            "profile": {
+                "title": "Profil",
+                "edit": "Modifier le profil",
+                "change_password": "Changer le mot de passe",
+                "delete_account": "Supprimer le compte",
+                "upload_photo": "Ajoutez une photo pour inspirer confiance !",
+                "complete_progress": "Profil complété à {{progress}}%",
+                "profile_complete": "Profil complet",
+                "verified_vendor": "Vendeur vérifié",
+                "license": "Licence : {{number}}",
+                "payment": "Paiement : {{type}} {{number}}",
+                "delete_confirm": "Êtes-vous sûr de vouloir supprimer votre compte vendeur ? Cette action est irréversible et supprimera définitivement toutes vos données."
+            },
+            "modals": {
+                "edit_profile": {
+                    "title": "Modifier le profil",
+                    "name": "Nom",
+                    "business_name": "Nom de l'entreprise",
+                    "location": "Lieu",
+                    "email": "Email",
+                    "phone": "Téléphone",
+                    "payment_number": "Numéro de paiement",
+                    "social_links": "Liens sociaux",
+                    "linkedin": "URL LinkedIn",
+                    "facebook": "URL Facebook",
+                    "website": "URL Site Web",
+                    "update_btn": "Mettre à jour",
+                    "updating_btn": "Mise à jour...",
+                    "cancel": "Annuler"
+                },
+                "change_password": {
+                    "title": "Changer le mot de passe",
+                    "desc": "Veuillez définir un nouveau mot de passe pour la sécurité. Minimum 10 caractères, 1 chiffre, 1 caractère spécial.",
+                    "current": "Mot de passe actuel",
+                    "new": "Nouveau mot de passe",
+                    "confirm": "Confirmer le mot de passe",
+                    "change_btn": "Changer le mot de passe",
+                    "changing_btn": "Changement...",
+                    "cancel": "Annuler"
+                },
+                "serial_numbers": {
+                    "title": "Gestion des numéros de série",
+                    "product": "Produit",
+                    "serial": "Numéro de série",
+                    "status": "Statut",
+                    "actions": "Actions",
+                    "add_btn": "Ajouter un numéro de série",
+                    "close": "Fermer",
+                    "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce numéro de série ?"
+                },
+                "add_serial": {
+                    "add_title": "Ajouter un numéro de série",
+                    "edit_title": "Modifier le numéro de série",
+                    "product_label": "Nom du produit",
+                    "product_placeholder": "ex : iPhone 14 Pro",
+                    "serial_label": "Numéro de série",
+                    "serial_placeholder": "Entrer le numéro de série",
+                    "status_label": "Statut",
+                    "available": "Disponible",
+                    "sold": "Vendu",
+                    "defective": "Défectueux",
+                    "returned": "Retourné",
+                    "cancel": "Annuler",
+                    "save": "Enregistrer"
+                }
+            },
+            "listings": {
+                "title": "Liste des produits",
+                "add_btn": "Ajouter un produit",
+                "search_placeholder": "Rechercher un produit...",
+                "table": {
+                    "sno": "N°",
+                    "name": "Nom du produit",
+                    "desc": "Description du produit",
+                    "price": "Prix",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "no_products": "Aucun produit trouvé.",
+                "delete_confirm": "Supprimer cette annonce ?",
+                "activate": "Activer",
+                "deactivate": "Désactiver",
+                "pending": "En attente",
+                "create_modal": {
+                    "title": "Ajouter un produit",
+                    "product_title": "Titre",
+                    "desc": "Description",
+                    "price": "Prix (GNF)",
+                    "cancel": "Annuler",
+                    "create": "Créer"
+                }
+            },
+            "orders": {
+                "title": "Liste des commandes",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "buyer": "Nom de l'acheteur",
+                    "product": "Produit",
+                    "quantity": "Quantité",
+                    "price": "Prix",
+                    "created_at": "Créé le",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "no_orders": "Aucune commande trouvée.",
+                "delete_confirm": "Supprimer cette commande ?",
+                "edit_modal": {
+                    "title": "Modifier la commande",
+                    "buyer": "Nom de l'acheteur",
+                    "product": "Produit",
+                    "quantity": "Quantité",
+                    "status": "Statut",
+                    "total_amount": "Montant total (GNF)",
+                    "cancel": "Annuler",
+                    "save": "Enregistrer"
+                }
+            },
+            "payouts": {
+                "title": "Paiements",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "amount": "Montant",
+                    "method": "Méthode",
+                    "status": "Statut",
+                    "created_at": "Créé le",
+                    "actions": "Actions"
+                },
+                "no_payouts": "Aucun paiement trouvé.",
+                "delete_confirm": "Supprimer ce paiement ?",
+                "edit_modal": {
+                    "title": "Modifier le paiement",
+                    "status": "Statut",
+                    "amount": "Montant (GNF)",
+                    "method": "Méthode",
+                    "cancel": "Annuler",
+                    "save": "Enregistrer"
+                }
+            },
+            "ads": {
+                "title": "Gestion des publicités",
+                "add_btn": "Ajouter une publicité",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "image": "Image",
+                    "title": "Titre",
+                    "subtitle": "Sous-titre",
+                    "cta": "CTA",
+                    "status": "Statut",
+                    "actions": "Actions"
+                },
+                "no_ads": "Aucune publicité trouvée.",
+                "delete_confirm": "Supprimer cette publicité ?",
+                "activate": "Activer",
+                "deactivate": "Désactiver",
+                "create_modal": {
+                    "title": "Ajouter une publicité",
+                    "desc": "Remplissez le formulaire pour ajouter votre publicité",
+                    "title_label": "Titre",
+                    "subtitle_label": "Sous-titre",
+                    "cta_label": "CTA",
+                    "image_label": "Image de la publicité",
+                    "click_upload": "Cliquez pour télécharger",
+                    "cancel": "Annuler",
+                    "create": "Ajouter"
+                }
+            }
+        },
+        "requested_courses_page": {
+            "title": "Cours demandés",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "course_title": "Titre du cours",
+                "category": "Catégorie",
+                "status": "Statut",
+                "request_date": "Date de la demande",
+                "actions": "Actions"
+            },
+            "pagination": {
+                "previous": "Précédent",
+                "next": "Suivant",
+                "page_info": "Page {{current}} sur {{total}}"
+            },
+            "modals": {
+                "edit": {
+                    "title": "Modifier le cours demandé",
+                    "course_title": "Titre",
+                    "price": "Prix (GNF)",
+                    "status": "Statut",
+                    "cancel": "Annuler",
+                    "save": "Enregistrer les modifications"
+                }
+            }
+        },
+        "training_progress_page": {
+            "title": "Progression de la formation",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "course_title": "Titre du cours",
+                "completion": "Achèvement",
+                "status": "Statut",
+                "last_accessed": "Dernier accès",
+                "time_remaining": "Temps restant",
+                "actions": "Actions"
+            },
+            "status": {
+                "completed": "Terminé",
+                "active": "Actif",
+                "not_started": "Pas commencé"
+            },
+            "actions": {
+                "continue": "Continuer"
+            },
+            "pagination": {
+                "previous": "Précédent",
+                "next": "Suivant",
+                "page_info": "Page {{current}} sur {{total}}"
+            }
+        }
+    },
+    "admin_dashboard": {
+        "sidebar": {
+            "home": {
+                "title": "ACCUEIL",
+                "dashboard": "Tableau de Bord"
+            },
+            "listings": {
+                "title": "LISTINGS",
+                "course": "Liste des Cours",
+                "product": "Liste des Produits",
+                "tickets": "Liste des Tickets"
+            },
+            "management": {
+                "title": "GESTION",
+                "bookings": "Réservations",
+                "training": "Demandes de Formation",
+                "tech": "Demandes Services Tech",
+                "ads": "Publicités",
+                "users": "Gestion Utilisateurs",
+                "sub_admin": "Gestion Sous-Admin",
+                "support": "Équipe de Support"
+            },
+            "footer": {
+                "logout": "Déconnexion"
+            }
+        },
+        "main": {
+            "title": "Tableau de Bord Admin",
+            "profile": {
+                "title": "Tableau de Bord Admin",
+                "role": "Rôle : Administration",
+                "user": "Utilisateur : {{email}}",
+                "upload_success": "Image de profil mise à jour avec succès !",
+                "upload_fail": "Échec du téléchargement de l'image.",
+                "upload_size_error": "Veuillez télécharger une image de moins de 2 Mo",
+                "login_error": "Vous devez être connecté pour télécharger."
+            },
+            "tabs": {
+                "users": "Utilisateurs",
+                "moderation": "Modération",
+                "statistics": "Statistiques",
+                "notifications": "Notifications"
+            },
+            "refresh_button": {
+                "loading": "Chargement...",
+                "refresh": "Actualiser les Données"
+            },
+            "stats": {
+                "total_companies": "Total Entreprises",
+                "active_freelancers": "Freelances Actifs",
+                "active_sellers": "Vendeurs Actifs",
+                "total_revenue": "Revenu Total"
+            },
+            "cards": {
+                "manage_companies": {
+                    "title": "Gérer les Entreprises",
+                    "desc": "Vérifier RCCM/NIF, gérer les profils, réinitialiser les mots de passe, voir les rapports de dépenses",
+                    "tag_rccm": "Vérification RCCM",
+                    "tag_profile": "Gestion Profil",
+                    "tag_spending": "Analyse Dépenses"
+                },
+                "manage_freelancers": {
+                    "title": "Gérer les Freelances",
+                    "desc": "Vérifier les profils, gérer OTP, modifier méthodes de paiement, voir les gains",
+                    "tag_profile": "Vérification Profil",
+                    "tag_otp": "Gestion OTP",
+                    "tag_earnings": "Suivi des Gains"
+                },
+                "manage_sellers": {
+                    "title": "Gérer les Vendeurs",
+                    "desc": "Vérifier licences commerciales, gérer OTP, modifier méthodes de paiement, voir les ventes",
+                    "tag_license": "Vérification Licence",
+                    "tag_otp": "Gestion OTP",
+                    "tag_sales": "Analyse Ventes"
+                },
+                "manage_leasing": {
+                    "title": "Gérer les Locations",
+                    "desc": "Approuver demandes de location, suivre statut équipement, gérer livraisons",
+                    "tag_approval": "Approbation Bail",
+                    "tag_tracking": "Suivi Équipement",
+                    "tag_delivery": "Gestion Livraison"
+                },
+                "monitor_chats": {
+                    "title": "Surveiller les Chats",
+                    "desc": "Filtrer chats par type d'utilisateur, limiter messages, signaler contenu inapproprié",
+                    "tag_filter": "Filtrage Utilisateur",
+                    "tag_limits": "Limites Messages",
+                    "tag_moderation": "Modération Contenu"
+                },
+                "sponsorships": {
+                    "title": "Parrainages",
+                    "desc": "Approuver/rejeter demandes de sponsors, gérer carrousel page d'accueil",
+                    "tag_approval": "Approbation Sponsor",
+                    "tag_carousel": "Gestion Carrousel",
+                    "tag_revenue": "Suivi Revenus"
+                },
+                "transactions": {
+                    "title": "Transactions",
+                    "desc": "Voir toutes les transactions, suivre commissions, exporter rapports",
+                    "tag_history": "Historique Transactions",
+                    "tag_commission": "Suivi Commissions",
+                    "tag_export": "Exporter Rapports"
+                },
+                "gamification": {
+                    "title": "Ludification",
+                    "desc": "Suivre progrès formation, analyse ventes, stats ludification",
+                    "tag_training": "Progrès Formation",
+                    "tag_sales": "Analyse Ventes",
+                    "tag_badges": "Badges & Récompenses"
+                },
+                "portfolio_ads": {
+                    "title": "Portfolio & Pubs",
+                    "desc": "Approuver portfolios, gérer publicités, modération contenu",
+                    "tag_approval": "Approbation Portfolio",
+                    "tag_management": "Gestion Pubs",
+                    "tag_moderation": "Modération Contenu"
+                },
+                "deleted_accounts": {
+                    "title": "Comptes Supprimés",
+                    "desc": "Voir comptes supprimés, journaux d'audit, alertes sécurité",
+                    "tag_accounts": "Comptes Supprimés",
+                    "tag_logs": "Journaux Audit",
+                    "tag_alerts": "Alertes Sécurité"
+                }
+            },
+            "sections": {
+                "training_requests": {
+                    "title": "Total Demandes de Formation",
+                    "current": "Nombre actuel de Demandes",
+                    "count": "{{count}} Demandes",
+                    "view_btn": "Voir Demandes"
+                },
+                "tickets": {
+                    "title": "Total Tickets",
+                    "current": "Nombre actuel de Tickets",
+                    "count": "{{count}} Tickets",
+                    "view_btn": "Voir Tickets"
+                },
+                "messages": {
+                    "title": "Messages",
+                    "active": "Session Active",
+                    "closed": "Fermé",
+                    "no_chats": "Aucun chat actif",
+                    "open_btn": "OUVRIR CHAT SUPPORT"
+                },
+                "bookings": {
+                    "title": "Liste des Réservations",
+                    "view_btn": "Voir Toutes Réservations",
+                    "table": {
+                        "name": "Nom",
+                        "device": "Appareil",
+                        "duration": "Durée",
+                        "amount": "Montant"
+                    },
+                    "empty": {
+                        "title": "Commencez avec votre entreprise !",
+                        "desc": "Vous trouverez toutes les infos employés ici une fois votre première commande terminée."
+                    }
+                },
+                "analytics": {
+                    "title": "Analyses de la Plateforme",
+                    "growth": "Croissance Utilisateurs",
+                    "transactions": "Transactions"
+                },
+                "moderation": {
+                    "title": "Panneau de Modération",
+                    "desc": "Ici vous examinerez le contenu signalé, les litiges et les locations."
+                },
+                "notifications": {
+                    "title": "Notifications",
+                    "items": {
+                        "suspicious": "Activité Suspecte : Offre basse détectée pour achat d'ordinateur !",
+                        "dispute": "Litige Signalé : Client a signalé : Ordinateur non livré.",
+                        "marketplace": "Alerte Marketplace : 50 nouveaux achats d'ordinateurs aujourd'hui."
+                    }
+                }
+            }
+        },
+        "user_management": {
+            "title": "Gestion des Utilisateurs",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "headers": {
+                    "name": "Nom d'Utilisateur",
+                    "completed_orders": "Total Commandes Terminées",
+                    "creation_date": "Date de Création",
+                    "spent": "Total Argent Dépensé",
+                    "actions": "Actions"
+                },
+                "actions": {
+                    "ban": "Bannir",
+                    "unban": "Débannir",
+                    "processing": "Traitement..."
+                }
+            },
+            "pagination": {
+                "previous": "Précédent",
+                "next": "Suivant",
+                "page_info": "Page {{current}} sur {{total}}"
+            }
+        },
+        "sub_admin_management": {
+            "title": "Gestion des Sous-Administrateurs",
+            "add_button": "Ajouter Sous-Admin",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "headers": {
+                    "name": "Nom Sous-Admin",
+                    "permission": "Permission",
+                    "assigned_date": "Date d'Assignation",
+                    "role": "Rôle",
+                    "actions": "Actions"
+                }
+            },
+            "modals": {
+                "add": {
+                    "title": "Ajouter Sous-Admin",
+                    "subtitle": "Ajouter manuellement vos sous-administrateurs",
+                    "submit": "Ajouter Sous-Admin",
+                    "submitting": "Ajout..."
+                },
+                "edit": {
+                    "title": "Modifier Sous-Admin",
+                    "subtitle": "Mettre à jour les informations du sous-administrateur",
+                    "submit": "Mettre à jour",
+                    "submitting": "Mise à jour..."
+                },
+                "delete": {
+                    "title": "Confirmer la Suppression",
+                    "message": "Êtes-vous sûr de vouloir supprimer ce sous-administrateur ?",
+                    "confirm": "Supprimer",
+                    "deleting": "Suppression...",
+                    "cancel": "Annuler"
+                },
+                "form": {
+                    "name": "Nom :",
+                    "permissions": "Permissions :",
+                    "roles": "Rôles :",
+                    "select_permission": "Sélectionner Permission",
+                    "select_role": "Sélectionner Rôle",
+                    "select_multiple": "Sélectionner Multiple",
+                    "clear_all": "Tout Effacer"
+                }
+            },
+            "roles": {
+                "support": "Support",
+                "head": "Chef",
+                "order_manager": "Gestionnaire Commandes",
+                "admin": "Admin",
+                "content_manager": "Gestionnaire Contenu",
+                "finance_manager": "Gestionnaire Finance",
+                "analytics_manager": "Gestionnaire Analytique"
+            },
+            "permissions": {
+                "user_access": "Accès Gestion Utilisateurs",
+                "support_access": "Accès Équipe Support",
+                "order_access": "Accès Gestion Commandes",
+                "content_access": "Accès Gestion Contenu",
+                "finance_access": "Accès Gestion Finance",
+                "analytics_access": "Accès Analytique",
+                "full_access": "Accès Admin Complet"
+            }
+        },
+        "support_team_management": {
+            "title": "Équipe de Support",
+            "add_button": "Ajouter Membre",
+            "filter": {
+                "date_range": "Plage de dates",
+                "activity": "Activité"
+            },
+            "report_button": "Voir Rapport Équipe Support",
+            "showing_results": "Affichage de {{count}} résultats.",
+            "table": {
+                "headers": {
+                    "name": "Nom du Membre",
+                    "avg_response": "Temps de Réponse Moyen",
+                    "avg_resolution": "Temps de Résolution Moyen",
+                    "assigned_tickets": "Tickets Assignés",
+                    "actions": "Actions"
+                },
+                "more": "+{{count}} de plus"
+            },
+            "modals": {
+                "add": {
+                    "title": "Ajouter Membre",
+                    "subtitle": "Ajouter manuellement les membres de votre équipe support",
+                    "submit": "Ajouter Membre Support",
+                    "submitting": "Ajout..."
+                },
+                "edit": {
+                    "title": "Modifier Membre",
+                    "subtitle": "Mettre à jour les informations du membre support",
+                    "submit": "Mettre à jour",
+                    "submitting": "Mise à jour..."
+                },
+                "delete": {
+                    "title": "Confirmer la Suppression",
+                    "message": "Êtes-vous sûr de vouloir supprimer ce membre de l'équipe support ?",
+                    "confirm": "Supprimer",
+                    "deleting": "Suppression...",
+                    "cancel": "Annuler"
+                },
+                "view": {
+                    "title": "Détails du Membre",
+                    "subtitle": "Voir les informations du membre support",
+                    "close": "Fermer",
+                    "name": "Nom :",
+                    "response_time": "Temps de Réponse :",
+                    "resolution_time": "Temps de Résolution :",
+                    "assigned_tickets": "Tickets Assignés :"
+                },
+                "form": {
+                    "name": "Nom :",
+                    "tickets": "Tickets :",
+                    "select_multiple": "Sélectionner Multiple"
+                }
+            }
+        },
+        "listings": {
+            "course": {
+                "title": "Liste des Cours",
+                "add_button": "Ajouter un Nouveau Cours",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "headers": {
+                        "s_no": "N°",
+                        "name": "Nom du Cours",
+                        "description": "Description du Cours",
+                        "price": "Prix",
+                        "status": "Statut",
+                        "actions": "Actions"
+                    }
+                },
+                "mobile": {
+                    "price": "Prix :",
+                    "status": "Statut :"
+                },
+                "actions": {
+                    "activate": "Activer",
+                    "deactivate": "Désactiver",
+                    "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce cours ?"
+                },
+                "status": {
+                    "active": "Actif",
+                    "inactive": "Inactif"
+                },
+                "errors": {
+                    "delete_failed": "Échec de la suppression du cours : {{message}}",
+                    "activate_failed": "Échec de l'activation du cours : {{message}}",
+                    "deactivate_failed": "Échec de la désactivation du cours : {{message}}",
+                    "missing_path": "Impossible de modifier le cours : référence de chemin manquante."
+                },
+                "form_page": {
+                    "title": "Ajouter un Cours",
+                    "subtitle": "Complétez le formulaire pour ajouter un nouveau cours",
+                    "labels": {
+                        "name": "Nom",
+                        "description": "Description",
+                        "price": "Prix"
+                    },
+                    "placeholders": {
+                        "name": "Droit des contrats essentiels",
+                        "description": "Écrivez une brève description du cours...",
+                        "price": "1 000 000"
+                    },
+                    "buttons": {
+                        "submit": "Soumettre votre annonce",
+                        "submitting": "Création du cours..."
+                    },
+                    "errors": {
+                        "create_failed": "Échec de la création du cours"
+                    }
+                }
+            },
+            "product": {
+                "title": "Liste des Produits",
+                "add_button": "Ajouter un Nouveau Produit",
+                "search_placeholder": "Rechercher des produits...",
+                "table": {
+                    "headers": {
+                        "s_no": "N°",
+                        "name": "Nom du Produit",
+                        "description": "Description du Produit",
+                        "price": "Prix",
+                        "status": "Statut",
+                        "actions": "Actions"
+                    }
+                },
+                "mobile": {
+                    "price": "Prix :",
+                    "status": "Statut :"
+                },
+                "actions": {
+                    "activate": "Activer",
+                    "deactivate": "Désactiver",
+                    "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce produit ?"
+                },
+                "status": {
+                    "active": "Actif",
+                    "inactive": "Inactif"
+                },
+                "errors": {
+                    "delete_failed": "Échec de la suppression du produit : {{message}}",
+                    "activate_failed": "Échec de l'activation du produit : {{message}}",
+                    "deactivate_failed": "Échec de la désactivation du produit : {{message}}"
+                },
+                "form_page": {
+                    "title": "Ajouter un Produit",
+                    "subtitle": "Complétez le formulaire pour ajouter un nouveau produit",
+                    "labels": {
+                        "name": "Nom",
+                        "category": "Catégorie",
+                        "price": "Prix"
+                    },
+                    "placeholders": {
+                        "name": "iPhone 14",
+                        "price": "1 000 000",
+                        "select_category": "Sélectionner une catégorie"
+                    },
+                    "categories": {
+                        "smartphones": "Smartphones",
+                        "laptops": "Ordinateurs portables",
+                        "tablets": "Tablettes",
+                        "accessories": "Accessoires",
+                        "wearables": "Objets connectés",
+                        "others": "Autres"
+                    },
+                    "buttons": {
+                        "submit": "Ajouter le produit",
+                        "submitting": "Ajout du produit..."
+                    },
+                    "errors": {
+                        "create_failed": "Échec de la création du produit"
+                    }
+                }
+            },
+            "ticket": {
+                "title": "Liste des Tickets",
+                "search_placeholder": "Rechercher des tickets...",
+                "table": {
+                    "headers": {
+                        "s_no": "N°",
+                        "name": "Nom du Ticket",
+                        "assigned_to": "Assigné à",
+                        "created_date": "Date de Création",
+                        "status": "Statut",
+                        "actions": "Actions"
+                    }
+                },
+                "mobile": {
+                    "assigned_to": "Assigné à :",
+                    "created": "Créé :",
+                    "status": "Statut :"
+                },
+                "actions": {
+                    "save": "Enregistrer",
+                    "cancel": "Annuler",
+                    "view": "Voir",
+                    "close": "Fermer",
+                    "edit_ticket": "Modifier le Ticket",
+                    "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce ticket ?"
+                },
+                "status": {
+                    "open": "Ouvert",
+                    "in_progress": "En Cours",
+                    "resolved": "Résolu",
+                    "closed": "Fermé"
+                },
+                "priority": {
+                    "medium": "Moyen"
+                },
+                "details": {
+                    "title": "Détails du Ticket",
+                    "subject": "Sujet",
+                    "description": "Description",
+                    "status": "Statut",
+                    "priority": "Priorité",
+                    "assigned_to": "Assigné à",
+                    "created_by": "Créé par",
+                    "created_date": "Date de Création",
+                    "no_description": "Aucune description fournie",
+                    "unassigned": "Non assigné",
+                    "unknown": "Inconnu"
+                },
+                "form": {
+                    "subject_placeholder": "Sujet du ticket",
+                    "assigned_to_placeholder": "Assigné à"
+                },
+                "errors": {
+                    "delete_failed": "Échec de la suppression du ticket : {{message}}",
+                    "update_failed": "Échec de la mise à jour du ticket : {{message}}"
+                }
+            }
+        },
+        "ad_management": {
+            "title": "Gestion des Publicités",
+            "add_button": "Ajouter Nouvelle Pub",
+            "search_placeholder": "Rechercher",
+            "table": {
+                "headers": {
+                    "image": "Image",
+                    "title": "Titre Pub",
+                    "subtitle": "Sous-titre Pub",
+                    "cta": "Appel à l'action",
+                    "status": "Statut",
+                    "actions": "Actions"
+                }
+            },
+            "modals": {
+                "add": {
+                    "title": "Ajouter Publicité",
+                    "subtitle": "Complétez le formulaire pour ajouter votre publicité",
+                    "submit": "Ajouter Publicité",
+                    "form": {
+                        "title": "Titre :",
+                        "subtitle": "Sous-titre :",
+                        "cta": "Appel à l'action :",
+                        "placeholders": {
+                            "title": "Obtenez les meilleurs services en ligne",
+                            "subtitle": "Nous nous assurerons...",
+                            "cta": "Rejoindre Maintenant"
+                        }
+                    }
+                },
+                "delete": {
+                    "title": "Confirmer la Suppression",
+                    "message": "Êtes-vous sûr de vouloir supprimer cette publicité ?",
+                    "confirm": "Supprimer",
+                    "cancel": "Annuler"
+                }
+            },
+            "toasts": {
+                "added": "Publicité ajoutée avec succès !",
+                "deleted": "Publicité supprimée avec succès !",
+                "activated": "Publicité activée avec succès !",
+                "deactivated": "Publicité désactivée avec succès !"
+            },
+            "actions": {
+                "activate": "Activer",
+                "deactivate": "Désactiver"
+            }
+        },
+        "operations": {
+            "booking_management": {
+                "title": "Gérer les Réservations",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "headers": {
+                        "client_name": "Nom du Client",
+                        "description": "Description",
+                        "bidding_date": "Date de l'Offre",
+                        "amount": "Montant",
+                        "actions": "Actions"
+                    }
+                },
+                "actions": {
+                    "accept": "Accepter",
+                    "deny": "Refuser",
+                    "confirm_deny": "Êtes-vous sûr de vouloir refuser cette réservation ?",
+                    "status": {
+                        "pending": "En attente",
+                        "approved": "Approuvé",
+                        "rejected": "Rejeté"
+                    }
+                },
+                "errors": {
+                    "accept_failed": "Échec de l'acceptation de la réservation : {{message}}",
+                    "deny_failed": "Échec du refus de la réservation : {{message}}"
+                }
+            },
+            "training_management": {
+                "title": "Gérer les Demandes de Formation",
+                "search_placeholder": "Rechercher",
+                "table": {
+                    "headers": {
+                        "client_name": "Nom du Client",
+                        "description": "Description",
+                        "bidding_date": "Date de l'Offre",
+                        "amount": "Montant",
+                        "actions": "Actions"
+                    }
+                },
+                "actions": {
+                    "accept": "Accepter",
+                    "deny": "Refuser",
+                    "confirm_deny": "Êtes-vous sûr de vouloir refuser cette demande de formation ?",
+                    "status": {
+                        "pending": "En attente",
+                        "approved": "Approuvée",
+                        "rejected": "Rejetée"
+                    }
+                },
+                "errors": {
+                    "accept_failed": "Échec de l'acceptation de la demande de formation : {{message}}",
+                    "deny_failed": "Échec du refus de la demande de formation : {{message}}"
+                }
+            }
+        }
+    },
+    "login_page": {
+        "tagline": "Boostez votre succès : connectez-vous, vendez, innovez avec Freelance-224 !",
+        "img_alt": "Travail en freelance",
+        "title": "Connex<span>ion</span>",
+        "welcome": "Bienvenue à nouveau sur Freelance Guinée !",
+        "email_placeholder": "E-mail",
+        "password_placeholder": "Mot de passe",
+        "forgot_password": "Mot de passe oublié ?",
+        "login_btn": "Se connecter",
+        "no_account": "Vous n'avez pas de compte ?",
+        "signup_link": "S'inscrire",
+        "or": "OU",
+        "google_signin": "Se connecter avec Google",
+        "terms_agreement": "En vous connectant, vous acceptez nos",
+        "terms_of_service": "Conditions d'utilisation",
+        "and": "et notre",
+        "privacy_policy": "Politique de confidentialité"
+    },
+    "shop": {
+        "hero": {
+            "title": "Découvrez Smartphones, Ordinateurs Portables, Bureaux et Accessoires",
+            "subtitle": "La vente se termine le 10 septembre 2025 – Économisez 20% !",
+            "ends_on": "La vente se termine le 10 septembre 2025 à 23h59",
+            "remaining": "restant",
+            "ad": "Annonce",
+            "need_support": "Besoin de support IT ? Explorez nos services techniques !",
+            "get_support": "Obtenir du support IT"
+        },
+        "product": {
+            "add_to_cart": "Ajouter au Panier",
+            "rent": "Louer",
+            "per_month": "/mois",
+            "sale": "Solde",
+            "rent_per_month": "{{price}} /mois"
+        },
+        "banner": {
+            "flash_sale": "VENTE FLASH - 20% DE RÉDUCTION SUR TOUS LES APPAREILS",
+            "ends_may": "Fin le 16 Mai 2025",
+            "left": "restants"
+        },
+        "categories": {
+            "smartphones": "Smartphones",
+            "laptops": "Ordinateurs Portables",
+            "desktops": "Ordinateurs de Bureau",
+            "accessories": "Accessoires",
+            "components": "Composants",
+            "keyboards": "Claviers",
+            "mice": "Souris",
+            "monitors": "Moniteurs",
+            "audio": "Audio",
+            "adapters": "Adaptateurs",
+            "stylus": "Stylets",
+            "power": "Alimentation",
+            "processors": "Processeurs",
+            "graphics_cards": "Cartes Graphiques",
+            "memory": "Mémoire",
+            "storage": "Stockage",
+            "motherboards": "Cartes Mères",
+            "power_supplies": "Alimentations",
+            "cooling": "Refroidissement",
+            "cases": "Boîtiers"
+        },
+        "filters": {
+            "title": "Filtres",
+            "open": "Ouvrir les filtres",
+            "close": "Fermer les filtres",
+            "condition": "État",
+            "conditions": {
+                "new": "Neuf",
+                "used": "Occasion"
+            },
+            "brand": "Marque",
+            "availability": "Disponibilité",
+            "availabilities": {
+                "conakry": "Conakry",
+                "global": "Mondial"
+            },
+            "min_rating": "Note minimale",
+            "price_range": "Fourchette de prix",
+            "screen_size": "Taille de l'écran",
+            "ram": "RAM",
+            "storage": "Stockage",
+            "stars_up": "{{count}} étoile & plus",
+            "stars_up_plural": "{{count}} étoiles & plus",
+            "processor": "Processeur",
+            "graphics_card": "Carte Graphique",
+            "category": "Catégorie",
+            "compatibility": "Compatibilité"
+        },
+        "sorting": {
+            "sort_by": "Trier par :",
+            "most_popular": "Les plus populaires",
+            "price_low_high": "Prix : Bas à Élevé",
+            "price_high_low": "Prix : Élevé à Bas",
+            "newest_first": "Les plus récents",
+            "best_rating": "Meilleure note"
+        },
+        "smartphones": {
+            "title": "Smartphones",
+            "showing_results": "Affichage de {{filtered}} sur {{total}} produits"
+        },
+        "laptops": {
+            "title": "Ordinateurs Portables",
+            "found": "{{count}} ordinateurs trouvés",
+            "no_results": "Aucun ordinateur portable trouvé correspondant à vos critères."
+        },
+        "desktops": {
+            "title": "Ordinateurs de Bureau",
+            "found": "{{count}} bureaux trouvés",
+            "no_results": "Aucun ordinateur de bureau trouvé correspondant à vos critères."
+        },
+        "accessories": {
+            "title": "Accessoires",
+            "found": "{{count}} accessoires trouvés",
+            "no_results": "Aucun accessoire trouvé correspondant à vos critères.",
+            "ngo_title": "Tarifs Spéciaux Projets ONG",
+            "ngo_desc": "Soutenir les ONG avec des accessoires abordables pour les projets technologiques. Tarification spéciale disponible pour les organisations qualifiées.",
+            "ngo_qualification": "Qualification ONG : Contactez-nous avec les détails de votre organisation pour accéder aux tarifs spéciaux pour les projets technologiques.",
+            "usb_cable": "Câble USB-C",
+            "power_adapter": "Adaptateur Secteur",
+            "headphones": "Écouteurs Basiques",
+            "perfect_ngo": "Parfait pour les projets ONG",
+            "universal_comp": "Compatibilité universelle",
+            "training_ready": "Prêt pour les sessions de formation"
+        },
+        "components": {
+            "title": "Composants PC",
+            "found": "{{count}} composants trouvés",
+            "no_results": "Aucun composant trouvé correspondant à vos critères."
+        },
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant"
+        }
+    },
+    "cart": {
+        "breadcrumb": "Panier",
+        "title": "Votre Panier",
+        "condition": "État :",
+        "category": "Catégorie :",
+        "empty_title": "Votre panier est vide",
+        "empty_desc": "Ajoutez des produits pour commencer !",
+        "summary_title": "Résumé de la commande",
+        "subtotal": "Sous-total",
+        "discount": "Remise",
+        "delivery_fee": "Frais de livraison",
+        "total": "Total",
+        "checkout_btn": "Passer à la caisse"
+    },
+    "shipping": {
+        "breadcrumb": "Détails",
+        "title": "Livraison & Paiement",
+        "method_title": "Mode de Livraison",
+        "free_notice_title": "Livraison Gratuite à Conakry ou Retrait",
+        "free_notice_desc": "Choisissez entre la livraison gratuite à Conakry ou le retrait de votre commande chez un vendeur vérifié.",
+        "delivery_label": "Livraison Gratuite",
+        "delivery_desc": "Livraison à votre adresse à Conakry",
+        "pickup_label": "Retrait",
+        "pickup_desc": "Retrait chez le vendeur",
+        "pickup_location_title": "Sélectionner le lieu de retrait",
+        "use_location_btn": "Utiliser ma position (Trier par proximité)",
+        "you_are_here": "Vous êtes ici",
+        "mon_fri": "Lun-Ven, 9h - 18h",
+        "select_location_btn": "Sélectionner ce lieu",
+        "selected_point": "Point de retrait sélectionné",
+        "vendor_id": "ID Vendeur :",
+        "available_locations": "Lieux disponibles",
+        "nearest_to_you": "(Le plus proche de vous)",
+        "no_locations": "Aucun lieu de retrait disponible pour le moment.",
+        "payment_method_title": "Moyen de Paiement",
+        "redirect_orange": "Vous serez redirigé vers le site Orange Money",
+        "redirect_mtn": "Vous serez redirigé vers le site MTN",
+        "redirect_paypal": "Vous serez redirigé vers le site PayPal",
+        "pay_card": "Payez en toute sécurité avec votre carte de crédit ou débit",
+        "bank_transfer_desc": "Virement direct sur notre compte bancaire",
+        "cod_desc": "Payez à la réception de votre commande",
+        "phone_label": "Numéro de téléphone *",
+        "card_number": "Numéro de carte *",
+        "expiry_date": "Date d'expiration *",
+        "cvv": "CVV *",
+        "cardholder_name": "Nom du titulaire *",
+        "bank_name": "Nom de la banque *",
+        "select_bank": "Sélectionner la banque",
+        "account_number": "Numéro de compte *",
+        "enter_account": "Entrez votre numéro de compte",
+        "delivery_address": "Adresse de livraison *",
+        "enter_address": "Entrez votre adresse de livraison complète",
+        "paypal_integration": "Intégration PayPal",
+        "paypal_desc": "Vous serez redirigé vers le portail sécurisé de PayPal pour effectuer votre paiement.",
+        "success": "Succès !",
+        "error": "Erreur",
+        "reference": "Référence :",
+        "secure_msg": "Transaction cryptée et sécurisée. Vos données sont protégées.",
+        "free": "Gratuit",
+        "pickup_at": "Retrait chez",
+        "processing": "Traitement...",
+        "confirm_payment": "Confirmer le paiement",
+        "terms_agree": "En payant, vous acceptez nos Termes et Conditions",
+        "login_alert": "Veuillez vous connecter pour terminer votre commande",
+        "fill_details_alert": "Veuillez remplir tous les détails de paiement requis"
+    },
+    "invoice": {
+        "breadcrumb": "Télécharger la facture",
+        "tax_invoice": "Facture Fiscale",
+        "checkout_summary": "Résumé de la commande",
+        "number": "Numéro de facture :",
+        "date": "Date de facture :",
+        "verification_code": "Code de vérification :",
+        "reverse_charge": "Autoliquidation applicable :",
+        "yes": "Oui",
+        "no": "Non",
+        "supplier": "Fournisseur :",
+        "buyer": "Détails de l'acheteur (Facturé à) :",
+        "consignee": "Détails du destinataire (Expédié à) :",
+        "state": "État :",
+        "state_code": "Code État :",
+        "gstin": "NIF :",
+        "table": {
+            "hsn": "HSN/SAC",
+            "desc": "Description",
+            "qty": "Qté",
+            "unit": "Unité",
+            "rate": "Prix unitaire",
+            "taxable": "Valeur imposable",
+            "igst_rate": "Taux TVA",
+            "igst_amount": "Montant TVA",
+            "total": "Total",
+            "serial": "Numéro de série"
+        },
+        "total_amounts": "Montants Totaux",
+        "rounding": "Arrondi",
+        "amount_words": "Montant total de la facture en toutes lettres :",
+        "delivery_info": "Informations de livraison",
+        "pickup_loc": "Lieu de retrait :",
+        "delivery_method": "Mode de livraison :",
+        "original_recipient": "Original pour le destinataire",
+        "auth_signatory": "Signataire autorisé :",
+        "qr_instruction": "Présentez ce code QR et/ou partagez le code de vérification avec le vendeur. Le vendeur peut scanner le code ou saisir le code alphanumérique dans son tableau de bord pour vérifier le paiement avant de remettre la marchandise.",
+        "print_btn": "Imprimer / Enregistrer en PDF",
+        "complete_payment_msg": "Effectuez le paiement pour générer votre facture et le code QR de preuve de paiement.",
+        "igst_msg": "La TVA sera appliquée automatiquement lors du paiement.",
+        "pay_now": "Payer Maintenant",
+        "payment_completed": "Paiement effectué. Votre facture est prête.",
+        "vendor_instruction": "Vendeurs : utilisez le tableau de bord pour <strong>scanner le QR</strong> ou saisissez le <strong>Code de Vérification</strong> pour valider le paiement."
+    },
+    "product": {
+        "breadcrumb_shop": "Boutique",
+        "smartphone": "Smartphone",
+        "specifications": "Caractéristiques",
+        "general": "Général",
+        "model": "Modèle",
+        "release_date": "Date de sortie",
+        "brand": "Marque",
+        "os": "Système d'exploitation",
+        "colors": "Couleurs",
+        "body_design": "Corps & Design",
+        "dimensions": "Dimensions",
+        "weight": "Poids",
+        "build": "Construction",
+        "water_resistance": "Résistance à l'eau",
+        "availability": "Disponibilité",
+        "in_stock": "En Stock",
+        "kyc_verified": "Vérifié KYC",
+        "reviews": "Avis",
+        "leave_review": "Laisser un avis",
+        "enter_name": "Entrez votre nom",
+        "write_review": "Écrivez votre avis...",
+        "submit_review": "Soumettre l'avis",
+        "choose_color": "Choisir une couleur",
+        "buy_now": "Acheter maintenant"
+    },
+    "company_history": {
+        "headline": "Notre Parcours : Jeunesse, Innovation, Sécurité",
+        "subheadline": "Freelance-224, fondé par des experts informatiques guinéens avec une expérience internationale, valorise les talents locaux via des solutions sécurisées, reliant PME, ONG, institutions et utilisateurs mondiaux.",
+        "founding": "En 2024, des jeunes guinéens et de la diaspora, forts de décennies d’expertise IT acquises en freelance pour des entreprises mondiales, ont fondé Freelance-224 pour lutter contre le chômage à Conakry. Notre plateforme mobile-first et sécurisée propose la cybersécurité, l’IA, la Data Science et des services IT, ainsi que l’achat et la location d’appareils, avec transactions chiffrées pour PME, ONG et clients mondiaux. Exemple : “18 utilisateurs alpha sécurisés à Conakry.”",
+        "milestone_1": "2024 : Lancement de la plateforme avec tests alpha sécurisés (18 utilisateurs, données chiffrées).",
+        "milestone_2": "2025 : Partenariats avec Orange Guinée et CCC ; présentation sécurisée à GFW 2025 (août 2025).",
+        "milestone_3": "2026 : Objectif de 1 500 utilisateurs, 150M GNF de revenus, extension Cybersécurité/IA.",
+        "partnerships": "De confiance auprès d’Orange Guinée et de la CCC, notre plateforme, développée par des experts guinéens, propose des solutions sécurisées aux PME, ONG, institutions et utilisateurs mondiaux, renforçant emploi et confiance.",
+        "cta": "Rejoignez Notre Mission Sécurisée",
+        "copyright": "© 2025 Freelance-224. Sécuriser les talents guinéens, connecter le monde."
+    },
+    "company_dashboard": {
+        "loading": "Chargement des statistiques de l'entreprise...",
+        "error_retry": "Réessayer la connexion",
+        "no_stats": "Aucune statistique disponible. Veuillez compléter votre profil.",
+        "training_progress": "Progrès de la formation",
+        "complete": "terminé",
+        "no_active_training": "Aucun cours de formation actif.",
+        "requested_courses": "Cours demandés",
+        "for_employees": "pour {{count}} employés",
+        "no_pending_requests": "Aucune demande en attente.",
+        "finance_analytics": "Analyses financières",
+        "leases": "Baux",
+        "purchases": "Achats",
+        "training": "Formation",
+        "hires": "Recrutements",
+        "total_spent": "Total dépensé :",
+        "orders": "Commandes :",
+        "jds_posted": "Offres publiées :",
+        "active_contracts": "Contrats de location actifs",
+        "view_all_contracts": "Voir tous les contrats",
+        "request_lease": "Demander un nouveau bail",
+        "assigned": "Assigné :",
+        "no_active_contracts": "Aucun contrat de location actif.",
+        "recent_purchases": "Achats récents",
+        "view_all_purchases": "Voir tous les achats",
+        "track_order": "Suivre la commande",
+        "seller": "Vendeur :",
+        "no_recent_purchases": "Aucun achat récent trouvé",
+        "recent_purchases_placeholder": "Les achats récents apparaîtront ici",
+        "equipment_tracking": "Suivi des équipements",
+        "view_tracking": "Voir l'historique de suivi",
+        "report_issue": "Signaler un problème",
+        "eta": "ETA :",
+        "last_updated": "Dernière mise à jour :",
+        "no_tracking_data": "Aucune donnée de suivi d'équipement trouvée",
+        "notifications": "Notifications",
+        "settings": "Paramètres",
+        "just_now": "À l'instant",
+        "no_notifications": "Aucune notification trouvée",
+        "transaction_history": "Historique des transactions",
+        "view_all_transactions": "Voir toutes les transactions",
+        "export_pdf": "Exporter en PDF",
+        "freelancer": "Freelance :",
+        "provider": "Fournisseur :",
+        "payment": "Paiement :",
+        "no_transactions": "Aucun historique de transaction trouvé",
+        "freelancer_marketplace": "Place de marché Freelance",
+        "post_jd": "Publier une nouvelle offre",
+        "view_applications": "Voir les candidatures",
+        "bid_project": "Offre sur le projet",
+        "applicants": "Candidats :",
+        "posted_by": "Publié par :",
+        "deadline": "Date limite :",
+        "no_deadline": "Aucune date limite",
+        "no_marketplace_activity": "Aucune activité sur la place de marché trouvée",
+        "digital_growth_bundle": "Pack Croissance Numérique",
+        "free": "Gratuit",
+        "current_plan": "Plan Actuel",
+        "upgrade": "Mettre à niveau",
+        "no_subscription_details": "Aucun détail d'abonnement disponible.",
+        "employees": "Employés",
+        "add_employee": "Ajouter un employé",
+        "assign_equipment": "Assigner un équipement",
+        "request_training": "Demander une formation",
+        "role": "Rôle :",
+        "equipment": "Équipement :",
+        "no_employees": "Aucun employé trouvé"
+    },
+    "services_page": {
+        "price_device": "4 928 000 GNF (560 $)",
+        "price_rental": "8 800 GNF/heure (1 $)",
+        "profiles": {
+            "mariama": {
+                "name": "Mariama Diallo",
+                "role": "Spécialiste IT à Conakry (Kaloum)"
+            },
+            "ibrahima": {
+                "name": "Ibrahima Bah",
+                "role": "Consultant SAP à Kankan"
+            },
+            "fatou": {
+                "name": "Fatou Camara",
+                "role": "Développeur Logiciel à Labé"
+            },
+            "sekou": {
+                "name": "Sékou Traoré",
+                "role": "Ingénieur Réseau à Nzérékoré"
+            },
+            "aminata": {
+                "name": "Aminata Barry",
+                "role": "Administrateur Base de Données à Kindia"
+            },
+            "mohamed": {
+                "name": "Mohamed Sow",
+                "role": "Expert Cybersécurité à Boké"
+            }
+        }
+    },
+    "job_post": {
+        "title": "Publier une offre",
+        "subtitle": "Trouvez le talent idéal pour votre prochain projet à Conakry et au-delà.",
+        "form": {
+            "job_title": "Titre du poste",
+            "job_title_placeholder": "Besoin d'un spécialiste du support informatique à Conakry",
+            "job_title_help": "Entrez un titre court et clair pour votre offre d'emploi.",
+            "description": "Description du poste",
+            "description_placeholder": "Décrivez les tâches, les objectifs et les exigences.",
+            "description_help": "Fournissez des informations détaillées sur le poste.",
+            "budget": "Budget",
+            "budget_help": "Entrez le budget estimé pour ce projet.",
+            "deadline": "Date limite",
+            "deadline_help": "Précisez combien de jours le freelance a pour terminer le travail.",
+            "days": "Jours",
+            "skills": "Compétences requises",
+            "skills_placeholder": "Sélectionnez une compétence",
+            "skills_help": "Ajoutez plusieurs compétences pertinentes pour le poste.",
+            "add_btn": "Ajouter",
+            "post_btn": "Publier l'offre",
+            "success": "Offre publiée avec succès ! Les freelances peuvent maintenant enchérir sur votre projet."
+        },
+        "freelancer": {
+            "skills": "Compétences",
+            "hire_btn": "Embaucher maintenant",
+            "message_btn": "Message au freelance"
+        }
+    },
+    "tech_services": {
+        "hero": {
+            "title": "Transformez votre entreprise avec les services techniques de Freelance-224",
+            "subtitle": "ERP/SAP, Support IT, Intégration IT et Externalisation — Sur mesure pour les entreprises guinéennes, ONG, expatriés et entreprises locales dans toutes les préfectures",
+            "cta": "Réservez un service maintenant"
+        },
+        "solutions": {
+            "breadcrumbs": {
+                "home": "Accueil",
+                "tech_services": "Services Techniques"
+            },
+            "main_heading": "Solutions techniques complètes pour les entreprises, ONG et organisations guinéennes",
+            "map_title": "Consultants informatiques à proximité de Conakry",
+            "erp": {
+                "title": "Solutions ERP/SAP",
+                "description": "Implémentation, optimisation et personnalisation des systèmes SAP/ERP pour des industries comme les mines, l'agriculture et la technologie.",
+                "btn": "Réserver un service ERP",
+                "cards": {
+                    "impl": {
+                        "title": "Implémentation SAP",
+                        "desc": "Installation complète et intégration pour vos processus métiers.",
+                        "flip": {
+                            "title": "Implémentation SAP – Installation complète et intégration pour vos processus métiers en Guinée",
+                            "intro": "Chez Freelance-224, nous fournissons des services complets d'implémentation SAP adaptés aux entreprises en Guinée. Nous aidons à rationaliser les opérations, améliorer l'efficacité et offrir une visibilité en temps réel grâce à un système intégré unique.",
+                            "services_title": "Nos services SAP incluent :",
+                            "services": {
+                                "analysis_title": "Analyse des processus métiers et conseil",
+                                "analysis_desc": "Étude des finances, RH, ventes, chaîne d'approvisionnement, logistique, et alignement avec les meilleures pratiques.",
+                                "setup_title": "Installation SAP complète",
+                                "setup_desc": "Installation, configuration et sélection des modules (FI, MM, SD, RH, etc.) selon votre taille et secteur.",
+                                "migration_title": "Migration et intégration des données",
+                                "migration_desc": "Transfert sécurisé des données existantes et connexion avec CRM, e-commerce et services cloud.",
+                                "customization_title": "Personnalisation et localisation",
+                                "customization_desc": "Adaptation de SAP à l'environnement guinéen, y compris la conformité fiscale et réglementaire locale.",
+                                "training_title": "Formation et gestion du changement",
+                                "training_desc": "Formation sur site ou à distance pour permettre au personnel d'exploiter pleinement SAP.",
+                                "support_title": "Support et maintenance continue",
+                                "support_desc": "Surveillance continue, mises à jour et dépannage."
+                            },
+                            "why_title": "Pourquoi SAP pour la Guinée ?",
+                            "why_list": [
+                                "Centralise toutes les opérations commerciales sur une seule plateforme.",
+                                "Réduit les processus manuels et les erreurs.",
+                                "Fournit des rapports clairs pour de meilleures décisions.",
+                                "Aide les entreprises à être compétitives au niveau régional et international.",
+                                "S'adapte aux PME et aux grandes entreprises en Guinée."
+                            ],
+                            "conclusion": "Avec une intégration SAP complète, votre entreprise peut passer d'outils fragmentés et de processus manuels à un système ERP numérique moderne qui soutient la croissance et la compétitivité sur le marché guinéen."
+                        }
+                    },
+                    "opt": {
+                        "title": "Optimisation ERP",
+                        "desc": "Améliorer les performances et l'efficacité de l'ERP.",
+                        "flip": {
+                            "title": "Optimisation ERP – Installation complète et intégration pour vos processus métiers",
+                            "intro": "Chez Freelance-224, nous nous spécialisons dans l'optimisation ERP, aidant les entreprises en Guinée à passer de processus manuels et d'outils dispersés à un système intégré qui rationalise les opérations entre les départements.",
+                            "services_title": "Nos services ERP incluent :",
+                            "services": {
+                                "process_title": "Analyse des processus et conseil",
+                                "process_desc": "Cartographie des finances, RH, logistique, inventaire, ventes et chaîne d'approvisionnement.",
+                                "selection_title": "Sélection et installation ERP",
+                                "selection_desc": "Choisir et implémenter le bon ERP pour votre taille, industrie et budget.",
+                                "migration_title": "Migration et intégration des données",
+                                "migration_desc": "Importation de l'historique et connexion de l'ERP au e-commerce, CRM, POS, cloud.",
+                                "customization_title": "Personnalisation et localisation",
+                                "customization_desc": "Configuration pour les besoins fiscaux, comptables et légaux guinéens.",
+                                "training_title": "Formation et adoption par les utilisateurs",
+                                "training_desc": "Permettre aux équipes d'utiliser efficacement l'ERP.",
+                                "support_title": "Support continu et optimisation",
+                                "support_desc": "Mises à jour, dépannage et mise à l'échelle selon votre croissance."
+                            },
+                            "platforms_title": "Nous travaillons avec de nombreuses plateformes ERP :",
+                            "platforms_list": [
+                                "SAP – Robuste pour les moyennes/grandes entreprises.",
+                                "Oracle NetSuite – ERP Cloud pour la finance et les opérations mondiales.",
+                                "Microsoft Dynamics 365 – Flexible, s'intègre aux outils Microsoft.",
+                                "Odoo – Open-source, rentable pour les PME en Guinée.",
+                                "Zoho ERP / Zoho One – ERP cloud abordable avec CRM/RH/finance.",
+                                "Tally ERP – Populaire pour la gestion comptable/financière.",
+                                "QuickBooks Enterprise – Pour les PME axées sur la comptabilité.",
+                                "Infor ERP – Fort dans la fabrication et la logistique.",
+                                "ERPNext – Open-source adapté aux PME.",
+                                "Solutions ERP personnalisées – Quand les solutions standard ne conviennent pas."
+                            ],
+                            "why_title": "Pourquoi un ERP en Guinée ?",
+                            "why_list": [
+                                "Automatise les processus financiers, opérationnels et administratifs.",
+                                "Aperçus en temps réel pour de meilleures décisions.",
+                                "Améliore l'efficacité de la chaîne d'approvisionnement et de la logistique.",
+                                "Réduit les coûts en minimisant les erreurs et la duplication.",
+                                "Soutient à la fois les PME et les grandes entreprises."
+                            ],
+                            "conclusion": "Avec la bonne installation et optimisation ERP, les entreprises en Guinée gagnent en transparence, réduisent les inefficacités et sont compétitives sur les marchés locaux et internationaux."
+                        }
+                    },
+                    "custom": {
+                        "title": "Solutions personnalisées",
+                        "desc": "Configurations ERP sur mesure pour votre industrie.",
+                        "flip": {
+                            "title": "Solutions personnalisées – Configurations ERP sur mesure pour votre industrie",
+                            "intro": "Chez Freelance-224, nous comprenons que chaque entreprise est unique. C'est pourquoi nous fournissons des configurations ERP personnalisées conçues pour les besoins spécifiques de votre industrie en Guinée. Nous aidons à rationaliser les opérations, améliorer l'efficacité et vous donner un meilleur contrôle sur les processus critiques.",
+                            "industries_title": "Industries et entreprises qui en bénéficient en Guinée :",
+                            "industries_list": [
+                                "Commerce de détail et E-commerce – Inventaire, POS, intégration boutique en ligne, optimisation CX.",
+                                "Logistique et transport – Flotte, suivi de colis, optimisation des itinéraires, chaîne d'approvisionnement.",
+                                "Import & Export / Commerce – Documents douaniers, gestion d'entrepôt, rapports financiers.",
+                                "Banque et microfinance – Finance, traitement des prêts, intégration des données clients.",
+                                "Télécommunications – Facturation, CRM, surveillance des services.",
+                                "Santé et produits pharmaceutiques – Dossiers patients, administration, inventaire, conformité.",
+                                "Éducation et formation – E-learning, gestion des étudiants, RH, finance.",
+                                "Construction et immobilier – Gestion de projet, planification, comptabilité, actifs.",
+                                "Agriculture et agro-industrie – Planification agricole, suivi de la production, distribution, ventes.",
+                                "Fabrication et industrie – Planification, chaîne d'approvisionnement, contrôle qualité, maintenance.",
+                                "Hôtellerie et tourisme – Gestion hôtelière, réservations, RH, service client.",
+                                "Secteur public et ONG – Administration, suivi de projet, contrôle budgétaire, rapports."
+                            ],
+                            "solutions_title": "Nos solutions ERP sur mesure incluent :",
+                            "solutions_list": [
+                                "Modules personnalisés – Finance, RH, chaîne d'approvisionnement, CRM, et plus.",
+                                "Intégration avec les systèmes locaux – Fiscalité, paie et conformité pour la Guinée.",
+                                "Architecture évolutive – Des startups/PME aux grandes entreprises.",
+                                "Formation et support – Équiper les équipes pour gérer et maximiser la valeur de l'ERP."
+                            ],
+                            "conclusion": "Avec Freelance-224, votre ERP devient un outil stratégique adapté à votre industrie et à votre réalité commerciale en Guinée."
+                        }
+                    }
+                }
+            },
+            "it_support": {
+                "title": "Support IT",
+                "description": "Support IT fiable pour les problèmes matériels, logiciels et réseaux, assurant un temps d'arrêt minimal.",
+                "btn": "Obtenir un support IT",
+                "cards": {
+                    "support247": {
+                        "title": "Support 24/7",
+                        "desc": "Assistance à la demande pour les problèmes IT.",
+                        "flip": {
+                            "title": "Support IT 24/7 – Assistance à la demande pour tous vos problèmes IT",
+                            "intro": "Chez Freelance-224, nous savons à quel point la technologie est critique pour gérer une entreprise dans le monde numérique d'aujourd'hui. C'est pourquoi nous fournissons un support IT 24/7, garantissant que vos systèmes restent sécurisés, fiables et efficaces — à tout moment où vous avez besoin d'aide.",
+                            "services_title": "Nos services de support IT couvrent :",
+                            "services_list": [
+                                "Dépannage réseau – Connectivité, routeurs, pare-feu et VPN.",
+                                "Gestion serveur et Cloud – Configuration, surveillance et maintenance.",
+                                "Support matériel et logiciel – Diagnostics, réparation, installation, configuration.",
+                                "Surveillance cybersécurité – Protection contre les malwares, phishing et intrusions.",
+                                "Outils de messagerie et collaboration – Microsoft 365, Google Workspace et applications professionnelles.",
+                                "Applications ERP et métier – SAP, Odoo, Microsoft Dynamics, et plus.",
+                                "Sauvegarde et récupération de données – Sauvegarde des informations critiques en cas d'incident.",
+                                "Formation utilisateur et Helpdesk – Aider le personnel à résoudre les défis IT quotidiens."
+                            ],
+                            "why_title": "Pourquoi le support 24/7 est important pour la Guinée ?",
+                            "why_list": [
+                                "Interruptions fréquentes dues aux réseaux instables, coupures de courant et pannes système.",
+                                "Un support jour et nuit maintient les opérations et évite les temps d'arrêt coûteux.",
+                                "Une réponse rapide aide les startups, PME et entreprises à saisir les opportunités."
+                            ],
+                            "conclusion": "Avec le support 24/7 de Freelance-224, vous vous concentrez sur votre entreprise pendant que nous gérons les problèmes techniques — rapidement, efficacement et professionnellement."
+                        }
+                    },
+                    "hardware": {
+                        "title": "Dépannage matériel",
+                        "desc": "Réparer ordinateurs portables, smartphones et bureaux.",
+                        "flip": {
+                            "title": "Dépannage matériel – Réparations professionnelles pour ordinateurs, smartphones et bureaux",
+                            "intro": "Chez Freelance-224, nous fournissons des services de dépannage matériel rapides et fiables pour assurer le bon fonctionnement de vos appareils. Que vous soyez un particulier, une startup ou une grande entreprise en Guinée, notre équipe s'assure que votre équipement IT est toujours en parfait état.",
+                            "services_title": "Nos services de support matériel incluent :",
+                            "services_list": [
+                                "Réparations d'ordinateurs portables – Remplacement d'écran, problèmes de batterie, défauts de clavier, surchauffe, réinstallation de logiciels.",
+                                "Réparations de smartphones – Réparations d'écran et tactile, problèmes de charge, remplacement de batterie, réinitialisation système et problèmes d'applications.",
+                                "Support bureau et station de travail – Problèmes d'alimentation, mises à niveau matérielles, suppression de virus et optimisation.",
+                                "Périphériques – Dépannage d'imprimantes, scanners, moniteurs et disques externes.",
+                                "Maintenance préventive – Contrôles réguliers pour réduire les pannes et prolonger la durée de vie.",
+                                "Sauvegarde et récupération de données – Protéger et restaurer les fichiers importants en cas de panne matérielle.",
+                                "Support sur site et à distance – Assistance à votre bureau, domicile ou via des outils de diagnostic à distance."
+                            ],
+                            "why_title": "Pourquoi ce service est important pour la Guinée :",
+                            "why_list": [
+                                "Les entreprises dépendent fortement des ordinateurs portables et smartphones pour les opérations quotidiennes.",
+                                "Un dépannage rapide et fiable réduit les temps d'arrêt et prévient la perte de productivité.",
+                                "Une maintenance abordable maintient les appareils fonctionnels sans remplacements fréquents."
+                            ],
+                            "conclusion": "Avec Freelance-224, vous bénéficiez de services professionnels de dépannage et réparation matériel qui prolongent la durée de vie de vos appareils et maintiennent votre entreprise en activité sans interruption."
+                        }
+                    },
+                    "network": {
+                        "title": "Gestion réseau",
+                        "desc": "Optimiser les performances et la sécurité du réseau.",
+                        "flip": {
+                            "title": "Gestion réseau – Optimiser les performances et renforcer la sécurité",
+                            "intro": "Chez Freelance-224, nous aidons les entreprises et organisations en Guinée à concevoir, gérer et sécuriser leurs réseaux informatiques pour assurer une connectivité fluide et fiable. Un réseau solide est la colonne vertébrale de toute entreprise moderne, et nous nous assurons que le vôtre fonctionne toujours au mieux.",
+                            "services_title": "Nos services de gestion réseau incluent :",
+                            "services_list": [
+                                "Installation et configuration réseau – Routeurs, commutateurs, pare-feu et points d'accès sans fil.",
+                                "Optimisation des performances – Surveiller la bande passante, réduire les temps d'arrêt et améliorer la vitesse.",
+                                "Protection cybersécurité – Pare-feu, IDS/IPS, VPN et solutions anti-malware.",
+                                "Solutions LAN & WAN – Réseaux adaptés pour bureaux, écoles et entreprises.",
+                                "Déploiement Wi-Fi – Sans fil fiable et sécurisé pour entreprises, hôtels et institutions.",
+                                "Accès Cloud et à distance – VPN sécurisés et intégration cloud pour le travail à distance.",
+                                "Dépannage et maintenance – Réponse rapide aux pannes et problèmes de connectivité.",
+                                "Audits réseau – Analyse régulière pour détecter les vulnérabilités et améliorer les performances."
+                            ],
+                            "why_title": "Pourquoi c'est important en Guinée :",
+                            "why_list": [
+                                "Internet instable et défis de sécurité sont courants à Conakry et au-delà.",
+                                "Les réseaux mal gérés causent des temps d'arrêt, des pertes de productivité et des risques de sécurité.",
+                                "Des réseaux optimisés et sécurisés améliorent l'efficacité, protègent les données et le service client."
+                            ],
+                            "conclusion": "Avec l'expertise en gestion réseau de Freelance-224, vous obtenez une infrastructure réseau sécurisée, stable et performante qui soutient votre croissance."
+                        }
+                    }
+                }
+            },
+            "integration": {
+                "title": "Intégration de solutions informatiques",
+                "description": "Connectez logiciels et matériels pour des opérations unifiées.",
+                "btn": "Explorer l'intégration",
+                "cards": {
+                    "api": {
+                        "title": "Intégration API et systèmes",
+                        "desc": "Connecter différents logiciels pour un flux de données fluide.",
+                        "flip": {
+                            "title": "Intégration API et systèmes – Connectez vos logiciels pour un flux de données fluide",
+                            "intro": "Chez Freelance-224, nous spécialisons dans la connexion de vos systèmes logiciels disparates en un flux de travail unifié et efficace. Que vous ayez besoin de relier votre CRM à votre logiciel comptable ou de connecter votre site e-commerce à votre gestion des stocks, nous avons l'expertise pour le réaliser.",
+                            "services_title": "Nos services d'intégration incluent :",
+                            "services_list": [
+                                "Développement d'API personnalisées – Interfaces sur mesure pour connecter les applications.",
+                                "Intégration tiers – Passerelles de paiement, fournisseurs d'expédition et outils marketing.",
+                                "Modernisation des systèmes existants – Connecter les anciens systèmes aux applications cloud modernes.",
+                                "Synchronisation des données – Assurer la cohérence sur toutes vos plateformes en temps réel.",
+                                "Automatisation des flux de travail – Réduire la saisie manuelle en automatisant le transfert de données."
+                            ],
+                            "why_title": "Pourquoi l'intégration est importante pour votre entreprise :",
+                            "why_list": [
+                                "Élimine les silos de données et améliore l'accessibilité de l'information.",
+                                "Réduit les erreurs manuelles et fait gagner du temps sur la saisie de données.",
+                                "Améliore la prise de décision avec une vue unifiée des données commerciales."
+                            ],
+                            "conclusion": "Avec Freelance-224, vos systèmes fonctionnent ensemble de manière transparente, permettant à votre entreprise de fonctionner plus efficacement."
+                        }
+                    },
+                    "cloud": {
+                        "title": "Migration vers le Cloud",
+                        "desc": "Migrez votre entreprise vers le cloud en toute sécurité.",
+                        "flip": {
+                            "title": "Migration vers le Cloud – Migrez votre entreprise vers le Cloud en toute sécurité",
+                            "intro": "La transition vers le cloud est essentielle pour les entreprises modernes. Freelance-224 vous aide à migrer vos données, applications et infrastructures vers le cloud de manière sécurisée et efficace, en minimisant les interruptions.",
+                            "services_title": "Nos services de migration cloud incluent :",
+                            "services_list": [
+                                "Stratégie Cloud et conseil – Choisir le bon fournisseur (AWS, Azure, Google Cloud).",
+                                "Migration de données – Transfert sécurisé des bases de données et fichiers.",
+                                "Hébergement d'applications (Lift & Shift) – Déplacer les applications existantes vers le cloud.",
+                                "Solutions Cloud hybrides – Combiner infrastructure sur site avec évolutivité cloud.",
+                                "Sécurité et conformité – Assurer que votre environnement cloud respecte les normes."
+                            ],
+                            "why_title": "Les avantages de la migration cloud :",
+                            "why_list": [
+                                "Évolutivité pour croître vos ressources à mesure que votre entreprise se développe.",
+                                "Économies de coûts en réduisant le besoin de maintenance matérielle sur site.",
+                                "Accessibilité améliorée permettant le travail à distance de n'importe où."
+                            ],
+                            "conclusion": "Faites confiance à Freelance-224 pour guider votre voyage vers le cloud, assurant une transition en douceur qui débloque de nouvelles opportunités."
+                        }
+                    },
+                    "iot": {
+                        "title": "Solutions IoT",
+                        "desc": "Appareils intelligents pour le suivi et la surveillance.",
+                        "flip": {
+                            "title": "Solutions IoT – Appareils intelligents pour le suivi et la surveillance",
+                            "intro": "Exploitez la puissance de l'Internet des Objets (IoT) pour obtenir des informations en temps réel sur vos opérations. Freelance-224 fournit des solutions IoT de bout en bout adaptées aux industries en Guinée, de l'agriculture à la logistique.",
+                            "services_title": "Nos services IoT incluent :",
+                            "services_list": [
+                                "Suivi des actifs – Surveillance en temps réel des véhicules, équipements et cargaisons.",
+                                "Agriculture intelligente – Capteurs pour l'humidité du sol, la température et l'irrigation.",
+                                "IoT industriel – Surveiller la santé des machines et prédire les besoins de maintenance.",
+                                "Solutions de bâtiments intelligents – Gestion de l'énergie, accès de sécurité et occupation.",
+                                "Analyse de données – Transformer les données IoT en intelligence économique exploitable."
+                            ],
+                            "why_title": "Pourquoi adopter l'IoT en Guinée ?",
+                            "why_list": [
+                                "Améliore l'efficacité opérationnelle et réduit le gaspillage.",
+                                "Améliore la visibilité et le contrôle sur les actifs distants.",
+                                "Permet des décisions basées sur les données pour une meilleure gestion des ressources."
+                            ],
+                            "conclusion": "Avec les solutions IoT de Freelance-224, vous pouvez connecter vos actifs physiques au monde numérique, stimulant l'efficacité et l'innovation."
+                        }
+                    }
+                }
+            },
+            "outsourcing": {
+                "title": "Externalisation IT",
+                "description": "Recrutez des développeurs qualifiés, designers et personnel IT à la demande.",
+                "btn": "Recruter des talents",
+                "cards": {
+                    "staffing": {
+                        "title": "Augmentation des effectifs",
+                        "desc": "Évoluez votre équipe avec du personnel IT temporaire ou permanent.",
+                        "flip": {
+                            "title": "Augmentation des effectifs – Évoluez votre équipe avec des professionnels IT qualifiés",
+                            "intro": "Besoin de main-d'œuvre supplémentaire pour un projet ou un support à long terme ? Freelance-224 fournit des professionnels IT qualifiés pour augmenter votre équipe existante, vous permettant d'évoluer selon les besoins sans les frais généraux d'embauche.",
+                            "services_title": "Nous fournissons des talents pour :",
+                            "services_list": [
+                                "Développement logiciel – Frontend, Backend, Full Stack, Mobile.",
+                                "Support IT et Helpdesk – Ingénieurs support niveau 1, 2 et 3.",
+                                "Gestion de projet – Chefs de projet expérimentés pour mener vos initiatives.",
+                                "QA et tests – Testeurs pour assurer que votre logiciel est sans bug.",
+                                "UI/UX Design – Designers créatifs pour améliorer l'expérience utilisateur."
+                            ],
+                            "why_title": "Avantages de l'augmentation des effectifs :",
+                            "why_list": [
+                                "Accès à un vaste vivier de professionnels qualifiés et pré-vérifiés.",
+                                "Flexibilité d'ajuster la taille de l'équipe en fonction des demandes du projet.",
+                                "Réduction des coûts de recrutement et de la charge administrative."
+                            ],
+                            "conclusion": "Freelance-224 vous connecte aux bons talents pour atteindre vos objectifs commerciaux efficacement et à moindre coût."
+                        }
+                    },
+                    "project": {
+                        "title": "Externalisation de projet",
+                        "desc": "Externalisez vos projets IT complets à notre équipe d'experts.",
+                        "flip": {
+                            "title": "Externalisation de projet – Déléguez vos projets IT aux experts",
+                            "intro": "Concentrez-vous sur votre cœur de métier pendant que nous gérons vos projets IT du début à la fin. Freelance-224 offre des services complets d'externalisation de projets, livrant des résultats de haute qualité dans les délais et budgets.",
+                            "services_title": "Projets que nous gérons :",
+                            "services_list": [
+                                "Développement Web et Mobile – Solutions personnalisées adaptées à vos besoins.",
+                                "Implémentation de logiciels d'entreprise – CRM, ERP et applications métier sur mesure.",
+                                "Installation infrastructure IT – Conception réseau, déploiement serveur et sécurité.",
+                                "Transformation numérique – Moderniser vos processus d'affaires avec la technologie.",
+                                "Conseil et stratégie – Conseils d'experts pour aligner l'IT avec vos objectifs."
+                            ],
+                            "why_title": "Pourquoi nous externaliser ?",
+                            "why_list": [
+                                "Accès à une équipe dédiée d'experts dans divers domaines.",
+                                "Méthodologies éprouvées assurant qualité et livraison ponctuelle.",
+                                "Solutions rentables par rapport au développement en interne."
+                            ],
+                            "conclusion": "Associez-vous à Freelance-224 pour transformer vos idées en réalité. Nous gérons les complexités techniques pour que vous puissiez vous concentrer sur la croissance de votre entreprise."
+                        }
+                    },
+                    "managed": {
+                        "title": "Services gérés",
+                        "desc": "Gestion complète de votre infrastructure IT.",
+                        "flip": {
+                            "title": "Services gérés – Gestion complète de votre infrastructure IT",
+                            "intro": "Laissez Freelance-224 prendre la responsabilité complète de vos opérations IT. Nos services gérés fournissent une surveillance proactive, maintenance et support, assurant que votre technologie propulse votre entreprise.",
+                            "services_title": "Nos services gérés incluent :",
+                            "services_list": [
+                                "Surveillance proactive – Surveillance 24/7 pour détecter et résoudre les problèmes.",
+                                "Maintenance système – Mises à jour régulières, correctifs et optimisation.",
+                                "Gestion de la sécurité – Détection et réponse continues aux menaces.",
+                                "Gestion des fournisseurs – Nous gérons les fournisseurs technologiques pour vous.",
+                                "Planification stratégique – Revues régulières pour aligner la feuille de route IT."
+                            ],
+                            "why_title": "Avantages des services gérés :",
+                            "why_list": [
+                                "Coûts IT prévisibles avec des modèles de tarification forfaitaire.",
+                                "Fiabilité système améliorée et temps d'arrêt réduit.",
+                                "Accès à une maturité opérationnelle de niveau entreprise pour les PME."
+                            ],
+                            "conclusion": "Avec Freelance-224 comme partenaire de services gérés, vous gagnez en tranquillité d'esprit sachant que votre infrastructure IT est entre des mains expertes."
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "training_progress_page": {
+        "title": "Progression de la Formation",
+        "search_placeholder": "Rechercher des cours...",
+        "table": {
+            "course_title": "Titre du Cours",
+            "completion": "Achèvement",
+            "status": "Statut",
+            "last_accessed": "Dernier Accès",
+            "time_remaining": "Temps Restant",
+            "actions": "Actions"
+        },
+        "actions": {
+            "continue": "Continuer"
+        },
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "page_info": "Page {{current}} sur {{total}}"
+        },
+        "status": {
+            "completed": "Terminé",
+            "active": "Actif",
+            "not_started": "Non commencé"
+        },
+        "mobile": {
+            "completion": "Achèvement :",
+            "status": "Statut :",
+            "last_accessed": "Dernier accès :",
+            "time_remaining": "Temps restant :"
+        },
+        "time_remaining_format": "d'ici le {{date}} ({{days}} jours)",
+        "done": "Terminé",
+        "not_available": "-",
+        "loading": "Chargement...",
+        "error": "Échec du chargement de la progression de la formation"
+    },
+    "requested_courses_page": {
+        "title": "Cours demandés",
+        "search_placeholder": "Rechercher",
+        "table": {
+            "course_title": "Titre du cours",
+            "category": "Catégorie",
+            "status": "Statut",
+            "request_date": "Date de demande",
+            "actions": "Actions"
+        },
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "page_info": "Page {{current}} sur {{total}}"
+        },
+        "loading": "Chargement...",
+        "modals": {
+            "edit": {
+                "status_options": {
+                    "approved": "Approuvé",
+                    "under_review": "En Révision",
+                    "pending": "En attente",
+                    "confirmed": "Confirmé",
+                    "rejected": "Rejeté"
+                }
+            }
+        }
+    },
+    "earnings_page": {
+        "title": "Gains",
+        "available_funds": {
+            "title": "Fonds disponibles",
+            "balance_desc": "Solde disponible pour utilisation",
+            "withdraw_btn": "Retirer le solde"
+        },
+        "future_payments": {
+            "title": "Paiements futurs",
+            "clearing_desc": "Paiements en cours de compensation",
+            "active_orders": "Paiements pour les commandes actives",
+            "coming_soon": "Bientôt disponible"
+        },
+        "earnings_expenses": {
+            "title": "Gains et dépenses",
+            "gross_desc": "Gains à ce jour (brut)",
+            "since_joining": "Vos gains bruts depuis votre inscription.",
+            "commission": "Commission",
+            "net_earnings": "Gains nets"
+        },
+        "categories": {
+            "title": "Gains par catégorie"
+        },
+        "milestone": {
+            "title": "Jalon",
+            "next": "Suivant"
+        },
+        "filters": {
+            "date_range": "Plage de dates",
+            "activity": "Activité",
+            "email_activity": "Activité par email"
+        },
+        "table": {
+            "showing_results": "Affichage de {{count}} résultats.",
+            "date": "Date",
+            "activity": "Activité",
+            "desc": "Description",
+            "from": "De",
+            "order": "Commande",
+            "amount": "Montant",
+            "no_transactions": "Aucune transaction pour le moment",
+            "no_transactions_desc": "Les transactions apparaîtront ici après votre premier projet.",
+            "items": {
+                "payment": "Paiement"
+            }
+        },
+        "actions": {
+            "view_all": "Voir toutes les transactions",
+            "export": "Exporter en PDF"
+        }
+    },
+    "signup_page": {
+        "alerts": {
+            "accept_terms": "Veuillez accepter les termes et conditions",
+            "select_role": "Veuillez sélectionner un rôle.",
+            "invalid_email": "Veuillez entrer une adresse email valide.",
+            "invalid_password": "Le mot de passe doit comporter au moins 8 caractères et inclure : majuscule, minuscule, chiffre et caractère spécial.",
+            "password_mismatch": "Les mots de passe ne correspondent pas",
+            "enter_username": "Veuillez entrer un nom d'utilisateur.",
+            "enter_phone": "Veuillez entrer votre numéro de téléphone.",
+            "success": "Inscription réussie ! Veuillez vous connecter.",
+            "email_in_use": "Un utilisateur avec cet email existe déjà. Veuillez vous connecter.",
+            "failed": "L'inscription a échoué : "
+        },
+        "hero": {
+            "tagline": "Propulsez votre succès : Connectez, Vendez, Innovez avec Freelance-224 !",
+            "subtitle": "Rejoignez la Révolution Technologique en Guinée !"
+        },
+        "form": {
+            "sign": "S'in",
+            "up": "scrire",
+            "full_name": "Nom complet",
+            "email": "Email",
+            "role": "Rôle",
+            "select_role": "Sélectionner un rôle",
+            "roles": {
+                "freelancer": "Indépendant",
+                "vendor": "Fournisseur",
+                "company": "Entreprise",
+                "client": "Client",
+                "admin": "Admin",
+                "seller": "Vendeur"
+            },
+            "username": "Nom d'utilisateur",
+            "phone_number": "Numéro de téléphone",
+            "password": "Mot de passe",
+            "confirm_password": "Confirmer le mot de passe",
+            "terms": {
+                "agree": "J'accepte la ",
+                "privacy": "Politique de confidentialité",
+                "and": " et les ",
+                "service": "Conditions d'utilisation",
+                "period": "."
+            },
+            "submit": "S'inscrire",
+            "already_have_account": "Vous avez déjà un compte ? ",
+            "login": "Connexion"
+        }
+    },
+    "vendor_profiles_page": {
+        "title": "Profils des fournisseurs",
+        "breadcrumb": {
+            "home": "Accueil"
+        },
+        "sidebar": {
+            "filters_title": "Filtres",
+            "category": {
+                "title": "Catégorie",
+                "options": {
+                    "mobile": "Mobile",
+                    "laptop": "Ordinateur portable",
+                    "tablet": "Tablette",
+                    "smartwatch": "Montre connectée"
+                }
+            },
+            "premium": {
+                "title": "Premium",
+                "options": {
+                    "premium": "Premium",
+                    "non_premium": "Non-Premium"
+                }
+            },
+            "ratings": {
+                "title": "Évaluations",
+                "options": {
+                    "five": "5 Étoiles",
+                    "four_up": "4 Étoiles et plus",
+                    "three_up": "3 Étoiles et plus",
+                    "two_up": "2 Étoiles et plus",
+                    "one_up": "1 Étoile et plus"
+                }
+            },
+            "apply_btn": "Appliquer les filtres"
+        },
+        "card": {
+            "view_devices": "Voir les appareils →"
+        },
+        "sort": {
+            "showing_x_of_y": "Affichage de {{visible}} sur {{total}} indépendants",
+            "sort_by": "Trier par :",
+            "options": {
+                "popular": "Plus populaire",
+                "highest_rated": "Mieux noté",
+                "lowest_rated": "Moins bien noté",
+                "newest": "Plus récent"
+            }
+        }
+    }
+}

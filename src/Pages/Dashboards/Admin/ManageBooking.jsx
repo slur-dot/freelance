@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Search, ChevronDown } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
+import { useTranslation } from "react-i18next";
 
 export default function ManageBookings() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("companyId");
@@ -50,14 +52,14 @@ export default function ManageBookings() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error accepting booking:", e);
-      setError(`Failed to accept booking: ${e.message}`);
+      setError(t('admin_dashboard.operations.booking_management.errors.accept_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeny = async (id) => {
-    if (!window.confirm("Are you sure you want to deny this booking?")) {
+    if (!window.confirm(t('admin_dashboard.operations.booking_management.actions.confirm_deny'))) {
       return;
     }
 
@@ -72,7 +74,7 @@ export default function ManageBookings() {
       setError(""); // Clear any previous errors
     } catch (e) {
       console.error("Error denying booking:", e);
-      setError(`Failed to deny booking: ${e.message}`);
+      setError(t('admin_dashboard.operations.booking_management.errors.deny_failed', { message: e.message }));
     } finally {
       setLoading(false);
     }
@@ -94,14 +96,14 @@ export default function ManageBookings() {
       <div className="w-full">
         {/* Header */}
         <div className="p-6 pb-4">
-          <h1 className="text-4xl font-bold text-gray-800 mb-6">Manage Bookings</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('admin_dashboard.operations.booking_management.title')}</h1>
 
           {/* Search Bar */}
           <div className="relative mx-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
-              placeholder="Search"
+              placeholder={t('admin_dashboard.operations.booking_management.search_placeholder')}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -125,23 +127,23 @@ export default function ManageBookings() {
                     onClick={() => handleSort("clientName")}
                   >
                     <div className="flex items-center space-x-1">
-                      <span>Client Name</span>
+                      <span>{t('admin_dashboard.operations.booking_management.table.headers.client_name')}</span>
                       {sortField === "clientName" && (
                         <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
                       )}
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Description
+                    {t('admin_dashboard.operations.booking_management.table.headers.description')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Bidding Date
+                    {t('admin_dashboard.operations.booking_management.table.headers.bidding_date')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Amount
+                    {t('admin_dashboard.operations.booking_management.table.headers.amount')}
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
-                    Actions
+                    {t('admin_dashboard.operations.booking_management.table.headers.actions')}
                   </th>
                 </tr>
               </thead>
@@ -169,26 +171,26 @@ export default function ManageBookings() {
                               disabled={loading}
                               className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              Accept
+                              {t('admin_dashboard.operations.booking_management.actions.accept')}
                             </button>
                             <button
                               onClick={() => handleDeny(booking.id)}
                               disabled={loading}
                               className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              Deny
+                              {t('admin_dashboard.operations.booking_management.actions.deny')}
                             </button>
                           </>
                         ) : (
                           <span
                             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${booking.status === 'approved'
-                                ? 'bg-green-100 text-green-800'
-                                : booking.status === 'rejected'
-                                  ? 'bg-red-100 text-red-800'
-                                  : 'bg-yellow-100 text-yellow-800'
+                              ? 'bg-green-100 text-green-800'
+                              : booking.status === 'rejected'
+                                ? 'bg-red-100 text-red-800'
+                                : 'bg-yellow-100 text-yellow-800'
                               }`}
                           >
-                            {(booking.status || 'pending').charAt(0).toUpperCase() + (booking.status || 'pending').slice(1)}
+                            {t(`admin_dashboard.operations.booking_management.actions.status.${booking.status || 'pending'}`)}
                           </span>
                         )}
                       </div>
@@ -207,11 +209,11 @@ export default function ManageBookings() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {t('admin_dashboard.pagination.previous')}
               </button>
 
               <span className="text-sm font-medium text-gray-700">
-                Page {currentPage} of {totalPages}
+                {t('admin_dashboard.pagination.page_info', { current: currentPage, total: totalPages })}
               </span>
 
               <button
@@ -219,7 +221,7 @@ export default function ManageBookings() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {t('admin_dashboard.pagination.next')}
               </button>
             </div>
           </div>

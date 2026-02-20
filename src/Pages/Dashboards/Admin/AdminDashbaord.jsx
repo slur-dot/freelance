@@ -8,10 +8,10 @@ import Chart from "chart.js/auto";
 import { db, auth, storage } from "../../../firebaseConfig";
 import { collection, getCountFromServer, query, where, getDocs, limit, orderBy, doc, updateDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useTranslation } from "react-i18next";
 
 // ✅ Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
-  // ... no change ...
   const baseStyles =
     variant === "outline"
       ? "border border-gray-300 text-gray-500 bg-transparent"
@@ -50,6 +50,7 @@ function AvatarImage({ src, alt }) {
 
 // ✅ Admin Profile Component
 function AdminProfile() {
+  const { t } = useTranslation();
   const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -74,12 +75,12 @@ function AdminProfile() {
     const file = e.target.files[0];
     if (!file) return;
     if (!currentUser) {
-      alert("You must be logged in to upload.");
+      alert(t('admin_dashboard.main.profile.login_error'));
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) { // 2MB limit
-      alert("Please upload an image smaller than 2MB");
+      alert(t('admin_dashboard.main.profile.upload_size_error'));
       return;
     }
 
@@ -95,10 +96,10 @@ function AdminProfile() {
       });
 
       setAvatar(downloadURL);
-      alert("Profile image updated successfully!");
+      alert(t('admin_dashboard.main.profile.upload_success'));
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image.");
+      alert(t('admin_dashboard.main.profile.upload_fail'));
     } finally {
       setLoading(false);
     }
@@ -121,9 +122,9 @@ function AdminProfile() {
 
       {/* Profile Info */}
       <div>
-        <h2 className="text-xl font-bold">Admin Dashboard</h2>
-        <p className="text-green-600 font-semibold">Role: Administration</p>
-        <p className="text-gray-600">User: {currentUser?.email}</p>
+        <h2 className="text-xl font-bold">{t('admin_dashboard.main.profile.title')}</h2>
+        <p className="text-green-600 font-semibold">{t('admin_dashboard.main.profile.role')}</p>
+        <p className="text-gray-600">{t('admin_dashboard.main.profile.user', { email: currentUser?.email })}</p>
       </div>
     </div>
   );
@@ -131,17 +132,24 @@ function AdminProfile() {
 
 // ✅ Tabs Component
 function Tabs({ active, setActive }) {
-  const tabs = ["Utilisateurs", "Modération", "Statistiques", "Notifications"];
+  const { t } = useTranslation();
+  const tabs = [
+    { key: 'users', label: t('admin_dashboard.main.tabs.users') },
+    { key: 'moderation', label: t('admin_dashboard.main.tabs.moderation') },
+    { key: 'statistics', label: t('admin_dashboard.main.tabs.statistics') },
+    { key: 'notifications', label: t('admin_dashboard.main.tabs.notifications') }
+  ];
+
   return (
     <div className="flex gap-4 border-b max-w-7xl mx-auto mb-6">
       {tabs.map((tab) => (
         <button
-          key={tab}
-          onClick={() => setActive(tab)}
-          className={`px-4 py-2 font-medium ${active === tab ? "text-green-600 border-b-2 border-green-600" : "text-gray-500"
+          key={tab.key}
+          onClick={() => setActive(tab.key)}
+          className={`px-4 py-2 font-medium ${active === tab.key ? "text-green-600 border-b-2 border-green-600" : "text-gray-500"
             }`}
         >
-          {tab}
+          {tab.label}
         </button>
       ))}
     </div>
@@ -150,17 +158,18 @@ function Tabs({ active, setActive }) {
 
 // ✅ Analytics Component
 function Analytics() {
+  const { t } = useTranslation();
   const data = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May"],
     datasets: [
       {
-        label: "User Growth",
+        label: t('admin_dashboard.main.analytics.growth'),
         data: [50, 80, 150, 200, 300],
         borderColor: "rgb(34,197,94)",
         fill: false,
       },
       {
-        label: "Transactions",
+        label: t('admin_dashboard.main.analytics.transactions'),
         data: [20, 40, 90, 120, 250],
         borderColor: "rgb(59,130,246)",
         fill: false,
@@ -170,21 +179,17 @@ function Analytics() {
 
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Platform Analytics</h3>
+      <h3 className="text-lg font-semibold mb-4">{t('admin_dashboard.main.analytics.title')}</h3>
       <Line data={data} />
     </Card>
   );
 }
 
-// Imports moved to top
-// import { db } from "../../../firebaseConfig";
-// import { collection, getCountFromServer, query, where, getDocs, limit, orderBy } from "firebase/firestore";
-// import ChatService from "../../../services/chatService";
-
 // ✅ Main Dashboard
 export default function AdminDashboard() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
-  const [activeTab, setActiveTab] = useState("Utilisateurs");
+  const [activeTab, setActiveTab] = useState("users"); // Changed default to 'users' key
   const [dashboardData, setDashboardData] = useState({
     totalCompanies: 0,
     totalCourses: 0,
@@ -260,9 +265,6 @@ export default function AdminDashboard() {
     const unsubscribe = auth.onAuthStateChanged((u) => {
       if (!u) {
         navigate('/login');
-      } else {
-        // User is authenticated, we can optionally fetch data here if it depends on user
-        // But fetchDashboardData currently doesn't depend on 'user' variable, it uses global db
       }
     });
     return () => unsubscribe();
@@ -281,17 +283,17 @@ export default function AdminDashboard() {
       <Tabs active={activeTab} setActive={setActiveTab} />
 
       {/* Tab Content */}
-      {activeTab === "Utilisateurs" && (
+      {activeTab === "users" && (
         <>
           <div className="flex items-center justify-between mb-6 max-w-7xl mx-auto">
-            <h1 className="text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">{t('admin_dashboard.main.title')}</h1>
             <Button
               variant="outline"
               onClick={() => fetchDashboardData(true)}
               disabled={loading}
               className="text-sm"
             >
-              {loading ? 'Loading...' : 'Refresh Data'}
+              {loading ? t('admin_dashboard.main.refresh_button.loading') : t('admin_dashboard.main.refresh_button.refresh')}
             </Button>
           </div>
 
@@ -300,7 +302,7 @@ export default function AdminDashboard() {
             <Card className="p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm">Total Companies</p>
+                  <p className="text-blue-100 text-sm">{t('admin_dashboard.main.stats.total_companies')}</p>
                   <p className="text-2xl font-bold">{dashboardData.totalCompanies}</p>
                 </div>
                 <div className="w-8 h-8 bg-blue-400 rounded-lg flex items-center justify-center">
@@ -314,7 +316,7 @@ export default function AdminDashboard() {
             <Card className="p-4 bg-gradient-to-r from-green-500 to-green-600 text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm">Active Freelancers</p>
+                  <p className="text-green-100 text-sm">{t('admin_dashboard.main.stats.active_freelancers')}</p>
                   <p className="text-2xl font-bold">{dashboardData.totalFreelancers}</p>
                 </div>
                 <div className="w-8 h-8 bg-green-400 rounded-lg flex items-center justify-center">
@@ -328,7 +330,7 @@ export default function AdminDashboard() {
             <Card className="p-4 bg-gradient-to-r from-orange-500 to-orange-600 text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-100 text-sm">Active Sellers</p>
+                  <p className="text-orange-100 text-sm">{t('admin_dashboard.main.stats.active_sellers')}</p>
                   <p className="text-2xl font-bold">{dashboardData.totalSellers}</p>
                 </div>
                 <div className="w-8 h-8 bg-orange-400 rounded-lg flex items-center justify-center">
@@ -342,7 +344,7 @@ export default function AdminDashboard() {
             <Card className="p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm">Total Revenue</p>
+                  <p className="text-purple-100 text-sm">{t('admin_dashboard.main.stats.total_revenue')}</p>
                   <p className="text-2xl font-bold">{dashboardData.totalRevenue?.toLocaleString()} GNF</p>
                 </div>
                 <div className="w-8 h-8 bg-purple-400 rounded-lg flex items-center justify-center">
@@ -359,16 +361,10 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
             {/* Manage Companies Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-blue-200" onClick={() => {
-              console.log("Navigating to company dashboard...");
-              try {
-                navigate("/company/dashboard");
-              } catch (error) {
-                console.error("Navigation error:", error);
-                window.location.href = "/company/dashboard";
-              }
+              navigate("/company/dashboard");
             }}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Manage Companies</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_companies.title')}</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                     <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,26 +376,20 @@ export default function AdminDashboard() {
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Verify RCCM/NIF, manage profiles, reset passwords, view spending reports</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.manage_companies.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">RCCM Verification</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Profile Management</span>
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Spending Analytics</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_companies.tag_rccm')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_companies.tag_profile')}</span>
+                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_companies.tag_spending')}</span>
               </div>
             </Card>
 
             {/* Manage Freelancers Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-green-200" onClick={() => {
-              console.log("Navigating to freelancer dashboard...");
-              try {
-                navigate("/freelancer/dashboard");
-              } catch (error) {
-                console.error("Navigation error:", error);
-                window.location.href = "/freelancer/dashboard";
-              }
+              navigate("/freelancer/dashboard");
             }}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Manage Freelancers</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_freelancers.title')}</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                     <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -411,26 +401,20 @@ export default function AdminDashboard() {
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Verify profiles, manage OTP, edit payment methods, view earnings</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.manage_freelancers.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Profile Verification</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">OTP Management</span>
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Earnings Tracking</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_freelancers.tag_profile')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_freelancers.tag_otp')}</span>
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_freelancers.tag_earnings')}</span>
               </div>
             </Card>
 
             {/* Manage Sellers Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-orange-200" onClick={() => {
-              console.log("Navigating to seller dashboard...");
-              try {
-                navigate("/seller/dashboard");
-              } catch (error) {
-                console.error("Navigation error:", error);
-                window.location.href = "/seller/dashboard";
-              }
+              navigate("/seller/dashboard");
             }}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Manage Sellers</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_sellers.title')}</h3>
                 <div className="flex items-center gap-2">
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
                     <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -442,29 +426,29 @@ export default function AdminDashboard() {
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Verify business licenses, manage OTP, edit payment methods, view sales</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.manage_sellers.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">License Verification</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">OTP Management</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Sales Analytics</span>
+                <span className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_sellers.tag_license')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_sellers.tag_otp')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_sellers.tag_sales')}</span>
               </div>
             </Card>
 
             {/* Manage Leasing Card */}
             <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate("/admin/dashboard/bookings")}>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Manage Leasing</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_leasing.title')}</h3>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Approve lease requests, track equipment status, manage delivery</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.manage_leasing.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Lease Approval</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Equipment Tracking</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Delivery Management</span>
+                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_approval')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_tracking')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_delivery')}</span>
               </div>
             </Card>
 
@@ -472,108 +456,108 @@ export default function AdminDashboard() {
             {/* Monitor Chats Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Monitor Chats</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.monitor_chats.title')}</h3>
                 <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Filter chats by user type, enforce message limits, flag inappropriate content</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.monitor_chats.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded-full">User Filtering</span>
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Message Limits</span>
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Content Moderation</span>
+                <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_filter')}</span>
+                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_limits')}</span>
+                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_moderation')}</span>
               </div>
             </Card>
 
             {/* Sponsorships Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Sponsorships</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.sponsorships.title')}</h3>
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Approve/reject sponsor applications, manage homepage carousel</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.sponsorships.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Sponsor Approval</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Carousel Management</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Revenue Tracking</span>
+                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_approval')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_carousel')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_revenue')}</span>
               </div>
             </Card>
 
             {/* Transactions Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Transactions</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.transactions.title')}</h3>
                 <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">View all transactions, track commissions, export reports</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.transactions.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">Transaction History</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Commission Tracking</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Export Reports</span>
+                <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_history')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_commission')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_export')}</span>
               </div>
             </Card>
 
             {/* Gamification Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Gamification</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.gamification.title')}</h3>
                 <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Monitor training progress, sales analytics, gamification stats</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.gamification.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Training Progress</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Sales Analytics</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Badges & Rewards</span>
+                <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_training')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_sales')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_badges')}</span>
               </div>
             </Card>
 
             {/* Portfolio & Ads Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Portfolio & Ads</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.portfolio_ads.title')}</h3>
                 <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">Approve portfolios, manage ads, content moderation</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.portfolio_ads.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-rose-100 text-rose-800 text-xs rounded-full">Portfolio Approval</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Ad Management</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Content Moderation</span>
+                <span className="px-2 py-1 bg-rose-100 text-rose-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_approval')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_management')}</span>
+                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_moderation')}</span>
               </div>
             </Card>
 
             {/* Deleted Accounts Card */}
             <Card className="p-6 transition-shadow">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Deleted Accounts</h3>
+                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.deleted_accounts.title')}</h3>
                 <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center">
                   <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-gray-600 text-sm mb-4">View deleted accounts, audit logs, security monitoring</p>
+              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.deleted_accounts.desc')}</p>
               <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-slate-100 text-slate-800 text-xs rounded-full">Deleted Accounts</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Audit Logs</span>
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Security Alerts</span>
+                <span className="px-2 py-1 bg-slate-100 text-slate-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_accounts')}</span>
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_logs')}</span>
+                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_alerts')}</span>
               </div>
             </Card>
           </div>
@@ -604,20 +588,20 @@ export default function AdminDashboard() {
               </div>
             </div>
           )}
-          {loading && <div className="mb-4 text-gray-500 text-sm max-w-7xl mx-auto">Loading dashboard data...</div>}
+          {loading && <div className="mb-4 text-gray-500 text-sm max-w-7xl mx-auto">{t('admin_dashboard.main.refresh_button.loading')}</div>}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {/* Orders Card */}
             <div className="md:col-span-1">
-              <h3 className="text-base md:text-lg font-semibold mb-2">Total Training Requests</h3>
+              <h3 className="text-base md:text-lg font-semibold mb-2">{t('admin_dashboard.main.sections.training_requests.title')}</h3>
               <Card className="h-auto md:h-[180px] flex flex-col">
                 <div className="flex flex-row items-center justify-between p-4">
-                  <p className="text-sm font-medium text-gray-500">Current number of Requests</p>
+                  <p className="text-sm font-medium text-gray-500">{t('admin_dashboard.main.sections.training_requests.current')}</p>
                   <Info className="h-4 w-4 text-gray-500" />
                 </div>
                 <CardContent className="flex flex-col justify-between flex-grow">
-                  <div className="text-3xl md:text-4xl font-bold">{dashboardData.totalTrainingRequests} Requests</div>
+                  <div className="text-3xl md:text-4xl font-bold">{t('admin_dashboard.main.sections.training_requests.count', { count: dashboardData.totalTrainingRequests })}</div>
                   <Button className="mt-4 w-fit" onClick={() => navigate("/admin/dashboard/training-requests")}>
-                    View Training Requests
+                    {t('admin_dashboard.main.sections.training_requests.view_btn')}
                   </Button>
                 </CardContent>
               </Card>
@@ -625,16 +609,16 @@ export default function AdminDashboard() {
 
             {/* Listings Card */}
             <div className="md:col-span-1">
-              <h3 className="text-base md:text-lg font-semibold mb-2">Total Tickets</h3>
+              <h3 className="text-base md:text-lg font-semibold mb-2">{t('admin_dashboard.main.sections.tickets.title')}</h3>
               <Card className="h-auto md:h-[180px] flex flex-col">
                 <div className="flex flex-row items-center justify-between p-4">
-                  <p className="text-sm font-medium text-gray-500">Current number of Tickets</p>
+                  <p className="text-sm font-medium text-gray-500">{t('admin_dashboard.main.sections.tickets.current')}</p>
                   <Info className="h-4 w-4 text-gray-500" />
                 </div>
                 <CardContent className="flex flex-col justify-between flex-grow">
-                  <div className="text-3xl md:text-4xl font-bold">{dashboardData.totalTickets} Tickets</div>
+                  <div className="text-3xl md:text-4xl font-bold">{t('admin_dashboard.main.sections.tickets.count', { count: dashboardData.totalTickets })}</div>
                   <Button className="mt-4 w-fit" onClick={() => navigate("/admin/dashboard/ticket-listing")}>
-                    View Tickets
+                    {t('admin_dashboard.main.sections.tickets.view_btn')}
                   </Button>
                 </CardContent>
               </Card>
@@ -642,7 +626,7 @@ export default function AdminDashboard() {
 
             {/* Reviews Section */}
             <div className="md:col-span-1 md:row-span-2 flex flex-col">
-              <h3 className="text-base md:text-lg font-semibold mb-2">Messages</h3>
+              <h3 className="text-base md:text-lg font-semibold mb-2">{t('admin_dashboard.main.sections.messages.title')}</h3>
               <Card className="flex-grow">
                 <CardContent className="flex flex-col h-full p-0">
                   <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
@@ -657,7 +641,7 @@ export default function AdminDashboard() {
                           <div className="flex-grow">
                             <p className="font-semibold">{chat.userInfo?.name || "Unknown User"}</p>
                             <p className="text-sm text-gray-500 truncate">
-                              {chat.status === 'active' ? "Active Session" : "Closed"}
+                              {chat.status === 'active' ? t('admin_dashboard.main.sections.messages.active') : t('admin_dashboard.main.sections.messages.closed')}
                             </p>
                           </div>
                           <span className="text-xs text-gray-400">
@@ -666,7 +650,7 @@ export default function AdminDashboard() {
                         </div>
                       ))
                     ) : (
-                      <div className="p-4 text-center text-gray-500">No active chats</div>
+                      <div className="p-4 text-center text-gray-500">{t('admin_dashboard.main.sections.messages.no_chats')}</div>
                     )}
                   </div>
                   <div className="p-4 border-t">
@@ -675,7 +659,7 @@ export default function AdminDashboard() {
                       className="w-full"
                       onClick={() => setShowChatWidget(true)}
                     >
-                      OPEN SUPPORT CHAT
+                      {t('admin_dashboard.main.sections.messages.open_btn')}
                     </Button>
                   </div>
                 </CardContent>
@@ -685,31 +669,31 @@ export default function AdminDashboard() {
             {/* Orders Section */}
             <div className="md:col-span-2 flex flex-col">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-base md:text-lg font-semibold">Current Bookings List</h3>
+                <h3 className="text-base md:text-lg font-semibold">{t('admin_dashboard.main.sections.bookings.title')}</h3>
                 <Button
                   variant="outline"
                   className="text-sm"
                   onClick={() => navigate("/admin/dashboard/bookings")}
                 >
-                  View All Bookings
+                  {t('admin_dashboard.main.sections.bookings.view_btn')}
                 </Button>
               </div>
               <Card className="h-auto md:h-[520px]">
                 <CardContent className="flex flex-col items-center justify-center p-4 text-center h-full">
                   <div className="w-full text-left mb-4 bg-gray-50 overflow-x-auto">
                     <div className="grid grid-cols-5 min-w-[500px] gap-4 font-semibold text-sm text-gray-600 border-b border-gray-100 p-4">
-                      <div>Name</div>
-                      <div>Device</div>
-                      <div>Duration</div>
-                      <div>Amount</div>
+                      <div>{t('admin_dashboard.main.sections.bookings.table.name')}</div>
+                      <div>{t('admin_dashboard.main.sections.bookings.table.device')}</div>
+                      <div>{t('admin_dashboard.main.sections.bookings.table.duration')}</div>
+                      <div>{t('admin_dashboard.main.sections.bookings.table.amount')}</div>
                     </div>
                   </div>
                   <div className="flex flex-col items-center justify-center flex-grow">
                     <h4 className="text-lg md:text-xl font-bold mb-2">
-                      Get Started with your company!
+                      {t('admin_dashboard.main.sections.bookings.empty.title')}
                     </h4>
                     <p className="text-gray-500 w-full">
-                      You'll find all your employees info here once you complete your first order.
+                      {t('admin_dashboard.main.sections.bookings.empty.desc')}
                     </p>
                   </div>
                 </CardContent>
@@ -719,29 +703,29 @@ export default function AdminDashboard() {
         </>
       )}
 
-      {activeTab === "Statistiques" && (
+      {activeTab === "statistics" && (
         <div className="max-w-7xl mx-auto">
           <Analytics />
         </div>
       )}
 
-      {activeTab === "Modération" && (
+      {activeTab === "moderation" && (
         <div className="max-w-7xl mx-auto">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Modération Panel</h3>
-            <p className="text-gray-600">Here you will review reported content, disputes, and rentals.</p>
+            <h3 className="text-lg font-semibold mb-4">{t('admin_dashboard.main.sections.moderation.title')}</h3>
+            <p className="text-gray-600">{t('admin_dashboard.main.sections.moderation.desc')}</p>
           </Card>
         </div>
       )}
 
-      {activeTab === "Notifications" && (
+      {activeTab === "notifications" && (
         <div className="max-w-7xl mx-auto">
           <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Notifications</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('admin_dashboard.main.sections.notifications.title')}</h3>
             <ul className="list-disc ml-6 text-gray-600">
-              <li>Suspicious Activity: Low bid detected for laptop purchase!</li>
-              <li>Dispute Reported: Client reported issue: Laptop not delivered.</li>
-              <li>Marketplace Alert: 50 new laptop purchases today.</li>
+              <li>{t('admin_dashboard.main.sections.notifications.items.suspicious')}</li>
+              <li>{t('admin_dashboard.main.sections.notifications.items.dispute')}</li>
+              <li>{t('admin_dashboard.main.sections.notifications.items.marketplace')}</li>
             </ul>
           </Card>
         </div>

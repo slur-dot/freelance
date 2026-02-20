@@ -1,56 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Star, Trophy, Users, Languages } from "lucide-react";
-import banner from "../assets/TechServicesHero.jpg"; 
+import banner from "../assets/TechServicesHero.jpg";
 
 // i18n content
-const content = {
-  en: {
-    headline: "Our Journey: Youth, Innovation, Security",
-    subheadline:
-      "Freelance-224, founded by Guinean IT experts with global experience, empowers local talent through secure solutions, connecting SMEs, NGOs, institutions, and global users.",
-    founding: `In 2024, Guinean youth and diaspora, with decades of IT expertise from freelancing for global firms, founded Freelance-224 to address unemployment in Conakry. Our secure, mobile-first platform delivers Cybersecurity, AI, Data Science, and IT services, alongside device purchases and rentals, prioritizing encrypted transactions for local SMEs, NGOs, and global clients. Example: “Launched with 18 secure alpha users in Conakry.”`,
-    milestones: [
-      "2024: Launched platform with secure alpha testing (18 users, encrypted data).",
-      "2025: Secured partnerships with Orange Guinea and CCC; showcased secure platform at GFW 2025 (August 2025).",
-      "2026: Target 1,500 users, 150M GNF revenue, expanded Cybersecurity/AI services.",
-    ],
-    partnerships: `Trusted by Orange Guinea and CCC, our platform, built by Guinean IT experts, delivers secure solutions for local SMEs, NGOs, institutions, and global users, fostering jobs and trust.`,
-    cta: "Join Our Secure Mission",
-    copyright:
-      "© 2025 Freelance-224. Securing Guinean Talent, Connecting the World.",
-  },
-  fr: {
-    headline: "Notre Parcours : Jeunesse, Innovation, Sécurité",
-    subheadline:
-      "Freelance-224, fondé par des experts informatiques guinéens avec une expérience internationale, valorise les talents locaux via des solutions sécurisées, reliant PME, ONG, institutions et utilisateurs mondiaux.",
-    founding: `En 2024, des jeunes guinéens et de la diaspora, forts de décennies d’expertise IT acquises en freelance pour des entreprises mondiales, ont fondé Freelance-224 pour lutter contre le chômage à Conakry. Notre plateforme mobile-first et sécurisée propose la cybersécurité, l’IA, la Data Science et des services IT, ainsi que l’achat et la location d’appareils, avec transactions chiffrées pour PME, ONG et clients mondiaux. Exemple : “18 utilisateurs alpha sécurisés à Conakry.”`,
-    milestones: [
-      "2024 : Lancement de la plateforme avec tests alpha sécurisés (18 utilisateurs, données chiffrées).",
-      "2025 : Partenariats avec Orange Guinée et CCC ; présentation sécurisée à GFW 2025 (août 2025).",
-      "2026 : Objectif de 1 500 utilisateurs, 150M GNF de revenus, extension Cybersécurité/IA.",
-    ],
-    partnerships: `De confiance auprès d’Orange Guinée et de la CCC, notre plateforme, développée par des experts guinéens, propose des solutions sécurisées aux PME, ONG, institutions et utilisateurs mondiaux, renforçant emploi et confiance.`,
-    cta: "Rejoignez Notre Mission Sécurisée",
-    copyright:
-      "© 2025 Freelance-224. Sécuriser les talents guinéens, connecter le monde.",
-  },
-};
+import { useTranslation } from "react-i18next";
 
 export default function CompanyHistory() {
-  const [lang, setLang] = useState("en");
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("lang");
-    if (savedLang) setLang(savedLang);
-  }, []);
-
-  const toggleLang = () => {
-    const newLang = lang === "en" ? "fr" : "en";
-    setLang(newLang);
-    localStorage.setItem("lang", newLang);
-  };
-
-  const t = content[lang];
+  const { t } = useTranslation();
 
   return (
     <main className="bg-white text-gray-800">
@@ -62,19 +18,11 @@ export default function CompanyHistory() {
           loading="lazy"
           className="w-full h-64 md:h-96 object-cover"
         />
-        <button
-          onClick={toggleLang}
-          className="absolute top-4 right-4 bg-white text-gray-800 px-3 py-1 rounded shadow hover:bg-gray-100 flex items-center gap-1"
-          aria-label="Switch Language"
-        >
-          <Languages className="w-4 h-4" />
-          {lang === "en" ? "FR" : "EN"}
-        </button>
         <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-center px-4">
           <h1 className="text-2xl md:text-4xl font-bold text-white mb-3">
-            {t.headline}
+            {t('company_history.headline')}
           </h1>
-          <p className="text-gray-200 max-w-3xl">{t.subheadline}</p>
+          <p className="text-gray-200 max-w-3xl">{t('company_history.subheadline')}</p>
         </div>
       </section>
 
@@ -85,7 +33,7 @@ export default function CompanyHistory() {
             className="w-6 h-6 text-yellow-500 flex-shrink-0"
             aria-label="Secure Founding"
           />
-          <p className="text-gray-700 text-base leading-relaxed">{t.founding}</p>
+          <p className="text-gray-700 text-base leading-relaxed">{t('company_history.founding')}</p>
         </div>
       </section>
 
@@ -98,11 +46,9 @@ export default function CompanyHistory() {
               aria-label="Secure Milestones"
             />
             <ul className="space-y-2 text-gray-700">
-              {t.milestones.map((m, i) => (
-                <li key={i} className="text-base leading-relaxed">
-                  {m}
-                </li>
-              ))}
+              <li className="text-base leading-relaxed">{t('company_history.milestone_1')}</li>
+              <li className="text-base leading-relaxed">{t('company_history.milestone_2')}</li>
+              <li className="text-base leading-relaxed">{t('company_history.milestone_3')}</li>
             </ul>
           </div>
         </div>
@@ -116,7 +62,7 @@ export default function CompanyHistory() {
             aria-label="Secure Partnerships"
           />
           <p className="text-gray-700 text-base leading-relaxed">
-            {t.partnerships}
+            {t('company_history.partnerships')}
           </p>
         </div>
         <div className="flex gap-6 mt-6">
@@ -137,9 +83,9 @@ export default function CompanyHistory() {
           <a
             href="/signup"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition"
-            aria-label={t.cta}
+            aria-label={t('company_history.cta')}
           >
-            {t.cta}
+            {t('company_history.cta')}
           </a>
         </div>
       </section>
@@ -158,7 +104,7 @@ export default function CompanyHistory() {
               What We Do
             </a>
           </div>
-          <p className="text-gray-400 text-center">{t.copyright}</p>
+          <p className="text-gray-400 text-center">{t('company_history.copyright')}</p>
         </div>
       </footer>
     </main>
