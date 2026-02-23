@@ -1,4 +1,8 @@
 {
+    "common": {
+        "loading": "Chargement...",
+        "n_a": "N/A"
+    },
     "navbar": {
         "home": "Accueil",
         "shop": "Boutique",
@@ -1459,6 +1463,11 @@
                 "logout": "Déconnexion"
             }
         },
+        "pagination": {
+            "previous": "Précédent",
+            "next": "Suivant",
+            "page_info": "Page {{current}} sur {{total}}"
+        },
         "main": {
             "title": "Tableau de Bord Admin",
             "profile": {
@@ -1627,11 +1636,6 @@
                     "unban": "Débannir",
                     "processing": "Traitement..."
                 }
-            },
-            "pagination": {
-                "previous": "Précédent",
-                "next": "Suivant",
-                "page_info": "Page {{current}} sur {{total}}"
             }
         },
         "sub_admin_management": {
@@ -1674,7 +1678,10 @@
                     "select_permission": "Sélectionner Permission",
                     "select_role": "Sélectionner Rôle",
                     "select_multiple": "Sélectionner Multiple",
-                    "clear_all": "Tout Effacer"
+                    "clear_all": "Tout Effacer",
+                    "placeholders": {
+                        "name": "Jean Dupont"
+                    }
                 }
             },
             "roles": {
@@ -1733,7 +1740,8 @@
                     "message": "Êtes-vous sûr de vouloir supprimer ce membre de l'équipe support ?",
                     "confirm": "Supprimer",
                     "deleting": "Suppression...",
-                    "cancel": "Annuler"
+                    "cancel": "Annuler",
+                    "no_role": "Aucun rôle assigné"
                 },
                 "view": {
                     "title": "Détails du Membre",
@@ -1747,7 +1755,10 @@
                 "form": {
                     "name": "Nom :",
                     "tickets": "Tickets :",
-                    "select_multiple": "Sélectionner Multiple"
+                    "select_multiple": "Sélectionner Multiple",
+                    "placeholders": {
+                        "name": "Jean Dupont"
+                    }
                 }
             }
         },
@@ -2065,7 +2076,48 @@
             "rent": "Louer",
             "per_month": "/mois",
             "sale": "Solde",
-            "rent_per_month": "{{price}} /mois"
+            "rent_per_month": "{{price}} /mois",
+            "breadcrumb_shop": "Boutique",
+            "smartphone": "Smartphone",
+            "specifications": "Caractéristiques",
+            "general": "Général",
+            "model": "Modèle",
+            "release_date": "Date de sortie",
+            "brand": "Marque",
+            "os": "Système d'exploitation",
+            "colors": "Couleurs",
+            "body_design": "Corps & Design",
+            "dimensions": "Dimensions",
+            "weight": "Poids",
+            "build": "Construction",
+            "water_resistance": "Résistance à l'eau",
+            "availability": "Disponibilité",
+            "in_stock": "En Stock",
+            "kyc_verified": "Vérifié KYC",
+            "reviews": "Avis",
+            "leave_review": "Laisser un avis",
+            "enter_name": "Entrez votre nom",
+            "write_review": "Écrivez votre avis...",
+            "submit_review": "Soumettre l'avis",
+            "choose_color": "Choisir une couleur",
+            "buy_now": "Acheter maintenant",
+            "iphone_14_title": "iPhone 14",
+            "iphone_14_release": "16 septembre 2022",
+            "iphone_14_dimensions": "146,7 x 71,5 x 7,8 mm",
+            "iphone_14_weight": "172g",
+            "iphone_14_build_desc": "Cadre en aluminium, face avant Ceramic Shield, dos en verre",
+            "iphone_14_water_desc": "Certifié IP68",
+            "default_review_comment": "Excellent travail, livré à temps !",
+            "color_names": {
+                "midnight": "Minuit",
+                "starlight": "Lumière stellaire",
+                "blue": "Bleu",
+                "purple": "Mauve",
+                "yellow": "Jaune",
+                "black": "Noir",
+                "white": "Blanc",
+                "red": "Rouge"
+            }
         },
         "banner": {
             "flash_sale": "VENTE FLASH - 20% DE RÉDUCTION SUR TOUS LES APPAREILS",
@@ -2277,31 +2329,8 @@
         "payment_completed": "Paiement effectué. Votre facture est prête.",
         "vendor_instruction": "Vendeurs : utilisez le tableau de bord pour <strong>scanner le QR</strong> ou saisissez le <strong>Code de Vérification</strong> pour valider le paiement."
     },
-    "product": {
-        "breadcrumb_shop": "Boutique",
-        "smartphone": "Smartphone",
-        "specifications": "Caractéristiques",
-        "general": "Général",
-        "model": "Modèle",
-        "release_date": "Date de sortie",
-        "brand": "Marque",
-        "os": "Système d'exploitation",
-        "colors": "Couleurs",
-        "body_design": "Corps & Design",
-        "dimensions": "Dimensions",
-        "weight": "Poids",
-        "build": "Construction",
-        "water_resistance": "Résistance à l'eau",
-        "availability": "Disponibilité",
-        "in_stock": "En Stock",
-        "kyc_verified": "Vérifié KYC",
-        "reviews": "Avis",
-        "leave_review": "Laisser un avis",
-        "enter_name": "Entrez votre nom",
-        "write_review": "Écrivez votre avis...",
-        "submit_review": "Soumettre l'avis",
-        "choose_color": "Choisir une couleur",
-        "buy_now": "Acheter maintenant"
+    "locations": {
+        "conakry": "Conakry"
     },
     "company_history": {
         "headline": "Notre Parcours : Jeunesse, Innovation, Sécurité",

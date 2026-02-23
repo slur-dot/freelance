@@ -199,9 +199,9 @@ export default function SupportTeamManagement() {
       const csvContent = [
         headers.join(','),
         ...supportMembers.map(member => [
-          `"${member.memberName || 'N/A'}"`,
-          `"${member.avgResponseTime || 'N/A'}"`,
-          `"${member.avgResolutionTime || 'N/A'}"`,
+          `"${member.memberName || t('common.n_a')}"`,
+          `"${member.avgResponseTime || t('common.n_a')}"`,
+          `"${member.avgResolutionTime || t('common.n_a')}"`,
           `"${(member.assignedTickets || []).map(ticket => ticket.label).join('; ')}"`
         ].join(','))
       ].join('\n');
@@ -269,7 +269,7 @@ export default function SupportTeamManagement() {
             <div>
               <p className="text-gray-500">{t('admin_dashboard.support_team_management.showing_results', { count: filteredMembers.length })}</p>
               {error && <div className="mt-1 text-sm text-red-600">{error}</div>}
-              {loading && <div className="mt-1 text-sm text-gray-500">Loading...</div>}
+              {loading && <div className="mt-1 text-sm text-gray-500">{t('common.loading')}</div>}
             </div>
 
             <div className="flex items-center space-x-3">
@@ -322,7 +322,7 @@ export default function SupportTeamManagement() {
                 {paginatedMembers.map((member) => (
                   <tr key={member.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-base font-bold text-gray-800">
-                      {member.memberName || 'N/A'}
+                      {member.memberName || t('common.n_a')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       {member.avgResponseTime}
@@ -424,7 +424,7 @@ export default function SupportTeamManagement() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="John Doe"
+                  placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
@@ -518,7 +518,7 @@ export default function SupportTeamManagement() {
                   type="text"
                   value={editFormData.name}
                   onChange={(e) => handleEditInputChange("name", e.target.value)}
-                  placeholder="John Doe"
+                  placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />

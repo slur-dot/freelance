@@ -1,4 +1,8 @@
 {
+    "common": {
+        "loading": "Loading...",
+        "n_a": "N/A"
+    },
     "navbar": {
         "home": "Home",
         "shop": "Shop",
@@ -1459,6 +1463,11 @@
                 "logout": "Logout"
             }
         },
+        "pagination": {
+            "previous": "Previous",
+            "next": "Next",
+            "page_info": "Page {{current}} of {{total}}"
+        },
         "main": {
             "title": "Admin Dashboard",
             "profile": {
@@ -1627,11 +1636,6 @@
                     "unban": "Unban User",
                     "processing": "Processing..."
                 }
-            },
-            "pagination": {
-                "previous": "Previous",
-                "next": "Next",
-                "page_info": "Page {{current}} of {{total}}"
             }
         },
         "sub_admin_management": {
@@ -1646,6 +1650,24 @@
                     "role": "Role",
                     "actions": "Actions"
                 }
+            },
+            "roles": {
+                "support": "Support",
+                "head": "Head",
+                "order_manager": "Order Manager",
+                "admin": "Admin",
+                "content_manager": "Content Manager",
+                "finance_manager": "Finance Manager",
+                "analytics_manager": "Analytics Manager"
+            },
+            "permissions": {
+                "user_access": "User Management Access",
+                "support_access": "Support Team Access",
+                "order_access": "Order Management Access",
+                "content_access": "Content Management Access",
+                "finance_access": "Finance Management Access",
+                "analytics_access": "Analytics Access",
+                "full_access": "Full Admin Access"
             },
             "modals": {
                 "add": {
@@ -1674,26 +1696,11 @@
                     "select_permission": "Select Permission",
                     "select_role": "Select Role",
                     "select_multiple": "Select Multiple",
-                    "clear_all": "Clear All"
+                    "clear_all": "Clear All",
+                    "placeholders": {
+                        "name": "John Doe"
+                    }
                 }
-            },
-            "roles": {
-                "support": "Support",
-                "head": "Head",
-                "order_manager": "Order Manager",
-                "admin": "Admin",
-                "content_manager": "Content Manager",
-                "finance_manager": "Finance Manager",
-                "analytics_manager": "Analytics Manager"
-            },
-            "permissions": {
-                "user_access": "User Management Access",
-                "support_access": "Support Team Access",
-                "order_access": "Order Management Access",
-                "content_access": "Content Management Access",
-                "finance_access": "Finance Management Access",
-                "analytics_access": "Analytics Access",
-                "full_access": "Full Admin Access"
             }
         },
         "support_team_management": {
@@ -1728,26 +1735,21 @@
                     "submit": "Update Member",
                     "submitting": "Updating..."
                 },
+                "form": {
+                    "name": "Name:",
+                    "tickets": "Tickets:",
+                    "select_multiple": "Select Multiple",
+                    "placeholders": {
+                        "name": "John Doe"
+                    }
+                },
                 "delete": {
                     "title": "Confirm Deletion",
                     "message": "Are you sure you want to delete this support team member?",
                     "confirm": "Delete",
                     "deleting": "Deleting...",
-                    "cancel": "Cancel"
-                },
-                "view": {
-                    "title": "Member Details",
-                    "subtitle": "View support team member information",
-                    "close": "Close",
-                    "name": "Name:",
-                    "response_time": "Response Time:",
-                    "resolution_time": "Resolution Time:",
-                    "assigned_tickets": "Assigned Tickets:"
-                },
-                "form": {
-                    "name": "Name:",
-                    "tickets": "Tickets:",
-                    "select_multiple": "Select Multiple"
+                    "cancel": "Cancel",
+                    "no_role": "No role assigned"
                 }
             }
         },
@@ -2065,7 +2067,48 @@
             "rent": "Rent",
             "per_month": "/mo",
             "sale": "Sale",
-            "rent_per_month": "{{price}} /mo"
+            "rent_per_month": "{{price}} /mo",
+            "breadcrumb_shop": "Shop",
+            "smartphone": "Smartphone",
+            "specifications": "Specifications",
+            "general": "General",
+            "model": "Model",
+            "release_date": "Release Date",
+            "brand": "Brand",
+            "os": "Operating System",
+            "colors": "Colors",
+            "body_design": "Body & Design",
+            "dimensions": "Dimensions",
+            "weight": "Weight",
+            "build": "Build",
+            "water_resistance": "Water Resistance",
+            "availability": "Availability",
+            "in_stock": "In Stock",
+            "kyc_verified": "KYC Verified",
+            "reviews": "Reviews",
+            "leave_review": "Leave a Review",
+            "enter_name": "Enter your name",
+            "write_review": "Write your review...",
+            "submit_review": "Submit Review",
+            "choose_color": "Choose Color",
+            "buy_now": "Buy Now",
+            "iphone_14_title": "iPhone 14",
+            "iphone_14_release": "September 16, 2022",
+            "iphone_14_dimensions": "146.7 x 71.5 x 7.8 mm",
+            "iphone_14_weight": "172g",
+            "iphone_14_build_desc": "Aluminum frame, Ceramic Shield front, Glass back",
+            "iphone_14_water_desc": "IP68 certified",
+            "default_review_comment": "Great work, delivered on time!",
+            "color_names": {
+                "midnight": "Midnight",
+                "starlight": "Starlight",
+                "blue": "Blue",
+                "purple": "Purple",
+                "yellow": "Yellow",
+                "black": "Black",
+                "white": "White",
+                "red": "Red"
+            }
         },
         "banner": {
             "flash_sale": "FLASH SALE - 20% OFF ALL DEVICES",
@@ -2277,31 +2320,8 @@
         "payment_completed": "Payment completed. Your invoice is ready.",
         "vendor_instruction": "Vendors: use the dashboard to <strong>scan the QR</strong> or enter the <strong>Verification Code</strong> to validate payment."
     },
-    "product": {
-        "breadcrumb_shop": "Shop",
-        "smartphone": "Smartphone",
-        "specifications": "Specifications",
-        "general": "General",
-        "model": "Model",
-        "release_date": "Release Date",
-        "brand": "Brand",
-        "os": "Operating System",
-        "colors": "Colors",
-        "body_design": "Body & Design",
-        "dimensions": "Dimensions",
-        "weight": "Weight",
-        "build": "Build",
-        "water_resistance": "Water Resistance",
-        "availability": "Availability",
-        "in_stock": "In Stock",
-        "kyc_verified": "KYC Verified",
-        "reviews": "Reviews",
-        "leave_review": "Leave a Review",
-        "enter_name": "Enter your name",
-        "write_review": "Write your review...",
-        "submit_review": "Submit Review",
-        "choose_color": "Choose Color",
-        "buy_now": "Buy Now"
+    "locations": {
+        "conakry": "Conakry"
     },
     "company_history": {
         "headline": "Our Journey: Youth, Innovation, Security",

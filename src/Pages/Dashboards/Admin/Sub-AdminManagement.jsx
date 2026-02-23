@@ -263,7 +263,7 @@ export default function SubAdminManagement() {
               className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-md focus:outline-none text-gray-700 placeholder-gray-500"
             />
             {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
-            {loading && <div className="mt-2 text-sm text-gray-500">Loading...</div>}
+            {loading && <div className="mt-2 text-sm text-gray-500">{t('common.loading')}</div>}
           </div>
         </div>
 
@@ -349,11 +349,11 @@ export default function SubAdminManagement() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {t('admin_dashboard.sub_admin_management.pagination.previous')}
+                {t('admin_dashboard.pagination.previous')}
               </button>
 
               <span className="text-sm font-medium text-gray-700">
-                {t('admin_dashboard.sub_admin_management.pagination.page_info', { current: currentPage, total: totalPages })}
+                {t('admin_dashboard.pagination.page_info', { current: currentPage, total: totalPages })}
               </span>
 
               <button
@@ -361,7 +361,7 @@ export default function SubAdminManagement() {
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {t('admin_dashboard.sub_admin_management.pagination.next')}
+                {t('admin_dashboard.pagination.next')}
               </button>
             </div>
           </div>
@@ -387,7 +387,7 @@ export default function SubAdminManagement() {
                   type="text"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="John Doe"
+                  placeholder={t('admin_dashboard.sub_admin_management.modals.form.placeholders.name')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />
@@ -516,7 +516,7 @@ export default function SubAdminManagement() {
                   type="text"
                   value={editFormData.name}
                   onChange={(e) => handleEditInputChange("name", e.target.value)}
-                  placeholder="John Doe"
+                  placeholder={t('admin_dashboard.sub_admin_management.modals.form.placeholders.name')}
                   className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   required
                 />

@@ -46,9 +46,9 @@ export default function IPhoneProductPage() {
       : [
         {
           name: "Emily Lewis",
-          location: "Conakry",
+          location: t('locations.conakry'),
           rating: 5,
-          comment: "Great work, delivered on time!",
+          comment: t('shop.product.default_review_comment'),
           image: null,
         },
       ];
@@ -81,7 +81,7 @@ export default function IPhoneProductPage() {
 
     const newReview = {
       name: reviewName,
-      location: "Conakry",
+      location: t('locations.conakry'),
       rating,
       comment: reviewText,
       image: reviewImage,
@@ -97,7 +97,7 @@ export default function IPhoneProductPage() {
 
   // Color selection
   const [selectedColor, setSelectedColor] = useState("");
-  const colors = ["Blue", "Purple", "Yellow", "Black", "White", "Red"];
+  const colors = ["midnight", "starlight", "blue", "purple", "yellow", "black", "white", "red"];
 
   // Serial number (seller side – simulated here)
   const [serialNumber, setSerialNumber] = useState("");
@@ -123,7 +123,7 @@ export default function IPhoneProductPage() {
           <div className="space-y-6">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
-                iPhone 14
+                {t('shop.product.iphone_14_title')}
               </h1>
               <p className="text-sm sm:text-base text-black">{t('shop.product.smartphone')}</p>
             </div>
@@ -138,24 +138,24 @@ export default function IPhoneProductPage() {
                   <h3 className="font-medium text-black mb-2">{t('shop.product.general')}</h3>
                   <div className="text-sm text-black space-y-1">
                     <p>{t('shop.product.model')}: iPhone 14</p>
-                    <p>{t('shop.product.release_date')}: September 16, 2022</p>
+                    <p>{t('shop.product.release_date')}: {t('shop.product.iphone_14_release')}</p>
                     <p>{t('shop.product.brand')}: Apple</p>
                     <p>{t('shop.product.os')}: iOS 16</p>
                     <p>
-                      {t('shop.product.colors')}: Midnight, Starlight, Blue, Purple, (PRODUCT)RED,
-                      Yellow
+                      {t('shop.product.colors')}: {t('shop.product.color_names.midnight')}, {t('shop.product.color_names.starlight')}, {t('shop.product.color_names.blue')}, {t('shop.product.color_names.purple')}, (PRODUCT)RED,
+                      {t('shop.product.color_names.yellow')}
                     </p>
                   </div>
                 </div>
                 <div className="mt-4">
                   <h3 className="font-medium text-black mb-2">{t('shop.product.body_design')}</h3>
                   <div className="text-sm text-black space-y-1">
-                    <p>{t('shop.product.dimensions')}: 146.7 x 71.5 x 7.8 mm</p>
-                    <p>{t('shop.product.weight')}: 172g</p>
+                    <p>{t('shop.product.dimensions')}: {t('shop.product.iphone_14_dimensions')}</p>
+                    <p>{t('shop.product.weight')}: {t('shop.product.iphone_14_weight')}</p>
                     <p>
-                      {t('shop.product.build')}: Aluminum frame, Ceramic Shield front, Glass back
+                      {t('shop.product.build')}: {t('shop.product.iphone_14_build_desc')}
                     </p>
-                    <p>{t('shop.product.water_resistance')}: IP68 certified</p>
+                    <p>{t('shop.product.water_resistance')}: {t('shop.product.iphone_14_water_desc')}</p>
                   </div>
                 </div>
               </div>
@@ -347,11 +347,11 @@ export default function IPhoneProductPage() {
                       type="button"
                       onClick={() => setSelectedColor(color)}
                       className={`px-3 py-1 rounded border ${selectedColor === color
-                          ? "bg-blue-600 text-white"
-                          : "bg-white text-gray-700"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-700"
                         }`}
                     >
-                      {color}
+                      {t('shop.product.color_names.' + color)}
                     </button>
                   ))}
                 </div>
@@ -380,8 +380,8 @@ export default function IPhoneProductPage() {
                   disabled={!selectedColor}
                   onClick={() => navigate("/shop/cart")}
                   className={`${!selectedColor
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700"
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
                     } text-white px-6 py-3 rounded-lg flex items-center justify-center gap-2 w-full sm:w-auto`}
                 >
                   <span>{t('shop.product.buy_now')}</span>
