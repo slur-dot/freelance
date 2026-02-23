@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from "react";
 import { Search, Loader2 } from "lucide-react";
 import { CompanyService } from "../../../services/companyService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 // Button Component (Reused/Inline)
 function TPButton({
@@ -50,6 +51,7 @@ function TPInput({ className = "", ...props }) {
 }
 
 export default function TrainingQuotes() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -160,7 +162,7 @@ export default function TrainingQuotes() {
       console.error(e);
       // Revert UI on failure
       setQuotes(prev => prev.map(q => q.id === quoteId ? { ...q, status: q.status } : q));
-      alert('Failed to update request status. Please try again.');
+      alert(t('company_dashboard.tq_update_error'));
     } finally {
       setUpdatingId(null);
     }
@@ -175,7 +177,7 @@ export default function TrainingQuotes() {
       <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-          <span className="ml-3 text-lg text-gray-700">Loading training quotes...</span>
+          <span className="ml-3 text-lg text-gray-700">{t('company_dashboard.tq_loading')}</span>
         </div>
       </div>
     );
@@ -185,13 +187,13 @@ export default function TrainingQuotes() {
     return (
       <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
-          <h3 className="text-red-800 font-medium">Error loading training quotes</h3>
+          <h3 className="text-red-800 font-medium">{t('company_dashboard.tq_error_loading')}</h3>
           <p className="text-red-600 text-sm mt-1">{error}</p>
           <button
             onClick={() => fetchQuotes()}
             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
           >
-            Retry
+            {t('company_dashboard.tq_retry')}
           </button>
         </div>
       </div>
@@ -203,7 +205,7 @@ export default function TrainingQuotes() {
       {/* Header */}
       <header className="mb-6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
-          Custom Training Requests
+          {t('company_dashboard.tq_title')}
         </h1>
       </header>
 
@@ -212,7 +214,7 @@ export default function TrainingQuotes() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
         <TPInput
           type="search"
-          placeholder="Search"
+          placeholder={t('company_dashboard.tq_search_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           aria-label="Search quotes"
@@ -225,19 +227,19 @@ export default function TrainingQuotes() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-3 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase whitespace-nowrap">
-                Company
+                {t('company_dashboard.tq_col_company')}
               </th>
               <th className="px-3 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase">
-                Training Request
+                {t('company_dashboard.tq_col_request')}
               </th>
               <th className="px-3 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase whitespace-nowrap">
-                Request Date
+                {t('company_dashboard.tq_col_date')}
               </th>
               <th className="px-3 sm:px-6 py-3 text-left font-medium text-gray-500 uppercase whitespace-nowrap">
-                Amount
+                {t('company_dashboard.tq_col_amount')}
               </th>
               <th className="px-3 sm:px-6 py-3 font-medium text-gray-500 uppercase">
-                Actions
+                {t('company_dashboard.tq_col_actions')}
               </th>
             </tr>
           </thead>
@@ -260,22 +262,22 @@ export default function TrainingQuotes() {
                   <div className="flex items-center justify-end gap-2 flex-wrap">
                     <span
                       className={`px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium border ${quote.status === 'Accepted'
-                          ? 'bg-green-50 text-green-700 border-green-200'
-                          : quote.status === 'Denied'
-                            ? 'bg-red-50 text-red-700 border-red-200'
-                            : 'bg-gray-50 text-gray-700 border-gray-200'
+                        ? 'bg-green-50 text-green-700 border-green-200'
+                        : quote.status === 'Denied'
+                          ? 'bg-red-50 text-red-700 border-red-200'
+                          : 'bg-gray-50 text-gray-700 border-gray-200'
                         }`}
                     >
-                      {quote.status}
+                      {quote.status === 'Accepted' ? t('company_dashboard.tq_status_accepted') : quote.status === 'Denied' ? t('company_dashboard.tq_status_denied') : t('company_dashboard.tq_status_pending')}
                     </span>
                     {quote.status !== 'Accepted' && (
                       <TPButton size="sm" disabled={updatingId === quote.id} onClick={() => handleAccept(quote.id)}>
-                        Accept
+                        {t('company_dashboard.tq_action_accept')}
                       </TPButton>
                     )}
                     {quote.status !== 'Denied' && (
                       <TPButton variant="danger" size="sm" disabled={updatingId === quote.id} onClick={() => handleDeny(quote.id)}>
-                        Deny
+                        {t('company_dashboard.tq_action_deny')}
                       </TPButton>
                     )}
                   </div>
@@ -285,7 +287,7 @@ export default function TrainingQuotes() {
             {filteredQuotes.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-6 py-10 text-center text-gray-500">
-                  No training quotes found.
+                  {t('company_dashboard.tq_no_quotes')}
                 </td>
               </tr>
             )}
@@ -302,13 +304,13 @@ export default function TrainingQuotes() {
                 <h3 className="font-semibold text-gray-900 text-sm">{quote.client}</h3>
                 <span
                   className={`px-2 py-0.5 rounded-full text-[10px] font-medium border ${quote.status === 'Accepted'
-                      ? 'bg-green-50 text-green-700 border-green-200'
-                      : quote.status === 'Denied'
-                        ? 'bg-red-50 text-red-700 border-red-200'
-                        : 'bg-gray-50 text-gray-700 border-gray-200'
+                    ? 'bg-green-50 text-green-700 border-green-200'
+                    : quote.status === 'Denied'
+                      ? 'bg-red-50 text-red-700 border-red-200'
+                      : 'bg-gray-50 text-gray-700 border-gray-200'
                     }`}
                 >
-                  {quote.status}
+                  {quote.status === 'Accepted' ? t('company_dashboard.tq_status_accepted') : quote.status === 'Denied' ? t('company_dashboard.tq_status_denied') : t('company_dashboard.tq_status_pending')}
                 </span>
               </div>
               <p className="text-gray-700 text-xs">{quote.description}</p>
@@ -319,30 +321,30 @@ export default function TrainingQuotes() {
               <div className="flex items-center justify-end gap-2 mt-3">
                 {quote.status !== 'Accepted' && (
                   <TPButton size="sm" disabled={updatingId === quote.id} onClick={() => handleAccept(quote.id)}>
-                    Accept
+                    {t('company_dashboard.tq_action_accept')}
                   </TPButton>
                 )}
                 {quote.status !== 'Denied' && (
                   <TPButton variant="danger" size="sm" disabled={updatingId === quote.id} onClick={() => handleDeny(quote.id)}>
-                    Deny
+                    {t('company_dashboard.tq_action_deny')}
                   </TPButton>
                 )}
               </div>
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500 text-sm">No training quotes found.</p>
+          <p className="text-center text-gray-500 text-sm">{t('company_dashboard.tq_no_quotes')}</p>
         )}
       </div>
 
       {/* Pagination */}
       <div className="flex justify-between items-center px-4 py-4 bg-white rounded-lg border-t border-gray-200 shadow-sm flex-wrap gap-4 ">
         <TPButton variant="outline" size="sm">
-          Previous
+          {t('company_dashboard.tq_prev')}
         </TPButton>
-        <span className="text-xs sm:text-sm text-gray-700">Page 1 of 1</span>
+        <span className="text-xs sm:text-sm text-gray-700">{t('company_dashboard.tq_pagination')}</span>
         <TPButton variant="outline" size="sm">
-          Next
+          {t('company_dashboard.tq_next')}
         </TPButton>
       </div>
     </div>

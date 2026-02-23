@@ -13,6 +13,7 @@ import { ActiveContracts, RecentPurchases } from "./components/ContractsAndPurch
 import EmployeeManagement from "./components/EmployeeManagement";
 import { CompanyService } from "../../../services/companyService";
 import EnhancedNotifications from "./components/EnhancedNotifications";
+import { useTranslation } from "react-i18next";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -692,6 +693,7 @@ function formatTimestamp(timestamp) {
 }
 
 export default function CompanyDashboard() {
+  const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -805,18 +807,18 @@ export default function CompanyDashboard() {
 
         {/* Transactions Card */}
         <div className="md:col-span-1 w-full">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Total Transactions</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('company_dashboard.dashboard_total_transactions')}</h3>
           <Card className="h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between pb-2 p-4">
-              <p className="text-sm font-medium text-gray-500">Completed Transactions</p>
+              <p className="text-sm font-medium text-gray-500">{t('company_dashboard.dashboard_completed_transactions')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow p-4">
               <div className="text-2xl sm:text-4xl font-bold">
-                {selectedCompany?.status?.transactions || 0} Transactions
+                {selectedCompany?.status?.transactions || 0} {t('company_dashboard.dashboard_transactions_label')}
               </div>
               <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("#")}>
-                View Transactions
+                {t('company_dashboard.dashboard_view_transactions')}
               </Button>
             </CardContent>
           </Card>
@@ -824,10 +826,10 @@ export default function CompanyDashboard() {
 
         {/* Profile Completion Card */}
         <div className="md:col-span-1 w-full">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Profile Completion</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('company_dashboard.dashboard_profile_completion_title')}</h3>
           <Card className="h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between pb-2 p-4">
-              <p className="text-sm font-medium text-gray-500">Profile Completion Status</p>
+              <p className="text-sm font-medium text-gray-500">{t('company_dashboard.dashboard_profile_completion_status')}</p>
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow p-4">
@@ -835,7 +837,7 @@ export default function CompanyDashboard() {
                 {selectedCompany?.profileCompletion || 0}%
               </div>
               <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("#")}>
-                Complete Profile
+                {t('company_dashboard.dashboard_complete_profile_btn')}
               </Button>
             </CardContent>
           </Card>
@@ -843,7 +845,7 @@ export default function CompanyDashboard() {
 
         {/* Messages Section - Data comes from CompanyStatsDashboard */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col w-full">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Current Queries</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t('company_dashboard.dashboard_current_queries')}</h3>
           <Card className="flex-grow">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
@@ -867,19 +869,19 @@ export default function CompanyDashboard() {
                     ))}
                     {messages.length > 7 && (
                       <div className="text-center text-xs text-gray-500 p-4">
-                        +{messages.length - 7} more messages
+                        +{messages.length - 7} {t('company_dashboard.dashboard_more_messages')}
                       </div>
                     )}
                   </>
                 ) : (
                   <div className="p-4 text-center text-gray-500">
-                    No messages yet
+                    {t('company_dashboard.dashboard_no_messages')}
                   </div>
                 )}
               </div>
               <div className="p-4 border-t">
                 <Button variant="ghost" className="w-full" onClick={() => setShowChatWidget(true)}>
-                  MANAGE MESSAGES
+                  {t('company_dashboard.dashboard_manage_messages')}
                 </Button>
               </div>
             </CardContent>
@@ -897,7 +899,7 @@ export default function CompanyDashboard() {
       {/* Enhanced Dashboard Sections */}
       {dashboardData && (
         <div className="mt-8 max-w-7xl mx-auto">
-          <h2 className="text-xl font-semibold mb-6">Company Analytics & Management</h2>
+          <h2 className="text-xl font-semibold mb-6">{t('company_dashboard.dashboard_analytics_title')}</h2>
 
           {/* Gamification Profile */}
           <div className="mb-8">

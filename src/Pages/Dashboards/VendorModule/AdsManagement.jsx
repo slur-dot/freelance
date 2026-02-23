@@ -250,7 +250,7 @@ export default function AdsManagement() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusStyles(ad.status)}`}>
                         <span className={`w-2 h-2 rounded-full mr-2 ${getStatusIcon(ad.status)}`}></span>
-                        {ad.status === "active" ? "Active" : "Inactive"}
+                        {ad.status === "active" ? t('vendor_dashboard.ads.status.active') : t('vendor_dashboard.ads.status.inactive')}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
@@ -286,17 +286,17 @@ export default function AdsManagement() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                {t('vendor_dashboard.ads.pagination.previous')}
               </button>
               <span className="text-sm font-medium text-gray-700">
-                Page {currentPage} of {totalPages || 1}
+                {t('vendor_dashboard.ads.pagination.page_of', { current: currentPage, total: totalPages || 1 })}
               </span>
               <button
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages || totalPages === 0}
                 className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                {t('vendor_dashboard.ads.pagination.next')}
               </button>
             </div>
           </div>

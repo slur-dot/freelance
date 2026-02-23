@@ -204,7 +204,7 @@ export default function Listings() {
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${p.status === "Active" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
                         }`}
                     >
-                      {p.status || t('vendor_dashboard.listings.pending')}
+                      {p.status ? t(`vendor_dashboard.listings.status.${p.status.toLowerCase()}`, p.status) : t('vendor_dashboard.listings.pending')}
                     </span>
                   </RCTableCell>
                   <RCTableCell>
@@ -213,7 +213,7 @@ export default function Listings() {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleDelete(p.id)}
-                        title="Delete"
+                        title={t('vendor_dashboard.modals.serial_numbers.delete')}
                       >
                         <Trash2 className="h-4 w-4 text-red-500" />
                       </RCButton>
@@ -257,7 +257,7 @@ export default function Listings() {
                   className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.status === "Active" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
                     }`}
                 >
-                  {p.status || 'Pending Review'}
+                  {p.status ? t(`vendor_dashboard.listings.status.${p.status.toLowerCase()}`, p.status) : t('vendor_dashboard.listings.pending')}
                 </span>
               </div>
               <p className="text-gray-600 text-sm mb-2">{p.description || '-'}</p>
@@ -267,7 +267,7 @@ export default function Listings() {
                   variant="ghost"
                   size="icon"
                   onClick={() => handleDelete(p.id)}
-                  title="Delete"
+                  title={t('vendor_dashboard.modals.serial_numbers.delete')}
                 >
                   <Trash2 className="h-4 w-4 text-red-500" />
                 </RCButton>
@@ -277,28 +277,28 @@ export default function Listings() {
                     className="bg-green-600 hover:bg-green-700 text-white"
                     onClick={() => toggleStatus(p.id, "Active")}
                   >
-                    Activate
+                    {t('vendor_dashboard.listings.activate')}
                   </RCButton>
                 ) : (
                   <RCButton
                     className="bg-red-600 hover:bg-red-700 text-white"
                     onClick={() => toggleStatus(p.id, "Inactive")}
                   >
-                    Deactivate
+                    {t('vendor_dashboard.listings.deactivate')}
                   </RCButton>
                 )}
               </div>
 
             </div>
           ))}
-          {paginatedProducts.length === 0 && <p className="text-center text-gray-500">No products found.</p>}
+          {paginatedProducts.length === 0 && <p className="text-center text-gray-500">{t('vendor_dashboard.listings.no_products')}</p>}
         </div>
 
         {/* Pagination */}
         <div className="flex flex-col sm:flex-row justify-between items-center mt-6 pt-4 gap-3 border-t border-gray-300">
-          <RCButton variant="outline" className="w-full sm:w-auto" onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}>Previous</RCButton>
-          <span className="text-sm text-gray-500">Page {currentPage} of {totalPages || 1}</span>
-          <RCButton variant="outline" className="w-full sm:w-auto" onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}>Next</RCButton>
+          <RCButton variant="outline" className="w-full sm:w-auto" onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}>{t('vendor_dashboard.listings.pagination.previous')}</RCButton>
+          <span className="text-sm text-gray-500">{t('vendor_dashboard.listings.pagination.page_of', { current: currentPage, total: totalPages || 1 })}</span>
+          <RCButton variant="outline" className="w-full sm:w-auto" onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}>{t('vendor_dashboard.listings.pagination.next')}</RCButton>
         </div>
       </RCCard>
 

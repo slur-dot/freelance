@@ -728,7 +728,7 @@ export default function VendorDashboard() {
                             ? 'bg-red-100 text-red-800'
                             : 'bg-yellow-100 text-yellow-800'
                           }`}>
-                          {item.status}
+                          {t(`vendor_dashboard.modals.add_serial.${item.status?.toLowerCase() || 'available'}`)}
                         </span>
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
@@ -736,13 +736,13 @@ export default function VendorDashboard() {
                           onClick={() => handleEditSerial(item.id)}
                           className="text-blue-600 hover:text-blue-800 text-sm mr-2"
                         >
-                          Edit
+                          {t('vendor_dashboard.modals.serial_numbers.edit')}
                         </button>
                         <button
                           onClick={() => handleDeleteSerial(item.id)}
                           className="text-red-600 hover:text-red-800 text-sm"
                         >
-                          Delete
+                          {t('vendor_dashboard.modals.serial_numbers.delete')}
                         </button>
                       </td>
                     </tr>

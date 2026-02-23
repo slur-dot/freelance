@@ -162,10 +162,17 @@ service cloud.firestore {
     }
 
     // Advertisements Collection (Renamed from 'ads' to match service)
-    match /advertisements/{adId} {
+    match /ads/{adId} {
       allow read: if true;
       allow create: if isAuthenticated();
       allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.sellerId == request.auth.uid);
+    }
+
+    // Reviews Collection
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.authorId == request.auth.uid);
     }
 
     // Sub Admins Collection

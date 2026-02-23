@@ -1,16 +1,19 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 function Card({ children, className = "" }) {
   return <div className={`bg-white shadow rounded-lg ${className}`}>{children}</div>;
 }
 
 export default function GamificationProfile({ gamificationData }) {
+  const { t } = useTranslation();
+
   if (!gamificationData) {
     return (
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Gamification Profile</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('company_dashboard.gamification_title')}</h3>
         <div className="text-center text-gray-500">
-          <p>Loading gamification data...</p>
+          <p>{t('company_dashboard.gamification_loading')}</p>
         </div>
       </Card>
     );
@@ -20,16 +23,16 @@ export default function GamificationProfile({ gamificationData }) {
 
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Gamification Profile</h3>
+      <h3 className="text-lg font-semibold mb-4">{t('company_dashboard.gamification_title')}</h3>
 
       <div className="mb-6">
-        <h4 className="text-md font-semibold mb-3 text-green-600">Training Progress</h4>
+        <h4 className="text-md font-semibold mb-3 text-green-600">{t('company_dashboard.gamification_training_progress')}</h4>
         <div className="space-y-3">
           {trainingProgress.completedCourses.map((course, index) => (
             <div key={index} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
                 <p className="font-medium">{course.title}</p>
-                <p className="text-sm text-gray-600">Completed</p>
+                <p className="text-sm text-gray-600">{t('company_dashboard.gamification_completed')}</p>
               </div>
               <span className="text-green-600 font-semibold">100%</span>
             </div>
@@ -47,29 +50,29 @@ export default function GamificationProfile({ gamificationData }) {
       </div>
 
       <div className="mb-6">
-        <h4 className="text-md font-semibold mb-3 text-blue-600">Financial Breakdown</h4>
+        <h4 className="text-md font-semibold mb-3 text-blue-600">{t('company_dashboard.gamification_financial_breakdown')}</h4>
         <div className="grid grid-cols-2 gap-4">
           <div className="p-3 bg-blue-50 rounded-lg">
-            <p className="text-sm text-gray-600">Total Spent</p>
+            <p className="text-sm text-gray-600">{t('company_dashboard.gamification_total_spent')}</p>
             <p className="text-lg font-semibold">{financialBreakdown.totalSpent.toLocaleString()} GNF</p>
           </div>
           <div className="p-3 bg-purple-50 rounded-lg">
-            <p className="text-sm text-gray-600">Freelance Spending</p>
+            <p className="text-sm text-gray-600">{t('company_dashboard.gamification_freelance_spending')}</p>
             <p className="text-lg font-semibold">{financialBreakdown.freelanceSpending.toLocaleString()} GNF</p>
           </div>
           <div className="p-3 bg-orange-50 rounded-lg">
-            <p className="text-sm text-gray-600">Seller Purchases</p>
+            <p className="text-sm text-gray-600">{t('company_dashboard.gamification_seller_purchases')}</p>
             <p className="text-lg font-semibold">{financialBreakdown.sellerPurchases.toLocaleString()} GNF</p>
           </div>
           <div className="p-3 bg-green-50 rounded-lg">
-            <p className="text-sm text-gray-600">Training Costs</p>
+            <p className="text-sm text-gray-600">{t('company_dashboard.gamification_training_costs')}</p>
             <p className="text-lg font-semibold">{financialBreakdown.trainingCosts.toLocaleString()} GNF</p>
           </div>
         </div>
       </div>
 
       <div>
-        <h4 className="text-md font-semibold mb-3 text-purple-600">Achievements</h4>
+        <h4 className="text-md font-semibold mb-3 text-purple-600">{t('company_dashboard.gamification_achievements')}</h4>
         <div className="space-y-2">
           {achievements.map((achievement, index) => (
             <div key={index} className="flex items-center justify-between p-2 bg-purple-50 rounded-lg">
@@ -82,8 +85,8 @@ export default function GamificationProfile({ gamificationData }) {
           ))}
         </div>
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-sm text-gray-600">Level {level}</span>
-          <span className="text-sm font-semibold text-purple-600">{points} points</span>
+          <span className="text-sm text-gray-600">{t('company_dashboard.gamification_level')} {level}</span>
+          <span className="text-sm font-semibold text-purple-600">{points} {t('company_dashboard.gamification_points')}</span>
         </div>
       </div>
     </Card>

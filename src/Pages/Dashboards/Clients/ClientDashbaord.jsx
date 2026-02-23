@@ -448,15 +448,18 @@ export default function ClientDashbaord() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [authResolved, setAuthResolved] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
+      setAuthResolved(true);
     });
     return () => unsubscribe();
   }, []);
 
   const fetchDashboardData = async () => {
+    if (!authResolved) return;
     if (!user) {
       setLoading(false);
       navigate('/login');
@@ -479,8 +482,10 @@ export default function ClientDashbaord() {
   };
 
   useEffect(() => {
-    fetchDashboardData();
-  }, [user]);
+    if (authResolved) {
+      fetchDashboardData();
+    }
+  }, [user, authResolved]);
 
   if (loading && !stats) {
     return <div className="min-h-screen flex items-center justify-center">Loading dashboard...</div>;

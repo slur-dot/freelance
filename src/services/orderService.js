@@ -34,13 +34,21 @@ export const OrderService = {
 
             const ordersRef = collection(db, "orders");
             // Query orders where 'userId' matches the client's ID
-            const q = query(ordersRef, where("userId", "==", userId), orderBy("createdAt", "desc"));
+            // Removed orderBy("createdAt", "desc") to prevent requiring a Firestore composite index
+            const q = query(ordersRef, where("userId", "==", userId));
             const snapshot = await getDocs(q);
 
-            return snapshot.docs.map(doc => ({
+            const orders = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
+
+            // Sort client-side descending by createdAt
+            return orders.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+                const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+                return timeB - timeA;
+            });
         } catch (error) {
             console.error("Error fetching user orders:", error);
             // Fallback for missing index error

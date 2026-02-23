@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Card({ children, className = "" }) {
   return <div className={`bg-white shadow rounded-lg ${className}`}>{children}</div>;
@@ -11,6 +12,7 @@ function Button({ children, className = "", variant = "default", ...props }) {
 
 export default function EmployeeManagement({ employees }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleAddEmployee = () => {
     navigate('/company/dashboard/emplolyee-list');
@@ -19,8 +21,8 @@ export default function EmployeeManagement({ employees }) {
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold">Employee Management</h3>
-        <Button onClick={handleAddEmployee} className="text-sm">Add Employee</Button>
+        <h3 className="text-lg font-semibold">{t('company_dashboard.employees_title')}</h3>
+        <Button onClick={handleAddEmployee} className="text-sm">{t('company_dashboard.employees_add_btn')}</Button>
       </div>
       {employees && employees.length > 0 ? (
         <div className="space-y-3">
@@ -29,7 +31,7 @@ export default function EmployeeManagement({ employees }) {
               <div>
                 <p className="font-medium">{employee.name}</p>
                 <p className="text-sm text-gray-600">{employee.role}</p>
-                {employee.assignedDevice && (<p className="text-xs text-blue-600">Device: {employee.assignedDevice}</p>)}
+                {employee.assignedDevice && (<p className="text-xs text-blue-600">{t('company_dashboard.employees_device')} {employee.assignedDevice}</p>)}
               </div>
               <div className="text-right">
                 <p className="text-sm text-gray-600">{employee.email}</p>
@@ -40,8 +42,8 @@ export default function EmployeeManagement({ employees }) {
         </div>
       ) : (
         <div className="text-center text-gray-500 py-8">
-          <p>No employees found</p>
-          <p className="text-sm">Add your first employee to get started</p>
+          <p>{t('company_dashboard.employees_no_employees')}</p>
+          <p className="text-sm">{t('company_dashboard.employees_add_first')}</p>
         </div>
       )}
     </Card>

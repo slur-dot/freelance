@@ -3,6 +3,7 @@ import { Search, ArrowUpDown, Trash2, Pencil, Check, X, Loader2, Plus } from "lu
 import { useNavigate } from "react-router-dom";
 import { CompanyService } from "../../../services/companyService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 // Reusable Button
 function RCButton({ children, variant = "default", size = "md", className = "", ...props }) {
@@ -61,6 +62,7 @@ function RCTableCell({ children, className = "" }) {
 }
 
 export default function EmployeeList() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,8 +114,8 @@ export default function EmployeeList() {
             year: 'numeric'
           }),
           role: emp.role || "Employee",
-          equipment: emp.equipment || "No equipment assigned",
-          training: emp.training || "No training assigned"
+          equipment: emp.equipment || t('company_dashboard.el_no_equipment'),
+          training: emp.training || t('company_dashboard.el_no_training')
         }));
 
         setEmployees(transformedEmployees);
@@ -150,12 +152,12 @@ export default function EmployeeList() {
       );
       setEditId(null);
     } catch (err) {
-      alert('Failed to update employee: ' + err.message);
+      alert(t('company_dashboard.el_update_error') + err.message);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!user || !window.confirm('Delete this employee?')) return;
+    if (!user || !window.confirm(t('company_dashboard.el_delete_confirm'))) return;
     try {
       await CompanyService.deleteEmployee(user.uid, id);
       setEmployees(prev => prev.filter(e => e.id !== id));
@@ -176,8 +178,8 @@ export default function EmployeeList() {
         status: 'Active',
         joiningDate: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
         role: newEmployee.role,
-        equipment: newEmployee.equipment || 'No equipment assigned',
-        training: newEmployee.training || 'No training assigned'
+        equipment: newEmployee.equipment || t('company_dashboard.el_no_equipment'),
+        training: newEmployee.training || t('company_dashboard.el_no_training')
       }, ...prev]);
 
       setShowCreate(false);
@@ -198,7 +200,7 @@ export default function EmployeeList() {
       <div className="p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-          <span className="ml-3 text-lg text-gray-700">Loading employees...</span>
+          <span className="ml-3 text-lg text-gray-700">{t('company_dashboard.el_loading')}</span>
         </div>
       </div>
     );
@@ -208,13 +210,13 @@ export default function EmployeeList() {
     return (
       <div className="p-4 md:p-6 lg:p-8">
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
-          <h3 className="text-red-800 font-medium">Error loading employees</h3>
+          <h3 className="text-red-800 font-medium">{t('company_dashboard.el_error_loading')}</h3>
           <p className="text-red-600 text-sm mt-1">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
           >
-            Retry
+            {t('company_dashboard.el_retry')}
           </button>
         </div>
       </div>
@@ -226,9 +228,9 @@ export default function EmployeeList() {
       <div className="p-4 md:p-6 lg:p-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-          <h1 className="text-2xl md:text-3xl font-bold">Employee List</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">{t('company_dashboard.el_title')}</h1>
           <RCButton onClick={() => setShowCreate(true)}>
-            Add New Employee
+            {t('company_dashboard.el_add_btn')}
           </RCButton>
         </div>
 
@@ -236,7 +238,7 @@ export default function EmployeeList() {
           {/* Search */}
           <div className="relative mb-4">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <RCInput placeholder="Search" />
+            <RCInput placeholder={t('company_dashboard.el_search_placeholder')} />
           </div>
 
           {/* Desktop Table */}
@@ -246,15 +248,15 @@ export default function EmployeeList() {
                 <RCTableRow>
                   <RCTableHead className="min-w-[150px]">
                     <div className="flex items-center gap-1">
-                      Employee Name <ArrowUpDown className="h-4 w-4" />
+                      {t('company_dashboard.el_col_name')} <ArrowUpDown className="h-4 w-4" />
                     </div>
                   </RCTableHead>
-                  <RCTableHead className="min-w-[120px]">Role</RCTableHead>
-                  <RCTableHead className="min-w-[200px]">Email</RCTableHead>
-                  <RCTableHead className="min-w-[150px]">Equipment</RCTableHead>
-                  <RCTableHead className="min-w-[150px]">Training</RCTableHead>
-                  <RCTableHead className="min-w-[100px]">Status</RCTableHead>
-                  <RCTableHead className="min-w-[100px]">Actions</RCTableHead>
+                  <RCTableHead className="min-w-[120px]">{t('company_dashboard.el_col_role')}</RCTableHead>
+                  <RCTableHead className="min-w-[200px]">{t('company_dashboard.el_col_email')}</RCTableHead>
+                  <RCTableHead className="min-w-[150px]">{t('company_dashboard.el_col_equipment')}</RCTableHead>
+                  <RCTableHead className="min-w-[150px]">{t('company_dashboard.el_col_training')}</RCTableHead>
+                  <RCTableHead className="min-w-[100px]">{t('company_dashboard.el_col_status')}</RCTableHead>
+                  <RCTableHead className="min-w-[100px]">{t('company_dashboard.el_col_actions')}</RCTableHead>
                 </RCTableRow>
               </RCTableHeader>
               <RCTableBody>
@@ -284,8 +286,8 @@ export default function EmployeeList() {
                             onChange={handleChange}
                             className="border border-gray-300 rounded-md px-2 py-1 text-sm w-full"
                           >
-                            <option value="Active">Active</option>
-                            <option value="On Leave">On Leave</option>
+                            <option value="Active">{t('company_dashboard.el_status_active')}</option>
+                            <option value="On Leave">{t('company_dashboard.el_status_on_leave')}</option>
                           </select>
                         </RCTableCell>
                         <RCTableCell>
@@ -309,15 +311,15 @@ export default function EmployeeList() {
                         <RCTableCell>
                           <span
                             className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${emp.status === "Active"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-yellow-100 text-yellow-800"
                               }`}
                           >
                             <span
                               className={`h-2 w-2 rounded-full ${emp.status === "Active" ? "bg-green-500" : "bg-yellow-500"
                                 }`}
                             />
-                            {emp.status}
+                            {emp.status === "Active" ? t('company_dashboard.el_status_active') : t('company_dashboard.el_status_on_leave')}
                           </span>
                         </RCTableCell>
                         <RCTableCell>
@@ -345,33 +347,33 @@ export default function EmployeeList() {
                 {editId === emp.id ? (
                   <div className="space-y-2">
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Name</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.el_col_name')}</label>
                       <RCInput name="name" value={editForm.name} onChange={handleChange} />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.el_col_email')}</label>
                       <RCInput name="email" value={editForm.email} onChange={handleChange} />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Role</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.el_col_role')}</label>
                       <select
                         name="role"
                         value={editForm.role}
                         onChange={handleChange}
                         className="border border-gray-300 rounded-md px-2 py-1 text-sm w-full"
                       >
-                        <option value="Employee">Employee</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Director">Director</option>
-                        <option value="Intern">Intern</option>
+                        <option value="Employee">{t('company_dashboard.el_role_employee')}</option>
+                        <option value="Manager">{t('company_dashboard.el_role_manager')}</option>
+                        <option value="Director">{t('company_dashboard.el_role_director')}</option>
+                        <option value="Intern">{t('company_dashboard.el_role_intern')}</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Equipment</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.el_col_equipment')}</label>
                       <RCInput name="equipment" value={editForm.equipment} onChange={handleChange} />
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">Training</label>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.el_col_training')}</label>
                       <RCInput name="training" value={editForm.training} onChange={handleChange} />
                     </div>
                     <div className="flex gap-2">
@@ -389,15 +391,15 @@ export default function EmployeeList() {
                     <p className="text-sm text-gray-600">{emp.email}</p>
                     <span
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${emp.status === "Active"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
                         }`}
                     >
                       <span
                         className={`h-2 w-2 rounded-full ${emp.status === "Active" ? "bg-green-500" : "bg-yellow-500"
                           }`}
                       />
-                      {emp.status}
+                      {emp.status === "Active" ? t('company_dashboard.el_status_active') : t('company_dashboard.el_status_on_leave')}
                     </span>
                     <p className="text-sm text-gray-500">{emp.joiningDate}</p>
                     <div className="flex gap-2">
@@ -416,66 +418,66 @@ export default function EmployeeList() {
 
           {/* Pagination */}
           <div className="flex justify-between items-center mt-6 pt-4 flex-wrap gap-4 border-t border-gray-300">
-            <RCButton variant="outline">Previous</RCButton>
-            <span className="text-sm text-gray-500">Page 1 of 1</span>
-            <RCButton variant="outline">Next</RCButton>
+            <RCButton variant="outline">{t('company_dashboard.el_prev')}</RCButton>
+            <span className="text-sm text-gray-500">{t('company_dashboard.el_pagination_info')}</span>
+            <RCButton variant="outline">{t('company_dashboard.el_next')}</RCButton>
           </div>
         </RCCard>
       </div>
       {showCreate && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Add Employee</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('company_dashboard.el_modal_title')}</h2>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Employee Name *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.el_modal_name')}</label>
                 <RCInput
-                  placeholder="Enter employee name"
+                  placeholder={t('company_dashboard.el_modal_name_ph')}
                   value={createForm.name}
                   onChange={e => setCreateForm({ ...createForm, name: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.el_modal_email')}</label>
                 <RCInput
-                  placeholder="Enter email address"
+                  placeholder={t('company_dashboard.el_modal_email_ph')}
                   value={createForm.email}
                   onChange={e => setCreateForm({ ...createForm, email: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.el_modal_role')}</label>
                 <select
                   className="pl-9 pr-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:border-gray-400 text-sm w-full"
                   value={createForm.role}
                   onChange={e => setCreateForm({ ...createForm, role: e.target.value })}
                 >
-                  <option value="Employee">Employee</option>
-                  <option value="Manager">Manager</option>
-                  <option value="Director">Director</option>
-                  <option value="Intern">Intern</option>
+                  <option value="Employee">{t('company_dashboard.el_role_employee')}</option>
+                  <option value="Manager">{t('company_dashboard.el_role_manager')}</option>
+                  <option value="Director">{t('company_dashboard.el_role_director')}</option>
+                  <option value="Intern">{t('company_dashboard.el_role_intern')}</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Equipment</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.el_modal_equipment')}</label>
                 <RCInput
-                  placeholder="Enter equipment assigned"
+                  placeholder={t('company_dashboard.el_modal_equipment_ph')}
                   value={createForm.equipment}
                   onChange={e => setCreateForm({ ...createForm, equipment: e.target.value })}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Training</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.el_modal_training')}</label>
                 <RCInput
-                  placeholder="Enter training courses"
+                  placeholder={t('company_dashboard.el_modal_training_ph')}
                   value={createForm.training}
                   onChange={e => setCreateForm({ ...createForm, training: e.target.value })}
                 />
               </div>
             </div>
             <div className="flex justify-end gap-2 mt-4">
-              <RCButton variant="outline" onClick={() => setShowCreate(false)}>Cancel</RCButton>
-              <RCButton onClick={handleCreate}>Create</RCButton>
+              <RCButton variant="outline" onClick={() => setShowCreate(false)}>{t('company_dashboard.el_modal_cancel')}</RCButton>
+              <RCButton onClick={handleCreate}>{t('company_dashboard.el_modal_create')}</RCButton>
             </div>
           </div>
         </div>

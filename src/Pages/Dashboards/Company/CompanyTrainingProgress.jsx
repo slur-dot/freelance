@@ -3,6 +3,7 @@ import { Search, Trash2, Loader2 } from "lucide-react";
 import ChatPopup from "../../../components/ChatPopup";
 import { CompanyService } from "../../../services/companyService";
 import { auth } from "../../../firebaseConfig";
+import { useTranslation } from "react-i18next";
 
 // Button
 function TPButton({
@@ -47,6 +48,7 @@ function TPInput({ className = "", ...props }) {
 }
 
 export default function TrainingProgress() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [chatCourseId, setChatCourseId] = useState(null);
   const [employees, setEmployees] = useState([]);
@@ -159,7 +161,7 @@ export default function TrainingProgress() {
       <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-          <span className="ml-3 text-lg text-gray-700">Loading training data...</span>
+          <span className="ml-3 text-lg text-gray-700">{t('company_dashboard.tp_loading')}</span>
         </div>
       </div>
     );
@@ -169,13 +171,13 @@ export default function TrainingProgress() {
     return (
       <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
-          <h3 className="text-red-800 font-medium">Error loading training data</h3>
+          <h3 className="text-red-800 font-medium">{t('company_dashboard.tp_error')}</h3>
           <p className="text-red-600 text-sm mt-1">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
           >
-            Retry
+            {t('company_dashboard.tp_retry')}
           </button>
         </div>
       </div>
@@ -186,7 +188,7 @@ export default function TrainingProgress() {
     <div className="relative flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Header */}
       <header className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Team Training Progress</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t('company_dashboard.tp_title')}</h1>
       </header>
 
       {/* Search */}
@@ -194,7 +196,7 @@ export default function TrainingProgress() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
         <TPInput
           type="search"
-          placeholder="Search by name or course"
+          placeholder={t('company_dashboard.tp_search_placeholder')}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -205,11 +207,11 @@ export default function TrainingProgress() {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Employee Name</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Course Name</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Completion</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-6 py-3 text-right font-medium text-gray-500 uppercase">Action</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_name')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_course')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_completion')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_status')}</th>
+              <th className="px-6 py-3 text-right font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_action')}</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -229,7 +231,7 @@ export default function TrainingProgress() {
                 <td className="px-6 py-4 text-gray-500">
                   <div className="flex items-center bg-green-100 rounded-full p-1">
                     <span className="ml-4 h-2 w-2 bg-green-700 rounded-full mr-2" />
-                    {course.status}
+                    {course.status === 'Completed' ? t('company_dashboard.tp_status_completed') : t('company_dashboard.tp_status_active')}
                   </div>
                 </td>
                 <td className="px-6 py-4 text-right">
@@ -237,14 +239,14 @@ export default function TrainingProgress() {
                     <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
                       <Trash2 className="h-4 w-4 text-gray-500" />
                     </TPButton>
-                    <TPButton onClick={() => handleOpenChat(course.id)}>Message</TPButton>
+                    <TPButton onClick={() => handleOpenChat(course.id)}>{t('company_dashboard.tp_message')}</TPButton>
                   </div>
                 </td>
               </tr>
             ))}
             {filteredCourses.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">No records found.</td>
+                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">{t('company_dashboard.tp_no_records')}</td>
               </tr>
             )}
           </tbody>

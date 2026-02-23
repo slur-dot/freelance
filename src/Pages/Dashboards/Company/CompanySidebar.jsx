@@ -13,6 +13,7 @@ import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { CompanyService } from "../../../services/companyService";
+import { useTranslation } from "react-i18next";
 
 function Sidebar({ children, className }) {
   return (
@@ -67,6 +68,7 @@ function SidebarMenuButton({ children, isActive, to }) {
 }
 
 export default function CompanySidebar() {
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const activePath = location.pathname;
@@ -83,31 +85,31 @@ export default function CompanySidebar() {
 
   const navItems = [
     {
-      section: "HOME",
+      section: t('company_dashboard.sidebar_home'),
       items: [
-        { title: "Dashboard", url: "/company/dashboard", icon: BarChart3 },
+        { title: t('company_dashboard.sidebar_dashboard'), url: "/company/dashboard", icon: BarChart3 },
       ],
     },
     {
-      section: "EMPLOYEES",
+      section: t('company_dashboard.sidebar_employees'),
       items: [
         {
-          title: "Training Progress",
+          title: t('company_dashboard.sidebar_training_progress'),
           url: "/company/dashboard/training-progress",
           icon: Share2,
         },
         {
-          title: "Employee List",
+          title: t('company_dashboard.sidebar_employee_list'),
           url: "/company/dashboard/emplolyee-list",
           icon: MoreHorizontal,
         },
       ],
     },
     {
-      section: "TRAINING",
+      section: t('company_dashboard.sidebar_training'),
       items: [
         {
-          title: "Custom Training Quotes",
+          title: t('company_dashboard.sidebar_custom_training'),
           url: "/company/dashboard/training-quotes",
           icon: Wallet,
         },

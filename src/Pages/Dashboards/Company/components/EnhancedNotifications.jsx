@@ -1,5 +1,6 @@
 import React from "react";
 import AlexandraImg from "../../../../assets/Alexandra.png";
+import { useTranslation } from "react-i18next";
 
 function Card({ children, className = "" }) {
   return <div className={`bg-white shadow rounded-lg ${className}`}>{children}</div>;
@@ -9,12 +10,14 @@ function CardContent({ children, className = "" }) {
 }
 
 export default function EnhancedNotifications({ notifications }) {
+  const { t } = useTranslation();
+
   if (!notifications || notifications.length === 0) {
     return (
       <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Notifications</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('company_dashboard.notifications_title')}</h3>
         <div className="text-center text-gray-500">
-          <p>No notifications found</p>
+          <p>{t('company_dashboard.notifications_no_notifications')}</p>
         </div>
       </Card>
     );
@@ -22,7 +25,7 @@ export default function EnhancedNotifications({ notifications }) {
 
   return (
     <Card className="p-6">
-      <h3 className="text-lg font-semibold mb-4">Recent Notifications</h3>
+      <h3 className="text-lg font-semibold mb-4">{t('company_dashboard.notifications_recent')}</h3>
       <div className="space-y-3">
         {notifications.slice(0, 7).map((notification, index) => (
           <div key={index} className={`flex items-start gap-3 p-3 rounded-lg ${!notification.read ? 'bg-blue-50 border-l-4 border-blue-400' : 'bg-gray-50'}`}>

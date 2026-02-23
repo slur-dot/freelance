@@ -101,8 +101,8 @@ export default function Orders() {
   };
 
   const getStatusText = (status) => {
-    if (!status) return "Unknown";
-    return status.charAt(0).toUpperCase() + status.slice(1);
+    if (!status) return t('vendor_dashboard.orders.status.unknown', 'Unknown');
+    return t(`vendor_dashboard.orders.status.${status}`, status.charAt(0).toUpperCase() + status.slice(1));
   };
 
   // Filter & Sort
@@ -254,17 +254,17 @@ export default function Orders() {
                 disabled={currentPage === 1}
                 className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Previous
+                {t('vendor_dashboard.orders.pagination.previous')}
               </button>
               <span className="text-sm text-gray-700">
-                Page {currentPage} of {totalPages || 1}
+                {t('vendor_dashboard.orders.pagination.page_of', { current: currentPage, total: totalPages || 1 })}
               </span>
               <button
                 onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages || totalPages === 0}
                 className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Next
+                {t('vendor_dashboard.orders.pagination.next')}
               </button>
             </div>
           </div>
