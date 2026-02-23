@@ -23,7 +23,7 @@ const TrainingSection = () => {
       duration: "3 weeks"
     }
   ];
-
+  console.log('hello')
   return (
     <div className="min-h-screen">
       <section
