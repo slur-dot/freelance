@@ -3456,5 +3456,48 @@
                 "create": "Ajouter"
             }
         }
+    },
+    "tech_booking": {
+        "title": "Formulaire de Réservation",
+        "subtitle": "Remplissez le formulaire pour finaliser votre réservation",
+        "company_name": {
+            "label": "Nom de l'Entreprise",
+            "placeholder": "ex: Conakry Express"
+        },
+        "phone": {
+            "label": "Numéro de Téléphone",
+            "placeholder": "+CC ...",
+            "helper": "Utilisez le format international avec l'indicatif pays (ex: +224 …)."
+        },
+        "full_name": {
+            "label": "Nom de la Personne de Contact",
+            "placeholder": "ex: Saliou Camara"
+        },
+        "email": {
+            "label": "Adresse E-mail",
+            "placeholder": "ex: contact@societe.com"
+        },
+        "city": {
+            "label": "Ville",
+            "placeholder": "Sélectionnez une ville",
+            "no_results": "Aucun résultat trouvé"
+        },
+        "project_details": {
+            "label": "Détails du Projet",
+            "placeholder": "Décrivez les exigences de votre projet ici"
+        },
+        "file_upload": {
+            "label": "Téléchargez votre fichier de projet (obligatoire)",
+            "button": "Télécharger des fichiers"
+        },
+        "submit": "Soumettre votre réservation",
+        "validation": {
+            "required": "Ce champ est obligatoire",
+            "invalid_email": "Veuillez entrer une adresse e-mail valide",
+            "invalid_phone": "Format de numéro de téléphone invalide. Veuillez utiliser +CC ...",
+            "unsupported_file": "Type de fichier non pris en charge. Veuillez télécharger des documents PDF ou Word.",
+            "file_too_large": "Le fichier est trop volumineux. La taille maximale est de 10 Mo."
+        },
+        "success": "Votre réservation a été soumise avec succès !"
     }
 }

@@ -3450,5 +3450,48 @@
                 "create": "Add Advertisement"
             }
         }
+    },
+    "tech_booking": {
+        "title": "Booking Form",
+        "subtitle": "Complete the booking form to complete your booking",
+        "company_name": {
+            "label": "Company Name",
+            "placeholder": "e.g., Conakry Express"
+        },
+        "phone": {
+            "label": "Phone Number",
+            "placeholder": "+CC ...",
+            "helper": "Use international format with country code (e.g., +224 …)."
+        },
+        "full_name": {
+            "label": "Contact Name",
+            "placeholder": "e.g., Saliou Camara"
+        },
+        "email": {
+            "label": "Email Address",
+            "placeholder": "e.g., contact@company.com"
+        },
+        "city": {
+            "label": "City",
+            "placeholder": "Select a city",
+            "no_results": "No results found"
+        },
+        "project_details": {
+            "label": "Project Details",
+            "placeholder": "Describe your project requirements here"
+        },
+        "file_upload": {
+            "label": "Upload your project file (required)",
+            "button": "Upload from Files"
+        },
+        "submit": "Submit your Booking",
+        "validation": {
+            "required": "This field is required",
+            "invalid_email": "Please enter a valid email address",
+            "invalid_phone": "Invalid phone number format. Please use +CC ...",
+            "unsupported_file": "Unsupported file type. Please upload PDF or Word documents.",
+            "file_too_large": "File is too large. Maximum size is 10MB."
+        },
+        "success": "Your booking has been submitted successfully!"
     }
 }

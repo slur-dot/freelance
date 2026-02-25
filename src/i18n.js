@@ -10,7 +10,6 @@ i18n
     .init({
         fallbackLng: 'fr',
         debug: true,
-        lng: 'fr', // Set default language to French
 
         interpolation: {
             escapeValue: false, // not needed for react as it escapes by default
