@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PaymentMethodSelector from "../Payment/PaymentMethodSelector";
 import PriceDisplay from "../PriceDisplay";
+import PhoneInput from "../PhoneInput";
 
 export default function ComputerPaymentDetails({ onContinue, bookingData }) {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('orange-money');
@@ -8,6 +9,7 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
+    countryCode: "+224",
     notes: "",
     confirmAccurate: true,
     agreeTerms: false,
@@ -134,13 +136,12 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
               <label htmlFor="phone-number" className="text-gray-700">
                 Phone Number *
               </label>
-              <input
+              <PhoneInput
                 id="phone-number"
-                type="tel"
-                placeholder="+224 123 456 789"
-                className="w-full bg-gray-100 px-3 py-2 border rounded-md"
                 value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
+                onChange={(val) => handleInputChange("phone", val)}
+                countryCode={formData.countryCode}
+                onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
                 required
               />
             </div>

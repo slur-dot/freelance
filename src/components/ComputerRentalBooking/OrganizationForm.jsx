@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PhoneInput from "../PhoneInput";
 
 export default function OrganizationForm({ onContinue }) {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ export default function OrganizationForm({ onContinue }) {
     businessAddress: "",
     cityRegion: "",
     phoneNumber: "",
+    countryCode: "+224",
     email: "",
     contactPerson: "",
     role: "",
@@ -140,6 +142,15 @@ export default function OrganizationForm({ onContinue }) {
                     </option>
                   ))}
                 </select>
+              ) : input.type === "tel" ? (
+                <PhoneInput
+                  id={input.id}
+                  value={formData[input.field]}
+                  onChange={(val) => handleInputChange(input.field, val)}
+                  countryCode={formData.countryCode}
+                  onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
+                  required={input.required}
+                />
               ) : (
                 <input
                   id={input.id}

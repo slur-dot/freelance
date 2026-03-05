@@ -148,27 +148,38 @@ export default function AdminSidebar() {
   return (
     <div className="flex min-h-screen">
       {/* Mobile Hamburger */}
-      <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded shadow"
-        onClick={toggleSidebar}
-      >
-        {isMobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-      </button>
+      {/* Mobile Topbar */}
+      <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b fixed top-0 left-0 right-0 z-50">
+        <button onClick={() => setIsMobileOpen(true)}>
+          <Menu className="h-6 w-6 text-gray-700" />
+        </button>
+        <span className="font-bold">Freelance</span>
+        <div className="w-6" /> {/* Spacer for centering title */}
+      </div>
 
       {/* Sidebar */}
       <Sidebar
-        className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200 bg-white 
+        className={`fixed top-0 left-0 z-50 h-screen border-r border-gray-200 bg-white shadow-xl
           transform transition-transform duration-200 ease-in-out
           ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:static
+          lg:translate-x-0 lg:static lg:shadow-none
           ${isCollapsed ? "w-20" : "w-64"}`}
         onMouseEnter={() => setIsCollapsed(false)}
         onMouseLeave={() => window.innerWidth < 1024 && setIsCollapsed(true)}
       >
         {/* Header */}
-        <SidebarHeader className="p-4 flex items-center gap-3">
-          <img src="/logo.png" alt="Freelance Logo" width={40} height={40} />
-          {!isCollapsed && <span className="text-xl font-bold">Freelance</span>}
+        <SidebarHeader className="p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Freelance Logo" width={40} height={40} />
+            {!isCollapsed && <span className="text-xl font-bold">Freelance</span>}
+          </div>
+          {/* Close button (mobile only) */}
+          <button
+            className="lg:hidden text-gray-600"
+            onClick={() => setIsMobileOpen(false)}
+          >
+            <X className="h-6 w-6" />
+          </button>
         </SidebarHeader>
 
         {/* Sidebar Content */}
@@ -230,13 +241,13 @@ export default function AdminSidebar() {
       {/* Backdrop for Mobile */}
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-30 md:hidden"
-          onClick={toggleSidebar}
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          onClick={() => setIsMobileOpen(false)}
         />
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
+      <main className="flex-1 p-6 bg-gray-50 overflow-y-auto lg:mt-0 mt-16">
         <Outlet />
       </main>
     </div>

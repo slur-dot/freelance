@@ -1,7 +1,9 @@
 {
     "common": {
         "loading": "Chargement...",
-        "n_a": "N/A"
+        "n_a": "N/A",
+        "cancel": "Annuler",
+        "other": "Autre"
     },
     "navbar": {
         "home": "Accueil",
@@ -137,6 +139,7 @@
         "invite_friends": "Inviter des amis"
     },
     "home": {
+        "title": "Accueil",
         "hero": {
             "save_20": "Économisez 20%",
             "faster_solutions": "Solutions plus rapides",

@@ -1,7 +1,9 @@
 {
     "common": {
         "loading": "Loading...",
-        "n_a": "N/A"
+        "n_a": "N/A",
+        "cancel": "Cancel",
+        "other": "Other"
     },
     "navbar": {
         "home": "Home",
@@ -137,6 +139,7 @@
         "invite_friends": "Invite Friends"
     },
     "home": {
+        "title": "Home",
         "hero": {
             "save_20": "Save 20%",
             "faster_solutions": "Faster solutions",

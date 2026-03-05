@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { adminApi } from "../../../lib/adminApi";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { X } from "lucide-react";
 
 export default function Productform({ onContinue }) {
   const { t } = useTranslation();
@@ -69,11 +70,19 @@ export default function Productform({ onContinue }) {
     <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-6 sm:px-6 lg:px-8">
       <div className="w-full max-w-2xl rounded-lg bg-white px-4 py-6 shadow-lg sm:p-6 md:p-8">
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold sm:text-3xl">{t('admin_dashboard.listings.product.form_page.title')}</h1>
-          <p className="text-sm text-gray-500 sm:text-base">
-            {t('admin_dashboard.listings.product.form_page.subtitle')}
-          </p>
+        <div className="mb-6 flex justify-between items-start">
+          <div>
+            <h1 className="text-2xl font-bold sm:text-3xl">{t('admin_dashboard.listings.product.form_page.title')}</h1>
+            <p className="text-sm text-gray-500 sm:text-base">
+              {t('admin_dashboard.listings.product.form_page.subtitle')}
+            </p>
+          </div>
+          <button
+            onClick={() => navigate("/admin/dashboard/product-listing")}
+            className="text-gray-400 hover:text-gray-600 transition"
+          >
+            <X size={24} />
+          </button>
         </div>
 
         <form className="grid gap-6" onSubmit={handleSubmit}>
@@ -140,8 +149,15 @@ export default function Productform({ onContinue }) {
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="col-span-full mt-4 flex justify-center">
+          {/* Submit/Cancel Buttons */}
+          <div className="col-span-full mt-4 flex flex-col sm:flex-row justify-center gap-3">
+            <button
+              type="button"
+              onClick={() => navigate("/admin/dashboard/product-listing")}
+              className="w-full max-w-[250px] rounded-3xl border border-gray-300 px-6 py-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              {t('common.cancel') || 'Cancel'}
+            </button>
             <button
               type="submit"
               disabled={loading}

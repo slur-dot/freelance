@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { guineaCities, guineaCitiesByRegion } from "../data/guineaCities";
+import PhoneInput from "./PhoneInput";
 
 const Button = ({ children, className = "", ...props }) => (
   <button
@@ -176,6 +177,7 @@ export default function TechServiceBooking() {
   const [formData, setFormData] = useState({
     companyName: "",
     phoneNumber: "",
+    countryCode: "+224",
     fullName: "",
     email: "",
     city: "",
@@ -188,8 +190,9 @@ export default function TechServiceBooking() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const validatePhone = (phone) => {
+    // Simple check if length is at least 7 after cleaning
     const cleaned = phone.replace(/[\s\-\(\)]/g, "");
-    return /^\+\d{7,15}$/.test(cleaned);
+    return cleaned.length >= 7;
   };
 
   const validateEmail = (email) => {
@@ -324,16 +327,19 @@ export default function TechServiceBooking() {
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-x-6">
             <Label htmlFor="phoneNumber" required>{t("tech_booking.phone.label")}</Label>
             <div>
-              <Input
+              <PhoneInput
                 id="phoneNumber"
-                type="tel"
-                placeholder={t("tech_booking.phone.placeholder")}
                 value={formData.phoneNumber}
-                onChange={handleInputChange}
-                error={errors.phoneNumber}
-                aria-required="true"
-                aria-invalid={!!errors.phoneNumber}
-                aria-describedby={`phone-helper ${errors.phoneNumber ? "phoneNumber-error" : ""}`}
+                onChange={(val) => {
+                  setFormData((prev) => ({ ...prev, phoneNumber: val }));
+                  if (errors.phoneNumber) setErrors((prev) => ({ ...prev, phoneNumber: null }));
+                }}
+                countryCode={formData.countryCode}
+                onCountryCodeChange={(code) => {
+                  setFormData((prev) => ({ ...prev, countryCode: code }));
+                }}
+                required
+                error={!!errors.phoneNumber}
               />
               <p id="phone-helper" className="text-gray-500 text-[11px] mt-1 italic">
                 {t("tech_booking.phone.helper")}

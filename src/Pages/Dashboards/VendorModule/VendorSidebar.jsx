@@ -149,14 +149,15 @@ export default function VendorSidebar() {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Mobile Hamburger */}
-      <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded shadow"
-        onClick={toggleSidebar}
-      >
-        {isMobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-      </button>
+    <div className="flex flex-col md:flex-row min-h-screen">
+      {/* Mobile Topbar */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b fixed top-0 left-0 right-0 z-50">
+        <button onClick={toggleSidebar}>
+          {isMobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+        <span className="font-bold">Freelance</span>
+        <div className="w-6" /> {/* Spacer for centering title */}
+      </div>
 
       {/* Sidebar */}
       <Sidebar
@@ -235,7 +236,8 @@ export default function VendorSidebar() {
         />
       )}
 
-      <main className="flex-1 bg-gray-50 overflow-y-auto">
+      {/* Main Content */}
+      <main className="flex-1 bg-gray-50 overflow-y-auto md:mt-0 mt-16">
         <Outlet />
       </main>
     </div>

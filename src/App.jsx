@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './Pages/Home';
 import { CurrencyProvider } from './contexts/CurrencyContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -156,7 +157,7 @@ function AppContent() {
 
           {/* Freelancer Dashboard */}
 
-          <Route path="/freelancer/dashboard" element={<FreelancerSidebar />}>
+          <Route path="/freelancer/dashboard" element={<ProtectedRoute><FreelancerSidebar /></ProtectedRoute>}>
             <Route index element={<FreelancerDashboard />} />
             <Route path="training-progress" element={<TrainingProgress />} />
             <Route path="requested-courses" element={<RequestedCourses />} />
@@ -164,7 +165,7 @@ function AppContent() {
           </Route>
 
           {/* Client Dashboard */}
-          <Route path="/Clients/dashboard" element={<ClientSidebar />}>
+          <Route path="/Clients/dashboard" element={<ProtectedRoute><ClientSidebar /></ProtectedRoute>}>
             <Route index element={<ClientDashbaord />} />
             <Route path="Hired-Freelancers" element={<HiredFreelancers />} />
             <Route path="Project-List" element={<ProjectList />} />
@@ -173,7 +174,7 @@ function AppContent() {
 
 
           {/* Company Dashboard  */}
-          <Route path="/company/dashboard" element={<CompanySidebar />}>
+          <Route path="/company/dashboard" element={<ProtectedRoute><CompanySidebar /></ProtectedRoute>}>
             <Route index element={<CompanyDashbaord />} />
             <Route path="emplolyee-list" element={<EmployeeList />} />
             <Route path="training-progress" element={<CompanyTrainingProgress />} />
@@ -181,7 +182,7 @@ function AppContent() {
           </Route>
 
           {/* Vendor Dashboard  */}
-          <Route path="/vendor/dashboard" element={<VendorSidebar />}>
+          <Route path="/vendor/dashboard" element={<ProtectedRoute><VendorSidebar /></ProtectedRoute>}>
             <Route index element={<VendorDashboard />} />
             <Route path="listings" element={<Listings />}></Route>
             <Route path="orders" element={<Orders />}></Route>
@@ -190,7 +191,7 @@ function AppContent() {
           </Route>
 
           {/* Seller Dashboard  */}
-          <Route path="/seller/dashboard" element={<SellerSidebar />}>
+          <Route path="/seller/dashboard" element={<ProtectedRoute><SellerSidebar /></ProtectedRoute>}>
             <Route index element={<SellerDashboard />} />
             <Route path="listings" element={<SellerListings />}></Route>
             <Route path="orders" element={<SellerOrders />}></Route>
@@ -201,7 +202,7 @@ function AppContent() {
           </Route>
 
           {/* Admin Dashboard  */}
-          <Route path="/admin/dashboard" element={<AdminSidebar />}>
+          <Route path="/admin/dashboard" element={<ProtectedRoute><AdminSidebar /></ProtectedRoute>}>
             <Route index element={<AdminDashbaord />} />
             <Route path="course-listing" element={<CourseListing />} />
             <Route path="product-listing" element={<ProductListing />} />

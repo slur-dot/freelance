@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import PhoneInput from "../../components/PhoneInput";
 
 export default function CompanyTrainingRequestForm() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     companyName: "",
     phoneNumber: "",
+    countryCode: "+224",
     lookingFor: "",
     numEmployees: "",
     preferredDuration: "",
@@ -65,16 +67,16 @@ export default function CompanyTrainingRequestForm() {
                   {t('training.forms.request.phone')}
                 </label>
               </div>
-              <input
-                id="phone-number"
-                name="phoneNumber"
-                type="tel"
-                autoComplete="tel"
-                placeholder={t('training.forms.request.placeholders.phone')}
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                className="flex-grow rounded-md border border-gray-300 shadow-sm bg-gray-200 focus:border-gray-500 focus:ring-1 focus:ring-gray-500 sm:text-sm px-3 py-2"
-              />
+              <div className="flex-grow">
+                <PhoneInput
+                  id="phone-number"
+                  value={formData.phoneNumber}
+                  onChange={(val) => setFormData((d) => ({ ...d, phoneNumber: val }))}
+                  countryCode={formData.countryCode}
+                  onCountryCodeChange={(code) => setFormData((d) => ({ ...d, countryCode: code }))}
+                  className="!rounded-md"
+                />
+              </div>
             </div>
           </div>
 

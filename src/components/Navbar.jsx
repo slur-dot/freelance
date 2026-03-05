@@ -61,20 +61,6 @@ export default function Navbar() {
             <Link to="/locations" className={isActive("/locations")}>{t('navbar.locations')}</Link>
             <Link to="/tech-services" className={isActive("/tech-services")}>{t('navbar.tech_services')}</Link>
 
-            {/* Dashboards Dropdown */}
-            <div className="relative group">
-              <button className="flex items-center text-gray-700 font-medium pb-1">
-                {t('navbar.dashboards')} <HiChevronDown className="ml-1 text-sm text-gray-500" />
-              </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 py-1">
-                <Link to="/freelancer/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.freelancer_dashboard')}</Link>
-                <Link to="/Clients/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.clients_dashboard')}</Link>
-                <Link to="/Company/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.company_dashboard')}</Link>
-                <Link to="/admin/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.admin_dashboard')}</Link>
-                <Link to="/vendor/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_modules')}</Link>
-                <Link to="/seller/dashboard" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.seller_dashboard')}</Link>
-              </div>
-            </div>
 
             {/* More Dropdown */}
             <div className="relative group">
@@ -130,66 +116,190 @@ export default function Navbar() {
             </div>
             <FaShoppingCart className="text-black text-[18px] cursor-pointer" />
           </div>
-
-          {/* Mobile menu toggle button */}
-          <div className="md:hidden">
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-700">
-              {isMobileMenuOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
+          {/* Mobile Hamburger Button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="text-gray-700 hover:text-black"
+            >
+              <FaBars size={22} />
             </button>
+          </div>
+          {/* Mobile menu toggle button */}
+          {/* Mobile Drawer */}
+          <div
+            className={`fixed inset-0 z-50 md:hidden transition-opacity ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+              }`}
+          >
+            {/* Overlay */}
+            <div
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* Drawer */}
+            <div
+              className={`absolute right-0 top-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+                }`}
+            >
+              <div className="flex flex-col h-full">
+
+                {/* Drawer Header */}
+                <div className="flex items-center justify-between px-5 py-4 border-b">
+                  <div className="flex items-center space-x-2">
+                    <img src="/logo.png" className="w-8 h-8 rounded-full" />
+                    <span className="font-bold text-gray-800 text-lg">Freelance</span>
+                  </div>
+
+                  <button
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-gray-500 hover:text-black"
+                  >
+                    <FaTimes size={20} />
+                  </button>
+                </div>
+
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+
+                  {/* Main Links */}
+                  <div className="space-y-4 text-gray-700 font-medium">
+                    <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.home")}
+                    </Link>
+
+                    <Link to="/shop" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.shop")}
+                    </Link>
+
+                    <Link to="/hire-freelancers" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.hire_freelancers")}
+                    </Link>
+
+                    <Link to="/locations" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.locations")}
+                    </Link>
+
+                    <Link to="/tech-services" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.tech_services")}
+                    </Link>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t" />
+
+                  {/* More Section */}
+                  <div>
+                    <p className="text-sm font-semibold text-gray-400 uppercase mb-3">
+                      {t("navbar.more")}
+                    </p>
+
+                    <div className="space-y-3 text-gray-600 text-sm">
+                      <Link to="/computer-rental" className="block hover:text-blue-600">
+                        {t("navbar.device_rental")}
+                      </Link>
+
+                      <Link to="/training-modules" className="block hover:text-blue-600">
+                        {t("navbar.training_upskilling")}
+                      </Link>
+
+                      <Link to="/corporate-sales" className="block hover:text-blue-600">
+                        {t("navbar.corporate_sales")}
+                      </Link>
+
+                      <Link to="/faq" className="block hover:text-blue-600">
+                        {t("navbar.faq")}
+                      </Link>
+
+                      <Link to="/blog" className="block hover:text-blue-600">
+                        {t("navbar.blog")}
+                      </Link>
+
+                      <Link to="/contact" className="block hover:text-blue-600">
+                        {t("navbar.contact_us")}
+                      </Link>
+
+                      <Link to="/vendor-profiles" className="block hover:text-blue-600">
+                        {t("navbar.vendor_profiles")}
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t" />
+
+                  {/* Language Switch */}
+                  <div>
+                    <p className="text-sm font-semibold text-gray-400 uppercase mb-3">
+                      Language
+                    </p>
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => changeLanguage("en")}
+                        className={`px-4 py-1 rounded-full text-sm border ${i18n.language === "en"
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "border-gray-300 text-gray-700"
+                          }`}
+                      >
+                        EN
+                      </button>
+
+                      <button
+                        onClick={() => changeLanguage("fr")}
+                        className={`px-4 py-1 rounded-full text-sm border ${i18n.language === "fr"
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "border-gray-300 text-gray-700"
+                          }`}
+                      >
+                        FR
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Auth Section */}
+                <div className="border-t p-5 space-y-3">
+
+                  {currentUser ? (
+                    <>
+                      <p className="text-xs text-gray-500 truncate">
+                        {currentUser.email}
+                      </p>
+
+                      <button
+                        onClick={handleLogout}
+                        className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
+                      >
+                        {t("navbar.logout")}
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={handleLogin}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                      >
+                        {t("navbar.login")}
+                      </button>
+
+                      <button
+                        onClick={handleSignup}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition"
+                      >
+                        {t("navbar.signup")}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 px-4 py-4 space-y-3">
-          <Link to="/" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.home')}</Link>
-          <Link to="/shop" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.shop')}</Link>
-          <Link to="/hire-freelancers" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.hire_freelancers')}</Link>
-          <Link to="/locations" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.locations')}</Link>
-          <Link to="/tech-services" className="block text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>{t('navbar.tech_services')}</Link>
 
-          {/* Dashboards Dropdown (Flat) */}
-          <div>
-            <p className="font-semibold text-gray-700 mt-2">{t('navbar.dashboards')}</p>
-            <Link to="/freelancer/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.freelancer_dashboard')}</Link>
-            <Link to="/Clients/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.clients_dashboard')}</Link>
-            <Link to="/Company/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.company_dashboard')}</Link>
-            <Link to="/admin/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.admin_dashboard')}</Link>
-            <Link to="/vendor/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.vendor_modules')}</Link>
-            <Link to="/seller/dashboard" className="block text-sm text-gray-600 ml-4">{t('navbar.seller_dashboard')}</Link>
-          </div>
 
-          {/* More Dropdown (Flat) */}
-          <div>
-            <p className="font-semibold text-gray-700 mt-2">{t('navbar.more')}</p>
-            <Link to="/computer-rental" className="block text-sm text-gray-600 ml-4">{t('navbar.device_rental')}</Link>
-            <Link to="/training-modules" className="block text-sm text-gray-600 ml-4">{t('navbar.training_upskilling')}</Link>
-            <Link to="/corporate-sales" className="block text-sm text-gray-600 ml-4">{t('navbar.corporate_sales')}</Link>
-            <Link to="/faq" className="block text-sm text-gray-600 ml-4">{t('navbar.faq')}</Link>
-            <Link to="/blog" className="block text-sm text-gray-600 ml-4">{t('navbar.blog')}</Link>
-            <Link to="/contact" className="block text-sm text-gray-600 ml-4">{t('navbar.contact_us')}</Link>
-            <Link to="/vendor-profiles" className="block text-sm text-gray-600 ml-4">{t('navbar.vendor_profiles')}</Link>
-          </div>
-
-          <div className="flex space-x-4 mt-4 items-center justify-center">
-            <button onClick={() => changeLanguage('en')} className={`text-sm font-medium px-4 py-2 rounded-full border ${i18n.language === 'en' ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300'}`}>EN</button>
-            <button onClick={() => changeLanguage('fr')} className={`text-sm font-medium px-4 py-2 rounded-full border ${i18n.language === 'fr' ? 'bg-blue-600 text-white border-blue-600' : 'text-gray-700 border-gray-300'}`}>FR</button>
-          </div>
-
-          {/* Auth Buttons */}
-          <div className="pt-4 space-y-2">
-            {currentUser ? (
-              <button onClick={handleLogout} className="w-full bg-red-500 text-white py-2 rounded">{t('navbar.logout')}</button>
-            ) : (
-              <>
-                <button onClick={handleLogin} className="w-full bg-blue-500 text-white py-2 rounded">{t('navbar.login')}</button>
-                <button onClick={handleSignup} className="w-full bg-green-600 text-white py-2 rounded">{t('navbar.signup')}</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 }
