@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ProfileCarousel from "./ProfileCarousel";
 import ERP from "../assets/ERP.png";
 import DeviceSales from "../assets/DeviceSales.png";
@@ -10,7 +11,8 @@ import ITSupport from "../assets/ITSupport.png";
 import { useTranslation } from "react-i18next";
 
 // Sample ServiceCard component with updated styling
-const ServiceCard = ({ icon, title, description, buttonText, additionalContent }) => {
+const ServiceCard = ({ icon, title, description, buttonText, additionalContent, to }) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-slate-800 rounded-lg p-6 shadow-lg flex flex-col sm:flex-row sm:items-start items-center justify-center sm:justify-start text-center sm:text-left">
       {/* Icon */}
@@ -21,7 +23,10 @@ const ServiceCard = ({ icon, title, description, buttonText, additionalContent }
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
         <p className="text-gray-400 mb-4">{description}</p>
         {additionalContent && <div className="mb-4">{additionalContent}</div>}
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-colors duration-300">
+        <button 
+          onClick={() => navigate(to)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full transition-colors duration-300"
+        >
           {buttonText}
         </button>
       </div>
@@ -87,6 +92,7 @@ export default function Services() {
             title={t('home.services.erp_title')}
             description={t('home.services.erp_desc')}
             buttonText={t('home.services.erp_btn')}
+            to="/tech-services#erp-solutions"
           />
 
           <ServiceCard
@@ -98,6 +104,7 @@ export default function Services() {
             title={t('home.services.it_support_title')}
             description={t('home.services.it_support_desc')}
             buttonText={t('home.services.it_support_btn')}
+            to="/tech-services#it-support"
           />
 
           <ServiceCard
@@ -109,6 +116,7 @@ export default function Services() {
             title={t('home.services.integration_title')}
             description={t('home.services.integration_desc')}
             buttonText={t('home.services.integration_btn')}
+            to="/tech-services#it-integration"
           />
 
           <ServiceCard
@@ -120,6 +128,7 @@ export default function Services() {
             title={t('home.services.outsourcing_title')}
             description={t('home.services.outsourcing_desc')}
             buttonText={t('home.services.outsourcing_btn')}
+            to="/tech-services#it-outsourcing"
           />
 
           <ServiceCard
@@ -131,6 +140,7 @@ export default function Services() {
             title={t('home.services.device_title')}
             description={t('home.services.device_desc')}
             buttonText={t('home.services.device_btn')}
+            to="/computer-rental#rental-products"
             additionalContent={
               <div className="space-y-1 text-center sm:text-left flex flex-col items-center sm:items-start">
                 <p className="text-green-400 font-semibold">{t('services_page.price_device')}</p>
@@ -151,6 +161,7 @@ export default function Services() {
             title={t('home.services.training_title')}
             description={t('home.services.training_desc')}
             buttonText={t('home.services.training_btn')}
+            to="/training-modules#training-content"
           />
         </div>
       </div>

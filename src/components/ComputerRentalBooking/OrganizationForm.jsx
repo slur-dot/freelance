@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import PhoneInput from "../PhoneInput";
 
 export default function OrganizationForm({ onContinue }) {
+  const [phoneError, setPhoneError] = useState(false);
   const [formData, setFormData] = useState({
     organizationName: "",
     organizationType: "",
+    rccmNumber: "",
     businessAddress: "",
     cityRegion: "",
     phoneNumber: "",
@@ -32,6 +34,15 @@ export default function OrganizationForm({ onContinue }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    const digits = formData.phoneNumber.replace(/\D/g, '');
+    const requiredDigits = formData.countryCode === '+225' ? 10 : 9;
+    
+    if (digits.length < requiredDigits) {
+      setPhoneError(true);
+      return;
+    }
+
     console.log("Form Data:", formData);
     if (onContinue) onContinue(formData);
   };
@@ -69,6 +80,14 @@ export default function OrganizationForm({ onContinue }) {
               type: "select",
               required: true,
               options: organizationTypes,
+            },
+            {
+              id: "rccm-number",
+              label: "RCCM Number",
+              placeholder: "e.g., RCCM/GC/KAL/033.456B/2012",
+              field: "rccmNumber",
+              type: "text",
+              required: true,
             },
             {
               id: "business-address",
@@ -118,7 +137,9 @@ export default function OrganizationForm({ onContinue }) {
               type: "text",
               required: false,
             },
-          ].map((input) => (
+          ]
+          .filter((input) => !(input.field === "rccmNumber" && formData.organizationType !== "Corporation"))
+          .map((input) => (
             <div
               key={input.id}
               className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4"
@@ -143,14 +164,25 @@ export default function OrganizationForm({ onContinue }) {
                   ))}
                 </select>
               ) : input.type === "tel" ? (
-                <PhoneInput
-                  id={input.id}
-                  value={formData[input.field]}
-                  onChange={(val) => handleInputChange(input.field, val)}
-                  countryCode={formData.countryCode}
-                  onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
-                  required={input.required}
-                />
+                <div className="flex flex-col w-full">
+                  <PhoneInput
+                    id={input.id}
+                    value={formData[input.field]}
+                    onChange={(val) => {
+                      handleInputChange(input.field, val);
+                      if (phoneError) setPhoneError(false);
+                    }}
+                    countryCode={formData.countryCode}
+                    onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
+                    required={input.required}
+                    error={phoneError}
+                  />
+                  {phoneError && (
+                    <p className="text-red-500 text-xs mt-1">
+                      Please enter a valid {formData.countryCode === '+225' ? '10' : '9'}-digit phone number.
+                    </p>
+                  )}
+                </div>
               ) : (
                 <input
                   id={input.id}

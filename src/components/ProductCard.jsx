@@ -15,10 +15,10 @@ const ProductCard = ({ product, onAddToCart }) => {
             </span>
           )}
           <div className="mt-2">
-            <p className="text-red-500 line-through">{product.originalPrice}</p>
-            <p className="text-green-600 font-bold">{product.currentPrice}</p>
+            <p className="text-red-500 line-through">{product.originalPrice.toLocaleString()} GNF</p>
+            <p className="text-green-600 font-bold">{product.currentPrice.toLocaleString()} GNF</p>
             <p className="text-sm text-gray-500">
-              {product.monthlyOriginal} → {product.monthlyPrice} {t('shop.product.per_month')}
+              ${product.monthlyOriginal} → ${product.monthlyPrice} {t('shop.product.per_month')}
             </p>
           </div>
         </div>

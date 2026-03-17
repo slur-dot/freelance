@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import OrganizationForm from "./OrganizationForm";
 import DeviceDetailsForm from "./DeviceDetailsForm";
 import ComputerDeliveryDetails from "./ComputerDeliveryDetails";
@@ -7,7 +8,9 @@ import ComputerPaymentDetails from "./ComputerPaymentDetails";
 import EnhancedBookingStep from "./EnhancedBookingStep";
 import RentalAgreementStep from "./RentalAgreementStep";
 
-export default function ComputerBookingForm() {
+export default function ComputerBookingForm({ isCorporateSales = false }) {
+  const location = useLocation();
+  const prefilledProduct = location.state || {};
   const [step, setStep] = useState(1);
 
   const [organizationData, setOrganizationData] = useState({});
@@ -21,7 +24,11 @@ export default function ComputerBookingForm() {
   // Step 1 -> Organization
   const handleOrganizationContinue = (data) => {
     setOrganizationData(data);
-    setStep(2);
+    if (isCorporateSales) {
+      setStep(3); // Skip Device details entirely
+    } else {
+      setStep(2);
+    }
   };
 
   // Step 2 -> Device
@@ -72,9 +79,9 @@ export default function ComputerBookingForm() {
   return (
     <div>
       {step === 1 && <OrganizationForm onContinue={handleOrganizationContinue} />}
-      {step === 2 && <DeviceDetailsForm onContinue={handleDeviceContinue} />}
+      {step === 2 && <DeviceDetailsForm onContinue={handleDeviceContinue} prefilledProduct={prefilledProduct} />}
       {step === 3 && <ComputerDeliveryDetails onContinue={handleDeliveryContinue} />}
-      {step === 4 && <AddonsSelectionForm onContinue={handleAddonsContinue} />}
+      {step === 4 && <AddonsSelectionForm onContinue={handleAddonsContinue} deviceData={deviceData} />}
       {step === 5 && (
         <ComputerPaymentDetails
           onContinue={handlePaymentContinue}

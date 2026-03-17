@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Star, X, ArrowRight, MessageSquare, Heart, AlignJustify } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Star, X, ArrowRight, MessageSquare, Heart, AlignJustify, Briefcase, Award, FolderGit2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import EmilyImage from "../assets/Emily.jpg";
@@ -12,9 +12,61 @@ export default function JobPostForm() {
   const { t } = useTranslation();
   const [skills, setSkills] = useState(["Cyber Security", "SAP", "IT Support Specialist"]);
   const [showLiveChat, setShowLiveChat] = useState(false);
+  
+  // Custom Autocomplete State
+  const [inputValue, setInputValue] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const inputRef = useRef(null);
+  const dropdownRef = useRef(null);
 
-  const addSkill = () => {
-    setSkills([...skills, "New Skill"]);
+  // Expanded list of IT related skills
+  const availableSkills = [
+    "Cyber Security", "SAP", "IT Support Specialist", "Web Development",
+    "Data Analysis", "UI/UX Design", "Cloud Computing", "Python",
+    "JavaScript", "React", "Node.js", "Java", "C++", "C#", "SQL",
+    "NoSQL", "DevOps", "Docker", "Kubernetes", "AWS", "Azure",
+    "Google Cloud", "Machine Learning", "Artificial Intelligence",
+    "Blockchain", "Mobile Development", "iOS", "Android", "React Native",
+    "Flutter", "Ruby on Rails", "PHP", "Laravel", "Vue.js", "Angular",
+    "TypeScript", "GraphQL", "REST API"
+  ];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        dropdownRef.current && 
+        !dropdownRef.current.contains(event.target) &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    setShowDropdown(true);
+  };
+
+  const addSkill = (skill) => {
+    if (skill && !skills.includes(skill)) {
+      setSkills([...skills, skill]);
+      setInputValue("");
+      setShowDropdown(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      e.preventDefault();
+      addSkill(inputValue.trim());
+    } else if (e.key === "Backspace" && !inputValue && skills.length > 0) {
+      removeSkill(skills.length - 1);
+    }
   };
 
   const removeSkill = (index) => {
@@ -113,46 +165,87 @@ export default function JobPostForm() {
           <div>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <h3 className="text-lg font-semibold">{t('job_post.form.skills')}</h3>
-              <div className="flex items-center space-x-2 flex-grow">
-                <select
-                  className="w-1/2 border border-gray-300 rounded-md p-2 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                  id="skillSelect"
+              <div className="flex-grow max-w-lg relative">
+                
+                {/* Custom Autocomplete Input Area */}
+                <div 
+                  className={`min-h-[48px] border rounded-md p-1.5 flex flex-wrap gap-2 items-center bg-gray-50 transition-colors ${showDropdown ? 'border-blue-400 ring-2 ring-blue-100' : 'border-gray-300 hover:border-gray-400'}`}
+                  onClick={() => inputRef.current?.focus()}
                 >
-                  <option value="" disabled selected>{t('job_post.form.skills_placeholder')}</option>
-                  <option value="Cyber Security">Cyber Security</option>
-                  <option value="SAP">SAP</option>
-                  <option value="IT Support Specialist">IT Support Specialist</option>
-                  <option value="Web Development">Web Development</option>
-                  <option value="Data Analysis">Data Analysis</option>
-                  <option value="UI/UX Design">UI/UX Design</option>
-                  <option value="Cloud Computing">Cloud Computing</option>
-                </select>
-                <button
-                  onClick={addSkill}
-                  className="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-full"
-                >
-                  {t('job_post.form.add_btn')}
-                </button>
+                  {/* Chips */}
+                  {skills.map((skill, index) => (
+                    <div 
+                      key={index}
+                      className="flex items-center gap-1 bg-green-600 text-white px-2.5 py-1 rounded border border-green-700 text-sm"
+                    >
+                      <span className="max-w-[150px] truncate">{skill}</span>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeSkill(index);
+                        }}
+                        className="hover:bg-green-700 hover:text-red-200 rounded-full p-0.5 ml-1 transition-colors"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  {/* Input field */}
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => setShowDropdown(true)}
+                    placeholder={skills.length === 0 ? t('job_post.form.skills_placeholder') : ""}
+                    className="flex-grow min-w-[120px] bg-transparent outline-none p-1 text-sm text-gray-800 placeholder-gray-400"
+                  />
+                </div>
+
+                {/* Dropdown Menu */}
+                {showDropdown && (
+                  <div 
+                    ref={dropdownRef}
+                    className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                  >
+                    {availableSkills
+                      .filter(skill => !skills.includes(skill))
+                      .filter(skill => skill.toLowerCase().includes(inputValue.toLowerCase()))
+                      .map((skill, index) => (
+                        <div
+                          key={index}
+                          onClick={() => addSkill(skill)}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 transition-colors"
+                        >
+                          {skill}
+                        </div>
+                      ))}
+                    
+                    {/* Allow custom skill entry if no exact match */}
+                    {inputValue && !availableSkills.some(s => s.toLowerCase() === inputValue.toLowerCase()) && (
+                      <div
+                        onClick={() => addSkill(inputValue.trim())}
+                        className="px-4 py-2 bg-gray-50 hover:bg-gray-100 cursor-pointer text-sm text-blue-600 font-medium border-t border-gray-100 transition-colors"
+                      >
+                        Add "{inputValue}"
+                      </div>
+                    )}
+
+                    {/* Empty State */}
+                    {availableSkills.filter(skill => !skills.includes(skill) && skill.toLowerCase().includes(inputValue.toLowerCase())).length === 0 && !inputValue && (
+                      <div className="px-4 py-3 text-sm text-gray-500 italic text-center">
+                        No more default skills available
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             <p className="text-sm text-gray-500 mt-2">
               {t('job_post.form.skills_help')}
             </p>
-            <div className="p-3 mt-3 rounded-md flex flex-wrap gap-2 ml-35 bg-gray-100 ">
-              {skills.map((skill, index) => (
-                <div key={index} className="relative ">
-                  <span className="bg-green-600 text-white px-3 py-1 rounded-md text-sm">
-                    {skill}
-                  </span>
-                  <button
-                    onClick={() => removeSkill(index)}
-                    className="absolute -top-1 -right-1 bg-red-500 rounded-full p-0.5 shadow-sm text-white"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Post a Job Button */}
@@ -188,6 +281,25 @@ export default function JobPostForm() {
                 <div>
                   <h4 className="text-xl font-bold">Emily Lewis</h4>
                   <p className="text-sm text-gray-500">Conakry</p>
+                </div>
+              </div>
+
+              {/* Freelancer Summary Badges */}
+              <div className="grid grid-cols-3 gap-2 py-2">
+                <div className="bg-blue-50 p-2 rounded-md text-center border border-blue-100">
+                  <div className="flex justify-center mb-1"><Briefcase className="w-4 h-4 text-blue-600" /></div>
+                  <div className="text-sm font-bold text-gray-800">5+ Yrs</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-wider">{t('freelancer.profile.experienceLabel') || 'Experience'}</div>
+                </div>
+                <div className="bg-purple-50 p-2 rounded-md text-center border border-purple-100">
+                  <div className="flex justify-center mb-1"><Award className="w-4 h-4 text-purple-600" /></div>
+                  <div className="text-sm font-bold text-gray-800">Pro</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-wider">{t('freelancer.profile.levelLabel') || 'Level'}</div>
+                </div>
+                <div className="bg-green-50 p-2 rounded-md text-center border border-green-100">
+                  <div className="flex justify-center mb-1"><FolderGit2 className="w-4 h-4 text-green-600" /></div>
+                  <div className="text-sm font-bold text-gray-800">42</div>
+                  <div className="text-[10px] text-gray-500 uppercase tracking-wider">{t('freelancer.profile.projectsLabel') || 'Projects'}</div>
                 </div>
               </div>
 

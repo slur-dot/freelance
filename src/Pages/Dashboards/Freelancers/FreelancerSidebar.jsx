@@ -7,6 +7,7 @@ import {
   LogOut,
   Menu,
   X,
+  User,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import userAvatar from "../../../assets/UserPic.jpg";
@@ -124,6 +125,12 @@ export default function FreelancerSidebar() {
       section: t('sidebar.finance'),
       items: [
         { title: t('sidebar.earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
+      ],
+    },
+    {
+      section: t('sidebar.settings') || 'Settings',
+      items: [
+        { title: t('navbar.profile'), url: "/freelancer/dashboard/profile", icon: User },
       ],
     },
   ];

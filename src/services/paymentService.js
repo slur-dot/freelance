@@ -17,7 +17,7 @@ class PaymentService {
     }
 
     this.stripePublicKey = env.VITE_STRIPE_PUBLIC_KEY || env.REACT_APP_STRIPE_PUBLIC_KEY || 'pk_test_your_stripe_key';
-    this.paypalClientId = env.VITE_PAYPAL_CLIENT_ID || env.REACT_APP_PAYPAL_CLIENT_ID || 'your_paypal_client_id';
+    this.ymoClientId = env.VITE_YMO_CLIENT_ID || env.REACT_APP_YMO_CLIENT_ID || 'your_ymo_client_id';
   }
 
   // Process Stripe payment
@@ -56,18 +56,18 @@ class PaymentService {
     }
   }
 
-  // Process PayPal payment
-  async processPayPalPayment(paymentData) {
+  // Process YMO payment
+  async processYMOPayment(paymentData) {
     try {
-      console.log('Processing PayPal payment:', paymentData);
+      console.log('Processing YMO payment:', paymentData);
       
       // In a real implementation, you would:
-      // 1. Create a PayPal order
-      // 2. Redirect to PayPal for approval
+      // 1. Create a YMO order
+      // 2. Redirect to YMO for approval
       // 3. Capture the payment after approval
       
       const response = await this.simulateApiCall({
-        method: 'paypal',
+        method: 'ymo',
         amount: paymentData.amount,
         currency: paymentData.currency
       });
@@ -75,13 +75,13 @@ class PaymentService {
       return {
         success: true,
         transactionId: response.transactionId,
-        message: 'PayPal payment initiated successfully',
+        message: 'YMO payment initiated successfully',
         redirectUrl: response.redirectUrl
       };
     } catch (error) {
       return {
         success: false,
-        error: error.message || 'PayPal payment failed'
+        error: error.message || 'YMO payment failed'
       };
     }
   }
@@ -225,8 +225,8 @@ class PaymentService {
     switch (paymentMethod) {
       case 'stripe':
         return await this.processStripePayment(paymentData);
-      case 'paypal':
-        return await this.processPayPalPayment(paymentData);
+      case 'ymo':
+        return await this.processYMOPayment(paymentData);
       case 'orange-money':
         return await this.processOrangeMoneyPayment(paymentData);
       case 'mtn':
@@ -256,7 +256,7 @@ class PaymentService {
       setTimeout(() => {
         resolve({
           transactionId: `TXN_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          redirectUrl: data.method === 'paypal' ? 'https://paypal.com/checkout' : null
+          redirectUrl: data.method === 'ymo' ? 'https://ymo.example.com/checkout' : null
         });
       }, 1000);
     });

@@ -1,6 +1,6 @@
 // src/Pages/Training/TrainingModulesPage.jsx
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import TrainingHeroSection from "../../components/TrainingHeroSection";
 import FreelanceCourses from "./FreelanceCourses";
 import CompanyCourses from "./CompanyCourses";
@@ -9,6 +9,20 @@ import { useTranslation } from "react-i18next";
 export default function TrainingModulesPage() {
   const [activeTab, setActiveTab] = useState("freelancers");
   const { t } = useTranslation();
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [hash]);
 
   return (
     <main className="w-full flex flex-col">
@@ -16,7 +30,7 @@ export default function TrainingModulesPage() {
       <TrainingHeroSection />
 
       {/*  Breadcrumb + Tabs */}
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6">
+      <div id="training-content" className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 mt-6 scroll-mt-24">
         <div className="flex items-center border-b order-gray-300 pb-2">
           {/* Breadcrumb */}
           <nav className="text-sm text-gray-500">

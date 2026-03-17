@@ -28,7 +28,8 @@
         "vendor_profiles": "Vendor Profiles",
         "logout": "Logout",
         "login": "Login",
-        "signup": "Sign Up"
+        "signup": "Sign Up",
+        "profile": "Profile"
     },
     "footer": {
         "description": "Freelance-224 connects businesses with talented professionals, offering flexible, remote collaboration for projects of all sizes.",
@@ -136,7 +137,22 @@
         "read_more": "READ MORE",
         "explore_more": "Explore more",
         "referral_title": "Refer a Friend & Earn Rewards!",
-        "invite_friends": "Invite Friends"
+        "invite_friends": "Invite Friends",
+        "post": {
+            "title": "How NGOs Can Use IT Solutions to Empower Rural Communities in Guinea",
+            "category": "Tech",
+            "author": "Admin User",
+            "back_to_blog": "Back to Blog",
+            "share_article": "Share this article",
+            "content_p1": "Rural communities in Guinea face numerous challenges, but IT solutions are beginning to bridge the gap. NGOs are increasingly turning to technology to empower these regions, improve access to education, and streamline healthcare delivery.",
+            "h2_1": "The Role of Connectivity",
+            "content_p2": "One of the primary obstacles is consistent internet connectivity. However, recent initiatives to deploy satellite internet and mesh networks are showing immense promise. By establishing reliable communication channels, local leaders can coordinate more effectively with international support networks.",
+            "h2_2": "Educational Technology",
+            "content_p3": "E-learning platforms tailored for low-bandwidth environments are revolutionizing how information is shared. Interactive modules on agricultural best practices and public health can now be accessed via basic smartphones, which have a surprisingly high penetration rate even in remote areas.",
+            "quote": "Technology is not just a tool; it's a bridge to opportunity for communities that have historically been left behind.",
+            "h2_3": "Looking Ahead",
+            "content_p4": "The path forward requires continued investment and collaboration between NGOs, private tech companies, and local governments. As these IT solutions scale, we can expect to see a profound, sustainable impact on the quality of life in Guinea's rural sectors."
+        }
     },
     "home": {
         "title": "Home",
@@ -394,6 +410,11 @@
             },
             "upload": "Upload",
             "rating": "Rating",
+            "experienceLabel": "Experience",
+            "levelLabel": "Level",
+            "projectsLabel": "Projects",
+            "successLabel": "Job Success",
+            "hireNow": "Hire Now",
             "badges": {
                 "title": "Badges",
                 "complete": "Profile Complete",
@@ -765,7 +786,8 @@
         "project_list": "Project-List",
         "hired_freelancers": "Hired Freelancers",
         "payments": "Payments",
-        "logout": "Logout"
+        "logout": "Logout",
+        "settings": "Settings"
     },
     "freelancer_dashboard": {
         "stats": {
@@ -3116,7 +3138,7 @@
             "invalid_email": "Please enter a valid email address.",
             "invalid_password": "Password must be at least 8 characters long and include: uppercase, lowercase, number, and special character.",
             "password_mismatch": "Passwords do not match",
-            "enter_username": "Please enter a username.",
+            "enter_nickname": "Please enter a nickname.",
             "enter_phone": "Please enter your phone number.",
             "success": "Sign up successful! Please login.",
             "email_in_use": "User with this email already exists. Please log in.",
@@ -3141,7 +3163,7 @@
                 "admin": "Admin",
                 "seller": "Seller"
             },
-            "username": "Username",
+            "nickname": "Nickname",
             "phone_number": "Phone Number",
             "password": "Password",
             "confirm_password": "Confirm Password",
@@ -3215,7 +3237,8 @@
             "payouts": "Payouts",
             "ads": "Ads",
             "logout": "Logout",
-            "home": "HOME"
+            "home": "HOME",
+            "settings": "Settings"
         },
         "overview": {
             "title": "Dashboard",

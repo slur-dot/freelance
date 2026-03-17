@@ -12,8 +12,8 @@ export default function CartPage() {
   const { cartItems, updateQuantity, removeFromCart, subtotal } = useCart();
 
   const discount = 0; // Logic for discount can be added later
-  const deliveryFee = 15000; // Example delivery fee
-  const total = subtotal - discount + deliveryFee;
+  const deliveryFee = cartItems.length > 0 ? 15000 : 0; // Example delivery fee
+  const total = subtotal > 0 ? subtotal - discount + deliveryFee : 0;
 
   const formatPrice = (price) => {
     return (price || 0).toLocaleString() + " GNF";
@@ -96,7 +96,7 @@ export default function CartPage() {
 
                       {/* Remove */}
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeFromCart(item.id)}
                         className="text-red-500 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0 rounded"
                       >
                         <Trash2 className="h-4 w-4 mx-auto" />

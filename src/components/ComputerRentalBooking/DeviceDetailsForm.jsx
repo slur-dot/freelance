@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 
-export default function DeviceDetailsForm({ onContinue }) {
+export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} }) {
   const [formData, setFormData] = useState({
-    deviceType: "",
-    quantity: 10,
+    deviceType: prefilledProduct.deviceType || "",
+    quantity: 1,
     rentalDuration: "",
-    startDate: "2025-10-02",
-    endDate: "2025-10-09",
-    preferredBrands: "",
+    startDate: new Date().toISOString().split('T')[0],
+    endDate: "",
+    preferredBrands: prefilledProduct.brand || "",
     purpose: "",
   });
 
@@ -69,20 +69,18 @@ export default function DeviceDetailsForm({ onContinue }) {
 
             {/* Rental Duration */}
             <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">
-                Rental Duration*
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  value={formData.rentalDuration}
-                  onChange={(e) => handleChange("rentalDuration", e.target.value)}
-                  className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
-                  placeholder="Enter days"
-                  required
-                />
-                <span className="text-gray-600 font-medium">Days</span>
-              </div>
+              <label className="w-40 text-sm font-medium">Rental Duration*</label>
+              <select
+                value={formData.rentalDuration}
+                onChange={(e) => handleChange("rentalDuration", e.target.value)}
+                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                required
+              >
+                <option value="">Select an Option</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+              </select>
             </div>
 
             {/* Start Date and End Date on same line */}
@@ -90,6 +88,7 @@ export default function DeviceDetailsForm({ onContinue }) {
               <label className="w-40 text-sm font-medium">Start Date*</label>
               <input
                 type="date"
+                min={new Date().toISOString().split('T')[0]}
                 value={formData.startDate}
                 onChange={(e) => handleChange("startDate", e.target.value)}
                 className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
@@ -98,6 +97,7 @@ export default function DeviceDetailsForm({ onContinue }) {
               <label className="ml-6 text-sm font-medium">End Date*</label>
               <input
                 type="date"
+                min={formData.startDate || new Date().toISOString().split('T')[0]}
                 value={formData.endDate}
                 onChange={(e) => handleChange("endDate", e.target.value)}
                 className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"

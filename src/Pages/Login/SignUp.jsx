@@ -63,17 +63,15 @@ export default function SignUp() {
       return;
     }
 
-    if (userRole === "Freelancer") {
-      const username = e.target.freelancerUsername?.value.trim();
-      const phone = e.target.phone?.value.trim();
-      if (!username) {
-        alert(t('signup_page.alerts.enter_username') || "Please enter a username.");
-        return;
-      }
-      if (!phone) {
-        alert(t('signup_page.alerts.enter_phone') || "Please enter your phone number.");
-        return;
-      }
+    const nickname = e.target.nickname?.value.trim();
+    const phone = e.target.phone?.value.trim();
+    if (!nickname) {
+      alert(t('signup_page.alerts.enter_nickname') || "Please enter a nickname.");
+      return;
+    }
+    if (!phone) {
+      alert(t('signup_page.alerts.enter_phone') || "Please enter your phone number.");
+      return;
     }
 
     try {
@@ -84,12 +82,10 @@ export default function SignUp() {
       // Prepare user data for Firestore
       const userData = {
         fullName,
+        nickname: e.target.nickname.value.trim(),
         email,
+        phone: `${countryCode} ${e.target.phone.value.trim()}`,
         role: userRole,
-        ...(userRole === "Freelancer" && {
-          username: e.target.freelancerUsername.value.trim(),
-          phone: `${countryCode} ${e.target.phone.value.trim()}`,
-        }),
       };
 
       // Save user profile to Firestore via UserService
@@ -165,6 +161,18 @@ export default function SignUp() {
               />
             </div>
 
+            {/* Nickname */}
+            <div className="relative">
+              <UserRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-600 w-5 h-5" />
+              <input
+                type="text"
+                name="nickname"
+                placeholder={t('signup_page.form.nickname') || "Nickname"}
+                className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                required
+              />
+            </div>
+
             {/* Email */}
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-600 w-5 h-5" />
@@ -177,9 +185,37 @@ export default function SignUp() {
               />
             </div>
 
+            {/* Phone Number with Country Code */}
+            <div className="flex items-center border border-green-600 rounded-full px-3">
+              <select
+                value={countryCode}
+                onChange={(e) => {
+                  const selected = countries.find(
+                    (c) => c.code === e.target.value
+                  );
+                  setCountryCode(selected.code);
+                  setCountryFlag(selected.flag);
+                }}
+                className="bg-transparent focus:outline-none pr-2 py-2"
+              >
+                {countries.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.flag} {c.code}
+                  </option>
+                ))}
+              </select>
+              <input
+                type="tel"
+                name="phone"
+                placeholder={t('signup_page.form.phone_number') || "Phone Number"}
+                className="flex-1 py-2 px-2 focus:outline-none rounded-r-full"
+                required
+              />
+            </div>
+
             {/* Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
                 {t('signup_page.form.role') || "Role"}
               </label>
               <select
@@ -193,53 +229,9 @@ export default function SignUp() {
                 <option value="Vendor">{t('signup_page.form.roles.vendor') || "Vendor"}</option>
                 <option value="Company">{t('signup_page.form.roles.company') || "Company"}</option>
                 <option value="Client">{t('signup_page.form.roles.client') || "Client"}</option>
-                <option value="Admin">{t('signup_page.form.roles.admin') || "Admin"}</option>
                 <option value="Seller">{t('signup_page.form.roles.seller') || "Seller"}</option>
               </select>
             </div>
-
-            {/* Freelancer fields */}
-            {role === "Freelancer" && (
-              <>
-                <div className="relative">
-                  <UserRound className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-600 w-5 h-5" />
-                  <input
-                    type="text"
-                    name="freelancerUsername"
-                    placeholder={t('signup_page.form.username') || "Username"}
-                    className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                    required
-                  />
-                </div>
-
-                <div className="flex items-center border border-green-600 rounded-full px-3">
-                  <select
-                    value={countryCode}
-                    onChange={(e) => {
-                      const selected = countries.find(
-                        (c) => c.code === e.target.value
-                      );
-                      setCountryCode(selected.code);
-                      setCountryFlag(selected.flag);
-                    }}
-                    className="bg-transparent focus:outline-none pr-2"
-                  >
-                    {countries.map((c) => (
-                      <option key={c.code} value={c.code}>
-                        {c.flag} {c.code}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="tel"
-                    name="phone"
-                    placeholder={t('signup_page.form.phone_number') || "Phone Number"}
-                    className="flex-1 py-2 px-2 focus:outline-none rounded-r-full"
-                    required
-                  />
-                </div>
-              </>
-            )}
 
 
             {/* Password */}

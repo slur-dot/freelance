@@ -19,6 +19,7 @@ import {
   ShoppingCart,
   Ticket,
   Zap,
+  User,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 
@@ -83,7 +84,10 @@ export default function AdminSidebar() {
   const navItems = [
     {
       section: t('admin_dashboard.sidebar.home.title'),
-      items: [{ title: t('admin_dashboard.sidebar.home.dashboard'), url: "/admin/dashboard", icon: BarChart3 }],
+      items: [
+        { title: t('admin_dashboard.sidebar.home.dashboard'), url: "/admin/dashboard", icon: BarChart3 },
+        { title: t('navbar.profile'), url: "/admin/dashboard/profile", icon: User },
+      ],
     },
     {
       section: t('admin_dashboard.sidebar.listings.title'),

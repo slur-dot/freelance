@@ -4,7 +4,6 @@ import PriceDisplay from '../PriceDisplay';
 
 // Import payment icons (you'll need to add these to your assets)
 import StripeIcon from '../../assets/stripe-icon.png';
-import PayPalIcon from '../../assets/paypal_icon.png';
 import OrangeMoneyIcon from '../../assets/orangemoney_icon.png';
 import MTNIcon from '../../assets/mtn_icon.png';
 import CashOnDelivery from '../../assets/CashOnDelivery.png';
@@ -38,12 +37,12 @@ const PaymentMethodSelector = ({
       available: true
     },
     {
-      id: 'paypal',
-      name: 'PayPal',
-      description: 'Pay with your PayPal account',
-      icon: PayPalIcon,
+      id: 'ymo',
+      name: 'YMO Payment Gateway',
+      description: 'Pay securely with YMO',
+      icon: null,
       iconComponent: CreditCard,
-      color: 'bg-yellow-500',
+      color: 'bg-green-500',
       available: true
     },
     {
@@ -169,21 +168,21 @@ const PaymentMethodSelector = ({
           </div>
         );
 
-      case 'paypal':
+      case 'ymo':
         return (
           <div className="space-y-4">
-            <div className="bg-yellow-50 p-4 rounded-md">
-              <div className="flex items-center gap-2 text-yellow-800">
+            <div className="bg-green-50 p-4 rounded-md">
+              <div className="flex items-center gap-2 text-green-800">
                 <AlertCircle className="h-4 w-4" />
-                <span className="font-medium">PayPal Integration</span>
+                <span className="font-medium">YMO Integration</span>
               </div>
-              <p className="text-sm text-yellow-700 mt-1">
-                You will be redirected to PayPal to complete your payment
+              <p className="text-sm text-green-700 mt-1">
+                You will be redirected to the YMO Payment Gateway to complete your payment.
               </p>
             </div>
             <div className="text-center py-4">
-              <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-md">
-                Continue to PayPal
+              <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
+                Continue to YMO
               </button>
             </div>
           </div>

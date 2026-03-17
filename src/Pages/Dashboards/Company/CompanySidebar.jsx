@@ -7,6 +7,7 @@ import {
   LogOut,
   Menu,
   X,
+  User,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import userAvatar from "../../../assets/UserPic.jpg";
@@ -113,6 +114,12 @@ export default function CompanySidebar() {
           url: "/company/dashboard/training-quotes",
           icon: Wallet,
         },
+      ],
+    },
+    {
+      section: t('company_dashboard.sidebar_settings') || 'Settings',
+      items: [
+        { title: t('navbar.profile'), url: "/company/dashboard/profile", icon: User },
       ],
     },
   ];

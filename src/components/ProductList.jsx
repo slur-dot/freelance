@@ -7,6 +7,7 @@ import laptop from "../assets/Laptop.jpg";
 import mobile from "../assets/mobile.jpg";
 
 import { useTranslation } from "react-i18next";
+import { useCart } from "../contexts/CartContext";
 
 // Local product data with translation keys or logic to translate
 // Since this is outside the component, we might need to move it inside or translate it inside the component.
@@ -17,30 +18,30 @@ const productData = [
     name: "iPhone 14",
     condition: "New",
     badge: "Best Selling",
-    originalPrice: "7,920,000 GNF",
-    currentPrice: "6,336,000 GNF",
-    monthlyPrice: "$720",
-    monthlyOriginal: "$900"
+    originalPrice: 7920000,
+    currentPrice: 6336000,
+    monthlyPrice: 720,
+    monthlyOriginal: 900
   },
   {
     id: 2,
     name: "MacBook Pro M2",
     condition: "New",
     badge: "Best Selling",
-    originalPrice: "13,200,000 GNF",
-    currentPrice: "10,560,000 GNF",
-    monthlyPrice: "$1200",
-    monthlyOriginal: "$1500"
+    originalPrice: 13200000,
+    currentPrice: 10560000,
+    monthlyPrice: 1200,
+    monthlyOriginal: 1500
   },
   {
     id: 3,
     name: "Samsung Galaxy S23",
     condition: "Used",
     badge: null,
-    originalPrice: "6,160,000 GNF",
-    currentPrice: "4,928,000 GNF",
-    monthlyPrice: "$560",
-    monthlyOriginal: "$700"
+    originalPrice: 6160000,
+    currentPrice: 4928000,
+    monthlyPrice: 560,
+    monthlyOriginal: 700
   }
 ];
 
@@ -53,6 +54,7 @@ const imageMap = {
 
 const ProductList = () => {
   const { t } = useTranslation();
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -65,7 +67,14 @@ const ProductList = () => {
 
   const handleAddToCart = (id) => {
     const product = products.find((p) => p.id === id);
-    alert(`${product.name} ${t('home.product_list.added_to_cart')}`);
+    if (product) {
+      addToCart({
+        ...product,
+        // Make the cart context treat it properly
+        price: product.currentPrice,
+        category: "Featured"
+      });
+    }
   };
 
   return (

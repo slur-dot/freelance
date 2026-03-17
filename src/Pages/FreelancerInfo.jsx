@@ -41,6 +41,10 @@ export default function FreelancerInfo() {
       location: "Conakry",
       comment: "Great work, delivered on time!",
     },
+    experience: "5+ Years",
+    level: "Pro",
+    completedProjects: "42",
+    successRate: "98%",
   });
 
   const completionChecks = useMemo(() => {
@@ -124,8 +128,25 @@ export default function FreelancerInfo() {
                 <div className="text-sm text-gray-600">{profile.bio}</div>
 
               </div>
-              <div>
+            </div>
 
+            {/* Summary Badges */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+              <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-100">
+                <div className="text-xl font-bold text-blue-600">{profile.experience}</div>
+                <div className="text-sm text-gray-600">{t('freelancer.profile.experienceLabel') || 'Experience'}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-100">
+                <div className="text-xl font-bold text-blue-600">{profile.level}</div>
+                <div className="text-sm text-gray-600">{t('freelancer.profile.levelLabel') || 'Level'}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-100">
+                <div className="text-xl font-bold text-blue-600">{profile.completedProjects}</div>
+                <div className="text-sm text-gray-600">{t('freelancer.profile.projectsLabel') || 'Projects'}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-100">
+                <div className="text-xl font-bold text-green-600">{profile.successRate}</div>
+                <div className="text-sm text-gray-600">{t('freelancer.profile.successLabel') || 'Job Success'}</div>
               </div>
             </div>
 
@@ -174,9 +195,15 @@ export default function FreelancerInfo() {
                   className="w-full h-auto object-contain"
                 />
               </div>
-
-
             </div>
+
+            {/* Hire Now Button */}
+            <button 
+              onClick={() => setShowChat(true)}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center transition-all shadow-md hover:shadow-lg mb-4"
+            >
+              {t('freelancer.profile.hireNow') || 'Hire Now'}
+            </button>
 
             {/* Badges + Progress */}
             <div className="bg-white border border-gray-200 rounded-lg p-4">

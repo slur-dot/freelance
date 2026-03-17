@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   X,
+  User,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { auth } from "../../../firebaseConfig";
@@ -156,6 +157,7 @@ export default function SellerSidebar() {
       section: t('sidebar.account'),
       items: [
         { title: t('sidebar.settings'), url: "/seller/dashboard/settings", icon: Settings },
+        { title: t('navbar.profile'), url: "/seller/dashboard/profile", icon: User },
       ],
     },
   ];

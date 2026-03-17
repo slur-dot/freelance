@@ -1,11 +1,23 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 import { useTranslation } from "react-i18next";
 
 export default function TechServicesSolutions() {
   const { t } = useTranslation();
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [hash]);
   return (
     <div className="min-h-screen bg-white py-8 sm:py-12 px-4 sm:px-6 md:px-8 lg:px-16 mx-2 sm:mx-4 md:mx-8 lg:mx-16">
       {/* Breadcrumbs */}
@@ -28,6 +40,7 @@ export default function TechServicesSolutions() {
 
       {/* Sections */}
       <ServiceSection
+        id="erp-solutions"
         title={t('tech_services.solutions.erp.title')}
         description={t('tech_services.solutions.erp.description')}
         buttonText={t('tech_services.solutions.erp.btn')}
@@ -121,6 +134,7 @@ export default function TechServicesSolutions() {
       />
 
       <ServiceSection
+        id="it-support"
         title={t('tech_services.solutions.it_support.title')}
         description={t('tech_services.solutions.it_support.description')}
         buttonText={t('tech_services.solutions.it_support.btn')}
@@ -198,6 +212,7 @@ export default function TechServicesSolutions() {
       />
 
       <ServiceSection
+        id="it-integration"
         title={t('tech_services.solutions.integration.title')}
         description={t('tech_services.solutions.integration.description')}
         buttonText={t('tech_services.solutions.integration.btn')}
@@ -275,6 +290,7 @@ export default function TechServicesSolutions() {
       />
 
       <ServiceSection
+        id="it-outsourcing"
         title={t('tech_services.solutions.outsourcing.title')}
         description={t('tech_services.solutions.outsourcing.description')}
         buttonText={t('tech_services.solutions.outsourcing.btn')}
@@ -374,9 +390,9 @@ export default function TechServicesSolutions() {
 }
 
 /* Section Component */
-function ServiceSection({ title, description, cards, buttonText }) {
+function ServiceSection({ id, title, description, cards, buttonText }) {
   return (
-    <section className="container mx-auto mb-12 sm:mb-14 md:mb-16">
+    <section id={id} className="container mx-auto mb-12 sm:mb-14 md:mb-16 scroll-mt-24">
       <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">{title}</h2>
       <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8 max-w-3xl">{description}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">

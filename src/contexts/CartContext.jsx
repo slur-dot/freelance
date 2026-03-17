@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Toast from '../components/Toast';
 
 const CartContext = createContext();
 
@@ -7,14 +8,30 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState(() => {
         // Load from local storage on init
-        const saved = localStorage.getItem('cartItems');
-        return saved ? JSON.parse(saved) : [];
+        try {
+            const saved = localStorage.getItem('cartItems');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                return Array.isArray(parsed) ? parsed : [];
+            }
+        } catch (e) {
+            console.error("Failed to parse cartItems from localStorage", e);
+        }
+        return [];
     });
 
     useEffect(() => {
         // Save to local storage whenever cart changes
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
     }, [cartItems]);
+
+    const [toastMessage, setToastMessage] = useState('');
+    const [isToastVisible, setIsToastVisible] = useState(false);
+
+    const showToast = (message) => {
+        setToastMessage(message);
+        setIsToastVisible(true);
+    };
 
     const addToCart = (product) => {
         setCartItems(prev => {
@@ -28,6 +45,7 @@ export const CartProvider = ({ children }) => {
             }
             return [...prev, { ...product, quantity: 1 }];
         });
+        showToast(product.name);
     };
 
     const removeFromCart = (productId) => {
@@ -61,6 +79,11 @@ export const CartProvider = ({ children }) => {
     return (
         <CartContext.Provider value={value}>
             {children}
+            <Toast 
+                message={toastMessage} 
+                isVisible={isToastVisible} 
+                onClose={() => setIsToastVisible(false)} 
+            />
         </CartContext.Provider>
     );
 };

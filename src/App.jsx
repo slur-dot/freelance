@@ -22,6 +22,7 @@ import TrainingModulesPage from "./Pages/Training/TrainingModulesPage";
 import TeamEnrollmentForm from "./Pages/Training/TeamEnrollmentForm";
 import Faq from "./Pages//Faq";
 import Blog from './Pages/Blog';
+import BlogPost from './Pages/BlogPost';
 import LocationHome from "./Pages/LocationHome";
 import TechServices from "./Pages/TechServices";
 import TechServiceBooking from "./components/TechServiceBooking";
@@ -35,13 +36,20 @@ import FreelancerDashboard from "./Pages/Dashboards/Freelancers/FreelancerDashbo
 import TrainingProgress from "./Pages/Dashboards/Freelancers/TrainingProgress";
 import RequestedCourses from './Pages/Dashboards/Freelancers/RequestedCourses';
 import Earnings from './Pages/Dashboards/Freelancers/Earnings';
+import FreelancerProfile from './Pages/Dashboards/Freelancers/Profile';
+import ClientProfile from './Pages/Dashboards/Clients/Profile';
+import CompanyProfile from './Pages/Dashboards/Company/Profile';
+import VendorProfile from './Pages/Dashboards/VendorModule/Profile';
+import SellerProfile from './Pages/Dashboards/Sellers/Profile';
+import AdminProfilePage from './Pages/Dashboards/Admin/Profile';
+
 import ClientSidebar from './Pages/Dashboards/Clients/ClientSidebar';
-import ClientDashbaord from './Pages/Dashboards/Clients/ClientDashbaord';
+import ClientDashboard from './Pages/Dashboards/Clients/ClientDashboard';
 import HiredFreelancers from './Pages/Dashboards/Clients/HiredFreelancers';
 import Payments from './Pages/Dashboards/Clients/Payments';
 import ProjectList from './Pages/Dashboards/Clients/ProjectList';
 import CompanySidebar from './Pages/Dashboards/Company/CompanySidebar';
-import CompanyDashbaord from './Pages/Dashboards/Company/CompanyDashbaord';
+import CompanyDashboard from './Pages/Dashboards/Company/CompanyDashboard';
 import UserLogin from "./Pages/Login/UserLogin";
 import SuccessfulPage from './Pages/Login/SuccessfulPage';
 import VerifyCodePage from './Pages/Login/VerifyCodePage';
@@ -65,7 +73,7 @@ import SellerAds from './Pages/Dashboards/Sellers/SellerAds';
 import SellerNotifications from './Pages/Dashboards/Sellers/SellerNotifications';
 import SellerSettings from './Pages/Dashboards/Sellers/SellerSettings';
 import AdminSidebar from './Pages/Dashboards/Admin/AdminSidebar';
-import AdminDashbaord from './Pages/Dashboards/Admin/AdminDashbaord';
+import AdminDashboard from './Pages/Dashboards/Admin/AdminDashboard';
 
 import CourseListing from './Pages/Dashboards/Admin/CourseListing';
 import ProductListing from './Pages/Dashboards/Admin/ProductListing';
@@ -134,6 +142,7 @@ function AppContent() {
           <Route path="/training-modules/company/custom-request" element={<CompanyTrainingRequestForm />} />
           <Route path="/training-modules/company/enroll-team" element={<TeamEnrollmentForm />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/locations" element={<LocationHome />} />
           <Route path="/tech-services" element={<TechServices />} />
           <Route path="/tech-services/booking" element={<TechServiceBooking />} />
@@ -162,23 +171,26 @@ function AppContent() {
             <Route path="training-progress" element={<TrainingProgress />} />
             <Route path="requested-courses" element={<RequestedCourses />} />
             <Route path="earnings" element={<Earnings />} />
+            <Route path="profile" element={<FreelancerProfile />} />
           </Route>
 
           {/* Client Dashboard */}
           <Route path="/Clients/dashboard" element={<ProtectedRoute><ClientSidebar /></ProtectedRoute>}>
-            <Route index element={<ClientDashbaord />} />
+            <Route index element={<ClientDashboard />} />
             <Route path="Hired-Freelancers" element={<HiredFreelancers />} />
             <Route path="Project-List" element={<ProjectList />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="profile" element={<ClientProfile />} />
           </Route>
 
 
           {/* Company Dashboard  */}
           <Route path="/company/dashboard" element={<ProtectedRoute><CompanySidebar /></ProtectedRoute>}>
-            <Route index element={<CompanyDashbaord />} />
+            <Route index element={<CompanyDashboard />} />
             <Route path="emplolyee-list" element={<EmployeeList />} />
             <Route path="training-progress" element={<CompanyTrainingProgress />} />
             <Route path="training-quotes" element={<TrainingQuotes />} />
+            <Route path="profile" element={<CompanyProfile />} />
           </Route>
 
           {/* Vendor Dashboard  */}
@@ -188,6 +200,7 @@ function AppContent() {
             <Route path="orders" element={<Orders />}></Route>
             <Route path="payouts" element={<Payouts />}></Route>
             <Route path="ads" element={<AdsManagement />}></Route>
+            <Route path="profile" element={<VendorProfile />}></Route>
           </Route>
 
           {/* Seller Dashboard  */}
@@ -199,11 +212,12 @@ function AppContent() {
             <Route path="ads" element={<SellerAds />}></Route>
             <Route path="notifications" element={<SellerNotifications />}></Route>
             <Route path="settings" element={<SellerSettings />}></Route>
+            <Route path="profile" element={<SellerProfile />}></Route>
           </Route>
 
           {/* Admin Dashboard  */}
           <Route path="/admin/dashboard" element={<ProtectedRoute><AdminSidebar /></ProtectedRoute>}>
-            <Route index element={<AdminDashbaord />} />
+            <Route index element={<AdminDashboard />} />
             <Route path="course-listing" element={<CourseListing />} />
             <Route path="product-listing" element={<ProductListing />} />
             <Route path="ticket-listing" element={<TicketListing />} />
@@ -215,6 +229,7 @@ function AppContent() {
             <Route path="advertisements" element={<AdvertisementManagement />} />
             <Route path="support-team" element={<SupportTeamManagement />} />
             <Route path="users" element={<UserManagement />} />
+            <Route path="profile" element={<AdminProfilePage />} />
           </Route>
 
 
@@ -231,9 +246,12 @@ function AppContent() {
   );
 }
 
+import ScrollToTop from './components/ScrollToTop';
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <CurrencyProvider>

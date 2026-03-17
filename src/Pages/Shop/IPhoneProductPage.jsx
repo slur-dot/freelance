@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useCart } from "../../contexts/CartContext";
 import ShopAppleImage from "../../assets/ShopAppleImage.jpg";
 import IphoneImage from "../../assets/iphone.png";
 import MobileImage from "../../assets/mobile.jpg";
@@ -10,6 +11,7 @@ import MobileImage from "../../assets/mobile.jpg";
 export default function IPhoneProductPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Currency state
   const [currency, setCurrency] = useState("GNF");
@@ -378,7 +380,19 @@ export default function IPhoneProductPage() {
 
                 <button
                   disabled={!selectedColor}
-                  onClick={() => navigate("/shop/cart")}
+                  onClick={() => {
+                      addToCart({
+                          id: "iphone-14",
+                          name: "iPhone 14",
+                          price: priceGNF,
+                          currentPrice: priceGNF,
+                          image: ShopAppleImage,
+                          color: selectedColor,
+                          condition: "New",
+                          category: "Smartphone"
+                      });
+                      navigate("/shop/cart");
+                  }}
                   className={`${!selectedColor
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-blue-600 hover:bg-blue-700"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaCrown, FaCreditCard, FaPaypal, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import { FaCrown, FaCreditCard, FaCheckCircle, FaExclamationCircle, FaShieldAlt } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import paymentService from "../../services/paymentService";
 
@@ -176,21 +176,21 @@ const SubscriptionPlan = ({
           </div>
         </div>
       );
-    } else if (selectedPaymentMethod === 'paypal') {
+    } else if (selectedPaymentMethod === 'ymo') {
       return (
         <div className="space-y-4">
-          <div className="bg-yellow-50 p-4 rounded-md">
-            <div className="flex items-center gap-2 text-yellow-800">
-              <FaExclamationCircle className="h-4 w-4" />
-              <span className="font-medium">{t('training.subscription.paypal_alert')}</span>
+          <div className="bg-green-50 p-4 rounded-md">
+            <div className="flex items-center gap-2 text-green-800">
+              <FaShieldAlt className="h-4 w-4" />
+              <span className="font-medium">Secure YMO Payment</span>
             </div>
-            <p className="text-sm text-yellow-700 mt-1">
-              {t('training.subscription.paypal_text')}
+            <p className="text-sm text-green-700 mt-1">
+              You will be redirected to the secure YMO Payment Gateway to complete your subscription.
             </p>
           </div>
           <div className="text-center py-4">
-            <div className="bg-yellow-500 text-white px-6 py-2 rounded-md inline-block">
-              {t('training.subscription.continue_paypal')}
+            <div className="bg-green-600 text-white px-6 py-2 rounded-md inline-block">
+              Continue to YMO
             </div>
           </div>
         </div>
@@ -231,11 +231,11 @@ const SubscriptionPlan = ({
                 {t('training.subscription.pay_stripe')}
               </button>
               <button
-                onClick={() => handleSubscription('paypal')}
+                onClick={() => handleSubscription('ymo')}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
               >
-                <FaPaypal className="text-xs" />
-                {t('training.subscription.pay_paypal')}
+                <FaShieldAlt className="text-xs" />
+                Pay with YMO
               </button>
             </div>
           </div>
@@ -247,7 +247,7 @@ const SubscriptionPlan = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">
-              {selectedPaymentMethod === 'stripe' ? t('training.subscription.pay_stripe') : t('training.subscription.pay_paypal')}
+              {selectedPaymentMethod === 'stripe' ? t('training.subscription.pay_stripe') : 'Pay with YMO'}
             </h3>
 
             {renderPaymentForm()}

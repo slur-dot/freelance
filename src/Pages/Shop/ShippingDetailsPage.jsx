@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowRight, Info, CheckCircle, AlertCircle, MapPin, Clock, Navigation } from "lucide-react";
-import { SiStripe, SiPaypal } from "react-icons/si";
+import { ArrowRight, Info, CheckCircle, AlertCircle, MapPin, Clock, Navigation, CreditCard } from "lucide-react";
+import { SiStripe } from "react-icons/si";
 import { FaUniversity } from "react-icons/fa";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -17,7 +17,6 @@ import { useTranslation } from "react-i18next";
 
 import CashOnDelivery from "../../assets/CashOnDelivery.png";
 import Conakry from "../../assets/conakry.png";
-import PayPalIcon from "../../assets/paypal_icon.png";
 import OrangeMoneyIcon from "../../assets/orangemoney_icon.png";
 import MTNIcon from "../../assets/mtn_icon.png";
 
@@ -447,10 +446,11 @@ export default function ShippingDetailsPage() {
                   icon: MTNIcon,
                 },
                 {
-                  id: "paypal",
-                  label: "PayPal",
-                  desc: t('shipping.redirect_paypal'),
-                  icon: PayPalIcon,
+                  id: "ymo",
+                  label: "YMO Payment Gateway",
+                  desc: "Pay securely with YMO",
+                  icon: null,
+                  iconComponent: CreditCard,
                 },
                 {
                   id: "stripe",
@@ -514,7 +514,7 @@ export default function ShippingDetailsPage() {
                 <h3 className="text-lg font-bold text-gray-900 mb-6">
                   {selectedPaymentMethod === 'orange-money' && 'Orange Money Details'}
                   {selectedPaymentMethod === 'mtn' && 'MTN MoMo Details'}
-                  {selectedPaymentMethod === 'paypal' && 'PayPal Details'}
+                  {selectedPaymentMethod === 'ymo' && 'YMO Payment Details'}
                   {selectedPaymentMethod === 'stripe' && 'Card Details'}
                   {selectedPaymentMethod === 'bank-transfer' && 'Bank Transfer Details'}
                   {selectedPaymentMethod === 'cash-on-delivery' && 'Delivery Address'}
@@ -643,14 +643,14 @@ export default function ShippingDetailsPage() {
                   </div>
                 )}
 
-                {/* PayPal - No additional form needed */}
-                {selectedPaymentMethod === 'paypal' && (
-                  <div className="bg-yellow-50 p-4 rounded-lg flex items-start gap-3">
-                    <Info className="h-5 w-5 text-yellow-700 mt-0.5 flex-shrink-0" />
+                {/* YMO Form */ }
+                {selectedPaymentMethod === 'ymo' && (
+                  <div className="bg-green-50 p-4 rounded-lg flex items-start gap-3">
+                    <Info className="h-5 w-5 text-green-700 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="font-semibold text-yellow-800">{t('shipping.paypal_integration')}</p>
-                      <p className="text-sm text-yellow-700 mt-1">
-                        {t('shipping.paypal_desc')}
+                      <p className="font-semibold text-green-800">YMO Integration</p>
+                      <p className="text-sm text-green-700 mt-1">
+                        You will be redirected to the YMO Payment Gateway to complete your payment.
                       </p>
                     </div>
                   </div>

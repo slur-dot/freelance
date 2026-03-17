@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X, User } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
 import { VendorService } from "../../../services/vendorService";
@@ -137,6 +137,16 @@ export default function VendorSidebar() {
               <path d="M18.4999 18.5055V15.2555H15.2499V13.0889H18.4999V9.83887H20.6666V13.0889H23.9166V15.2555H20.6666V18.5055H18.4999ZM2.24992 19.5889C1.65409 19.5889 1.1442 19.3769 0.720252 18.953C0.296308 18.529 0.0839742 18.0188 0.083252 17.4222V2.25553C0.083252 1.6597 0.295585 1.14981 0.720252 0.725867C1.14492 0.301923 1.65481 0.0895894 2.24992 0.0888672H17.4166C18.0124 0.0888672 18.5227 0.301201 18.9473 0.725867C19.372 1.15053 19.584 1.66042 19.5833 2.25553V7.6722H17.4166V5.50553H2.24992V17.4222H16.3333V19.5889H2.24992Z" fill="#667085" />
             </svg>
           ),
+        },
+      ],
+    },
+    {
+      section: t('vendor_dashboard.sidebar.settings') || 'Settings',
+      items: [
+        {
+          title: t('navbar.profile'),
+          url: "/vendor/dashboard/profile",
+          icon: <User className="h-5 w-5 text-gray-400" />,
         },
       ],
     },

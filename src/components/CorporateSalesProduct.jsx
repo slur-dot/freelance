@@ -89,7 +89,7 @@ export default function CorporateSalesProduct() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-8">
             {t('corporate_sales.sales.booking_title', { product: selectedProduct })}
           </h1>
-          <ComputerBookingForm />
+          <ComputerBookingForm isCorporateSales={true} />
           <div className="mt-6">
             <button
               onClick={handleBackToProducts}

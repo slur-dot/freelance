@@ -28,7 +28,8 @@
         "vendor_profiles": "Profils Vendeurs",
         "logout": "Déconnexion",
         "login": "Connexion",
-        "signup": "S'inscrire"
+        "signup": "S'inscrire",
+        "profile": "Profil"
     },
     "footer": {
         "description": "Freelance-224 connecte les entreprises avec des professionnels talentueux, offrant une collaboration flexible et à distance pour des projets de toutes tailles.",
@@ -136,7 +137,22 @@
         "read_more": "LIRE LA SUITE",
         "explore_more": "Explorer plus",
         "referral_title": "Parrainez un ami & Gagnez des récompenses !",
-        "invite_friends": "Inviter des amis"
+        "invite_friends": "Inviter des amis",
+        "post": {
+            "title": "Comment les ONG peuvent utiliser des solutions IT pour autonomiser les communautés rurales en Guinée",
+            "category": "Technologie",
+            "author": "Utilisateur Admin",
+            "back_to_blog": "Retour au Blog",
+            "share_article": "Partager cet article",
+            "content_p1": "Les communautés rurales en Guinée font face à de nombreux défis, mais les solutions informatiques commencent à combler l'écart. Les ONG se tournent de plus en plus vers la technologie pour autonomiser ces régions, améliorer l'accès à l'éducation et rationaliser la prestation des soins de santé.",
+            "h2_1": "Le rôle de la connectivité",
+            "content_p2": "L'un des principaux obstacles est la connectivité Internet constante. Cependant, des initiatives récentes visant à déployer l'Internet par satellite et les réseaux maillés montrent d'immenses promesses. En établissant des canaux de communication fiables, les dirigeants locaux peuvent se coordonner plus efficacement avec les réseaux de soutien internationaux.",
+            "h2_2": "Technologie Éducative",
+            "content_p3": "Les plateformes d'apprentissage en ligne adaptées aux environnements à faible bande passante révolutionnent la façon dont l'information est partagée. Les modules interactifs sur les meilleures pratiques agricoles et la santé publique sont désormais accessibles via des smartphones basiques, qui ont un taux de pénétration étonnamment élevé même dans les zones reculées.",
+            "quote": "La technologie n'est pas seulement un outil ; c'est un pont vers les opportunités pour les communautés historiquement laissées de côté.",
+            "h2_3": "Regard vers l'avenir",
+            "content_p4": "La voie à suivre nécessite des investissements continus et une collaboration entre les ONG, les entreprises technologiques privées et les gouvernements locaux. À mesure que ces solutions informatiques se développent, nous pouvons nous attendre à un impact profond et durable sur la qualité de vie dans les secteurs ruraux de la Guinée."
+        }
     },
     "home": {
         "title": "Accueil",
@@ -394,6 +410,11 @@
             },
             "upload": "Télécharger",
             "rating": "Évaluation",
+            "experienceLabel": "Expérience",
+            "levelLabel": "Niveau",
+            "projectsLabel": "Projets",
+            "successLabel": "Taux de réussite",
+            "hireNow": "Engager Maintenant",
             "badges": {
                 "title": "Badges",
                 "complete": "Profil complet",
@@ -765,7 +786,8 @@
         "project_list": "Liste des projets",
         "hired_freelancers": "Freelances embauchés",
         "payments": "Paiements",
-        "logout": "Se déconnecter"
+        "logout": "Se déconnecter",
+        "settings": "Paramètres"
     },
     "freelancer_dashboard": {
         "stats": {
@@ -3125,7 +3147,7 @@
             "invalid_email": "Veuillez entrer une adresse email valide.",
             "invalid_password": "Le mot de passe doit comporter au moins 8 caractères et inclure : majuscule, minuscule, chiffre et caractère spécial.",
             "password_mismatch": "Les mots de passe ne correspondent pas",
-            "enter_username": "Veuillez entrer un nom d'utilisateur.",
+            "enter_nickname": "Veuillez entrer un pseudonyme.",
             "enter_phone": "Veuillez entrer votre numéro de téléphone.",
             "success": "Inscription réussie ! Veuillez vous connecter.",
             "email_in_use": "Un utilisateur avec cet email existe déjà. Veuillez vous connecter.",
@@ -3150,7 +3172,7 @@
                 "admin": "Admin",
                 "seller": "Vendeur"
             },
-            "username": "Nom d'utilisateur",
+            "nickname": "Pseudonyme",
             "phone_number": "Numéro de téléphone",
             "password": "Mot de passe",
             "confirm_password": "Confirmer le mot de passe",
@@ -3224,7 +3246,8 @@
             "payouts": "Paiements",
             "ads": "Publicités",
             "logout": "Déconnexion",
-            "home": "ACCUEIL"
+            "home": "ACCUEIL",
+            "settings": "Paramètres"
         },
         "overview": {
             "title": "Tableau de bord",

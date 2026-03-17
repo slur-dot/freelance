@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import blogCardImage from "../assets/BlogCard.png";
 import { useTranslation } from "react-i18next";
@@ -18,7 +19,7 @@ export default function Blog() {
   const blogPosts = Array(9).fill({
     image: blogCardImage,
     date: "21 Jul 2023",
-    title: "How NGOs Can Use IT Solutions to Empower Rural Communities in Guinea",
+    title: t('blog.post.title'),
   });
 
   const getDateParts = (dateStr) => {
@@ -102,41 +103,39 @@ export default function Blog() {
                 {blogPosts.map((post, index) => {
                   const { day, month, year } = getDateParts(post.date);
                   return (
-                    <div
+                    <Link
+                      to={`/blog/${index + 1}`}
                       key={index}
-                      className="relative overflow-visible rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200"
+                      className="relative flex flex-col rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 bg-white border border-gray-200 h-full"
                     >
                       <img
                         src={post.image}
                         alt={`Blog post ${index + 1}`}
-                        className="w-full h-48 object-cover rounded-t-lg"
+                        className="w-full h-48 sm:h-56 object-cover rounded-t-lg"
                       />
 
-                      <div className="absolute left-4 right-4 top-48 -translate-y-1/2 z-10">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-300 rounded-md p-4 shadow-sm">
-                          <div className="text-left leading-tight min-w-[3.5rem]">
+                      <div className="px-4 -mt-12 mb-4 z-10 flex-grow flex flex-col">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white border border-gray-300 rounded-md p-4 shadow-sm h-full">
+                          <div className="text-left leading-tight min-w-[3.5rem] flex-shrink-0">
                             <div className="text-2xl font-bold text-gray-800">{day}</div>
-                            <div className="text-xs text-gray-500 border-b border-gray-200">
+                            <div className="text-xs text-gray-500 border-b border-gray-200 pb-1">
                               {month} {year}
                             </div>
                           </div>
 
-                          <div className="flex-1">
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-snug mb-2">
+                          <div className="flex-1 flex flex-col h-full">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-snug mb-2 flex-grow">
                               {post.title}
                             </h3>
-                            <a
-                              href="#"
-                              className="text-gray-500 hover:underline inline-flex items-center gap-1 text-sm font-medium"
+                            <span
+                              className="text-green-600 group-hover:underline inline-flex items-center gap-1 text-sm font-medium mt-auto"
                             >
                               {t('blog.read_more')} <ArrowRight className="h-4 w-4" />
-                            </a>
+                            </span>
                           </div>
                         </div>
                       </div>
-
-                      <div className="pt-24 pb-4" />
-                    </div>
+                    </Link>
                   );
                 })}
               </div>

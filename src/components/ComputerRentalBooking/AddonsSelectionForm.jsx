@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 
-export default function AddonsSelectionForm({ onContinue }) {
-  // Paid Services with costs
-  const paidServices = [
-    { name: "Sim / Data Plan", cost: 50000 },
+export default function AddonsSelectionForm({ onContinue, deviceData }) {
+  const isMobile = deviceData?.deviceType === 'phone' || deviceData?.deviceType === 'tablet';
+
+  // Paid Services with costs conditionally structured
+  const paidServices = isMobile ? [
+    { name: "SIM Data Plan", cost: 50000 },
+    { name: "Mobile Back Cover", cost: 25000 },
+    { name: "Screen Protector", cost: 15000 },
+    { name: "Insurance", cost: 200000 },
+  ] : [
     { name: "Insurance", cost: 200000 },
     { name: "On Site Technical Support", cost: 150000 },
     { name: "Replacement Guarantee", cost: 100000 },
   ];
 
-  const includedItems = ["Charger", "Carrying Bag"];
+  const includedItems = isMobile ? ["Charger"] : ["Charger", "Carrying Bag"];
 
   const [selectedServices, setSelectedServices] = useState([]);
 

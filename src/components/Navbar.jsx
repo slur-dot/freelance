@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
+import { useCart } from "../contexts/CartContext";
 
 export default function Navbar() {
   const navigate = useNavigate()
@@ -16,6 +17,9 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { currentUser } = useAuth();
   const { t, i18n } = useTranslation();
+  const cartContext = useCart();
+  const cartItems = cartContext?.cartItems || [];
+  const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -46,15 +50,15 @@ export default function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-16 gap-4 xl:gap-8 w-full">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center flex-shrink-0">
             <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-full object-cover" />
             <span className="ml-2 text-xl font-bold text-gray-900">Freelance</span>
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex ml-10 space-x-6 items-center">
+          <div className="hidden lg:flex flex-1 justify-center space-x-2 xl:space-x-8 items-center whitespace-nowrap text-sm xl:text-base">
             <Link to="/" className={isActive("/")}>{t('navbar.home')}</Link>
             <Link to="/shop" className={isActive("/shop")}>{t('navbar.shop')}</Link>
             <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>{t('navbar.hire_freelancers')}</Link>
@@ -67,7 +71,7 @@ export default function Navbar() {
               <button className="flex items-center text-gray-700 font-medium pb-1">
                 {t('navbar.more')} <HiChevronDown className="ml-1 text-sm text-gray-500" />
               </button>
-              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 py-1">
+              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded shadow-lg opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100] py-1">
                 <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
                 <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
                 <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales')}</Link>
@@ -80,15 +84,15 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-2 xl:space-x-4 flex-shrink-0">
             {currentUser ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700 font-medium text-sm">
+              <div className="flex items-center space-x-2 xl:space-x-4">
+                <span className="text-gray-700 font-medium text-xs xl:text-sm">
                   {currentUser.email}
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="text-white bg-red-500 rounded-2xl px-4 py-1 hover:bg-red-600 transition"
+                  className="text-white bg-red-500 rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-red-600 transition whitespace-nowrap"
                 >
                   {t('navbar.logout')}
                 </button>
@@ -97,24 +101,31 @@ export default function Navbar() {
               <>
                 <button
                   onClick={handleLogin}
-                  className="text-white bg-blue-500 rounded-2xl px-4 py-1 hover:bg-blue-600 transition"
+                  className="text-white bg-blue-500 rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-blue-600 transition whitespace-nowrap"
                 >
                   {t('navbar.login')}
                 </button>
                 <button
                   onClick={handleSignup}
-                  className="bg-green-700 text-white rounded-2xl px-4 py-1 hover:bg-green-800 transition"
+                  className="bg-green-700 text-white rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-green-800 transition whitespace-nowrap"
                 >
                   {t('navbar.signup')}
                 </button>
               </>
             )}
-            <div className="flex space-x-2">
-              <button onClick={() => changeLanguage('en')} className={`text-sm font-medium ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-700'}`}>EN</button>
-              <span className="text-gray-400">|</span>
-              <button onClick={() => changeLanguage('fr')} className={`text-sm font-medium ${i18n.language === 'fr' ? 'text-blue-600' : 'text-gray-700'}`}>FR</button>
+            <div className="flex space-x-1 xl:space-x-2 ml-2">
+              <button onClick={() => changeLanguage('en')} className={`text-xs xl:text-sm font-medium ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-700'}`}>EN</button>
+              <span className="text-gray-400 text-xs xl:text-sm">|</span>
+              <button onClick={() => changeLanguage('fr')} className={`text-xs xl:text-sm font-medium ${i18n.language === 'fr' ? 'text-blue-600' : 'text-gray-700'}`}>FR</button>
             </div>
-            <FaShoppingCart className="text-black text-[18px] cursor-pointer" />
+            <Link to="/shop/cart" className="relative ml-2 xl:ml-3 flex items-center">
+              <FaShoppingCart className="text-black text-[18px] cursor-pointer" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
           </div>
           {/* Mobile Hamburger Button */}
           <div className="md:hidden flex items-center">
