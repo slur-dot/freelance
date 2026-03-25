@@ -188,42 +188,47 @@ export default function ShippingDetailsPage() {
         return;
       }
 
-      // Process payment (Simulated for now)
+      // 1. Create Order in Firestore BEFORE payment to secure the Document ID
+      const shippingMethod = document.querySelector('input[name="shipping"]:checked')?.value;
+      const orderData = {
+        items: cartItems,
+        totalAmount: subtotal,
+        shippingDetails: {
+          method: shippingMethod === "deliver" ? "Delivery" : "Pickup",
+          details: selectedPickupLocation || paymentDetails.deliveryAddress
+        },
+        paymentMethod: selectedPaymentMethod,
+        status: 'pending_payment'
+      };
+
+      const orderRes = await OrderService.createOrder(currentUser.uid, orderData);
+
+      if (!orderRes.success) {
+        setPaymentResult({ success: false, error: "Failed to create order. Please try again." });
+        setIsProcessing(false);
+        return;
+      }
+
+      // 2. Process payment securely locking the exact Firestore Order ID into the Gateway Reference
       const result = await paymentService.processPayment(selectedPaymentMethod, {
         ...paymentDetails,
         amount: subtotal,
-        currency: "GNF"
+        currency: "GNF",
+        merchantPaymentReference: orderRes.orderId
       });
 
       if (result.success) {
-        // Create Order in Firestore
-        const shippingMethod = document.querySelector('input[name="shipping"]:checked')?.value;
-        const orderData = {
-          items: cartItems,
-          totalAmount: subtotal,
-          shippingDetails: {
-            method: shippingMethod === "deliver" ? "Delivery" : "Pickup",
-            details: selectedPickupLocation || paymentDetails.deliveryAddress
-          },
-          paymentMethod: selectedPaymentMethod
-        };
-
-        const orderRes = await OrderService.createOrder(currentUser.uid, orderData);
-
-        if (orderRes.success) {
-          clearCart();
-          
-          if (result.redirectUrl) {
-            window.location.href = result.redirectUrl;
-            return;
-          }
-          
-          // Redirect to invoice page
-          navigate("/download-invoice", { state: { orderId: orderRes.orderId } });
-        } else {
-          setPaymentResult({ success: false, error: "Failed to create order" });
+        clearCart();
+        
+        if (result.redirectUrl) {
+          window.location.href = result.redirectUrl;
+          return;
         }
+        
+        // Redirect to invoice page
+        navigate("/download-invoice", { state: { orderId: orderRes.orderId } });
       } else {
+        OrderService.updateOrderStatus(orderRes.orderId, 'payment_failed');
         setPaymentResult(result);
       }
     } catch (error) {

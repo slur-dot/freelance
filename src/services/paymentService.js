@@ -291,7 +291,7 @@ class PaymentService {
         payerNumber: payerNumber,
         allowedPaymentMethods: ["OM", "MOMO", "CARD", "SOUTRA_MONEY", "PAYCARD"],
         description: `Order Payment`.substring(0, 250),
-        merchantPaymentReference: `ORD-${Date.now()}`.substring(0, 50),
+        merchantPaymentReference: paymentData.merchantPaymentReference || `ORD-${Date.now()}`.substring(0, 50),
         returnUrl: `${baseUrl}/checkout/success`,
         cancelUrl: `${baseUrl}/checkout/cart`,
       };
