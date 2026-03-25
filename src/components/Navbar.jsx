@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaSearch, FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, LayoutDashboard, LogOut } from "lucide-react";
+import userAvatar from "../assets/UserPic.jpg";
 import { useTranslation } from "react-i18next";
 
 
@@ -11,12 +13,31 @@ import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
 
 export default function Navbar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
   const current = location.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, userRole, userData } = useAuth();
   const { t, i18n } = useTranslation();
+
+  const displayRole = userRole ? userRole.charAt(0).toUpperCase() + userRole.slice(1) : "User";
+  const dispName = userData?.fullName || userData?.name || userData?.businessName || currentUser?.displayName || "User";
+  const avatarUrl = userData?.profileImage || userData?.avatar || currentUser?.photoURL || userAvatar;
+
+  const getDashboardRoute = () => {
+    if (!userRole) return "/Clients/dashboard";
+    const role = userRole.toLowerCase();
+    switch (role) {
+      case "freelancer": return "/freelancer/dashboard";
+      case "company": return "/company/dashboard";
+      case "vendor": return "/vendor/dashboard";
+      case "admin": return "/admin/dashboard";
+      case "client": return "/Clients/dashboard";
+      case "seller": return "/seller/dashboard";
+      default: return "/Clients/dashboard";
+    }
+  };
+
   const cartContext = useCart();
   const cartItems = cartContext?.cartItems || [];
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -84,17 +105,33 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden lg:flex items-center space-x-2 xl:space-x-4 flex-shrink-0">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 flex-shrink-0">
             {currentUser ? (
-              <div className="flex items-center space-x-2 xl:space-x-4">
-                <span className="text-gray-700 font-medium text-xs xl:text-sm">
-                  {currentUser.email}
-                </span>
+              <div className="flex items-center space-x-3 xl:space-x-4">
+                {/* Beautiful User Pill */}
+                <div className="hidden md:flex items-center gap-3 bg-white border border-gray-200 py-1.5 px-2 rounded-full shadow-sm pr-4">
+                  <img src={avatarUrl} alt={dispName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm" />
+                  <div className="flex flex-col">
+                    <span className="text-gray-900 font-bold text-xs leading-tight max-w-[100px] xl:max-w-[150px] truncate">{dispName}</span>
+                    <span className="text-blue-600 font-bold text-[9px] uppercase tracking-wider leading-tight">{displayRole}</span>
+                  </div>
+                </div>
+
+                <div className="h-8 w-px bg-gray-200 mx-1"></div>
+
+                <button
+                  onClick={() => navigate(getDashboardRoute())}
+                  className="text-white bg-blue-600 rounded-full font-medium px-4 py-1.5 text-sm shadow-sm hover:bg-blue-700 transition-all flex items-center gap-2 whitespace-nowrap"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  {t('sidebar.dashboard', 'Dashboard')}
+                </button>
                 <button
                   onClick={handleLogout}
-                  className="text-white bg-red-500 rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-red-600 transition whitespace-nowrap"
+                  className="text-gray-600 bg-gray-100 border border-gray-200 rounded-full font-medium px-4 py-1.5 text-sm hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all flex items-center gap-2 whitespace-nowrap"
                 >
-                  {t('navbar.logout')}
+                  <LogOut className="w-4 h-4" />
+                  {t('navbar.logout', 'Logout')}
                 </button>
               </div>
             ) : (
@@ -269,22 +306,38 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Bottom Auth Section */}
-                <div className="border-t p-5 space-y-3">
-
+                <div className="p-5 bg-gradient-to-b from-gray-50 to-white mt-auto border-t border-gray-200">
                   {currentUser ? (
-                    <>
-                      <p className="text-xs text-gray-500 truncate">
-                        {currentUser.email}
-                      </p>
+                    <div className="space-y-4">
+                      {/* Mobile Profile Card */}
+                      <div className="flex items-center gap-4 bg-white border border-gray-200 p-3.5 rounded-2xl shadow-sm">
+                         <img src={avatarUrl} alt={dispName} className="w-12 h-12 rounded-full object-cover border-2 border-blue-50 shadow-sm" />
+                         <div className="flex flex-col overflow-hidden">
+                           <span className="text-gray-900 font-bold text-sm truncate">{dispName}</span>
+                           <span className="inline-flex mt-1 items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-600 w-fit">
+                             {displayRole}
+                           </span>
+                         </div>
+                      </div>
 
-                      <button
-                        onClick={handleLogout}
-                        className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition"
-                      >
-                        {t("navbar.logout")}
-                      </button>
-                    </>
+                      <div className="grid grid-cols-2 gap-3 mt-4">
+                        <button
+                          onClick={() => { setIsMobileMenuOpen(false); navigate(getDashboardRoute()); }}
+                          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl shadow-sm transition-all text-sm"
+                        >
+                          <LayoutDashboard className="w-4 h-4" />
+                          {t('sidebar.dashboard', 'Dashboard')}
+                        </button>
+
+                        <button
+                          onClick={handleLogout}
+                          className="flex items-center justify-center gap-2 bg-white border border-gray-300 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-gray-700 font-semibold py-2.5 rounded-xl transition-all shadow-sm text-sm"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          {t("navbar.logout", "Logout")}
+                        </button>
+                      </div>
+                    </div>
                   ) : (
                     <>
                       <button

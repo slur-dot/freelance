@@ -67,11 +67,13 @@ const Footer = () => {
             <h4 className="text-white font-semibold mb-4 text-base">{t('footer.explore')}</h4>
             <ul className="space-y-3">
               {[
-                { label: t('footer.what_we_do'), href: "/what-we-do" },
-                { label: t('footer.our_services'), href: "#" },
-                { label: t('footer.user_strategy'), href: "#" },
-                { label: t('footer.blog'), href: "/blog" },
-                { label: t('footer.faqs'), href: "/faq" },
+                { label: t('footer.shop', 'Shop'), href: "/shop" },
+                { label: t('footer.tech_services', 'Tech Services'), href: "/tech-services" },
+                { label: t('footer.corporate_sales', 'Corporate Sales'), href: "/corporate-sales" },
+                { label: t('footer.computer_rental', 'Computer Rental'), href: "/computer-rental" },
+                { label: t('footer.training_modules', 'Training Modules'), href: "/training-modules" },
+                { label: t('footer.hire_freelancers', 'Hire Freelancers'), href: "/hire-freelancers" },
+                { label: t('footer.blog', 'Blog'), href: "/blog" },
               ].map((item, index) => (
                 <li key={index}>
                   <a
@@ -92,9 +94,9 @@ const Footer = () => {
               {[
                 { label: t('footer.about_freelance'), href: "/about-freelance" },
                 { label: t('footer.contact_support'), href: "/contact" },
-                { label: t('footer.success_stories'), href: "/success-stories" },
+                { label: t('footer.faqs', 'FAQs'), href: "/faq" },
                 { label: t('footer.privacy_policy'), href: "/privacy-policy" },
-                { label: t('footer.join_chamber'), href: "#" },
+                { label: t('footer.partnership', 'Partnership'), href: "/partnership" },
               ].map((item, index) => (
                 <li key={index}>
                   <a

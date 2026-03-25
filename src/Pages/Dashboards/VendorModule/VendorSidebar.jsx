@@ -1,75 +1,23 @@
 import { useState, useEffect } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LogOut, Menu, X, User } from "lucide-react";
+import { User, Home, ShoppingCart, Users, MapPin, Wrench, Monitor, BookOpen, Briefcase, HelpCircle, FileText, Mail, Store } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
 import { VendorService } from "../../../services/vendorService";
-
-function Sidebar({ children, className }) {
-  return <aside className={`h-screen flex flex-col ${className}`}>{children}</aside>;
-}
-
-function SidebarHeader({ children, className }) {
-  return <div className={className}>{children}</div>;
-}
-
-function SidebarContent({ children }) {
-  return <div className="flex-1 overflow-y-auto">{children}</div>;
-}
-
-function SidebarFooter({ children, className }) {
-  return <div className={className}>{children}</div>;
-}
-
-function SidebarGroup({ children }) {
-  return <div className="mb-6">{children}</div>;
-}
-
-function SidebarGroupLabel({ children, className }) {
-  return <h4 className={className}>{children}</h4>;
-}
-
-function SidebarGroupContent({ children }) {
-  return <div>{children}</div>;
-}
-
-function SidebarMenu({ children }) {
-  return <ul className="space-y-1">{children}</ul>;
-}
-
-function SidebarMenuItem({ children }) {
-  return <li>{children}</li>;
-}
-
-function SidebarMenuButton({ children, isActive, to, collapsed }) {
-  return (
-    <Link
-      to={to}
-      className={`flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium transition 
-      ${isActive ? "bg-gray-100 text-gray-900" : "text-gray-700 hover:bg-gray-100"}
-      ${collapsed ? "justify-center px-2" : ""}`}
-    >
-      {children}
-    </Link>
-  );
-}
+import DashboardLayout from "../../../components/DashboardLayout";
 
 export default function VendorSidebar() {
   const { t } = useTranslation();
   const location = useLocation();
-  const activePath = location.pathname;
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
   const [vendorProfile, setVendorProfile] = useState(null);
-
-  const toggleSidebar = () => setIsMobileOpen(!isMobileOpen);
 
   const handleLogout = async () => {
     try {
       await logout();
-      window.location.href = '/login';
+      navigate('/login');
     } catch (error) {
       console.error("Failed to log out", error);
     }
@@ -141,13 +89,35 @@ export default function VendorSidebar() {
       ],
     },
     {
-      section: t('vendor_dashboard.sidebar.settings') || 'Settings',
+      section: t('vendor_dashboard.sidebar.settings', 'Settings'),
       items: [
         {
           title: t('navbar.profile'),
           url: "/vendor/dashboard/profile",
           icon: <User className="h-5 w-5 text-gray-400" />,
         },
+      ],
+    },
+    {
+      section: t('sidebar.main_site', 'Main Site'),
+      items: [
+        { title: t('navbar.home', 'Home'), url: "/", icon: <Home className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.shop', 'Shop'), url: "/shop", icon: <ShoppingCart className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.hire_freelancers', 'Hire Freelancers'), url: "/hire-freelancers", icon: <Users className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.locations', 'Locations'), url: "/locations", icon: <MapPin className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.tech_services', 'Tech Services'), url: "/tech-services", icon: <Wrench className="h-5 w-5 text-gray-400" /> },
+      ],
+    },
+    {
+      section: t('navbar.more', 'More'),
+      items: [
+        { title: t('navbar.device_rental', 'Device Rental'), url: "/computer-rental", icon: <Monitor className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.training_upskilling', 'Training & Upskilling'), url: "/training-modules", icon: <BookOpen className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.corporate_sales', 'Corporate Sales'), url: "/corporate-sales", icon: <Briefcase className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.faq', 'FAQ'), url: "/faq", icon: <HelpCircle className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.blog', 'Blog'), url: "/blog", icon: <FileText className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.contact_us', 'Contact Us'), url: "/contact", icon: <Mail className="h-5 w-5 text-gray-400" /> },
+        { title: t('navbar.vendor_profiles', 'Vendor Profiles'), url: "/vendor-profiles", icon: <Store className="h-5 w-5 text-gray-400" /> },
       ],
     },
   ];
@@ -158,98 +128,5 @@ export default function VendorSidebar() {
     avatar: vendorProfile?.avatar || currentUser?.photoURL || userAvatar,
   };
 
-  return (
-    <div className="flex flex-col md:flex-row min-h-screen">
-      {/* Mobile Topbar */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b fixed top-0 left-0 right-0 z-50">
-        <button onClick={toggleSidebar}>
-          {isMobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
-        <span className="font-bold">Freelance</span>
-        <div className="w-6" /> {/* Spacer for centering title */}
-      </div>
-
-      {/* Sidebar */}
-      <Sidebar
-        className={`fixed top-0 left-0 z-40 h-screen border-r border-gray-200 bg-white 
-          transform transition-transform duration-200 ease-in-out
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:static
-          ${isCollapsed ? "w-20" : "w-64"}`}
-        onMouseEnter={() => setIsCollapsed(false)}
-        onMouseLeave={() => window.innerWidth < 1024 && setIsCollapsed(true)}
-      >
-        <SidebarHeader className="p-4 flex items-center gap-3">
-          <img src="/logo.png" alt="Freelance Logo" width={40} height={40} />
-          {!isCollapsed && <span className="text-xl font-bold">Freelance</span>}
-        </SidebarHeader>
-
-        <SidebarContent>
-          {navItems.map((section, index) => (
-            <SidebarGroup key={index}>
-              {!isCollapsed && (
-                <SidebarGroupLabel className="px-4 py-2 text-xs font-semibold uppercase text-gray-500">
-                  {section.section}
-                </SidebarGroupLabel>
-              )}
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {section.items.map((item) => (
-                    <SidebarMenuItem key={item.url}>
-                      <SidebarMenuButton
-                        isActive={activePath === item.url}
-                        to={item.url}
-                        collapsed={isCollapsed}
-                      >
-                        {item.icon}
-                        {!isCollapsed && item.title}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
-        </SidebarContent>
-
-        <SidebarFooter className="p-4 border-t border-gray-200 mt-auto">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <div className={`flex items-center gap-3 ${isCollapsed ? "justify-center" : ""}`}>
-                <img
-                  src={userData.avatar}
-                  alt={userData.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-                {!isCollapsed && (
-                  <div className="flex flex-col text-left">
-                    <span className="font-semibold">{userData.name}</span>
-                    <span className="text-xs text-gray-500">{userData.email}</span>
-                  </div>
-                )}
-                <button onClick={handleLogout} className="ml-auto text-gray-500 hover:text-red-500">
-                  <LogOut className="h-5 w-5" />
-                </button>
-              </div>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-
-      {/* Backdrop for Mobile */}
-      {isMobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 md:hidden"
-          onClick={toggleSidebar}
-        />
-      )}
-
-      {/* Main Content */}
-      <main className="flex-1 bg-gray-50 overflow-y-auto md:mt-0 mt-16">
-        <Outlet />
-      </main>
-    </div>
-  );
+  return <DashboardLayout navItems={navItems} user={userData} onLogout={handleLogout} />;
 }

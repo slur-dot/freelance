@@ -90,6 +90,7 @@ import UserManagement from './Pages/Dashboards/Admin/UserManagement';
 import VendorProfiles from './Pages/VendorProfiles';
 import CompanyHistory from './components/CompanyHistory';
 import VendorInfo from './Pages/VendorInfo';
+import Partnership from './Pages/Partnership';
 
 import './App.css';
 import LiveChatWidget from './components/Support/LiveChatWidget';
@@ -154,6 +155,7 @@ function AppContent() {
           <Route path="/vendor-profiles" element={<VendorProfiles />} />
           <Route path="/company-history" element={<CompanyHistory />} />
           <Route path="/vendor-profiles/info" element={<VendorInfo />} />
+          <Route path="/partnership" element={<Partnership />} />
 
           {/* Login Page */}
           <Route path="/login" element={<UserLogin />} />
@@ -238,7 +240,7 @@ function AppContent() {
 
 
       </div>
-      {!hideNavbarFooter && <Footer />}
+      <Footer />
 
       {/* Live Chat Widget - Show on all pages except dashboard pages */}
       {!hideNavbarFooter && <LiveChatWidget />}

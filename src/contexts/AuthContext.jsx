@@ -12,6 +12,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState(null);
     const [userRole, setUserRole] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     function logout() {
@@ -27,17 +28,22 @@ export function AuthProvider({ children }) {
                 try {
                     const userDoc = await getDoc(doc(db, "users", user.uid));
                     if (userDoc.exists()) {
-                        setUserRole(userDoc.data().role);
+                        const data = userDoc.data();
+                        setUserRole(data.role);
+                        setUserData(data);
                     } else {
                         console.log("No user profile found in Firestore");
                         setUserRole(null);
+                        setUserData(null);
                     }
                 } catch (error) {
                     console.error("Error fetching user role:", error);
                     setUserRole(null);
+                    setUserData(null);
                 }
             } else {
                 setUserRole(null);
+                setUserData(null);
             }
 
             setLoading(false);
@@ -49,6 +55,7 @@ export function AuthProvider({ children }) {
     const value = {
         currentUser,
         userRole,
+        userData,
         loading,
         logout
     };

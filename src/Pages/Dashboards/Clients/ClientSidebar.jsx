@@ -1,78 +1,34 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   BarChart3,
   Share2,
   MoreHorizontal,
   Wallet,
-  LogOut,
-  Menu,
-  X,
+  Home,
+  ShoppingCart,
+  Users,
+  MapPin,
+  Wrench,
   User,
+  Monitor,
+  BookOpen,
+  Briefcase,
+  HelpCircle,
+  FileText,
+  Mail,
+  Store,
 } from "lucide-react";
-import { useState, useEffect } from "react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { ClientService } from "../../../services/clientService";
-import { useTranslation } from "react-i18next";
-
-function Sidebar({ children, className }) {
-  return (
-    <aside className={`h-screen flex flex-col ${className}`}>{children}</aside>
-  );
-}
-
-function SidebarHeader({ children, className }) {
-  return <div className={className}>{children}</div>;
-}
-
-function SidebarContent({ children }) {
-  return <div className="flex-1 overflow-y-auto">{children}</div>;
-}
-
-function SidebarFooter({ children, className }) {
-  return <div className={className}>{children}</div>;
-}
-
-function SidebarGroup({ children }) {
-  return <div className="mb-6">{children}</div>;
-}
-
-function SidebarGroupLabel({ children, className }) {
-  return <h4 className={className}>{children}</h4>;
-}
-
-function SidebarGroupContent({ children }) {
-  return <div>{children}</div>;
-}
-
-function SidebarMenu({ children }) {
-  return <ul className="space-y-1">{children}</ul>;
-}
-
-function SidebarMenuItem({ children }) {
-  return <li>{children}</li>;
-}
-
-function SidebarMenuButton({ children, isActive, to }) {
-  return (
-    <Link
-      to={to}
-      className={`w-full flex items-center gap-3 text-left px-4 py-2 rounded-lg text-sm font-medium transition ${isActive
-        ? "bg-gray-100 text-gray-900"
-        : "text-gray-700 hover:bg-gray-100"
-        }`}
-    >
-      {children}
-    </Link>
-  );
-}
+import DashboardLayout from "../../../components/DashboardLayout";
 
 export default function ClientSidebar() {
   const { t } = useTranslation();
-  const location = useLocation();
-  const activePath = location.pathname;
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     {
@@ -103,9 +59,31 @@ export default function ClientSidebar() {
       ],
     },
     {
-      section: t('sidebar.settings') || 'Settings',
+      section: t('sidebar.settings', 'Settings'),
       items: [
         { title: t('navbar.profile'), url: "/Clients/dashboard/profile", icon: User },
+      ],
+    },
+    {
+      section: t('sidebar.main_site', 'Main Site'),
+      items: [
+        { title: t('navbar.home', 'Home'), url: "/", icon: Home },
+        { title: t('navbar.shop', 'Shop'), url: "/shop", icon: ShoppingCart },
+        { title: t('navbar.hire_freelancers', 'Hire Freelancers'), url: "/hire-freelancers", icon: Users },
+        { title: t('navbar.locations', 'Locations'), url: "/locations", icon: MapPin },
+        { title: t('navbar.tech_services', 'Tech Services'), url: "/tech-services", icon: Wrench },
+      ],
+    },
+    {
+      section: t('navbar.more', 'More'),
+      items: [
+        { title: t('navbar.device_rental', 'Device Rental'), url: "/computer-rental", icon: Monitor },
+        { title: t('navbar.training_upskilling', 'Training & Upskilling'), url: "/training-modules", icon: BookOpen },
+        { title: t('navbar.corporate_sales', 'Corporate Sales'), url: "/corporate-sales", icon: Briefcase },
+        { title: t('navbar.faq', 'FAQ'), url: "/faq", icon: HelpCircle },
+        { title: t('navbar.blog', 'Blog'), url: "/blog", icon: FileText },
+        { title: t('navbar.contact_us', 'Contact Us'), url: "/contact", icon: Mail },
+        { title: t('navbar.vendor_profiles', 'Vendor Profiles'), url: "/vendor-profiles", icon: Store },
       ],
     },
   ];
@@ -115,8 +93,6 @@ export default function ClientSidebar() {
     email: "Loading...",
     avatar: userAvatar,
   });
-
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -131,7 +107,6 @@ export default function ClientSidebar() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
-          // Fetch detailed profile
           const profile = await ClientService.getClientProfile(user.uid);
           setUserData({
             name: profile?.name || profile?.fullName || user.displayName || "Valued Client",
@@ -157,105 +132,5 @@ export default function ClientSidebar() {
     return () => unsubscribe();
   }, []);
 
-  return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar
-        className={`fixed inset-y-0 left-0 z-50 w-64 border-r border-gray-200 bg-white transform transition-transform duration-200 ease-in-out
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-        lg:translate-x-0 lg:static`}
-      >
-        {/* Header */}
-        <SidebarHeader className="p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Freelance Logo" width={40} height={40} />
-            <span className="text-xl font-bold">Freelance</span>
-          </div>
-          {/* Close btn (mobile only) */}
-          <button
-            className="lg:hidden text-gray-600"
-            onClick={() => setIsOpen(false)}
-          >
-            <X className="h-6 w-6" />
-          </button>
-        </SidebarHeader>
-
-        {/* Sidebar Content */}
-        <SidebarContent>
-          {navItems.map((section, index) => (
-            <SidebarGroup key={index}>
-              <SidebarGroupLabel className="px-4 py-2 text-xs font-semibold uppercase text-gray-500">
-                {section.section}
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {section.items.map((item) => (
-                    <SidebarMenuItem key={item.url}>
-                      <SidebarMenuButton
-                        isActive={activePath === item.url}
-                        to={item.url}
-                      >
-                        <item.icon className="h-5 w-5" />
-                        {item.title}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          ))}
-        </SidebarContent>
-
-        {/* Footer */}
-        <SidebarFooter className="p-4 border-t border-gray-200 mt-auto">
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <div
-                className="flex items-center gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors"
-                onClick={handleLogout}
-              >
-                <img
-                  src={userData.avatar}
-                  alt={userData.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-                <div className="flex flex-col text-left">
-                  <span className="font-semibold">{userData.name}</span>
-                  <span className="text-xs text-gray-500">
-                    {userData.email}
-                  </span>
-                </div>
-                <LogOut className="ml-auto h-5 w-5 text-gray-500" />
-              </div>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
-
-      {/* Backdrop (mobile only) */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Mobile Topbar */}
-        <div className="lg:hidden flex items-center justify-between p-4 bg-white border-b">
-          <button onClick={() => setIsOpen(true)}>
-            <Menu className="h-6 w-6 text-gray-700" />
-          </button>
-          <span className="font-bold">Freelance</span>
-        </div>
-
-        <main className="flex-1 p-6 bg-gray-50 overflow-y-auto">
-          <Outlet />
-        </main>
-      </div>
-    </div>
-  );
+  return <DashboardLayout navItems={navItems} user={userData} onLogout={handleLogout} />;
 }
