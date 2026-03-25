@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Printer, ArrowLeft, CheckCircle } from "lucide-react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Printer, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import QRCode from "react-qr-code";
 import { useTranslation } from "react-i18next";
 import { OrderService } from "../../services/orderService";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function DownloadInvoicePage() {
   const { t } = useTranslation();
@@ -13,6 +13,8 @@ export default function DownloadInvoicePage() {
 
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(false);
+  const { currentUser } = useAuth();
 
   // Extract orderId from state passed by navigate()
   const orderId = location.state?.orderId;
@@ -20,9 +22,18 @@ export default function DownloadInvoicePage() {
   useEffect(() => {
     const fetchOrder = async () => {
       if (orderId) {
+        if (!currentUser) {
+          setAuthError(true);
+          setLoading(false);
+          return;
+        }
+
         const fetchedOrder = await OrderService.getOrderById(orderId);
         if (fetchedOrder) {
           setOrder(fetchedOrder);
+        } else {
+          // If the fetch returned null but an orderId was supplied, it's likely a permission error or invalid ID
+          setAuthError(true);
         }
       }
       setLoading(false);
@@ -55,6 +66,34 @@ export default function DownloadInvoicePage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-600"></div>
+      </div>
+    );
+  }
+
+  if (authError || (orderId && !order)) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center space-y-4">
+          <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-2">
+            <AlertCircle className="w-10 h-10 text-red-500" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900">Access Denied</h2>
+          <p className="text-gray-600 pb-4">
+            We couldn't securely load your receipt. If you just completed a payment, you may have been redirected into a browser that isn't logged in.
+          </p>
+          <button 
+            onClick={() => navigate('/login')}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-xl transition-colors"
+          >
+            Log In to View Receipt
+          </button>
+          <button 
+            onClick={() => navigate('/')}
+            className="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 rounded-xl transition-colors"
+          >
+            Return Home
+          </button>
+        </div>
       </div>
     );
   }
