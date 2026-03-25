@@ -15,6 +15,7 @@ export default function DownloadInvoicePage() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const { currentUser } = useAuth();
 
   // Extract orderId from state passed by navigate()
@@ -43,8 +44,26 @@ export default function DownloadInvoicePage() {
     fetchOrder();
   }, [orderId]);
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    setDownloadingPdf(true);
+    try {
+      const html2pdf = (await import('html2pdf.js')).default;
+      const element = invoiceRef.current;
+      const opt = {
+        margin:       0.3,
+        filename:     `Invoice_${displayOrder?.id?.toUpperCase() || 'DEMO'}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      await html2pdf().set(opt).from(element).save();
+    } catch (error) {
+      console.error("PDF generation failed, falling back to print:", error);
+      window.print();
+    } finally {
+      setDownloadingPdf(false);
+    }
   };
 
   const formatGNF = (n) => {
@@ -278,10 +297,15 @@ export default function DownloadInvoicePage() {
         </button>
         <button
           onClick={handlePrint}
-          className="px-6 py-2.5 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-2"
+          disabled={downloadingPdf}
+          className={`px-6 py-2.5 text-white font-medium rounded-xl transition-colors flex items-center gap-2 ${downloadingPdf ? 'bg-purple-400 cursor-wait' : 'bg-purple-600 hover:bg-purple-700'}`}
         >
-          <Printer className="w-4 h-4" />
-          Print / Save PDF
+          {downloadingPdf ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+          ) : (
+            <Printer className="w-4 h-4" />
+          )}
+          {downloadingPdf ? "Generating PDF..." : "Print / Save PDF"}
         </button>
       </div>
     </div>
