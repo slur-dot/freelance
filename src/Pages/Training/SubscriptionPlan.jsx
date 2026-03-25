@@ -83,6 +83,10 @@ const SubscriptionPlan = ({
 
         // Close the modal after a short delay
         setTimeout(() => {
+          if (result.redirectUrl) {
+            window.location.href = result.redirectUrl;
+            return;
+          }
           setShowPaymentForm(false);
           // Call the success callback if provided
           if (onPaymentSuccess) {
@@ -195,6 +199,32 @@ const SubscriptionPlan = ({
           </div>
         </div>
       );
+    } else if (selectedPaymentMethod === 'djomy') {
+      return (
+        <div className="space-y-4">
+          <div className="bg-purple-50 p-4 rounded-md">
+            <div className="flex items-center gap-2 text-purple-800">
+              <FaShieldAlt className="h-4 w-4" />
+              <span className="font-medium">Secure Djomy Payment</span>
+            </div>
+            <p className="text-sm text-purple-700 mt-1">
+              You will be redirected to the secure Djomy Payment Gateway.
+            </p>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Phone Number (Required) *
+            </label>
+            <input
+              type="tel"
+              placeholder="00224..."
+              value={paymentDetails.phoneNumber || ''}
+              onChange={(e) => handlePaymentDetailsChange('phoneNumber', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+      );
     }
     return null;
   };
@@ -237,6 +267,13 @@ const SubscriptionPlan = ({
                 <FaShieldAlt className="text-xs" />
                 Pay with YMO
               </button>
+              <button
+                onClick={() => handleSubscription('djomy')}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2 transition-colors text-sm"
+              >
+                <FaShieldAlt className="text-xs" />
+                Pay with Djomy
+              </button>
             </div>
           </div>
         </div>
@@ -247,7 +284,7 @@ const SubscriptionPlan = ({
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-semibold mb-4">
-              {selectedPaymentMethod === 'stripe' ? t('training.subscription.pay_stripe') : 'Pay with YMO'}
+              {selectedPaymentMethod === 'stripe' ? t('training.subscription.pay_stripe') : selectedPaymentMethod === 'djomy' ? 'Pay with Djomy' : 'Pay with YMO'}
             </h3>
 
             {renderPaymentForm()}

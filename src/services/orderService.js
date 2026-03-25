@@ -27,6 +27,22 @@ export const OrderService = {
         }
     },
 
+    // Get order by ID
+    async getOrderById(orderId) {
+        try {
+            const { getDoc } = await import("firebase/firestore");
+            const orderRef = doc(db, "orders", orderId);
+            const orderSnap = await getDoc(orderRef);
+            if (orderSnap.exists()) {
+                return { id: orderSnap.id, ...orderSnap.data() };
+            }
+            return null;
+        } catch (error) {
+            console.error("Error fetching order by ID:", error);
+            return null;
+        }
+    },
+
     // Get orders for a specific user (buyer)
     async getUserOrders(userId) {
         try {

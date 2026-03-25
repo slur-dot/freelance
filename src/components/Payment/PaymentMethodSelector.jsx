@@ -46,6 +46,15 @@ const PaymentMethodSelector = ({
       available: true
     },
     {
+      id: 'djomy',
+      name: 'Djomy Gateway',
+      description: 'Pay via Djomy (OM, MoMo, Card)',
+      icon: null,
+      iconComponent: CreditCard,
+      color: 'bg-purple-600',
+      available: true
+    },
+    {
       id: 'orange-money',
       name: 'Orange Money',
       description: 'Pay with Orange Money mobile wallet',
@@ -184,6 +193,33 @@ const PaymentMethodSelector = ({
               <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md">
                 Continue to YMO
               </button>
+            </div>
+          </div>
+        );
+
+      case 'djomy':
+        return (
+          <div className="space-y-4">
+            <div className="bg-purple-50 p-4 rounded-md">
+              <div className="flex items-center gap-2 text-purple-800">
+                <AlertCircle className="h-4 w-4" />
+                <span className="font-medium">Djomy Integration</span>
+              </div>
+              <p className="text-sm text-purple-700 mt-1">
+                You will be redirected to the Djomy Payment Gateway to complete your payment securely.
+              </p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number (Required) *
+              </label>
+              <input
+                type="tel"
+                placeholder="00224..."
+                value={paymentDetails.phoneNumber || ''}
+                onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              />
             </div>
           </div>
         );

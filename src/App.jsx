@@ -13,6 +13,7 @@ import CartPage from './Pages/Shop/CartPage';
 import Shop from './Pages/Shop/Shop';
 import Footer from './components/Footer';
 import ShippingDetailsPage from './Pages/Shop/ShippingDetailsPage';
+import PaymentSuccess from './Pages/Shop/PaymentSuccess';
 import DownloadInvoicePage from "./Pages/Shop/DownloadInvoicePage";
 import ComputerRentalPage from "./Pages/ComputerRentalPage";
 import ComputerBookingForm from './components/ComputerRentalBooking/ComputerBookingForm';
@@ -133,6 +134,7 @@ function AppContent() {
           <Route path="/shop/product/:id" element={<IPhoneProductPage />} />
           <Route path="/shop/cart" element={<CartPage />} />
           <Route path="/shipping-details" element={<ShippingDetailsPage />} />
+          <Route path="/checkout/success" element={<PaymentSuccess />} />
           <Route path="/download-invoice" element={<DownloadInvoicePage />} />
           <Route path="/computer-rental" element={<ComputerRentalPage />} />
           <Route path="/computer-rental/booking" element={<ComputerBookingForm />} />

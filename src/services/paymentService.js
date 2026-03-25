@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 // Payment processing service for different payment methods
 class PaymentService {
   constructor() {
@@ -18,6 +20,9 @@ class PaymentService {
 
     this.stripePublicKey = env.VITE_STRIPE_PUBLIC_KEY || env.REACT_APP_STRIPE_PUBLIC_KEY || 'pk_test_your_stripe_key';
     this.ymoClientId = env.VITE_YMO_CLIENT_ID || env.REACT_APP_YMO_CLIENT_ID || 'your_ymo_client_id';
+    this.djomyApiUrl = env.VITE_DJOMY_API_URL || env.REACT_APP_DJOMY_API_URL || 'https://api.djomy.com';
+    this.djomyClientId = env.VITE_DJOMY_CLIENT_ID || env.REACT_APP_DJOMY_CLIENT_ID || '';
+    this.djomyClientSecret = env.VITE_DJOMY_CLIENT_SECRET || env.REACT_APP_DJOMY_CLIENT_SECRET || '';
   }
 
   // Process Stripe payment
@@ -220,11 +225,118 @@ class PaymentService {
     }
   }
 
+  // Process Djomy payment
+  async processDjomyPayment(paymentData) {
+    try {
+      console.log('Processing Djomy payment:', paymentData);
+      
+      const apiUrl = this.djomyApiUrl;
+      const clientId = this.djomyClientId;
+      const clientSecret = this.djomyClientSecret;
+      
+      if (!clientId || !clientSecret) {
+        throw new Error('Djomy credentials are not configured.');
+      }
+      
+      // 1. Generate Signature
+      const hash = CryptoJS.HmacSHA256(clientId, clientSecret);
+      const signature = hash.toString(CryptoJS.enc.Hex);
+      const apiKeyHeader = `${clientId}:${signature}`;
+      
+      // 2. Get Access Token
+      const authResponse = await fetch(`${apiUrl}/v1/auth`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKeyHeader,
+        },
+        body: JSON.stringify({})
+      });
+      
+      if (!authResponse.ok) {
+        throw new Error(`Failed to authenticate with Djomy: ${authResponse.statusText}`);
+      }
+      
+      const authData = await authResponse.json();
+      const accessToken = authData.data?.accessToken || authData.accessToken || authData.token;
+      
+      if (!accessToken) {
+        throw new Error('Failed to retrieve Djomy access token.');
+      }
+      
+      // Sanitize phone number (replace + with 00 to match Djomy's format)
+      const rawPhone = paymentData.phoneNumber || "00224000000000";
+      const payerNumber = rawPhone.startsWith('+') ? '00' + rawPhone.slice(1) : rawPhone;
+
+      // Djomy strictly requires HTTPS and prohibits localhost or private IP addresses
+      let baseUrl = window.location.origin;
+      if (
+        baseUrl.includes('localhost') || 
+        baseUrl.includes('127.0.0.1') || 
+        baseUrl.startsWith('http://192.')
+      ) {
+        baseUrl = 'https://example.com'; 
+      } else {
+        baseUrl = baseUrl.replace('http://', 'https://');
+      }
+
+      // 3. Initiate Gateway Payment
+      const paymentPayload = {
+        amount: Number(paymentData.amount) || 0,
+        countryCode: paymentData.countryCode || "GN",
+        payerNumber: payerNumber,
+        allowedPaymentMethods: ["OM", "MOMO", "CARD", "SOUTRA_MONEY", "PAYCARD"],
+        description: `Order Payment`.substring(0, 250),
+        merchantPaymentReference: `ORD-${Date.now()}`.substring(0, 50),
+        returnUrl: `${baseUrl}/checkout/success`,
+        cancelUrl: `${baseUrl}/checkout/cart`,
+      };
+      
+      const paymentResponse = await fetch(`${apiUrl}/v1/payments/gateway`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': apiKeyHeader,
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(paymentPayload)
+      });
+      
+      if (!paymentResponse.ok) {
+        const errorData = await paymentResponse.json().catch(() => ({}));
+        throw new Error(`Djomy payment initiation failed: ${errorData.message || paymentResponse.statusText}`);
+      }
+      
+      const paymentResult = await paymentResponse.json();
+      const redirectUrl = paymentResult.data?.paymentUrl || paymentResult.data?.redirectUrl || paymentResult.redirectUrl || paymentResult.paymentUrl;
+      
+      if (redirectUrl) {
+        return {
+          success: true,
+          method: 'djomy',
+          transactionId: paymentResult.data?.transactionId || paymentResult.transactionId || `DJ_${Date.now()}`,
+          redirectUrl: redirectUrl,
+          message: 'Redirecting to Djomy payment gateway...'
+        };
+      } else {
+         throw new Error('Djomy did not return a valid redirect URL.');
+      }
+    } catch (error) {
+      console.error('Djomy payment failed:', error);
+      return {
+        success: false,
+        error: error.message || 'Djomy payment initialization failed'
+      };
+    }
+  }
+
   // Main payment processing method
   async processPayment(paymentMethod, paymentData) {
     switch (paymentMethod) {
       case 'stripe':
         return await this.processStripePayment(paymentData);
+      case 'djomy':
+        return await this.processDjomyPayment(paymentData);
       case 'ymo':
         return await this.processYMOPayment(paymentData);
       case 'orange-money':
@@ -284,6 +396,7 @@ class PaymentService {
 
       case 'orange-money':
       case 'mtn':
+      case 'djomy':
         if (!paymentData.phoneNumber) {
           errors.phoneNumber = 'Phone number is required';
         }

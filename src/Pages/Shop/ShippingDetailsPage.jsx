@@ -212,8 +212,16 @@ export default function ShippingDetailsPage() {
 
         if (orderRes.success) {
           clearCart();
+          
+          if (result.redirectUrl) {
+            window.location.href = result.redirectUrl;
+            return;
+          }
+          
           // Redirect to invoice page
           navigate("/download-invoice", { state: { orderId: orderRes.orderId } });
+        } else {
+          setPaymentResult({ success: false, error: "Failed to create order" });
         }
       } else {
         setPaymentResult(result);
@@ -453,6 +461,13 @@ export default function ShippingDetailsPage() {
                   iconComponent: CreditCard,
                 },
                 {
+                  id: "djomy",
+                  label: "Djomy Gateway",
+                  desc: "Pay via Djomy (OM, MoMo, Card)",
+                  icon: null,
+                  iconComponent: CreditCard,
+                },
+                {
                   id: "stripe",
                   label: "Stripe",
                   desc: t('shipping.pay_card'),
@@ -515,6 +530,7 @@ export default function ShippingDetailsPage() {
                   {selectedPaymentMethod === 'orange-money' && 'Orange Money Details'}
                   {selectedPaymentMethod === 'mtn' && 'MTN MoMo Details'}
                   {selectedPaymentMethod === 'ymo' && 'YMO Payment Details'}
+                  {selectedPaymentMethod === 'djomy' && 'Djomy Payment Details'}
                   {selectedPaymentMethod === 'stripe' && 'Card Details'}
                   {selectedPaymentMethod === 'bank-transfer' && 'Bank Transfer Details'}
                   {selectedPaymentMethod === 'cash-on-delivery' && 'Delivery Address'}
@@ -652,6 +668,33 @@ export default function ShippingDetailsPage() {
                       <p className="text-sm text-green-700 mt-1">
                         You will be redirected to the YMO Payment Gateway to complete your payment.
                       </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Djomy Form */}
+                {selectedPaymentMethod === 'djomy' && (
+                  <div className="space-y-4">
+                    <div className="bg-purple-50 p-4 rounded-lg flex items-start gap-3">
+                      <Info className="h-5 w-5 text-purple-700 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-semibold text-purple-800">Djomy Integration</p>
+                        <p className="text-sm text-purple-700 mt-1">
+                          You will be redirected to the Djomy Payment Gateway to complete your payment securely.
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number (Required) *
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="00224..."
+                        value={paymentDetails.phoneNumber || ''}
+                        onChange={(e) => handlePaymentDetailsChange('phoneNumber', e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
+                      />
                     </div>
                   </div>
                 )}
