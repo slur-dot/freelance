@@ -20,7 +20,11 @@ class PaymentService {
 
     this.stripePublicKey = env.VITE_STRIPE_PUBLIC_KEY || env.REACT_APP_STRIPE_PUBLIC_KEY || 'pk_test_your_stripe_key';
     this.ymoClientId = env.VITE_YMO_CLIENT_ID || env.REACT_APP_YMO_CLIENT_ID || 'your_ymo_client_id';
-    this.djomyApiUrl = env.VITE_DJOMY_API_URL || env.REACT_APP_DJOMY_API_URL || 'https://api.djomy.com';
+    
+    // Intelligently route Djomy calls through secure proxies based on environment
+    const isDev = env.DEV || (typeof process !== 'undefined' && process.env.NODE_ENV === 'development');
+    this.djomyApiUrl = isDev ? '/api/djomy' : '/api/djomy-proxy?path=';
+    
     this.djomyClientId = env.VITE_DJOMY_CLIENT_ID || env.REACT_APP_DJOMY_CLIENT_ID || '';
     this.djomyClientSecret = env.VITE_DJOMY_CLIENT_SECRET || env.REACT_APP_DJOMY_CLIENT_SECRET || '';
   }
