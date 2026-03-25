@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Printer, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import QRCode from "react-qr-code";
