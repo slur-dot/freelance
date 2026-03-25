@@ -61,6 +61,7 @@ export default function AdminSidebar() {
         { title: t('admin_dashboard.sidebar.management.users'), url: "/admin/dashboard/users", icon: Users },
         { title: t('admin_dashboard.sidebar.management.sub_admin'), url: "/admin/dashboard/sub-admin", icon: UserPlus },
         { title: t('admin_dashboard.sidebar.management.support'), url: "/admin/dashboard/support-team", icon: LifeBuoy },
+        { title: t('admin_dashboard.sidebar.management.partnerships', 'Manage Partnerships'), url: "/admin/dashboard/partnerships", icon: Handshake },
       ],
     },
     {

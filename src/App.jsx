@@ -87,6 +87,7 @@ import SubAdminManagement from './Pages/Dashboards/Admin/Sub-AdminManagement';
 import AdvertisementManagement from './Pages/Dashboards/Admin/AdvertismentManagement';
 import SupportTeamManagement from './Pages/Dashboards/Admin/SupportTeamManagement';
 import UserManagement from './Pages/Dashboards/Admin/UserManagement';
+import ManagePartnerships from './Pages/Dashboards/Admin/ManagePartnerships';
 import VendorProfiles from './Pages/VendorProfiles';
 import CompanyHistory from './components/CompanyHistory';
 import VendorInfo from './Pages/VendorInfo';
@@ -231,6 +232,7 @@ function AppContent() {
             <Route path="advertisements" element={<AdvertisementManagement />} />
             <Route path="support-team" element={<SupportTeamManagement />} />
             <Route path="users" element={<UserManagement />} />
+            <Route path="partnerships" element={<ManagePartnerships />} />
             <Route path="profile" element={<AdminProfilePage />} />
           </Route>
 
