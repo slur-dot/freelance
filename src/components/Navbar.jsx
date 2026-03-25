@@ -92,8 +92,9 @@ export default function Navbar() {
               <button className="flex items-center text-gray-700 font-medium pb-1">
                 {t('navbar.more')} <HiChevronDown className="ml-1 text-sm text-gray-500" />
               </button>
-              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded shadow-lg opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100] py-1">
-                <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
+              <div className="absolute left-0 top-full pt-1 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100]">
+                <div className="bg-white border border-gray-200 rounded shadow-lg py-1">
+                  <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
                 <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
                 <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales')}</Link>
                 <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.faq')}</Link>
@@ -101,6 +102,7 @@ export default function Navbar() {
                 <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.contact_us')}</Link>
                 <Link to="/vendor-profiles" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_profiles')}</Link>
                 <Link to="/partnership" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.partnership', 'Partnership')}</Link>
+                </div>
               </div>
             </div>
           </div>

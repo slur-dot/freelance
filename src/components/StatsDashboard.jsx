@@ -1,7 +1,7 @@
 import { Users, Shield, Award, TrendingUp } from "lucide-react";
 import chartImage from "../assets/Chart.png";
 import illustrationImage from "../assets/illustration.png";
-import testimonialImage from "../assets/Testimonial_image2.jpg";
+import testimonialImage from "../assets/partnership-humanImage.jpeg";
 
 import { useTranslation } from "react-i18next";
 
