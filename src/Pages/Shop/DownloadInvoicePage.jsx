@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Printer, ArrowLeft, CheckCircle } from "lucide-react";
 import QRCode from "react-qr-code";
 import { useTranslation } from "react-i18next";
-import { OrderService } from "../../services/OrderService";
+import { OrderService } from "../../services/orderService";
 
 export default function DownloadInvoicePage() {
   const { t } = useTranslation();
