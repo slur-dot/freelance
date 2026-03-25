@@ -292,7 +292,7 @@ class PaymentService {
         allowedPaymentMethods: ["OM", "MOMO", "CARD", "SOUTRA_MONEY", "PAYCARD"],
         description: `Order Payment`.substring(0, 250),
         merchantPaymentReference: paymentData.merchantPaymentReference || `ORD-${Date.now()}`.substring(0, 50),
-        returnUrl: `${baseUrl}/checkout/success`,
+        returnUrl: `${baseUrl}/checkout/success?orderId=${paymentData.merchantPaymentReference || ''}`,
         cancelUrl: `${baseUrl}/checkout/cart`,
       };
       

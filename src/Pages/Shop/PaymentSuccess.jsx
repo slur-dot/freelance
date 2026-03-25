@@ -4,6 +4,7 @@ import { CheckCircle, Home, Receipt } from 'lucide-react';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
+  const orderId = searchParams.get('orderId');
   const ref = searchParams.get('ref') || searchParams.get('merchantPaymentReference') || 'Unknown Reference';
   const navigate = useNavigate();
 
@@ -27,9 +28,9 @@ const PaymentSuccess = () => {
         </div>
 
         <div className="flex flex-col gap-3">
-          {/* Note: In a real flow orderId might be different from ref, using ref here as fallback */}
+          {/* Use the explicitly passed orderId, or fallback to ref if missing */}
           <button 
-            onClick={() => navigate('/download-invoice', { state: { orderId: ref } })}
+            onClick={() => navigate('/download-invoice', { state: { orderId: orderId || ref } })}
             className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md"
           >
             <Receipt className="w-5 h-5" />
