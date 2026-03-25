@@ -21,6 +21,7 @@ import {
   FileText,
   Mail,
   Store,
+  Handshake,
 } from "lucide-react";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -133,6 +134,7 @@ export default function SellerSidebar() {
         { title: t('navbar.blog', 'Blog'), url: "/blog", icon: FileText },
         { title: t('navbar.contact_us', 'Contact Us'), url: "/contact", icon: Mail },
         { title: t('navbar.vendor_profiles', 'Vendor Profiles'), url: "/vendor-profiles", icon: Store },
+        { title: t('navbar.partnership', 'Partnership'), url: "/partnership", icon: Handshake },
       ],
     },
   ];

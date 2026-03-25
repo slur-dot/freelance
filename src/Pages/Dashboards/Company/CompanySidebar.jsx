@@ -19,6 +19,7 @@ import {
   FileText,
   Mail,
   Store,
+  Handshake,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
@@ -97,6 +98,7 @@ export default function CompanySidebar() {
         { title: t('navbar.blog', 'Blog'), url: "/blog", icon: FileText },
         { title: t('navbar.contact_us', 'Contact Us'), url: "/contact", icon: Mail },
         { title: t('navbar.vendor_profiles', 'Vendor Profiles'), url: "/vendor-profiles", icon: Store },
+        { title: t('navbar.partnership', 'Partnership'), url: "/partnership", icon: Handshake },
       ],
     },
   ];

@@ -186,5 +186,11 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
     }
+
+    // Partnerships Collection
+    match /partnerships/{docId} {
+      allow create: if true; // Public can submit application
+      allow read, update, delete: if isAdmin();
+    }
   }
 }

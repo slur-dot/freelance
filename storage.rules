@@ -38,5 +38,11 @@ service firebase.storage {
       allow read: if true;
       allow write: if isAuthenticated() && request.auth.uid == clientId;
     }
+
+    // Partnerships: Public create (unauthenticated applications), Authenticated read
+    match /partnerships/{allPaths=**} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
   }
 }

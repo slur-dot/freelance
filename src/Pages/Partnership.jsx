@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Building2, Mail, Phone, Upload, Send, MessageSquare, Briefcase, Handshake } from 'lucide-react';
+import { Building2, Mail, Phone, Upload, Send, MessageSquare, Briefcase, Handshake, CheckCircle2 } from 'lucide-react';
 import partnershipImage from '../assets/partnership-humanImage.jpeg';
+import { db, storage } from '../firebaseConfig';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default function Partnership() {
   const { t } = useTranslation();
@@ -16,6 +19,9 @@ export default function Partnership() {
   });
   
   const [file, setFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,16 +34,45 @@ export default function Partnership() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data:', formData);
-    console.log('File:', file);
-    alert('Partnership application submitted successfully!');
-    // Reset form
-    setFormData({
-      name: '', email: '', phone: '', partnershipType: '', projectDetails: '', comments: ''
-    });
-    setFile(null);
+    setIsSubmitting(true);
+    setErrorMsg('');
+    setSubmitSuccess(false);
+
+    try {
+      let fileUrl = null;
+      let fileName = null;
+
+      if (file) {
+        const fileRef = ref(storage, `partnerships/${Date.now()}_${file.name}`);
+        const snapshot = await uploadBytes(fileRef, file);
+        fileUrl = await getDownloadURL(snapshot.ref);
+        fileName = file.name;
+      }
+
+      await addDoc(collection(db, 'partnerships'), {
+        ...formData,
+        fileUrl,
+        fileName,
+        createdAt: serverTimestamp(),
+        status: 'pending'
+      });
+
+      setSubmitSuccess(true);
+      setFormData({
+        name: '', email: '', phone: '', partnershipType: '', projectDetails: '', comments: ''
+      });
+      setFile(null);
+      
+      setTimeout(() => setSubmitSuccess(false), 5000);
+      
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      setErrorMsg('Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -251,12 +286,27 @@ export default function Partnership() {
                 </div>
               </div>
 
+              {errorMsg && (
+                <div className="p-4 rounded-lg bg-red-50 text-red-600 border border-red-200 text-sm">
+                  {errorMsg}
+                </div>
+              )}
+              
+              {submitSuccess && (
+                <div className="p-4 rounded-lg bg-green-50 text-green-700 border border-green-200 text-sm flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <span>Your partnership application has been submitted successfully! We will contact you soon.</span>
+                </div>
+              )}
+
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-[#15803D] hover:bg-[#166534] text-white font-bold py-4 px-8 rounded-lg transition-colors flex justify-center items-center gap-2 mt-4"
+                disabled={isSubmitting}
+                className={`w-full text-white font-bold py-4 px-8 rounded-lg transition-colors flex justify-center items-center gap-2 mt-4 
+                  ${isSubmitting ? 'bg-[#15803D]/70 cursor-not-allowed' : 'bg-[#15803D] hover:bg-[#166534]'}`}
               >
-                Submit Application <Send className="w-5 h-5" />
+                {isSubmitting ? 'Submitting...' : 'Submit Application'} {!isSubmitting && <Send className="w-5 h-5" />}
               </button>
             </form>
           </div>

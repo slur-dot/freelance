@@ -100,6 +100,7 @@ export default function Navbar() {
                 <Link to="/blog" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.blog')}</Link>
                 <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.contact_us')}</Link>
                 <Link to="/vendor-profiles" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_profiles')}</Link>
+                <Link to="/partnership" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.partnership', 'Partnership')}</Link>
               </div>
             </div>
           </div>
@@ -269,6 +270,10 @@ export default function Navbar() {
 
                       <Link to="/vendor-profiles" className="block hover:text-blue-600">
                         {t("navbar.vendor_profiles")}
+                      </Link>
+
+                      <Link to="/partnership" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                        {t("navbar.partnership", "Partnership")}
                       </Link>
                     </div>
                   </div>
