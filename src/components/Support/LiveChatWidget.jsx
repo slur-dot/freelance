@@ -250,8 +250,8 @@ export default function LiveChatWidget({ forceOpen = false, onClose: externalOnC
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isMinimized ? 'h-16' : 'h-[28rem]'
-      } w-96 bg-white rounded-lg shadow-xl border`}>
+    <div className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50 transition-all duration-300 ${isMinimized ? 'h-16' : 'h-[28rem]'
+      } w-[calc(100%-2rem)] sm:w-80 md:w-96 bg-white rounded-lg shadow-xl border`}>
       {/* Header */}
       <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
         <div className="flex items-center gap-3">

@@ -37,23 +37,25 @@ export default function RentalAgreementStep({ onContinue, formData }) {
         </div>
 
         {/* Step Indicator */}
-        <div className="flex items-center justify-center mb-8">
-          {[1, 2, 3, 4, 5, 6, 7].map((step) => (
-            <div key={step} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step <= 7 
-                  ? 'bg-blue-600 text-white' 
-                  : 'bg-gray-200 text-gray-600'
-              }`}>
-                {step}
+        <div className="overflow-x-auto pb-4 mb-4">
+          <div className="flex items-center justify-center min-w-max px-4">
+            {[1, 2, 3, 4, 5, 6, 7].map((step) => (
+              <div key={step} className="flex items-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                  step <= 7 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-gray-200 text-gray-600'
+                }`}>
+                  {step}
+                </div>
+                {step < 7 && (
+                  <div className={`w-8 sm:w-16 h-1 mx-1 sm:mx-2 ${
+                    step < 7 ? 'bg-blue-600' : 'bg-gray-200'
+                  }`} />
+                )}
               </div>
-              {step < 7 && (
-                <div className={`w-16 h-1 mx-2 ${
-                  step < 7 ? 'bg-blue-600' : 'bg-gray-200'
-                }`} />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

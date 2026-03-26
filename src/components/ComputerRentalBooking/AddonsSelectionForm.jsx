@@ -82,22 +82,22 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
             Select additional services to add to your purchase
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {paidServices.map((service) => {
               const isSelected = selectedServices.some(s => s.name === service.name);
               return (
                 <button
                   key={service.name}
                   onClick={() => toggleService(service)}
-                  className={`flex justify-between items-center px-6 py-4 rounded-lg font-medium transition-all duration-200 border
+                  className={`flex justify-between items-center px-4 sm:px-6 py-4 rounded-lg font-medium transition-all duration-200 border
                     ${isSelected
                       ? "bg-green-50 border-green-500 text-green-700 shadow-sm"
                       : "bg-white border-gray-200 text-gray-700 hover:border-green-300 hover:bg-gray-50"
                     }
                   `}
                 >
-                  <span>{service.name}</span>
-                  <span className={`text-sm ${isSelected ? 'font-bold' : ''}`}>
+                  <span className="text-sm sm:text-base text-left">{service.name}</span>
+                  <span className={`text-xs sm:text-sm ${isSelected ? 'font-bold' : ''} whitespace-nowrap ml-2`}>
                     {service.cost.toLocaleString()} GNF
                   </span>
                 </button>

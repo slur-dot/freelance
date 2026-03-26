@@ -142,9 +142,9 @@ export default function OrganizationForm({ onContinue }) {
           .map((input) => (
             <div
               key={input.id}
-              className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4"
+              className="grid gap-2 sm:grid-cols-3 sm:items-center sm:gap-4"
             >
-              <label htmlFor={input.id} className="font-medium text-sm sm:text-base">
+              <label htmlFor={input.id} className="font-medium text-sm sm:text-base sm:col-span-1">
                 {input.label}
                 {input.required && <span className="text-red-500">*</span>}
               </label>
@@ -153,7 +153,7 @@ export default function OrganizationForm({ onContinue }) {
                   id={input.id}
                   value={formData[input.field]}
                   onChange={(e) => handleInputChange(input.field, e.target.value)}
-                  className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 sm:col-span-2"
                   required={input.required}
                 >
                   <option value="">Select an Option</option>
@@ -164,7 +164,7 @@ export default function OrganizationForm({ onContinue }) {
                   ))}
                 </select>
               ) : input.type === "tel" ? (
-                <div className="flex flex-col w-full">
+                <div className="flex flex-col w-full sm:col-span-2">
                   <PhoneInput
                     id={input.id}
                     value={formData[input.field]}
@@ -190,7 +190,7 @@ export default function OrganizationForm({ onContinue }) {
                   placeholder={input.placeholder}
                   value={formData[input.field]}
                   onChange={(e) => handleInputChange(input.field, e.target.value)}
-                  className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 sm:col-span-2"
                   required={input.required}
                 />
               )}

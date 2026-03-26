@@ -26,7 +26,7 @@ const ComputerRentalHero = () => {
         <h1 className="text-white text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-tight max-w-xs sm:max-w-xl md:max-w-4xl">
           {t('computer_rental.hero.title')}
         </h1>
-        <p className="text-white text-base sm:text-lg md:text-xl lg:text-2xl mt-4 max-w-sm sm:max-w-lg md:max-w-2xl -ml-2 sm:-ml-4 md:-ml-14 lg:-ml-50">
+        <p className="text-white text-base sm:text-lg md:text-xl lg:text-2xl mt-4 max-w-sm sm:max-w-lg md:max-w-2xl">
           {t('computer_rental.hero.subtitle')}
         </p>
       </div>

@@ -117,33 +117,37 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
             <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2 mb-4">
               Contact Information
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-y-4 gap-x-6 items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-4 gap-x-6 items-center">
               {/* Name */}
-              <label htmlFor="name" className="text-gray-700">
+              <label htmlFor="name" className="text-gray-700 text-sm sm:text-base">
                 Full Name *
               </label>
-              <input
-                id="name"
-                type="text"
-                placeholder="John Doe"
-                className="w-full bg-gray-100 px-3 py-2 border rounded-md"
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                required
-              />
+              <div className="sm:col-span-2">
+                <input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  className="w-full bg-gray-100 px-3 py-2 border rounded-md"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  required
+                />
+              </div>
 
               {/* Phone Number */}
-              <label htmlFor="phone-number" className="text-gray-700">
+              <label htmlFor="phone-number" className="text-gray-700 text-sm sm:text-base">
                 Phone Number *
               </label>
-              <PhoneInput
-                id="phone-number"
-                value={formData.phone}
-                onChange={(val) => handleInputChange("phone", val)}
-                countryCode={formData.countryCode}
-                onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
-                required
-              />
+              <div className="sm:col-span-2">
+                <PhoneInput
+                  id="phone-number"
+                  value={formData.phone}
+                  onChange={(val) => handleInputChange("phone", val)}
+                  countryCode={formData.countryCode}
+                  onCountryCodeChange={(code) => handleInputChange("countryCode", code)}
+                  required
+                />
+              </div>
             </div>
           </div>
 
@@ -219,7 +223,7 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg relative left-[-40px]"
+              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg"
             >
               Continue
             </button>

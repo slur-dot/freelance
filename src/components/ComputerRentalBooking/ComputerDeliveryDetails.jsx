@@ -97,15 +97,15 @@ export default function ComputerDeliveryDetails({ onContinue }) {
         </div>
 
         {/* Delivery Type Selector */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-2 border-b pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 border-b pb-4">
           <h2 className="text-lg sm:text-xl font-bold">Delivery / Pickup Details</h2>
-          <div className="flex space-x-2">
+          <div className="flex space-x-2 w-full sm:w-auto">
             {["delivery", "pickup"].map((type) => (
               <button
                 key={type}
                 type="button"
                 onClick={() => handleInputChange("deliveryType", type)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${formData.deliveryType === type
+                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${formData.deliveryType === type
                   ? "bg-green-600 text-white"
                   : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                   }`}

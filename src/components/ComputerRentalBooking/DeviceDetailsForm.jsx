@@ -40,12 +40,12 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
 
           <div className="grid grid-cols-1 gap-6">
             {/* Device Type */}
-            <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">Device Type*</label>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
+              <label className="w-full sm:w-40 text-sm font-medium">Device Type*</label>
               <select
                 value={formData.deviceType}
                 onChange={(e) => handleChange("deviceType", e.target.value)}
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 w-full"
                 required
               >
                 <option value="">Select an Option</option>
@@ -56,24 +56,24 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
             </div>
 
             {/* Quantity */}
-            <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">Quantity*</label>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
+              <label className="w-full sm:w-40 text-sm font-medium">Quantity*</label>
               <input
                 type="number"
                 value={formData.quantity}
                 onChange={(e) => handleChange("quantity", e.target.value)}
-                className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                className="w-full sm:w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
                 required
               />
             </div>
 
             {/* Rental Duration */}
-            <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">Rental Duration*</label>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
+              <label className="w-full sm:w-40 text-sm font-medium">Rental Duration*</label>
               <select
                 value={formData.rentalDuration}
                 onChange={(e) => handleChange("rentalDuration", e.target.value)}
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 w-full"
                 required
               >
                 <option value="">Select an Option</option>
@@ -83,37 +83,41 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
               </select>
             </div>
 
-            {/* Start Date and End Date on same line */}
-            <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">Start Date*</label>
-              <input
-                type="date"
-                min={new Date().toISOString().split('T')[0]}
-                value={formData.startDate}
-                onChange={(e) => handleChange("startDate", e.target.value)}
-                className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
-                required
-              />
-              <label className="ml-6 text-sm font-medium">End Date*</label>
-              <input
-                type="date"
-                min={formData.startDate || new Date().toISOString().split('T')[0]}
-                value={formData.endDate}
-                onChange={(e) => handleChange("endDate", e.target.value)}
-                className="w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
-                required
-              />
+            {/* Start Date and End Date */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+              <div className="flex flex-col sm:flex-row flex-1 items-start sm:items-center gap-2 sm:gap-8">
+                <label className="w-full sm:w-40 text-sm font-medium">Start Date*</label>
+                <input
+                  type="date"
+                  min={new Date().toISOString().split('T')[0]}
+                  value={formData.startDate}
+                  onChange={(e) => handleChange("startDate", e.target.value)}
+                  className="w-full sm:w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                  required
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row flex-1 items-start sm:items-center gap-2 sm:gap-4">
+                <label className="w-full sm:w-auto text-sm font-medium sm:min-w-[80px]">End Date*</label>
+                <input
+                  type="date"
+                  min={formData.startDate || new Date().toISOString().split('T')[0]}
+                  value={formData.endDate}
+                  onChange={(e) => handleChange("endDate", e.target.value)}
+                  className="w-full sm:w-40 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                  required
+                />
+              </div>
             </div>
 
             {/* Preferred Brands */}
-            <div className="flex items-center gap-8">
-              <label className="w-40 text-sm font-medium">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
+              <label className="w-full sm:w-40 text-sm font-medium">
                 Preferred Brand*
               </label>
               <select
                 value={formData.preferredBrands}
                 onChange={(e) => handleChange("preferredBrands", e.target.value)}
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2"
+                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 w-full"
                 required
               >
                 <option value="">Select a Brand</option>
@@ -128,15 +132,15 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
             </div>
 
             {/* Purpose of Rental */}
-            <div className="flex items-start gap-8">
-              <label className="w-40 text-sm font-medium">
+            <div className="flex flex-col sm:flex-row items-start gap-2 sm:gap-8">
+              <label className="w-full sm:w-40 text-sm font-medium pt-2">
                 Purpose of Rental
               </label>
               <textarea
                 value={formData.purpose}
                 onChange={(e) => handleChange("purpose", e.target.value)}
                 placeholder="e.g. Office use, Project implementation"
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 min-h-[100px]"
+                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 min-h-[100px] w-full"
               />
             </div>
           </div>
@@ -145,7 +149,7 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
           <div className="flex justify-center p-6">
             <button
               type="submit"
-              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg relative left-[-80px]"
+              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg"
             >
               Continue
             </button>
