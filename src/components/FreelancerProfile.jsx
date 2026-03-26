@@ -161,7 +161,7 @@ function FreelancerCard({ freelancer }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition hover:border-green-600 hover:border-2">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition hover:border-green-600 hover:border-2 flex flex-col h-full">
       <div className="relative">
         {/* Circular Avatar */}
         <div className="absolute top-4 left-4 z-10">
@@ -187,7 +187,7 @@ function FreelancerCard({ freelancer }) {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 flex-1 flex flex-col">
         <h3 className="text-lg font-bold">{freelancer.name}</h3>
         <p className="text-gray-500 text-sm">{freelancer.company}</p>
         <p className="text-gray-600 text-sm">{freelancer.location} • {freelancer.experience}</p>
@@ -243,35 +243,41 @@ function FreelancerCard({ freelancer }) {
         </div>
       </div>
 
-      <div className="p-4 flex justify-between items-center border-t">
-        <div className="flex gap-2">
-          <button className="p-2 hover:bg-gray-100 rounded-full" title="View Profile">
-            <AlignJustify className="w-4 h-4" />
-          </button>
-          <button className="p-2 hover:bg-gray-100 rounded-full" title="Save to Favorites">
-            <Heart className="w-4 h-4" />
-          </button>
-          <button
-            className="p-2 hover:bg-gray-100 rounded-full"
-            title="Send Message"
-            onClick={() => navigate("/hire-freelancers/info")}
-          >
-            <MessageSquareText className="w-4 h-4" />
-          </button>
+      <div className="p-4 border-t border-gray-100">
+        <div className="flex justify-between items-center mb-3">
+          <div className="flex gap-1">
+            <button className="p-2 hover:bg-gray-100 rounded-full text-gray-500" title="View Profile">
+              <AlignJustify className="w-4 h-4" />
+            </button>
+            <button className="p-2 hover:bg-gray-100 rounded-full text-gray-500" title="Save to Favorites">
+              <Heart className="w-4 h-4" />
+            </button>
+            <button
+              className="p-2 hover:bg-gray-100 rounded-full text-gray-500"
+              title="Send Message"
+              onClick={() => navigate("/hire-freelancers/info")}
+            >
+              <MessageSquareText className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="text-xs font-semibold text-green-600">
+            {freelancer.hourlyRate}/hr
+          </div>
         </div>
+
         <div className="flex gap-2">
           <button
             onClick={() => navigate("/hire-freelancers/info/job-post")}
-            className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1 rounded-md"
+            className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-2 py-2 rounded-md transition-colors"
           >
             {t('freelancer.profile.actions.bid')}
           </button>
           <button
             onClick={() => navigate("/hire-freelancers/info")}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-1 rounded-md"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-2 py-2 rounded-md transition-colors"
             style={{ backgroundColor: '#3B82F6' }}
           >
-            {t('freelancer.profile.actions.hire')} →
+            {t('freelancer.profile.actions.hire')}
           </button>
         </div>
       </div>
