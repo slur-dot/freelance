@@ -313,7 +313,7 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div className="p-5 bg-gradient-to-b from-gray-50 to-white mt-auto border-t border-gray-200">
+                <div className="p-5 bg-gradient-to-b from-gray-50 to-white mt-auto border-t border-gray-200 flex flex-col gap-3">
                   {currentUser ? (
                     <div className="space-y-4">
                       {/* Mobile Profile Card */}
