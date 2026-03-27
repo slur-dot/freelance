@@ -153,17 +153,17 @@ export default function EnhancedBookingStep({ onContinue, formData }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between mt-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
           <button
             onClick={() => window.history.back()}
-            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600"
+            className="w-full sm:w-auto bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 order-2 sm:order-1"
           >
             Previous
           </button>
           <button
             onClick={handleContinue}
             disabled={!isFormValid}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+            className="w-full sm:w-auto bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2"
           >
             <CheckCircle className="h-5 w-5" />
             Continue to Agreement

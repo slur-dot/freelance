@@ -1,11 +1,6 @@
 import React from "react";
 
-const countryCodes = [
-    { code: "+224", iso: "GN", flag: "🇬🇳", placeholder: "XXX XX XX XX", digits: 9 },
-    { code: "+221", iso: "SN", flag: "🇸🇳", placeholder: "XX XXX XX XX", digits: 9 },
-    { code: "+225", iso: "CI", flag: "🇨🇮", placeholder: "XX XX XX XX XX", digits: 10 },
-    { code: "+233", iso: "GH", flag: "🇬🇭", placeholder: "XX XXX XXXX", digits: 9 },
-];
+import { countryData as countryCodes } from "../utils/countryData";
 
 export default function PhoneInput({
     value,
@@ -16,7 +11,9 @@ export default function PhoneInput({
     id,
     required = false,
     error = false,
-    className = ""
+    className = "",
+    selectClassName = "",
+    inputClassName = ""
 }) {
     const selectedCountry = countryCodes.find(c => c.code === countryCode) || countryCodes[0];
     const activePlaceholder = placeholder || selectedCountry.placeholder;
@@ -25,42 +22,50 @@ export default function PhoneInput({
         const digits = val.replace(/\D/g, '');
         if (!digits) return '';
 
-        let formatted = digits;
-        if (code === '+225') {
-            // 10 digits: XX XX XX XX XX
-            formatted = digits.match(/.{1,2}/g)?.join(' ') || '';
-            return formatted.substring(0, 14); // 10 digits + 4 spaces
-        } else if (code === '+221') {
-            // 9 digits: XX XXX XX XX
-            const match = digits.match(/^(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})$/);
-            if (match) {
-                formatted = match[1];
-                if (match[2]) formatted += ' ' + match[2];
-                if (match[3]) formatted += ' ' + match[3];
-                if (match[4]) formatted += ' ' + match[4];
+        // Limit to max digits for the selected country
+        const country = countryCodes.find(c => c.code === code) || countryCodes[0];
+        const trimmedDigits = digits.substring(0, country.digits);
+
+        if (code === '+225' || code === '+33' || code === '+212' || code === '+213') {
+            // 10 digits (CI) or 9 digits (FR/MA/DZ): XX XX XX XX XX or X XX XX XX XX
+            return trimmedDigits.match(/.{1,2}/g)?.join(' ') || '';
+        } else if (code === '+221' || code === '+224') {
+            // 9 digits: XX XXX XX XX or XXX XX XX XX
+            if (code === '+221') {
+                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})$/);
+                if (match) {
+                    return [match[1], match[2], match[3], match[4]].filter(Boolean).join(' ');
+                }
+            } else {
+                const match = trimmedDigits.match(/^(\d{0,3})(\d{0,2})(\d{0,2})(\d{0,2})$/);
+                if (match) {
+                    return [match[1], match[2], match[3], match[4]].filter(Boolean).join(' ');
+                }
             }
-            return formatted.trim().substring(0, 12);
-        } else if (code === '+233') {
-            // 9 digits: XX XXX XXXX
-            const match = digits.match(/^(\d{0,2})(\d{0,3})(\d{0,4})$/);
-            if (match) {
-                formatted = match[1];
-                if (match[2]) formatted += ' ' + match[2];
-                if (match[3]) formatted += ' ' + match[3];
+        } else if (code === '+233' || code === '+1' || code === '+234' || code === '+44') {
+            // Generic pattern
+            if (code === '+233') {
+                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,4})$/);
+                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
+            } else if (code === '+1' || code === '+234') {
+                const match = trimmedDigits.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
+            } else if (code === '+44') {
+                const match = trimmedDigits.match(/^(\d{0,4})(\d{0,6})$/);
+                if (match) return [match[1], match[2]].filter(Boolean).join(' ');
             }
-            return formatted.trim().substring(0, 11);
-        } else {
-            // +224 or others
-            // 9 digits: XXX XX XX XX
-            const match = digits.match(/^(\d{0,3})(\d{0,2})(\d{0,2})(\d{0,2})$/);
-            if (match) {
-                formatted = match[1];
-                if (match[2]) formatted += ' ' + match[2];
-                if (match[3]) formatted += ' ' + match[3];
-                if (match[4]) formatted += ' ' + match[4];
+        } else if (code === '+216' || code === '+223') {
+            // Tunisia (8 digits): XX XXX XXX
+            // Mali (8 digits): XX XX XX XX
+            if (code === '+216') {
+                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,3})$/);
+                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
+            } else {
+                return trimmedDigits.match(/.{1,2}/g)?.join(' ') || '';
             }
-            return formatted.trim().substring(0, 12);
         }
+        
+        return trimmedDigits;
     };
 
     const handleInputChange = (e) => {
@@ -73,19 +78,18 @@ export default function PhoneInput({
         if (onCountryCodeChange) {
             onCountryCodeChange(newCode);
         }
-        // Re-format existing value to new format if possible, or clear it
+        
+        // Clean existing value and re-format for new country rules
         const currentDigits = value.replace(/\D/g, '');
-        const maxDigits = countryCodes.find(c => c.code === newCode)?.digits || 9;
-        const trimmedDigits = currentDigits.slice(0, maxDigits);
-        onChange(formatPhoneNumber(trimmedDigits, newCode));
+        onChange(formatPhoneNumber(currentDigits, newCode));
     };
 
     return (
-        <div className={`flex items-stretch w-full h-[46px] ${className}`}>
+        <div className={`flex items-stretch w-full ${className}`}>
             <select
                 value={countryCode}
                 onChange={handleCountryChange}
-                className={`rounded-l-md border-y border-l border-gray-300 bg-gray-100 px-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none min-w-[145px] flex-shrink-0 h-full ${error ? "border-red-500 text-red-500" : "text-gray-700"
+                className={`${selectClassName || "rounded-l-md border-y border-l border-gray-300 bg-gray-100"} px-3 text-sm focus:outline-none flex-shrink-0 min-w-[120px] ${error ? "border-red-500 text-red-500" : "text-gray-700"
                     }`}
             >
                 {countryCodes.map((country) => (
@@ -100,7 +104,7 @@ export default function PhoneInput({
                 placeholder={activePlaceholder}
                 value={value}
                 onChange={handleInputChange}
-                className={`w-full rounded-r-md border border-gray-300 bg-gray-100 px-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none h-full ${error ? "border-red-500" : ""
+                className={`w-full ${inputClassName || "rounded-r-md border border-gray-300 bg-gray-100"} px-4 text-sm focus:outline-none ${error ? "border-red-500" : ""
                     }`}
                 required={required}
             />

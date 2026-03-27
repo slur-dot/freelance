@@ -58,17 +58,17 @@ export default function RentalAgreementStep({ onContinue, formData }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Rental Agreement Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-6">
               <FileText className="h-6 w-6 text-blue-600" />
-              <h2 className="text-2xl font-bold">Rental Terms & Conditions</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">Rental Terms</h2>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
               <h3 className="font-semibold mb-3">Rental Terms & Conditions</h3>
-              <div className="text-sm space-y-2 text-gray-700">
+              <div className="text-xs space-y-2 text-gray-700 max-h-[200px] overflow-y-auto pr-2">
                 <p>• Rental period: Based on your selection</p>
                 <p>• Device: {formData.deviceData?.deviceType || 'Selected device'}</p>
                 <p>• Security deposit: 50,000 GNF per device</p>
@@ -85,26 +85,26 @@ export default function RentalAgreementStep({ onContinue, formData }) {
             </div>
 
             <div className="space-y-4">
-              <label className="flex items-start gap-3">
+              <label className="flex items-start gap-3 cursor-pointer group">
                 <input
                   type="checkbox"
                   checked={agreement.agreementAccepted}
                   onChange={(e) => handleAgreementChange('agreementAccepted', e.target.checked)}
-                  className="mt-1"
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="text-sm">
+                <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
                   I agree to the rental terms and conditions and understand my responsibilities as a renter.
                 </span>
               </label>
 
-              <label className="flex items-start gap-3">
+              <label className="flex items-start gap-3 cursor-pointer group">
                 <input
                   type="checkbox"
                   checked={agreement.termsAccepted}
                   onChange={(e) => handleAgreementChange('termsAccepted', e.target.checked)}
-                  className="mt-1"
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <span className="text-sm">
+                <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
                   I consent to the processing of my personal data for rental purposes and ID verification.
                 </span>
               </label>
@@ -112,65 +112,64 @@ export default function RentalAgreementStep({ onContinue, formData }) {
           </div>
 
           {/* Booking Summary Section */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-6">
               <CheckCircle className="h-6 w-6 text-green-600" />
-              <h2 className="text-2xl font-bold">Booking Summary</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">Booking Summary</h2>
             </div>
 
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-lg">
                 <h3 className="font-semibold mb-3 text-blue-800">Rental Details</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>Organization:</span>
-                    <span>{formData.organizationData?.companyName || 'N/A'}</span>
+                <div className="space-y-2 text-xs sm:text-sm">
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Organization:</span>
+                    <span className="font-medium text-right truncate max-w-[150px]">{formData.organizationData?.companyName || 'N/A'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Device:</span>
-                    <span>{formData.deviceData?.deviceType || 'N/A'}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Device:</span>
+                    <span className="font-medium">{formData.deviceData?.deviceType || 'N/A'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Delivery:</span>
-                    <span>{formData.deliveryData?.deliveryMethod || 'N/A'}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Delivery:</span>
+                    <span className="font-medium">{formData.deliveryData?.deliveryMethod || 'N/A'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Add-ons:</span>
-                    <span>{formData.addonsData?.length || 0} selected</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Add-ons:</span>
+                    <span className="font-medium">{formData.addonsData?.length || 0} selected</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Payment:</span>
-                    <span>{formData.paymentData?.paymentMethod || 'N/A'}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Payment:</span>
+                    <span className="font-medium">{formData.paymentData?.paymentMethod || 'N/A'}</span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-green-50 p-4 rounded-lg">
                 <h3 className="font-semibold mb-3 text-green-800">ID Verification</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span>ID Type:</span>
-                    <span>{formData.idVerification?.idType || 'N/A'}</span>
+                <div className="space-y-2 text-xs sm:text-sm">
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">ID Type:</span>
+                    <span className="font-medium">{formData.idVerification?.idType || 'N/A'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>ID Number:</span>
-                    <span>{formData.idVerification?.idNumber || 'N/A'}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">ID Number:</span>
+                    <span className="font-medium truncate max-w-[150px] text-right">{formData.idVerification?.idNumber || 'N/A'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Document:</span>
-                    <span>{formData.idVerification?.idImage ? 'Uploaded' : 'Not uploaded'}</span>
+                  <div className="flex justify-between gap-2">
+                    <span className="text-gray-600">Document:</span>
+                    <span className="font-medium text-green-700">{formData.idVerification?.idImage ? 'Uploaded' : 'Not uploaded'}</span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-yellow-800">Important Notice</h4>
-                    <p className="text-sm text-yellow-700 mt-1">
-                      By completing this booking, you agree to all terms and conditions. 
-                      Your rental will be confirmed once payment is processed and ID is verified.
+                    <h4 className="font-semibold text-yellow-800 text-sm">Important Notice</h4>
+                    <p className="text-xs text-yellow-700 mt-1">
+                      Confirmed once payment is processed and ID is verified.
                     </p>
                   </div>
                 </div>
@@ -180,17 +179,17 @@ export default function RentalAgreementStep({ onContinue, formData }) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between mt-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
           <button
             onClick={() => window.history.back()}
-            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600"
+            className="w-full sm:w-auto bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 order-2 sm:order-1"
           >
             Previous
           </button>
           <button
             onClick={handleContinue}
             disabled={!isFormValid}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+            className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2"
           >
             <CheckCircle className="h-5 w-5" />
             Complete Booking

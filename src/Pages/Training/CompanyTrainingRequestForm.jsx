@@ -18,8 +18,19 @@ export default function CompanyTrainingRequestForm() {
     setFormData((d) => ({ ...d, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const phoneDigits = formData.phoneNumber.replace(/\D/g, '');
+    const { countryData } = await import("../../utils/countryData");
+    const selectedCountry = countryData.find(c => c.code === formData.countryCode);
+    const requiredDigits = selectedCountry ? selectedCountry.digits : 9;
+
+    if (phoneDigits.length !== requiredDigits) {
+      alert(`Invalid phone number length for ${selectedCountry?.name || 'selected country'}. Expected ${requiredDigits} digits.`);
+      return;
+    }
+
     console.log("Custom Training Request Submitted:", formData);
     alert("Request submitted! We'll contact you soon.");
   };

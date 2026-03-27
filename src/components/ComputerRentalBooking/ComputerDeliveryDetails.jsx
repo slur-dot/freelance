@@ -170,8 +170,8 @@ export default function ComputerDeliveryDetails({ onContinue }) {
             <div className="space-y-6 animate-fadeIn">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* List */}
-                <div className="lg:col-span-1 h-[400px] overflow-y-auto border rounded-lg p-2 bg-gray-50">
-                  <h3 className="font-bold mb-2 sticky top-0 bg-gray-50 p-2">Select a Pickup Point</h3>
+                <div className="lg:col-span-1 h-[300px] sm:h-[400px] overflow-y-auto border rounded-lg p-2 bg-gray-50">
+                  <h3 className="font-bold mb-2 sticky top-0 bg-gray-50 p-2 text-sm sm:text-base">Select a Pickup Point</h3>
                   <div className="space-y-2">
                     {vendors.map(vendor => (
                       <div
@@ -182,15 +182,15 @@ export default function ComputerDeliveryDetails({ onContinue }) {
                           : 'bg-white border-gray-200 hover:border-green-300'
                           }`}
                       >
-                        <div className="font-semibold text-gray-800">{vendor.name}</div>
-                        <div className="text-xs text-gray-500">{vendor.address}</div>
+                        <div className="font-semibold text-sm sm:text-base text-gray-800">{vendor.name}</div>
+                        <div className="text-[10px] sm:text-xs text-gray-500">{vendor.address}</div>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Map */}
-                <div className="lg:col-span-2 h-[400px] rounded-lg overflow-hidden border border-gray-300 relative z-0">
+                <div className="lg:col-span-2 h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-gray-300 relative z-0">
                   <MapContainer
                     center={mapCenter}
                     zoom={13}

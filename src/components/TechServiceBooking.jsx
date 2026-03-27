@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { guineaCities, guineaCitiesByRegion } from "../data/guineaCities";
 import PhoneInput from "./PhoneInput";
+import { countryData } from "../utils/countryData";
 
 const Button = ({ children, className = "", ...props }) => (
   <button
@@ -189,10 +190,12 @@ export default function TechServiceBooking() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const validatePhone = (phone) => {
-    // Simple check if length is at least 7 after cleaning
-    const cleaned = phone.replace(/[\s\-\(\)]/g, "");
-    return cleaned.length >= 7;
+  const validatePhone = (phone, countryCode) => {
+    const digits = phone.replace(/\D/g, '');
+    const selectedCountry = countryData.find(c => c.code === countryCode);
+    const requiredDigits = selectedCountry ? selectedCountry.digits : 9; // Default to 9 if country not found
+
+    return digits.length === requiredDigits;
   };
 
   const validateEmail = (email) => {
@@ -208,7 +211,7 @@ export default function TechServiceBooking() {
 
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = t("tech_booking.validation.required");
-    } else if (!validatePhone(formData.phoneNumber)) {
+    } else if (!validatePhone(formData.phoneNumber, formData.countryCode)) {
       newErrors.phoneNumber = t("tech_booking.validation.invalid_phone");
     }
 

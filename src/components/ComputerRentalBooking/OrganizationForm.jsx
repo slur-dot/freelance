@@ -32,13 +32,15 @@ export default function OrganizationForm({ onContinue }) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     const digits = formData.phoneNumber.replace(/\D/g, '');
-    const requiredDigits = formData.countryCode === '+225' ? 10 : 9;
+    const { countryData } = await import("../../utils/countryData");
+    const selectedCountry = countryData.find(c => c.code === formData.countryCode);
+    const requiredDigits = selectedCountry ? selectedCountry.digits : 9;
     
-    if (digits.length < requiredDigits) {
+    if (digits.length !== requiredDigits) {
       setPhoneError(true);
       return;
     }

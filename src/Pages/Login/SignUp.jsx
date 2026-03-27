@@ -8,6 +8,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
 import { UserService } from "../../services/userService";
 
+import PhoneInput from "../../components/PhoneInput";
 
 export default function SignUp() {
   const { t } = useTranslation();
@@ -15,16 +16,9 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [role, setRole] = useState(""); // role state
-  const [countryCode, setCountryCode] = useState("+224"); // default Guinea
-  const [countryFlag, setCountryFlag] = useState("🇬🇳"); // Guinea flag
-
-  const countries = [
-    { code: "+224", flag: "🇬🇳", name: "Guinea" },
-    { code: "+221", flag: "🇸🇳", name: "Senegal" },
-    { code: "+225", flag: "🇨🇮", name: "Ivory Coast" },
-    { code: "+233", flag: "🇬🇭", name: "Ghana" },
-  ];
+  const [role, setRole] = useState(""); 
+  const [countryCode, setCountryCode] = useState("+224");
+  const [phone, setPhone] = useState("");
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) =>
@@ -64,13 +58,23 @@ export default function SignUp() {
     }
 
     const nickname = e.target.nickname?.value.trim();
-    const phone = e.target.phone?.value.trim();
+    const phoneDigits = phone.replace(/\D/g, '');
+    
+    // Country specific length validation
+    const { countryData } = await import("../../utils/countryData");
+    const selectedCountry = countryData.find(c => c.code === countryCode);
+    
     if (!nickname) {
       alert(t('signup_page.alerts.enter_nickname') || "Please enter a nickname.");
       return;
     }
-    if (!phone) {
+    if (!phoneDigits) {
       alert(t('signup_page.alerts.enter_phone') || "Please enter your phone number.");
+      return;
+    }
+
+    if (selectedCountry && phoneDigits.length !== selectedCountry.digits) {
+      alert(`${t('signup_page.alerts.invalid_phone_length') || 'Invalid phone number length for'} ${selectedCountry.name}. ${t('signup_page.alerts.expected') || 'Expected'} ${selectedCountry.digits} ${t('signup_page.alerts.digits') || 'digits'}.`);
       return;
     }
 
@@ -79,12 +83,12 @@ export default function SignUp() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Prepare user data for Firestore
+      // Prepare user data for Firestore - sanitize phone (keep only code and digits)
       const userData = {
         fullName,
-        nickname: e.target.nickname.value.trim(),
+        nickname: nickname,
         email,
-        phone: `${countryCode} ${e.target.phone.value.trim()}`,
+        phone: `${countryCode}${phoneDigits}`,
         role: userRole,
       };
 
@@ -186,29 +190,15 @@ export default function SignUp() {
             </div>
 
             {/* Phone Number with Country Code */}
-            <div className="flex items-center border border-green-600 rounded-full px-3">
-              <select
-                value={countryCode}
-                onChange={(e) => {
-                  const selected = countries.find(
-                    (c) => c.code === e.target.value
-                  );
-                  setCountryCode(selected.code);
-                  setCountryFlag(selected.flag);
-                }}
-                className="bg-transparent focus:outline-none pr-2 py-2"
-              >
-                {countries.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.flag} {c.code}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="tel"
-                name="phone"
-                placeholder={t('signup_page.form.phone_number') || "Phone Number"}
-                className="flex-1 py-2 px-2 focus:outline-none rounded-r-full"
+            <div className="relative">
+              <PhoneInput
+                value={phone}
+                onChange={setPhone}
+                countryCode={countryCode}
+                onCountryCodeChange={setCountryCode}
+                className="overflow-hidden rounded-full border border-green-600 focus-within:ring-2 focus-within:ring-green-500"
+                selectClassName="bg-transparent border-none pr-2 py-2"
+                inputClassName="bg-transparent border-none py-2 px-2"
                 required
               />
             </div>

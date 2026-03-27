@@ -69,7 +69,7 @@ export default function Partnership() {
       
     } catch (error) {
       console.error('Error submitting application:', error);
-      setErrorMsg('Failed to submit application. Please try again.');
+      setErrorMsg(t('partnership_page.form.error_msg'));
     } finally {
       setIsSubmitting(false);
     }
@@ -85,13 +85,13 @@ export default function Partnership() {
         
         <div className="relative container mx-auto px-4 text-center z-10">
           <span className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 px-4 py-2 rounded-full font-semibold mb-6">
-            <Handshake className="w-5 h-5" /> Let's Grow Together
+            <Handshake className="w-5 h-5" /> {t('partnership_page.hero.badge')}
           </span>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Partner With Freelance
+            {t('partnership_page.hero.title')}
           </h1>
           <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join our ecosystem of talented professionals and forward-thinking companies. We're looking for mutually beneficial partnerships to create lasting impact.
+            {t('partnership_page.hero.subtitle')}
           </p>
         </div>
       </div>
@@ -114,8 +114,8 @@ export default function Partnership() {
                     <Building2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-xl">Market Expansion</h4>
-                    <p className="text-gray-200 mt-1">Access new markets and a broader audience.</p>
+                    <h4 className="font-semibold text-xl">{t('partnership_page.benefits.market_expansion.title')}</h4>
+                    <p className="text-gray-200 mt-1">{t('partnership_page.benefits.market_expansion.desc')}</p>
                   </div>
                 </div>
                 <div className="flex gap-4 items-start">
@@ -123,16 +123,16 @@ export default function Partnership() {
                     <Briefcase className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-xl">Premium Resources</h4>
-                    <p className="text-gray-200 mt-1">Leverage our extensive pool of vetted talent.</p>
+                    <h4 className="font-semibold text-xl">{t('partnership_page.benefits.premium_resources.title')}</h4>
+                    <p className="text-gray-200 mt-1">{t('partnership_page.benefits.premium_resources.desc')}</p>
                   </div>
                 </div>
               </div>
               
               <div className="pt-6 border-t border-white/20">
-                <p className="text-gray-300 mb-2">Have questions?</p>
+                <p className="text-gray-300 mb-2">{t('partnership_page.benefits.questions')}</p>
                 <a href="mailto:partners@freelance.com" className="text-white font-medium hover:text-blue-300 flex items-center gap-2">
-                  <Mail className="w-5 h-5" /> partners@freelance-224.com
+                  <Mail className="w-5 h-5" /> {t('partnership_page.benefits.email')}
                 </a>
               </div>
             </div>
@@ -140,14 +140,14 @@ export default function Partnership() {
 
           {/* Right Form Panel */}
           <div className="p-8 md:p-12 lg:p-16 md:w-7/12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Application Form</h2>
-            <p className="text-gray-500 mb-8">Fill out the details below and our partnership team will reach out to you.</p>
+            <h2 className="text-3xl font-bold text-gray-800 mb-2">{t('partnership_page.form.title')}</h2>
+            <p className="text-gray-500 mb-8">{t('partnership_page.form.subtitle')}</p>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 {/* Name / Company */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Company / Organization Name *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.company_name')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <Building2 className="h-5 w-5 text-gray-400" />
@@ -159,7 +159,7 @@ export default function Partnership() {
                       value={formData.name}
                       onChange={handleInputChange}
                       className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors"
-                      placeholder="e.g. Acme Corp"
+                      placeholder={t('partnership_page.form.company_placeholder')}
                     />
                   </div>
                 </div>
@@ -167,7 +167,7 @@ export default function Partnership() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Email *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.email')}</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Mail className="h-5 w-5 text-gray-400" />
@@ -179,14 +179,14 @@ export default function Partnership() {
                         value={formData.email}
                         onChange={handleInputChange}
                         className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors"
-                        placeholder="john@example.com"
+                        placeholder={t('partnership_page.form.email_placeholder')}
                       />
                     </div>
                   </div>
 
                   {/* Phone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.phone')}</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Phone className="h-5 w-5 text-gray-400" />
@@ -198,7 +198,7 @@ export default function Partnership() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors"
-                        placeholder="+1 (555) 000-0000"
+                        placeholder={t('partnership_page.form.phone_placeholder')}
                       />
                     </div>
                   </div>
@@ -206,7 +206,7 @@ export default function Partnership() {
 
                 {/* Partnership Type */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type of Partnership *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.type')}</label>
                   <select
                     name="partnershipType"
                     required
@@ -214,18 +214,18 @@ export default function Partnership() {
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors text-gray-700"
                   >
-                    <option value="" disabled>Select partnership type</option>
-                    <option value="affiliate">Affiliate / Referral</option>
-                    <option value="technology">Technology Provider</option>
-                    <option value="sponsor">Sponsorship / Event</option>
-                    <option value="education">Educational Institution</option>
-                    <option value="other">Other</option>
+                    <option value="" disabled>{t('partnership_page.form.type_placeholder')}</option>
+                    <option value="affiliate">{t('partnership_page.form.types.affiliate')}</option>
+                    <option value="technology">{t('partnership_page.form.types.technology')}</option>
+                    <option value="sponsor">{t('partnership_page.form.types.sponsor')}</option>
+                    <option value="education">{t('partnership_page.form.types.education')}</option>
+                    <option value="other">{t('partnership_page.form.types.other')}</option>
                   </select>
                 </div>
 
                 {/* Project Details */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Project / Proposal Details *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.project_details')}</label>
                   <div className="relative">
                     <div className="absolute top-3 left-3 pointer-events-none">
                       <Briefcase className="h-5 w-5 text-gray-400" />
@@ -237,14 +237,14 @@ export default function Partnership() {
                       onChange={handleInputChange}
                       rows="4"
                       className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors resize-none"
-                      placeholder="Briefly describe the proposed partnership..."
+                      placeholder={t('partnership_page.form.project_placeholder')}
                     ></textarea>
                   </div>
                 </div>
 
                 {/* Comments */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Additional Comments</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.comments')}</label>
                   <div className="relative">
                     <div className="absolute top-3 left-3 pointer-events-none">
                       <MessageSquare className="h-5 w-5 text-gray-400" />
@@ -255,21 +255,21 @@ export default function Partnership() {
                       onChange={handleInputChange}
                       rows="3"
                       className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors resize-none"
-                      placeholder="Any other details we should know?"
+                      placeholder={t('partnership_page.form.comments_placeholder')}
                     ></textarea>
                   </div>
                 </div>
 
                 {/* File Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Optional Document (Pitch Deck, Proposal)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('partnership_page.form.file_label')}</label>
                   <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <Upload className="w-8 h-8 mb-3 text-gray-400" />
                       <p className="mb-2 text-sm text-gray-500">
-                        <span className="font-semibold">Click to upload</span> or drag and drop
+                        <span className="font-semibold">{t('partnership_page.form.file_upload_text')}</span> {t('partnership_page.form.file_drag_drop')}
                       </p>
-                      <p className="text-xs text-gray-500">PDF, PPTX, DOCX (MAX. 10MB)</p>
+                      <p className="text-xs text-gray-500">{t('partnership_page.form.file_specs')}</p>
                     </div>
                     <input 
                       type="file" 
@@ -295,7 +295,7 @@ export default function Partnership() {
               {submitSuccess && (
                 <div className="p-4 rounded-lg bg-green-50 text-green-700 border border-green-200 text-sm flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                  <span>Your partnership application has been submitted successfully! We will contact you soon.</span>
+                  <span>{t('partnership_page.form.success_msg')}</span>
                 </div>
               )}
 
@@ -306,7 +306,7 @@ export default function Partnership() {
                 className={`w-full text-white font-bold py-4 px-8 rounded-lg transition-colors flex justify-center items-center gap-2 mt-4 
                   ${isSubmitting ? 'bg-[#15803D]/70 cursor-not-allowed' : 'bg-[#15803D] hover:bg-[#166534]'}`}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Application'} {!isSubmitting && <Send className="w-5 h-5" />}
+                {isSubmitting ? t('partnership_page.form.submitting') : t('partnership_page.form.submit_btn')} {!isSubmitting && <Send className="w-5 h-5" />}
               </button>
             </form>
           </div>

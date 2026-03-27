@@ -44,8 +44,24 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
     setPaymentDetails(details);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    const { countryData } = await import("../../utils/countryData");
+    const selectedCountry = countryData.find(c => c.code === formData.countryCode);
+    const requiredDigits = selectedCountry ? selectedCountry.digits : 9;
+
+    if (phoneDigits.length !== requiredDigits) {
+      alert(`Invalid phone number length for ${selectedCountry?.name || 'selected country'}. Expected ${requiredDigits} digits.`);
+      return;
+    }
+
+    if (!formData.agreeTerms) {
+      alert("Please agree to the rental terms and conditions");
+      return;
+    }
+
     if (onContinue) {
       onContinue({
         ...formData,
@@ -70,29 +86,29 @@ export default function ComputerPaymentDetails({ onContinue, bookingData }) {
         {/* Order Summary */}
         <div className="mb-8 bg-gray-50 p-6 rounded-lg border border-gray-200">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
-          <div className="space-y-2 text-sm text-gray-700">
-            <div className="flex justify-between">
-              <span>Device Rental ({quantity}x for {duration} days)</span>
-              <span>{rentalCost.toLocaleString()} GNF</span>
+          <div className="space-y-3 text-sm text-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between gap-1">
+              <span className="font-medium">Device Rental ({quantity}x for {duration} days)</span>
+              <span className="text-green-700 sm:text-gray-900 font-semibold">{rentalCost.toLocaleString()} GNF</span>
             </div>
 
             {addons.filter(a => a.cost > 0).map((addon, idx) => (
-              <div key={idx} className="flex justify-between text-gray-600">
+              <div key={idx} className="flex flex-col sm:flex-row justify-between gap-1 text-gray-600">
                 <span>+ {addon.name}</span>
-                <span>{addon.cost.toLocaleString()} GNF</span>
+                <span className="font-medium">{addon.cost.toLocaleString()} GNF</span>
               </div>
             ))}
 
             {deliveryCost > 0 && (
-              <div className="flex justify-between text-gray-600">
+              <div className="flex flex-col sm:flex-row justify-between gap-1 text-gray-600">
                 <span>Delivery Fee</span>
-                <span>{deliveryCost.toLocaleString()} GNF</span>
+                <span className="font-medium">{deliveryCost.toLocaleString()} GNF</span>
               </div>
             )}
 
-            <div className="border-t border-gray-300 my-2 pt-2 flex justify-between font-bold text-lg text-gray-900">
-              <span>Total</span>
-              <span>{totalCost.toLocaleString()} GNF</span>
+            <div className="border-t border-gray-300 my-2 pt-3 flex justify-between items-center font-bold text-lg text-gray-900">
+              <span className="text-base sm:text-lg">Total</span>
+              <span className="text-[#15803D]">{totalCost.toLocaleString()} GNF</span>
             </div>
           </div>
         </div>

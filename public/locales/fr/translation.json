@@ -54,6 +54,56 @@
         "newsletter_success": "Merci de vous être abonné à notre newsletter !",
         "all_rights_reserved": "Tous droits réservés"
     },
+    "partnership_page": {
+        "hero": {
+            "badge": "Grandissons Ensemble",
+            "title": "Partenariat avec Freelance",
+            "subtitle": "Rejoignez notre écosystème de professionnels talentueux et d'entreprises avant-gardistes. Nous recherchons des partenariats mutuellement bénéfiques pour créer un impact durable."
+        },
+        "benefits": {
+            "market_expansion": {
+                "title": "Expansion du Marché",
+                "desc": "Accédez à de nouveaux marchés et à un public plus large."
+            },
+            "premium_resources": {
+                "title": "Ressources Premium",
+                "desc": "Tirez parti de notre vaste bassin de talents vérifiés."
+            },
+            "questions": "Vous avez des questions ?",
+            "email": "partners@freelance-224.com"
+        },
+        "form": {
+            "title": "Formulaire de Demande",
+            "subtitle": "Remplissez les détails ci-dessous et notre équipe de partenariat vous contactera.",
+            "company_name": "Nom de l'Entreprise / Organisation *",
+            "company_placeholder": "ex : Acme Corp",
+            "email": "E-mail de Contact *",
+            "email_placeholder": "john@exemple.com",
+            "phone": "Numéro de Téléphone *",
+            "phone_placeholder": "+1 (555) 000-0000",
+            "type": "Type de Partenariat *",
+            "type_placeholder": "Sélectionnez le type de partenariat",
+            "types": {
+                "affiliate": "Affilié / Parrainage",
+                "technology": "Fournisseur de Technologie",
+                "sponsor": "Sponsorisation / Événement",
+                "education": "Établissement d'Enseignement",
+                "other": "Autre"
+            },
+            "project_details": "Détails du Projet / Proposition *",
+            "project_placeholder": "Décrivez brièvement le partenariat proposé...",
+            "comments": "Commentaires Supplémentaires",
+            "comments_placeholder": "D'autres détails que nous devrions connaître ?",
+            "file_label": "Document Optionnel (Pitch Deck, Proposition)",
+            "file_upload_text": "Cliquez pour télécharger",
+            "file_drag_drop": "ou glisser-déposer",
+            "file_specs": "PDF, PPTX, DOCX (MAX. 10 Mo)",
+            "error_msg": "Échec de l'envoi de la demande. Veuillez réessayer.",
+            "success_msg": "Votre demande de partenariat a été soumise avec succès ! Nous vous contacterons bientôt.",
+            "submitting": "Envoi en cours...",
+            "submit_btn": "Soumettre la Demande"
+        }
+    },
     "contact": {
         "title": "Contactez-nous",
         "subtitle": "Envoyez-nous un message et nous serons là pour vous aider.",

@@ -54,6 +54,56 @@
         "newsletter_success": "Thank you for subscribing to our newsletter!",
         "all_rights_reserved": "All Rights Reserved"
     },
+    "partnership_page": {
+        "hero": {
+            "badge": "Let's Grow Together",
+            "title": "Partner With Freelance",
+            "subtitle": "Join our ecosystem of talented professionals and forward-thinking companies. We're looking for mutually beneficial partnerships to create lasting impact."
+        },
+        "benefits": {
+            "market_expansion": {
+                "title": "Market Expansion",
+                "desc": "Access new markets and a broader audience."
+            },
+            "premium_resources": {
+                "title": "Premium Resources",
+                "desc": "Leverage our extensive pool of vetted talent."
+            },
+            "questions": "Have questions?",
+            "email": "partners@freelance-224.com"
+        },
+        "form": {
+            "title": "Application Form",
+            "subtitle": "Fill out the details below and our partnership team will reach out to you.",
+            "company_name": "Company / Organization Name *",
+            "company_placeholder": "e.g. Acme Corp",
+            "email": "Contact Email *",
+            "email_placeholder": "john@example.com",
+            "phone": "Phone Number *",
+            "phone_placeholder": "+1 (555) 000-0000",
+            "type": "Type of Partnership *",
+            "type_placeholder": "Select partnership type",
+            "types": {
+                "affiliate": "Affiliate / Referral",
+                "technology": "Technology Provider",
+                "sponsor": "Sponsorship / Event",
+                "education": "Educational Institution",
+                "other": "Other"
+            },
+            "project_details": "Project / Proposal Details *",
+            "project_placeholder": "Briefly describe the proposed partnership...",
+            "comments": "Additional Comments",
+            "comments_placeholder": "Any other details we should know?",
+            "file_label": "Optional Document (Pitch Deck, Proposal)",
+            "file_upload_text": "Click to upload",
+            "file_drag_drop": "or drag and drop",
+            "file_specs": "PDF, PPTX, DOCX (MAX. 10MB)",
+            "error_msg": "Failed to submit application. Please try again.",
+            "success_msg": "Your partnership application has been submitted successfully! We will contact you soon.",
+            "submitting": "Submitting...",
+            "submit_btn": "Submit Application"
+        }
+    },
     "contact": {
         "title": "Contact Us",
         "subtitle": "Send us a message and we are here to help.",

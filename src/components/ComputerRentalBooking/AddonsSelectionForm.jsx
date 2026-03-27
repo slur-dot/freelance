@@ -4,18 +4,20 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
   const isMobile = deviceData?.deviceType === 'phone' || deviceData?.deviceType === 'tablet';
 
   // Paid Services with costs conditionally structured
-  const paidServices = isMobile ? [
-    { name: "SIM Data Plan", cost: 50000 },
-    { name: "Mobile Back Cover", cost: 25000 },
-    { name: "Screen Protector", cost: 15000 },
+  const paidServices = [
     { name: "Insurance", cost: 200000 },
-  ] : [
-    { name: "Insurance", cost: 200000 },
-    { name: "On Site Technical Support", cost: 150000 },
-    { name: "Replacement Guarantee", cost: 100000 },
+    { name: "Carrying Bag", cost: 30000 },
+    ...(isMobile ? [
+      { name: "SIM Data Plan", cost: 50000 },
+      { name: "Mobile Back Cover", cost: 25000 },
+      { name: "Screen Protector", cost: 15000 },
+    ] : [
+      { name: "On Site Technical Support", cost: 150000 },
+      { name: "Replacement Guarantee", cost: 100000 },
+    ])
   ];
 
-  const includedItems = isMobile ? ["Charger"] : ["Charger", "Carrying Bag"];
+  const includedItems = ["Charger"];
 
   const [selectedServices, setSelectedServices] = useState([]);
 
@@ -89,15 +91,15 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
                 <button
                   key={service.name}
                   onClick={() => toggleService(service)}
-                  className={`flex justify-between items-center px-4 sm:px-6 py-4 rounded-lg font-medium transition-all duration-200 border
+                  className={`flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 rounded-lg font-medium transition-all duration-200 border gap-2
                     ${isSelected
                       ? "bg-green-50 border-green-500 text-green-700 shadow-sm"
                       : "bg-white border-gray-200 text-gray-700 hover:border-green-300 hover:bg-gray-50"
                     }
                   `}
                 >
-                  <span className="text-sm sm:text-base text-left">{service.name}</span>
-                  <span className={`text-xs sm:text-sm ${isSelected ? 'font-bold' : ''} whitespace-nowrap ml-2`}>
+                  <span className="text-xs sm:text-base text-left break-words">{service.name}</span>
+                  <span className={`text-[10px] sm:text-sm ${isSelected ? 'font-bold' : ''} whitespace-nowrap`}>
                     {service.cost.toLocaleString()} GNF
                   </span>
                 </button>
