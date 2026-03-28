@@ -70,8 +70,8 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 gap-4 xl:gap-8 w-full">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6">
+        <div className="flex justify-between items-center h-16 gap-3 xl:gap-6 w-full">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-full object-cover" />
@@ -79,12 +79,12 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex flex-1 justify-center space-x-2 xl:space-x-8 items-center whitespace-nowrap text-sm xl:text-base">
+          <div className="hidden lg:flex flex-1 justify-center space-x-2 xl:space-x-6 items-center whitespace-nowrap text-sm xl:text-base">
             <Link to="/" className={isActive("/")}>{t('navbar.home')}</Link>
             <Link to="/shop" className={isActive("/shop")}>{t('navbar.shop')}</Link>
             <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>{t('navbar.hire_freelancers')}</Link>
-            <Link to="/locations" className={isActive("/locations")}>{t('navbar.locations')}</Link>
-            <Link to="/tech-services" className={isActive("/tech-services")}>{t('navbar.tech_services')}</Link>
+            <Link to="/locations" className={`${isActive("/locations")} hidden xl:inline-block`}>{t('navbar.locations')}</Link>
+            <Link to="/tech-services" className={`${isActive("/tech-services")} hidden xl:inline-block`}>{t('navbar.tech_services')}</Link>
 
 
             {/* More Dropdown */}
@@ -94,6 +94,8 @@ export default function Navbar() {
               </button>
               <div className="absolute left-0 top-full pt-1 w-56 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100]">
                 <div className="bg-white border border-gray-200 rounded shadow-lg py-1">
+                  <Link to="/locations" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.locations')}</Link>
+                  <Link to="/tech-services" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.tech_services')}</Link>
                   <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
                 <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
                 <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales')}</Link>
@@ -108,9 +110,9 @@ export default function Navbar() {
           </div>
 
           {/* Right side actions */}
-          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 flex-shrink-0">
+          <div className="hidden lg:flex items-center space-x-2 xl:space-x-3 flex-shrink-0">
             {currentUser ? (
-              <div className="flex items-center space-x-3 xl:space-x-4">
+              <div className="flex items-center space-x-2 xl:space-x-3">
                 {/* Beautiful User Pill */}
                 <div className="hidden md:flex items-center gap-3 bg-white border border-gray-200 py-1.5 px-2 rounded-full shadow-sm pr-4">
                   <img src={avatarUrl} alt={dispName} className="w-8 h-8 rounded-full object-cover border border-gray-100 shadow-sm" />
@@ -168,7 +170,7 @@ export default function Navbar() {
             </Link>
           </div>
           {/* Mobile Hamburger Button */}
-          <div className="md:hidden flex items-center">
+          <div className="lg:hidden flex items-center">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
               className="text-gray-700 hover:text-black"
@@ -179,7 +181,7 @@ export default function Navbar() {
           {/* Mobile menu toggle button */}
           {/* Mobile Drawer */}
           <div
-            className={`fixed inset-0 z-50 md:hidden transition-opacity ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+            className={`fixed inset-0 z-50 lg:hidden transition-opacity ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
               }`}
           >
             {/* Overlay */}
@@ -202,12 +204,23 @@ export default function Navbar() {
                     <span className="font-bold text-gray-800 text-lg">Freelance</span>
                   </div>
 
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-gray-500 hover:text-black"
-                  >
-                    <FaTimes size={20} />
-                  </button>
+                  <div className="flex items-center space-x-4">
+                    <Link to="/shop/cart" onClick={() => setIsMobileMenuOpen(false)} className="relative flex items-center text-gray-700">
+                      <FaShoppingCart size={22} />
+                      {cartCount > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                          {cartCount}
+                        </span>
+                      )}
+                    </Link>
+
+                    <button
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="text-gray-500 hover:text-black"
+                    >
+                      <FaTimes size={20} />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Scrollable Content */}

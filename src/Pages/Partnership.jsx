@@ -5,6 +5,7 @@ import partnershipImage from '../assets/partnership-humanImage.jpeg';
 import { db, storage } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import PartnerPhoneInput from '../components/PartnerPhoneInput';
 
 export default function Partnership() {
   const { t } = useTranslation();
@@ -185,22 +186,14 @@ export default function Partnership() {
                   </div>
 
                   {/* Phone */}
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="block text-sm font-medium text-gray-700 mb-1">{t('partnership_page.form.phone')}</label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Phone className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <input
-                        type="tel"
-                        name="phone"
-                        required
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="pl-10 w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#15803D] focus:border-transparent transition-colors"
-                        placeholder={t('partnership_page.form.phone_placeholder')}
-                      />
-                    </div>
+                    <PartnerPhoneInput
+                      value={formData.phone}
+                      onChange={(phone) => setFormData(prev => ({ ...prev, phone }))}
+                      defaultCountry="gn"
+                      required
+                    />
                   </div>
                 </div>
 

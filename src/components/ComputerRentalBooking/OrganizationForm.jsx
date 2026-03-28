@@ -167,7 +167,7 @@ export default function OrganizationForm({ onContinue }) {
                 </select>
               ) : input.type === "tel" ? (
                 <div className="flex flex-col w-full sm:col-span-2">
-                  <PhoneInput
+                   <PhoneInput
                     id={input.id}
                     value={formData[input.field]}
                     onChange={(val) => {
