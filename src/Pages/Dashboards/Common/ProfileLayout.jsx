@@ -1,9 +1,21 @@
-import React from 'react';
-import { Camera, Mail, MapPin, Calendar, Edit2, Shield, Layout } from 'lucide-react';
+import { Camera, Mail, MapPin, Calendar, Edit2, Shield, Layout, LogOut, Trash2, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileLayout = ({ user, stats, children, roleActions }) => {
   const { t } = useTranslation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error("Failed to logout", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -78,16 +90,29 @@ const ProfileLayout = ({ user, stats, children, roleActions }) => {
               </div>
             </div>
 
-            {/* Badges/Achievements Card */}
+            {/* Account Actions Card */}
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-tight mb-4">{t('profile.badges', 'Badges & Status')}</h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full border border-green-100 flex items-center gap-1">
-                  <Shield className="w-3 h-3" /> {t('profile.verified', 'Verified')}
-                </span>
-                <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full border border-blue-100 flex items-center gap-1">
-                  <Layout className="w-3 h-3" /> {t('profile.early_adopter', 'Early Adopter')}
-                </span>
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-tight mb-4">{t('profile.account_actions', 'Account Actions')}</h3>
+              <div className="space-y-3">
+                <button 
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 text-gray-700 hover:bg-red-50 hover:text-red-600 transition-all font-bold text-sm group"
+                >
+                  <div className="flex items-center gap-3">
+                    <LogOut className="w-4 h-4" />
+                    {t('profile.logout', 'Logout')}
+                  </div>
+                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+                <button 
+                  className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 transition-all font-bold text-sm group"
+                  disabled
+                >
+                  <div className="flex items-center gap-3">
+                    <Trash2 className="w-4 h-4" />
+                    {t('profile.delete_account', 'Delete Account')}
+                  </div>
+                </button>
               </div>
             </div>
           </div>

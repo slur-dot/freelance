@@ -79,9 +79,10 @@ export default function FreelancerSidebar() {
       ],
     },
     {
-      section: t('sidebar.finance'),
+      section: t('sidebar.work_management', 'Work Management'),
       items: [
-        { title: t('sidebar.earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
+        { title: t('sidebar.my_jobs', 'My Projects / Services'), url: "/freelancer/dashboard/work-management", icon: Briefcase },
+        { title: t('sidebar.earnings', 'Earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
       ],
     },
     {

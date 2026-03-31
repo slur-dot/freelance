@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ProfileLayout from "../Common/ProfileLayout";
-import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Briefcase, Award, ExternalLink } from "lucide-react";
+import PaymentManagement from "../../../components/Payment/PaymentManagement";
+import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Briefcase, Award, ExternalLink, CreditCard } from "lucide-react";
 
 export default function FreelancerProfile() {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ export default function FreelancerProfile() {
   return (
     <ProfileLayout user={user} stats={stats}>
       <div className="flex border-b border-gray-100 bg-gray-50/30 overflow-x-auto no-scrollbar">
-        {['overview', 'professional', 'security'].map((tab) => (
+        {['overview', 'professional', 'payments', 'security'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -63,7 +64,10 @@ export default function FreelancerProfile() {
               : 'text-gray-400 hover:text-gray-600'
             }`}
           >
-            {t(`profile.tabs.${tab}`, tab.charAt(0).toUpperCase() + tab.slice(1))}
+            <div className="flex items-center gap-2">
+              {tab === 'payments' && <CreditCard className="w-4 h-4" />}
+              {t(`profile.tabs.${tab}`, tab.charAt(0).toUpperCase() + tab.slice(1))}
+            </div>
             {activeTab === tab && (
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full"></div>
             )}
@@ -164,6 +168,12 @@ export default function FreelancerProfile() {
                   {t('profile.save_pro_info', 'Update Portfolio')}
                 </button>
              </div>
+          </div>
+        )}
+
+        {activeTab === 'payments' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <PaymentManagement userRole="Freelancer" />
           </div>
         )}
 

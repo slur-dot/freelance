@@ -70,13 +70,7 @@ export default function FreelancerDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [showProjectModal, setShowProjectModal] = useState(false);
-  const [projectSaving, setProjectSaving] = useState(false);
-  const [projectForm, setProjectForm] = useState({ title: '', description: '', amount: '', client: '', status: 'in_progress' });
-  const [showJDModal, setShowJDModal] = useState(false);
-  const [jdSaving, setJdSaving] = useState(false);
-  const [jdForm, setJdForm] = useState({ title: '', budget: '', client: '', status: 'pending' });
-  const [showJDList, setShowJDList] = useState(false);
+  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const DefaultAvatar = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Crect width='150' height='150' fill='%23e5e7eb'/%3E%3Ctext x='75' y='75' font-family='Arial, sans-serif' font-size='16' fill='%236b7280' text-anchor='middle' dy='.3em'%3EAvatar%3C/text%3E%3C/svg%3E";
   const [showEdit, setShowEdit] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -110,7 +104,6 @@ export default function FreelancerDashboard() {
     paymentType: 'MoMo', paymentNumber: '',
     bankName: '', accountNumber: '', swiftCode: '', accountHolder: ''
   });
-  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawProcessing, setWithdrawProcessing] = useState(false);
   const [plans, setPlans] = useState([]);
@@ -245,6 +238,21 @@ export default function FreelancerDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
+      {/* Quick Management Hub - New Prominent Section */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+           <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-3xl font-bold">{t('freelancer_dashboard.welcome', 'Welcome back,')} {freelancer?.name || user?.displayName}!</h2>
+              <p className="text-blue-100 font-medium">{t('freelancer_dashboard.hub_desc', 'Manage your services and track global progress from your centralized work hub.')}</p>
+           </div>
+           <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/freelancer/dashboard/work-management" className="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-blue-50 transition-all active:scale-95">
+                 {t('freelancer_dashboard.go_to_hub', 'Manage Work & Services')}
+              </Link>
+           </div>
+        </div>
+      </div>
+
       {/* Quick Stats */}
       <div className="max-w-7xl mx-auto mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
@@ -290,24 +298,6 @@ export default function FreelancerDashboard() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Requested Courses Card */}
-        <div className="md:col-span-1">
-          <h3 className="text-lg font-semibold mb-2">{text.requestedCourses}</h3>
-          <Card className="flex flex-col h-fit">
-            <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm md:text-base font-medium">{text.coursesUnderReview}</p>
-              <Info className="h-4 w-4 text-gray-500 flex-shrink-0" />
-            </div>
-            <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{loading ? '...' : `${requestedCount} ${t('freelancer_dashboard.courses.count_suffix')}`}</div>
-              <Link to="/freelancer/dashboard/requested-courses">
-                <Button className="mt-4 w-fit">{text.viewRequested}</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* Messages Section */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col">
           <h3 className="text-lg font-semibold mb-2">{t('freelancer_dashboard.messages.title')}</h3>
@@ -396,8 +386,9 @@ export default function FreelancerDashboard() {
                 )}
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowProjectModal(true)}>{t('freelancer_dashboard.projects.post_new')}</Button>
-                <Button variant="outline" className="border-green-600 text-green-700">{t('freelancer_dashboard.projects.view_all')}</Button>
+                <Link to="/freelancer/dashboard/work-management">
+                  <Button className="bg-blue-600 hover:bg-blue-700">{t('freelancer_dashboard.projects.post_new', 'Post & Manage')}</Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -423,8 +414,9 @@ export default function FreelancerDashboard() {
                 )}
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Button className="bg-green-600 hover:bg-green-700" onClick={() => setShowJDModal(true)}>{t('freelancer_dashboard.bids.apply')}</Button>
-                <Button variant="outline" className="border-green-600 text-green-700" onClick={() => setShowJDList((v) => !v)}>{t('freelancer_dashboard.bids.view_status')}</Button>
+                <Link to="/freelancer/dashboard/work-management">
+                  <Button className="bg-blue-600 hover:bg-blue-700">{t('freelancer_dashboard.bids.view_status', 'Manage Applications')}</Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -549,155 +541,6 @@ export default function FreelancerDashboard() {
 
       {/* Chat Popup */}
       {showChatWidget && <LiveChatWidget forceOpen={true} />}
-
-      {/* Post New Project Modal */}
-      {
-        showProjectModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.post_project.title')}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.title')}</label>
-                  <input className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.title} onChange={(e) => setProjectForm({ ...projectForm, title: e.target.value })} />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.description')}</label>
-                  <textarea className="w-full border rounded-md px-3 py-2 mt-1" rows={3} value={projectForm.description} onChange={(e) => setProjectForm({ ...projectForm, description: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.budget')}</label>
-                  <input type="number" className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.amount} onChange={(e) => setProjectForm({ ...projectForm, amount: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.client')}</label>
-                  <input className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.client} onChange={(e) => setProjectForm({ ...projectForm, client: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.post_project.form.status')}</label>
-                  <select className="w-full border rounded-md px-3 py-2 mt-1" value={projectForm.status} onChange={(e) => setProjectForm({ ...projectForm, status: e.target.value })}>
-                    <option value="in_progress">in_progress</option>
-                    <option value="completed">completed</option>
-                    <option value="pending">pending</option>
-                  </select>
-                </div>
-              </div>
-              <div className="mt-6 flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowProjectModal(false)}>{t('freelancer_dashboard.modals.post_project.cancel')}</Button>
-                <Button disabled={projectSaving} onClick={async () => {
-                  try {
-                    setProjectSaving(true);
-                    const payload = {
-                      title: projectForm.title,
-                      description: projectForm.description,
-                      amount: Number(projectForm.amount) || 0,
-                      status: projectForm.status,
-                      client: projectForm.client, // Or use user.displayName if client is self
-                      freelancerId: user.uid // Link to this freelancer
-                    };
-
-                    await ProjectService.createProject(payload, user.uid);
-
-                    // Refresh projects
-                    const projects = await ProjectService.getProjects();
-                    setRecentProjects(projects.slice(0, 10));
-
-                    setShowProjectModal(false);
-                    setProjectForm({ title: '', description: '', amount: '', client: '', status: 'in_progress' });
-                    alert('Project posted successfully!');
-                  } catch (err) {
-                    console.error("Post project error:", err);
-                    alert('Failed to save project. Please check inputs.');
-                  } finally {
-                    setProjectSaving(false);
-                  }
-                }}>{projectSaving ? t('freelancer_dashboard.modals.post_project.saving') : t('freelancer_dashboard.modals.post_project.save')}</Button>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {/* Apply to JD Modal */}
-      {
-        showJDModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.apply_jd.title')}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.title')}</label>
-                  <input className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.title} onChange={(e) => setJdForm({ ...jdForm, title: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.budget')}</label>
-                  <input type="number" className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.budget} onChange={(e) => setJdForm({ ...jdForm, budget: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.client')}</label>
-                  <input className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.client} onChange={(e) => setJdForm({ ...jdForm, client: e.target.value })} />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.apply_jd.form.status')}</label>
-                  <select className="w-full border rounded-md px-3 py-2 mt-1" value={jdForm.status} onChange={(e) => setJdForm({ ...jdForm, status: e.target.value })}>
-                    <option value="pending">pending</option>
-                    <option value="shortlisted">shortlisted</option>
-                    <option value="hired">hired</option>
-                  </select>
-                </div>
-              </div>
-              <div className="mt-6 flex items-center justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowJDModal(false)}>{t('freelancer_dashboard.modals.apply_jd.cancel')}</Button>
-                <Button disabled={jdSaving} onClick={async () => {
-                  try {
-                    setJdSaving(true);
-                    const payload = {
-                      title: jdForm.title,
-                      budget: Number(jdForm.budget) || 0,
-                      status: jdForm.status,
-                      client: jdForm.client
-                    };
-
-                    const newApp = await FreelancerService.applyToJD(FREELANCER_ID, payload);
-
-                    setJdApplications(prev => [newApp, ...prev]);
-                    setShowJDModal(false);
-                    setJdForm({ title: '', budget: '', client: '', status: 'pending' });
-                    // Refresh stats
-                    setMainStats(prev => ({ ...prev, jdsApplied: (prev.jdsApplied || 0) + 1 }));
-                  } catch (err) {
-                    alert('Failed to apply. Please check inputs.');
-                  } finally {
-                    setJdSaving(false);
-                  }
-                }}>{jdSaving ? t('freelancer_dashboard.modals.apply_jd.submitting') : t('freelancer_dashboard.modals.apply_jd.apply')}</Button>
-              </div>
-            </div>
-          </div>
-        )
-      }
-
-      {/* JD List toggle (simple viewer) */}
-      {
-        showJDList && (
-          <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30" onClick={() => setShowJDList(false)}>
-            <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.jd_list.title')}</h3>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {jdApplications.map((b) => (
-                  <div key={b.id} className="border rounded-md p-3 text-sm">
-                    <div className="font-medium">{b.title}</div>
-                    <div className="text-gray-600">Budget: {(b.budget || 0).toLocaleString()} GNF • Status: {b.status} • Client: {b.client}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 flex items-center justify-end">
-                <Button variant="outline" onClick={() => setShowJDList(false)}>{t('freelancer_dashboard.modals.jd_list.close')}</Button>
-              </div>
-            </div>
-          </div>
-        )
-      }
 
       {/* Edit Profile Modal */}
       {

@@ -37,6 +37,7 @@ import FreelancerDashboard from "./Pages/Dashboards/Freelancers/FreelancerDashbo
 import TrainingProgress from "./Pages/Dashboards/Freelancers/TrainingProgress";
 import RequestedCourses from './Pages/Dashboards/Freelancers/RequestedCourses';
 import Earnings from './Pages/Dashboards/Freelancers/Earnings';
+import WorkManagement from './Pages/Dashboards/Freelancers/WorkManagement';
 import FreelancerProfile from './Pages/Dashboards/Freelancers/Profile';
 import ClientProfile from './Pages/Dashboards/Clients/Profile';
 import CompanyProfile from './Pages/Dashboards/Company/Profile';
@@ -176,6 +177,7 @@ function AppContent() {
             <Route path="training-progress" element={<TrainingProgress />} />
             <Route path="requested-courses" element={<RequestedCourses />} />
             <Route path="earnings" element={<Earnings />} />
+            <Route path="work-management" element={<WorkManagement />} />
             <Route path="profile" element={<FreelancerProfile />} />
           </Route>
 

@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ProfileLayout from "../Common/ProfileLayout";
-import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, ShoppingBag, Truck, CreditCard } from "lucide-react";
+import PaymentManagement from "../../../components/Payment/PaymentManagement";
+import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, ShoppingBag, Truck, CreditCard as CreditCardIcon } from "lucide-react";
 
 export default function SellerProfile() {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ export default function SellerProfile() {
   return (
     <ProfileLayout user={user} stats={stats}>
       <div className="flex border-b border-gray-100 bg-gray-50/30 overflow-x-auto no-scrollbar">
-        {['overview', 'store_settings', 'security'].map((tab) => (
+        {['overview', 'store_settings', 'payments', 'security'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -63,13 +64,16 @@ export default function SellerProfile() {
               : 'text-gray-400 hover:text-gray-600'
             }`}
           >
-            {t(`profile.tabs.${tab}`, tab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}
+            <div className="flex items-center gap-2">
+              {tab === 'payments' && <CreditCardIcon className="w-4 h-4" />}
+              {t(`profile.tabs.${tab}`, tab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}
+            </div>
             {activeTab === tab && (
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full"></div>
             )}
           </button>
         ))}
-      </div>
+</div>
 
       <div className="p-8">
         {activeTab === 'overview' && (
@@ -169,8 +173,14 @@ export default function SellerProfile() {
           </div>
         )}
 
+        {activeTab === 'payments' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <PaymentManagement userRole="Seller" />
+          </div>
+        )}
+
         {activeTab === 'security' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+<div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-2xl flex items-start gap-4">
               <div className="p-2 bg-blue-100 rounded-xl">
                  <Shield className="w-5 h-5 text-blue-600" />

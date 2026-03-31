@@ -87,15 +87,6 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
                  )}
                </div>
 
-               {!isCollapsed && (
-                 <button 
-                  onClick={onLogout}
-                  className="mt-1 z-10 w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-red-500/90 transition-all border border-slate-700 hover:border-red-500 bg-slate-800 shadow-sm"
-                 >
-                   <LogOut className="w-3.5 h-3.5" />
-                   Logout
-                 </button>
-               )}
             </div>
           </div>
 

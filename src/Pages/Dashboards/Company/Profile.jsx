@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ProfileLayout from "../Common/ProfileLayout";
-import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Building } from "lucide-react";
+import PaymentManagement from "../../../components/Payment/PaymentManagement";
+import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Building, CreditCard } from "lucide-react";
 
 export default function CompanyProfile() {
   const { t } = useTranslation();
@@ -52,8 +53,8 @@ export default function CompanyProfile() {
 
   return (
     <ProfileLayout user={user} stats={stats}>
-      <div className="flex border-b border-gray-100 bg-gray-50/30">
-        {['overview', 'company_details', 'security'].map((tab) => (
+      <div className="flex border-b border-gray-100 bg-gray-50/30 overflow-x-auto no-scrollbar">
+        {['overview', 'company_details', 'payments', 'security'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -63,7 +64,10 @@ export default function CompanyProfile() {
               : 'text-gray-400 hover:text-gray-600'
             }`}
           >
-            {t(`profile.tabs.${tab}`, tab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}
+            <div className="flex items-center gap-2">
+              {tab === 'payments' && <CreditCard className="w-4 h-4" />}
+              {t(`profile.tabs.${tab}`, tab.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '))}
+            </div>
             {activeTab === tab && (
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 rounded-t-full"></div>
             )}
@@ -159,6 +163,12 @@ export default function CompanyProfile() {
                   {t('profile.save_company', 'Update Company Profile')}
                 </button>
              </div>
+          </div>
+        )}
+
+        {activeTab === 'payments' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <PaymentManagement userRole="Company" />
           </div>
         )}
 
