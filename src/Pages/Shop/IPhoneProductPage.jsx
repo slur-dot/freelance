@@ -128,8 +128,8 @@ export default function IPhoneProductPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column (Details + Reviews) */}
-          <div className="space-y-6">
-            <div>
+          <div className="space-y-6 flex flex-col order-2 lg:order-1">
+            <div className="order-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-black mb-2">
                 {t('shop.product.iphone_14_title')}
               </h1>
@@ -137,7 +137,7 @@ export default function IPhoneProductPage() {
             </div>
 
             {/* Specifications */}
-            <div className="bg-white">
+            <div className="bg-white order-3 mt-6 lg:mt-0">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">
                 {t('shop.product.specifications')}
               </h2>
@@ -170,7 +170,7 @@ export default function IPhoneProductPage() {
             </div>
 
             {/* Availability */}
-            <div className="bg-white">
+            <div className="bg-white order-4 mt-6 lg:mt-0">
               <h2 className="text-lg sm:text-xl font-semibold mb-5">
                 {t('shop.product.availability')}
               </h2>
@@ -185,7 +185,7 @@ export default function IPhoneProductPage() {
             </div>
 
             {/* Reviews */}
-            <div className="bg-white">
+            <div className="bg-white order-2 mt-6 lg:mt-0">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">{t('shop.product.reviews')}</h2>
               <div className="space-y-4 mb-6">
                 {reviews.map((review, index) => (
@@ -294,7 +294,7 @@ export default function IPhoneProductPage() {
           </div>
 
           {/* Right Column - Flip Card + Price + Options */}
-          <div className="lg:sticky lg:top-8 lg:self-start">
+          <div className="lg:sticky lg:top-8 lg:self-start order-1 lg:order-2">
             {/* Flip Card */}
             <div
               className="relative w-full h-96 [perspective:1000px]"
