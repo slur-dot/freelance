@@ -199,6 +199,24 @@ export default function VendorProfile() {
                   <ChevronRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform" />
                </button>
             </div>
+
+            {/* Delete Account — Hidden in Security Tab */}
+            <div className="mt-8 pt-6 border-t border-gray-100">
+              <div className="bg-red-50/50 border border-red-100 p-4 rounded-2xl">
+                <h4 className="font-bold text-red-800 text-sm">{t('profile.danger_zone', 'Danger Zone')}</h4>
+                <p className="text-sm text-red-600/80 mt-1 mb-4">{t('profile.delete_account_warning', 'Deleting your account is permanent and cannot be undone. All your data will be lost.')}</p>
+                <button 
+                  onClick={() => {
+                    if (window.confirm(t('profile.delete_account_confirm', 'Are you absolutely sure you want to delete your account? This action is irreversible.'))) {
+                      alert(t('profile.delete_account_contact', 'Please contact support to complete account deletion.'));
+                    }
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-xl text-sm transition-all"
+                >
+                  {t('profile.delete_account', 'Delete Account')}
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
