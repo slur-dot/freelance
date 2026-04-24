@@ -21,11 +21,13 @@ export default function SupportTeamManagement() {
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    tickets: ""
+    tickets: "",
+    permissions: []
   });
   const [editFormData, setEditFormData] = useState({
     name: "",
-    tickets: ""
+    tickets: "",
+    permissions: []
   });
   const [selectedRoles, setSelectedRoles] = useState(["Ticket 1", "Ticket 2", "Ticket 3"]);
   const [editSelectedRoles, setEditSelectedRoles] = useState([]);
@@ -55,6 +57,13 @@ export default function SupportTeamManagement() {
     }
   };
 
+  const availablePermissions = [
+    { id: 'manage_users', label: 'Manage Users' },
+    { id: 'manage_tickets', label: 'Manage Tickets' },
+    { id: 'manage_contracts', label: 'Manage Contracts' },
+    { id: 'system_settings', label: 'System Settings' }
+  ];
+
   const handleView = (id) => {
     const member = supportMembers.find(m => m.id === id);
     setViewingMember(member);
@@ -66,7 +75,8 @@ export default function SupportTeamManagement() {
     setEditingMember(member);
     setEditFormData({
       name: member.memberName,
-      tickets: ""
+      tickets: "",
+      permissions: member.permissions || ['manage_tickets']
     });
     setEditSelectedRoles([member.assignedTickets[0]?.label || "Role 1"]);
     setShowEditModal(true);
@@ -84,14 +94,14 @@ export default function SupportTeamManagement() {
 
   const handleCloseAddModal = () => {
     setShowAddModal(false);
-    setFormData({ name: "", tickets: "" });
+    setFormData({ name: "", tickets: "", permissions: [] });
     setSelectedRoles(["Ticket 1", "Ticket 2", "Ticket 3"]);
   };
 
   const handleCloseEditModal = () => {
     setShowEditModal(false);
     setEditingMember(null);
-    setEditFormData({ name: "", tickets: "" });
+    setEditFormData({ name: "", tickets: "", permissions: [] });
     setEditSelectedRoles([]);
   };
 
@@ -135,7 +145,8 @@ export default function SupportTeamManagement() {
         memberName: formData.name,
         avgResponseTime: "1h 20m",
         avgResolutionTime: "1h 20m",
-        assignedTickets: assignedTickets
+        assignedTickets: assignedTickets,
+        permissions: formData.permissions
       });
       fetchSupportMembers();
       setError(""); // Clear any previous errors
@@ -161,6 +172,7 @@ export default function SupportTeamManagement() {
       const updateData = {
         memberName: editFormData.name,
         assignedTickets: assignedTickets,
+        permissions: editFormData.permissions,
         updatedAt: new Date()
       };
 
@@ -475,6 +487,28 @@ export default function SupportTeamManagement() {
                   ))}
                 </div>
               </div>
+              {/* Permissions Toggles */}
+              <div className="flex flex-col mt-4">
+                <label className="text-sm font-medium text-gray-700 mb-2">System Permissions</label>
+                <div className="grid grid-cols-2 gap-3 ml-4">
+                  {availablePermissions.map(perm => (
+                    <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        checked={formData.permissions.includes(perm.id)} 
+                        onChange={(e) => {
+                          const newPerms = e.target.checked 
+                            ? [...formData.permissions, perm.id] 
+                            : formData.permissions.filter(p => p !== perm.id);
+                          handleInputChange('permissions', newPerms);
+                        }} 
+                        className="rounded text-green-600 focus:ring-green-500 w-4 h-4" 
+                      />
+                      <span className="text-sm text-gray-700">{perm.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
 
               {/* Submit Button */}
               <div className="text-center pt-4">
@@ -566,6 +600,29 @@ export default function SupportTeamManagement() {
                         <X className="h-3 w-3" />
                       </button>
                     </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Permissions Toggles */}
+              <div className="flex flex-col mt-4">
+                <label className="text-sm font-medium text-gray-700 mb-2">System Permissions</label>
+                <div className="grid grid-cols-2 gap-3 ml-4">
+                  {availablePermissions.map(perm => (
+                    <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
+                      <input 
+                        type="checkbox" 
+                        checked={editFormData.permissions.includes(perm.id)} 
+                        onChange={(e) => {
+                          const newPerms = e.target.checked 
+                            ? [...editFormData.permissions, perm.id] 
+                            : editFormData.permissions.filter(p => p !== perm.id);
+                          handleEditInputChange('permissions', newPerms);
+                        }} 
+                        className="rounded text-green-600 focus:ring-green-500 w-4 h-4" 
+                      />
+                      <span className="text-sm text-gray-700">{perm.label}</span>
+                    </label>
                   ))}
                 </div>
               </div>

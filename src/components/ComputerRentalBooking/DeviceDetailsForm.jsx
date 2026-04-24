@@ -42,17 +42,11 @@ export default function DeviceDetailsForm({ onContinue, prefilledProduct = {} })
             {/* Device Type */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
               <label className="w-full sm:w-40 text-sm font-medium">Device Type*</label>
-              <select
-                value={formData.deviceType}
-                onChange={(e) => handleChange("deviceType", e.target.value)}
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-md px-4 py-2 w-full"
-                required
-              >
-                <option value="">Select an Option</option>
-                <option value="laptop">Laptop</option>
-                <option value="tablet">Tablet</option>
-                <option value="phone">Phone</option>
-              </select>
+              <input
+                value={formData.deviceType || "Computer"}
+                readOnly
+                className="flex-1 bg-gray-200 text-gray-600 border border-gray-300 rounded-md px-4 py-2 w-full cursor-not-allowed cursor-default"
+              />
             </div>
 
             {/* Quantity */}

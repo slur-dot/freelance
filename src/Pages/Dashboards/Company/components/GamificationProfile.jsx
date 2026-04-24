@@ -25,6 +25,18 @@ export default function GamificationProfile({ gamificationData }) {
     <Card className="p-6">
       <h3 className="text-lg font-semibold mb-4">{t('company_dashboard.gamification_title')}</h3>
 
+      {/* Profile Completion Bar */}
+      <div className="mb-6 bg-blue-50/50 border border-blue-100 p-4 rounded-xl">
+        <div className="flex justify-between items-center mb-2">
+          <h4 className="text-sm font-bold text-blue-900">{t('company_dashboard.gamification_profile_completion', 'Profile Completion')}</h4>
+          <span className="text-sm font-extrabold text-blue-700">{gamificationData.profileCompletion || 85}%</span>
+        </div>
+        <div className="w-full bg-blue-200/50 rounded-full h-2.5 mb-2 overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full" style={{ width: `${gamificationData.profileCompletion || 85}%` }}></div>
+        </div>
+        <p className="text-xs text-blue-800/70 font-medium">{t('company_dashboard.gamification_profile_hint', 'Complete your profile to unlock more achievements and trust badges.')}</p>
+      </div>
+
       <div className="mb-6">
         <h4 className="text-md font-semibold mb-3 text-green-600">{t('company_dashboard.gamification_training_progress')}</h4>
         <div className="space-y-3">

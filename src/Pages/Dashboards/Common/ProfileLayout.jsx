@@ -104,15 +104,6 @@ const ProfileLayout = ({ user, stats, children, roleActions }) => {
                   </div>
                   <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
-                <button 
-                  className="w-full flex items-center justify-between p-3 rounded-xl bg-gray-50 text-gray-400 hover:bg-gray-100 transition-all font-bold text-sm group"
-                  disabled
-                >
-                  <div className="flex items-center gap-3">
-                    <Trash2 className="w-4 h-4" />
-                    {t('profile.delete_account', 'Delete Account')}
-                  </div>
-                </button>
               </div>
             </div>
           </div>

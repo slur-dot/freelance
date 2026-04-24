@@ -73,9 +73,30 @@ export default function CompanySidebar() {
       ],
     },
     {
+      section: t('company_dashboard.sidebar_operations', 'Operations'),
+      items: [
+        {
+          title: t('company_dashboard.sidebar_contracts', 'Contracts'),
+          url: "/company/dashboard/contracts",
+          icon: FileText,
+        },
+        {
+          title: t('company_dashboard.sidebar_equipment', 'Equipment Tracking'),
+          url: "/company/dashboard/equipment",
+          icon: Monitor,
+        },
+        {
+          title: t('company_dashboard.sidebar_issues', 'Issue Reporting'),
+          url: "/company/dashboard/issues",
+          icon: HelpCircle,
+        },
+      ],
+    },
+    {
       section: t('company_dashboard.sidebar_settings', 'Settings'),
       items: [
         { title: t('navbar.profile'), url: "/company/dashboard/profile", icon: User },
+        { title: t('sidebar.referral', 'Referral Program'), url: "/company/dashboard/referrals", icon: Share2 },
       ],
     },
     {

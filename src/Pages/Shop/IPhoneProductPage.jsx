@@ -101,6 +101,9 @@ export default function IPhoneProductPage() {
   const [selectedColor, setSelectedColor] = useState("");
   const colors = ["midnight", "starlight", "blue", "purple", "yellow", "black", "white", "red"];
 
+  // Quantity selection
+  const [quantity, setQuantity] = useState(1);
+
   // Serial number (seller side – simulated here)
   const [serialNumber, setSerialNumber] = useState("");
 
@@ -362,8 +365,30 @@ export default function IPhoneProductPage() {
               {/* Serial Number - Hidden from public view */}
               {/* This will be shown only to vendors in their dashboard and buyers on invoice */}
 
+              {/* Quantity Selection */}
+              <div className="mt-3">
+                <label className="block text-sm font-medium mb-2">
+                  {t('shop.product.quantity', 'Quantity')}
+                </label>
+                <div className="flex items-center gap-3 w-fit border border-gray-300 rounded-lg overflow-hidden bg-white">
+                  <button 
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))} 
+                    className="px-4 py-2 hover:bg-gray-100 text-gray-700 transition"
+                  >
+                    -
+                  </button>
+                  <span className="font-semibold w-8 text-center text-gray-900">{quantity}</span>
+                  <button 
+                    onClick={() => setQuantity(quantity + 1)} 
+                    className="px-4 py-2 hover:bg-gray-100 text-gray-700 transition"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
               {/* Price */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
                 <div>
                   <div className="text-2xl sm:text-3xl font-bold text-gray-900">
                     {convertPrice(priceGNF, currency)} {currency}
@@ -388,6 +413,7 @@ export default function IPhoneProductPage() {
                           currentPrice: priceGNF,
                           image: ShopAppleImage,
                           color: selectedColor,
+                          quantity: quantity,
                           condition: "New",
                           category: "Smartphone"
                       });

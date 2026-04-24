@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 import { guineaCities, guineaCitiesByRegion } from "../data/guineaCities";
 import PhoneInput from "./PhoneInput";
 import { countryData } from "../utils/countryData";
@@ -301,12 +302,45 @@ export default function TechServiceBooking() {
     );
   }
 
-  return (
-    <div className="w-full min-h-screen bg-gray-100 flex items-center justify-center py-10 px-4">
-      <div className="bg-white shadow-lg rounded-lg max-w-2xl w-full p-8">
-        <h1 className="text-2xl font-bold mb-2 text-gray-800">{t("tech_booking.title")}</h1>
-        <p className="text-gray-600 text-sm mb-8">{t("tech_booking.subtitle")}</p>
+  const locationParams = useLocation();
+  
+  useEffect(() => {
+    const params = new URLSearchParams(locationParams.search);
+    const service = params.get("service");
+    if (service) {
+      setFormData(prev => ({ ...prev, projectDetails: `Interested in: ${service.toUpperCase()}` }));
+    }
+  }, [locationParams]);
 
+  return (
+    <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
+      {/* Search Nearby Toggle / Header area */}
+      <div className="max-w-4xl w-full mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">{t("tech_booking.title")}</h1>
+          <p className="text-gray-600 text-sm mt-1">{t("tech_booking.subtitle")}</p>
+        </div>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm flex items-center gap-2">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Search Nearby IT Services
+        </button>
+      </div>
+
+      {/* World Map Presentation */}
+      <div className="max-w-4xl w-full h-64 bg-gray-300 rounded-lg overflow-hidden shadow-md mb-8">
+        <iframe
+          title="World Map"
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          scrolling="no"
+          marginHeight="0"
+          marginWidth="0"
+          src="https://maps.google.com/maps?q=Guinea&t=&z=6&ie=UTF8&iwloc=&output=embed"
+        ></iframe>
+      </div>
+
+      <div className="bg-white shadow-lg rounded-lg max-w-4xl w-full p-8">
         <form className="space-y-6" onSubmit={handleSubmit} noValidate>
           {/* Company Name */}
           <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-x-6">
@@ -381,6 +415,23 @@ export default function TechServiceBooking() {
                 aria-describedby={errors.projectDetails ? "projectDetails-error" : undefined}
               />
               <ErrorMessage id="projectDetails-error" message={errors.projectDetails} />
+            </div>
+          </div>
+
+          {/* Urgency of Project */}
+          <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] items-start gap-x-6">
+            <Label htmlFor="urgency" required>Urgency</Label>
+            <div>
+              <select
+                id="urgency"
+                className="border border-gray-300 bg-gray-100 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-500 w-full transition-all"
+                defaultValue="Medium"
+              >
+                <option value="Low">Low - Whenever Possible</option>
+                <option value="Medium">Medium - Standard Priority</option>
+                <option value="High">High - Urgent</option>
+                <option value="Critical">Critical - Emergency</option>
+              </select>
             </div>
           </div>
 

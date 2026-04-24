@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Star, X, ArrowRight, MessageSquare, Heart, AlignJustify, Briefcase, Award, FolderGit2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../contexts/CartContext";
 
 import EmilyImage from "../assets/Emily.jpg";
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
@@ -10,6 +12,8 @@ import LiveChatWidget from "./Support/LiveChatWidget";
 
 export default function JobPostForm() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { clearCart, addToCart } = useCart();
   const [skills, setSkills] = useState(["Cyber Security", "SAP", "IT Support Specialist"]);
   const [showLiveChat, setShowLiveChat] = useState(false);
   
@@ -113,6 +117,35 @@ export default function JobPostForm() {
             </div>
             <p className="text-sm text-gray-500 mt-2">
               {t('job_post.form.description_help')}
+            </p>
+          </div>
+
+          {/* Target User / Direct Assigment */}
+          <div>
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <h3 className="text-lg font-semibold">Assign to (Optional)</h3>
+              <input
+                type="text"
+                placeholder="Enter freelancer name to lock bid..."
+                className="flex-grow w-full md:w-auto border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
+              />
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              If left blank, this will be posted to the public job board. If a specific freelancer is provided, only they can see and bid on it.
+            </p>
+          </div>
+
+          {/* Project File Upload */}
+          <div>
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <h3 className="text-lg font-semibold">Project Files</h3>
+              <input
+                type="file"
+                className="flex-grow w-full md:w-auto border border-gray-300 rounded-md p-1.5 focus:outline-none text-sm bg-gray-100"
+              />
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              Upload any reference PDFs or documents for the project requirements.
             </p>
           </div>
 
@@ -340,7 +373,21 @@ export default function JobPostForm() {
                   <Heart className="w-5 h-5" />
 
                 </button>
-                <button className="ml-auto bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 px-4 py-2 rounded-full">
+                <button 
+                  onClick={() => {
+                    const item = {
+                        id: "emily_lewis",
+                        name: "Hire Emily Lewis",
+                        currentPrice: 150000,
+                        image: EmilyImage,
+                        vendor: "Independent Freelancer"
+                    };
+                    clearCart();
+                    addToCart(item);
+                    navigate("/shipping-details");
+                  }} 
+                  className="ml-auto bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 px-4 py-2 rounded-full"
+                >
                   {t('job_post.freelancer.hire_btn')} <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

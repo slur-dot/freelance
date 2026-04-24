@@ -38,6 +38,7 @@ import TrainingProgress from "./Pages/Dashboards/Freelancers/TrainingProgress";
 import RequestedCourses from './Pages/Dashboards/Freelancers/RequestedCourses';
 import Earnings from './Pages/Dashboards/Freelancers/Earnings';
 import WorkManagement from './Pages/Dashboards/Freelancers/WorkManagement';
+import ReferralSystem from './Pages/Dashboards/Freelancers/ReferralSystem';
 import FreelancerProfile from './Pages/Dashboards/Freelancers/Profile';
 import ClientProfile from './Pages/Dashboards/Clients/Profile';
 import CompanyProfile from './Pages/Dashboards/Company/Profile';
@@ -52,6 +53,9 @@ import Payments from './Pages/Dashboards/Clients/Payments';
 import ProjectList from './Pages/Dashboards/Clients/ProjectList';
 import CompanySidebar from './Pages/Dashboards/Company/CompanySidebar';
 import CompanyDashboard from './Pages/Dashboards/Company/CompanyDashboard';
+import ContractManagement from './Pages/Dashboards/Company/ContractManagement';
+import EquipmentTracking from './Pages/Dashboards/Company/EquipmentTracking';
+import IssueReporting from './Pages/Dashboards/Company/IssueReporting';
 import UserLogin from "./Pages/Login/UserLogin";
 import SuccessfulPage from './Pages/Login/SuccessfulPage';
 import VerifyCodePage from './Pages/Login/VerifyCodePage';
@@ -64,6 +68,7 @@ import VendorSidebar from './Pages/Dashboards/VendorModule/VendorSidebar';
 import Orders from './Pages/Dashboards/VendorModule/Orders';
 import VendorDashboard from './Pages/Dashboards/VendorModule/VendorDashboard';
 import Listings from './Pages/Dashboards/VendorModule/Listings';
+import Receipts from './Pages/Dashboards/VendorModule/Receipts';
 import Payouts from './Pages/Dashboards/VendorModule/Payouts';
 import AdsManagement from './Pages/Dashboards/VendorModule/AdsManagement';
 import SellerSidebar from './Pages/Dashboards/Sellers/SellerSidebar';
@@ -178,6 +183,7 @@ function AppContent() {
             <Route path="requested-courses" element={<RequestedCourses />} />
             <Route path="earnings" element={<Earnings />} />
             <Route path="work-management" element={<WorkManagement />} />
+            <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<FreelancerProfile />} />
           </Route>
 
@@ -197,6 +203,10 @@ function AppContent() {
             <Route path="emplolyee-list" element={<EmployeeList />} />
             <Route path="training-progress" element={<CompanyTrainingProgress />} />
             <Route path="training-quotes" element={<TrainingQuotes />} />
+            <Route path="contracts" element={<ContractManagement />} />
+            <Route path="equipment" element={<EquipmentTracking />} />
+            <Route path="issues" element={<IssueReporting />} />
+            <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<CompanyProfile />} />
           </Route>
 
@@ -204,6 +214,7 @@ function AppContent() {
           <Route path="/vendor/dashboard" element={<ProtectedRoute><VendorSidebar /></ProtectedRoute>}>
             <Route index element={<VendorDashboard />} />
             <Route path="listings" element={<Listings />}></Route>
+            <Route path="receipts" element={<Receipts />}></Route>
             <Route path="orders" element={<Orders />}></Route>
             <Route path="payouts" element={<Payouts />}></Route>
             <Route path="ads" element={<AdsManagement />}></Route>

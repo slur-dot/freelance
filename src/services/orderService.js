@@ -2,15 +2,39 @@ import { db } from "../firebaseConfig";
 import { collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 export const OrderService = {
+    /**
+     * Helper to generate a unique serial number
+     * Format: F224-YYYYMMDD-XXXX
+     */
+    generateSerialNumber() {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+        return `F224-${year}${month}${day}-${randomStr}`;
+    },
+
     // Create a new order
     async createOrder(userId, orderData) {
         try {
             if (!userId) throw new Error("User ID is required");
 
             const orderRef = collection(db, "orders");
+            
+            // Add generated serial numbers to physical stock items like devices
+            const processedItems = orderData.items.map(item => {
+                const serials = [];
+                const quantity = item.quantity || 1;
+                for (let i = 0; i < quantity; i++) {
+                    serials.push(this.generateSerialNumber());
+                }
+                return { ...item, serials };
+            });
+
             const newOrder = {
                 userId,
-                items: orderData.items,
+                items: processedItems,
                 totalAmount: orderData.totalAmount,
                 shippingDetails: orderData.shippingDetails,
                 paymentMethod: orderData.paymentMethod, // e.g., 'stripe', 'cod'

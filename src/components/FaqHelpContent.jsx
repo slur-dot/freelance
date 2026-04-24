@@ -82,12 +82,16 @@ export default function FaqHelpContent() {
               <label htmlFor="role-filter" className="text-sm font-medium text-gray-500">
                 {t('faq.role')}
               </label>
-              <input
+              <select
                 id="role-filter"
-                type="text"
-                placeholder={t('faq.role_placeholder')}
-                className="w-full h-10 px-3 border border-gray-300 text-gray-800 placeholder:text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-[#66C2B9] focus:border-transparent text-sm"
-              />
+                className="w-full h-10 px-3 border border-gray-300 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white"
+              >
+                <option value="">All Roles</option>
+                <option value="freelancer">Freelancer</option>
+                <option value="company">Company</option>
+                <option value="vendor">Vendor</option>
+                <option value="client">Client</option>
+              </select>
             </div>
 
             <button

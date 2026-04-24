@@ -8,8 +8,9 @@ i18n
     .use(LanguageDetector)
     .use(initReactI18next)
     .init({
+        lng: 'fr',
         fallbackLng: 'fr',
-        debug: true,
+        debug: false,
 
         interpolation: {
             escapeValue: false, // not needed for react as it escapes by default
@@ -18,7 +19,7 @@ i18n
             loadPath: '/locales/{{lng}}/{{ns}}.json',
         },
         detection: {
-            order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+            order: ['localStorage', 'cookie', 'querystring'],
             caches: ['localStorage', 'cookie'],
         }
     });

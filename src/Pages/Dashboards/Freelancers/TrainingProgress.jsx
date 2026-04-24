@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Search, Trash2 } from "lucide-react";
+import { Search, Trash2, Plus } from "lucide-react";
 import ChatPopup from "../../../components/ChatPopup";
 import { auth } from "../../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 // Button
 function TPButton({ children, className = "", variant = "default", size = "md", disabled, ...props }) {
@@ -43,6 +44,7 @@ import { FreelancerService } from "../../../services/freelancerService";
 
 export default function TrainingProgress() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [user, setUser] = useState(auth.currentUser);
   const FREELANCER_ID = user?.uid;
 
@@ -128,8 +130,12 @@ export default function TrainingProgress() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
       {/* Header */}
-      <header className="mb-6">
+      <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t('training_progress_page.title')}</h1>
+        <TPButton onClick={() => navigate('/training-modules')} className="flex items-center gap-2 w-full md:w-auto px-6 py-2">
+          <Plus className="w-4 h-4" />
+          {t('training_progress_page.request_course', 'Request Course')}
+        </TPButton>
       </header>
 
       {/* Search */}

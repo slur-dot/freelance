@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaSearch, FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, LogOut } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, LogOut, MessageSquare } from "lucide-react";
 import userAvatar from "../assets/UserPic.jpg";
 import { useTranslation } from "react-i18next";
 
@@ -81,7 +81,21 @@ export default function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden lg:flex flex-1 justify-center space-x-2 xl:space-x-6 items-center whitespace-nowrap text-sm xl:text-base">
             <Link to="/" className={isActive("/")}>{t('navbar.home')}</Link>
-            <Link to="/shop" className={isActive("/shop")}>{t('navbar.shop')}</Link>
+            {/* Shop Dropdown */}
+            <div className="relative group">
+              <button className={`flex items-center ${current.startsWith('/shop') ? "text-blue-600 font-medium border-b-2 border-blue-600 pb-1" : "text-gray-700 hover:text-gray-900 font-medium pb-1 border-b-2 border-transparent hover:border-gray-300"}`}>
+                {t('navbar.shop')} <HiChevronDown className="ml-1 text-sm text-gray-400 group-hover:text-blue-600 transition-colors" />
+              </button>
+              <div className="absolute left-0 top-full pt-1 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100]">
+                <div className="bg-white border border-gray-200 rounded shadow-lg py-1 text-sm text-gray-700 font-normal">
+                  <Link to="/shop" className="block px-4 py-2 hover:bg-gray-100">All Products</Link>
+                  {userRole !== 'freelancer' && (
+                    <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental', 'Device Rental')}</Link>
+                  )}
+                  <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales', 'Corporate Sales')}</Link>
+                </div>
+              </div>
+            </div>
             <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>{t('navbar.hire_freelancers')}</Link>
             <Link to="/locations" className={`${isActive("/locations")} hidden xl:inline-block`}>{t('navbar.locations')}</Link>
             <Link to="/tech-services" className={`${isActive("/tech-services")} hidden xl:inline-block`}>{t('navbar.tech_services')}</Link>
@@ -96,10 +110,8 @@ export default function Navbar() {
                 <div className="bg-white border border-gray-200 rounded shadow-lg py-1">
                   <Link to="/locations" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.locations')}</Link>
                   <Link to="/tech-services" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.tech_services')}</Link>
-                  <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental')}</Link>
-                <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
-                <Link to="/corporate-sales" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.corporate_sales')}</Link>
-                <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.faq')}</Link>
+                  <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
+                  <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.faq')}</Link>
                 <Link to="/blog" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.blog')}</Link>
                 <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.contact_us')}</Link>
                 <Link to="/vendor-profiles" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.vendor_profiles')}</Link>
@@ -160,6 +172,18 @@ export default function Navbar() {
               <span className="text-gray-400 text-xs xl:text-sm">|</span>
               <button onClick={() => changeLanguage('fr')} className={`text-xs xl:text-sm font-medium ${i18n.language === 'fr' ? 'text-blue-600' : 'text-gray-700'}`}>FR</button>
             </div>
+            {currentUser && (
+              <button
+                onClick={() => navigate(getDashboardRoute())}
+                className="relative ml-2 xl:ml-3 flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+                title={t('navbar.messages', 'Messages')}
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  0
+                </span>
+              </button>
+            )}
             <Link to="/shop/cart" className="relative ml-2 xl:ml-3 flex items-center">
               <FaShoppingCart className="text-black text-[18px] cursor-pointer" />
               {cartCount > 0 && (

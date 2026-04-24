@@ -319,7 +319,10 @@ const ComponentsStore = () => {
               step="50920"
               value={filters.priceRange[1]}
               onChange={handlePriceRangeChange}
-              className="w-full"
+              className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, #15803D 0%, #15803D ${(filters.priceRange[1] / 5092000) * 100}%, #d1d5db ${(filters.priceRange[1] / 5092000) * 100}%, #d1d5db 100%)`
+              }}
             />
             <div className="flex justify-between text-sm text-gray-600 mt-1">
               <span>0 GNF</span>

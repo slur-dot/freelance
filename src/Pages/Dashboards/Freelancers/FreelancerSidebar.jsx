@@ -89,6 +89,7 @@ export default function FreelancerSidebar() {
       section: t('sidebar.settings', 'Settings'),
       items: [
         { title: t('navbar.profile'), url: "/freelancer/dashboard/profile", icon: User },
+        { title: t('sidebar.referral', 'Referral Program'), url: "/freelancer/dashboard/referrals", icon: Share2 },
       ],
     },
     {
@@ -104,7 +105,6 @@ export default function FreelancerSidebar() {
     {
       section: t('navbar.more', 'More'),
       items: [
-        { title: t('navbar.device_rental', 'Device Rental'), url: "/computer-rental", icon: Monitor },
         { title: t('navbar.training_upskilling', 'Training & Upskilling'), url: "/training-modules", icon: BookOpen },
         { title: t('navbar.corporate_sales', 'Corporate Sales'), url: "/corporate-sales", icon: Briefcase },
         { title: t('navbar.faq', 'FAQ'), url: "/faq", icon: HelpCircle },

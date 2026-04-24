@@ -12,6 +12,8 @@ import HireFreelanceImage from "../assets/HireFreelanceImage.png";
 import FilterSidebar from "./FilterSidebar";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useCart } from "../contexts/CartContext";
+import { Search } from "lucide-react";
 
 // Enhanced freelancer data with specialized skills
 const mockFreelancers = [
@@ -160,6 +162,23 @@ function Loading() {
 function FreelancerCard({ freelancer }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { clearCart, addToCart } = useCart();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const handleHire = () => {
+    const price = parseInt(freelancer.hourlyRate.replace(/[^0-9]/g, "")) || 150000;
+    const item = {
+      id: freelancer.id,
+      name: `Hire ${freelancer.name} - ${freelancer.category}`,
+      currentPrice: price,
+      image: freelancer.image,
+      vendor: freelancer.company || "Freelancer"
+    };
+    clearCart();
+    addToCart(item);
+    navigate("/shipping-details");
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition hover:border-green-600 hover:border-2 flex flex-col h-full">
       <div className="relative">
@@ -249,8 +268,15 @@ function FreelancerCard({ freelancer }) {
             <button className="p-2 hover:bg-gray-100 rounded-full text-gray-500" title="View Profile">
               <AlignJustify className="w-4 h-4" />
             </button>
-            <button className="p-2 hover:bg-gray-100 rounded-full text-gray-500" title="Save to Favorites">
-              <Heart className="w-4 h-4" />
+            <button
+               className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${isFavorite ? 'text-red-500' : 'text-gray-500'}`}
+               title={isFavorite ? "Remove from Favorites" : "Save to Favorites"}
+               onClick={(e) => {
+                 e.stopPropagation();
+                 setIsFavorite(!isFavorite);
+               }}
+            >
+              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500' : ''}`} />
             </button>
             <button
               className="p-2 hover:bg-gray-100 rounded-full text-gray-500"
@@ -273,7 +299,7 @@ function FreelancerCard({ freelancer }) {
             {t('freelancer.profile.actions.bid')}
           </button>
           <button
-            onClick={() => navigate("/hire-freelancers/info")}
+            onClick={handleHire}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-2 py-2 rounded-md transition-colors"
             style={{ backgroundColor: '#3B82F6' }}
           >
@@ -307,6 +333,13 @@ export default function FreelancerProfile() {
     t('freelancer.sort.options.newest')
   ];
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredFreelancers = mockFreelancers.filter(f => 
+    f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    f.skills.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
     <div className="min-h-screen bg-white relative">
       <div className="relative z-10 container mx-auto px-4 py-6">
@@ -332,10 +365,20 @@ export default function FreelancerProfile() {
                 {t('freelancer.profile.breadcrumbs.hire')}
               </h1>
 
-              {/* Sort Section */}
-              <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center mb-5 gap-4 relative">
-                <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-                  <p>{t('freelancer.sort.showing', { start: 1, end: 100, total: 100 })}</p>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-4 relative">
+                <div className="relative w-full sm:w-64">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search freelancers by name or skill..."
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 w-full sm:w-auto justify-end">
+                  <p>{t('freelancer.sort.showing', { start: 1, end: filteredFreelancers.length, total: mockFreelancers.length })}</p>
                   <span>{t('freelancer.sort.label')}</span>
                   <div className="relative">
                     <button
@@ -366,7 +409,7 @@ export default function FreelancerProfile() {
 
               {/* Freelancer Cards */}
               <Suspense fallback={<Loading />}>
-                <FreelancerList freelancers={mockFreelancers} />
+                <FreelancerList freelancers={filteredFreelancers} />
               </Suspense>
 
               {/* Pagination Dots */}

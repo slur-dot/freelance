@@ -57,6 +57,8 @@ export default function AdminSidebar() {
         { title: t('admin_dashboard.sidebar.management.bookings'), url: "/admin/dashboard/bookings", icon: CalendarCheck },
         { title: t('admin_dashboard.sidebar.management.training'), url: "/admin/dashboard/training-requests", icon: Headphones },
         { title: t('admin_dashboard.sidebar.management.tech'), url: "#", icon: Zap },
+        { title: t('admin_dashboard.sidebar.management.rentals', 'Manage Rentals'), url: "/admin/dashboard/rentals", icon: Monitor },
+        { title: t('admin_dashboard.sidebar.management.faq', 'Manage FAQ'), url: "/admin/dashboard/manage-faq", icon: HelpCircle },
         { title: t('admin_dashboard.sidebar.management.ads'), url: "/admin/dashboard/advertisements", icon: Megaphone },
         { title: t('admin_dashboard.sidebar.management.users'), url: "/admin/dashboard/users", icon: Users },
         { title: t('admin_dashboard.sidebar.management.sub_admin'), url: "/admin/dashboard/sub-admin", icon: UserPlus },

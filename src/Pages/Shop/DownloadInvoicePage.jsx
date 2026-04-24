@@ -132,7 +132,8 @@ export default function DownloadInvoicePage() {
       {
         name: "Demo Item",
         quantity: 1,
-        price: 0
+        price: 0,
+        serials: ["F224-DEMO1234-ABCD"]
       }
     ]
   };
@@ -246,7 +247,14 @@ export default function DownloadInvoicePage() {
                 {displayOrder.items?.length > 0 ? (
                   displayOrder.items.map((item, idx) => (
                     <tr key={idx} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="py-4 px-6 text-gray-900 font-medium">{item.name || item.description || "Product"}</td>
+                      <td className="py-4 px-6 text-gray-900 font-medium">
+                        <div>{item.name || item.description || "Product"}</div>
+                        {item.serials && item.serials.length > 0 && (
+                          <div className="text-xs text-gray-500 mt-1 font-mono">
+                            S/N: {item.serials.join(', ')}
+                          </div>
+                        )}
+                      </td>
                       <td className="py-4 px-6 text-gray-600 text-center">{item.quantity || 1}</td>
                       <td className="py-4 px-6 text-gray-600 text-right">{formatGNF(item.price || 0)}</td>
                       <td className="py-4 px-6 text-gray-900 font-semibold text-right">{formatGNF((item.price || 0) * (item.quantity || 1))}</td>

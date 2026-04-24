@@ -136,10 +136,10 @@ export default function TechServicesLanding() {
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 leading-snug">
                 {t('home.hero.promo_title')}
               </h3>
-              <button className="bg-transparent text-white border border-white hover:bg-white/20 px-6 py-3 text-sm sm:text-md rounded-full font-semibold flex items-center justify-center transition">
+              <Link to="/shop" className="bg-transparent text-white border border-white hover:bg-white/20 px-6 py-3 text-sm sm:text-md rounded-full font-semibold flex items-center justify-center transition">
                 {t('home.hero.btn_explore')}
                 <FaArrowRight className="ml-2" />
-              </button>
+              </Link>
             </div>
 
             {/* Right Image */}

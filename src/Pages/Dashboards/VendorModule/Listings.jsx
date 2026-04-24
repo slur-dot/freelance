@@ -4,6 +4,8 @@ import { Search, ArrowUpDown, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ProductService } from "../../../services/productService";
 import { auth } from "../../../firebaseConfig";
+import { validateMultipleImages } from "../../../utils/imageUtils";
+import { sanitizeInput } from "../../../utils/sanitize";
 
 // Reusable Button
 function RCButton({ children, variant = "default", size = "md", className = "", ...props }) {
@@ -71,7 +73,8 @@ export default function Listings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showCreate, setShowCreate] = useState(false);
-  const [newProduct, setNewProduct] = useState({ title: "", description: "", price: "" });
+  const [newProduct, setNewProduct] = useState({ title: "", description: "", price: "", currency: "GNF" });
+  const [images, setImages] = useState([]);
   const [user, setUser] = useState(auth.currentUser);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -127,21 +130,52 @@ export default function Listings() {
     e?.preventDefault();
     try {
       if (!user) return;
+      
+      // Basic sanitization
+      const cleanTitle = sanitizeInput(newProduct.title);
+      const cleanDesc = sanitizeInput(newProduct.description);
+      
+      if (!cleanTitle || !cleanDesc) {
+        alert("Title and description cannot contain invalid characters");
+        return;
+      }
+
       await ProductService.createProduct({
         sellerId: user.uid,
-        title: newProduct.title,
-        description: newProduct.description,
+        title: cleanTitle,
+        description: cleanDesc,
         price: Number(newProduct.price),
-        status: 'Active' // Default to active or pending
+        currency: newProduct.currency,
+        status: 'Active', // Default to active or pending
+        // Images would be uploaded to Firebase Storage here
+        // images: images.map(file => URL.createObjectURL(file)) // Placeholder
       });
 
       setShowCreate(false);
-      setNewProduct({ title: "", description: "", price: "" });
+      setNewProduct({ title: "", description: "", price: "", currency: "GNF" });
+      setImages([]);
       loadProducts();
     } catch (e) {
       setError(e.message);
       alert("Failed to create product");
     }
+  };
+
+  const handleImageSelection = async (e) => {
+    const files = Array.from(e.target.files);
+    
+    if (files.length === 0) return;
+    
+    const result = await validateMultipleImages(files, { maxCount: 5, maxSizeMB: 2 });
+    
+    if (!result.valid) {
+      alert(result.errors.join('\n'));
+      e.target.value = ''; // clearer
+      setImages([]);
+      return;
+    }
+    
+    setImages(result.validFiles);
   };
 
   // Client side pagination
@@ -308,10 +342,56 @@ export default function Listings() {
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-semibold mb-4">{t('vendor_dashboard.listings.create_modal.title')}</h2>
             <form onSubmit={handleCreate} className="space-y-4">
-              <input className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.product_title')} value={newProduct.title} onChange={e => setNewProduct({ ...newProduct, title: e.target.value })} required />
-              <textarea className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.desc')} value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} required />
-              <input type="number" className="w-full border rounded px-3 py-2" placeholder={t('vendor_dashboard.listings.create_modal.price')} value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} required />
-              <div className="flex justify-end gap-2">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Project/Listing Title</label>
+                <input className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder={t('vendor_dashboard.listings.create_modal.product_title')} value={newProduct.title} onChange={e => setNewProduct({ ...newProduct, title: e.target.value })} required />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea className="w-full border border-gray-300 rounded px-3 py-2 min-h-[100px] focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder={t('vendor_dashboard.listings.create_modal.desc')} value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} required />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                  <input type="number" className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none" placeholder={t('vendor_dashboard.listings.create_modal.price')} value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} required min="1" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                  <select 
+                    className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" 
+                    value={newProduct.currency} 
+                    onChange={e => setNewProduct({ ...newProduct, currency: e.target.value })}
+                  >
+                    <option value="GNF">GNF</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+                <input 
+                  type="file" 
+                  multiple 
+                  accept="image/jpeg,image/png,image/webp" 
+                  onChange={handleImageSelection}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-2"
+                />
+                <p className="text-xs text-gray-500 flex flex-col gap-1">
+                  <span>• Maximum 5 images</span>
+                  <span>• Max file size: 2MB per image</span>
+                  <span>• Supported: JPG, PNG, WEBP</span>
+                </p>
+                {images.length > 0 && (
+                  <div className="mt-3 bg-white p-2 border border-green-200 rounded text-sm text-green-700">
+                    <span className="font-semibold">{images.length} image(s)</span> ready to upload
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                 <RCButton variant="outline" type="button" onClick={() => setShowCreate(false)}>{t('vendor_dashboard.listings.create_modal.cancel')}</RCButton>
                 <RCButton type="submit">{t('vendor_dashboard.listings.create_modal.create')}</RCButton>
               </div>

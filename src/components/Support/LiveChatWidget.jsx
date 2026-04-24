@@ -18,7 +18,9 @@ export default function LiveChatWidget({ forceOpen = false, onClose: externalOnC
   const [newMessage, setNewMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
   const messagesEndRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -40,6 +42,31 @@ export default function LiveChatWidget({ forceOpen = false, onClose: externalOnC
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showAttachmentMenu]);
+
+  // Scroll visibility logic
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!isOpen) {
+        setIsScrolling(true);
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+        scrollTimeoutRef.current = setTimeout(() => {
+          setIsScrolling(false);
+        }, 300);
+      }
+    };
+
+    // Add listener only if we want to hide on scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, [isOpen]);
 
   // Cleanup object URLs when component unmounts
   useEffect(() => {
@@ -234,7 +261,7 @@ export default function LiveChatWidget({ forceOpen = false, onClose: externalOnC
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className={`fixed bottom-6 right-6 z-50 transition-all duration-300 ${isScrolling ? 'opacity-0 translate-y-4 pointer-events-none' : 'opacity-100 translate-y-0'}`}>
         <button
           onClick={() => setIsOpen(true)}
           data-chat-trigger

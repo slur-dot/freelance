@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Facebook,
-  Twitter,
   Mail,
   Linkedin,
   Instagram,
@@ -13,6 +12,7 @@ import {
   Send,
 } from "lucide-react";
 import { FaWhatsapp, FaFlag } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import logo from "../assets/logo.png";
 import { useTranslation } from "react-i18next";
 
@@ -173,10 +173,10 @@ const Footer = () => {
             </div>
 
             {/* Social Media */}
-            <div className="flex flex-wrap justify-center lg:justify-end gap-3">
+            <div className="flex flex-wrap justify-center lg:justify-end gap-3 items-center">
               {[
                 { icon: Facebook, href: "#" },
-                { icon: Twitter, href: "#" },
+                { icon: FaXTwitter, href: "#" },
                 { icon: Instagram, href: "#" },
                 { icon: Linkedin, href: "#" },
                 { icon: FaWhatsapp, href: "https://wa.me/224629653636" }
@@ -186,7 +186,7 @@ const Footer = () => {
                   href={href}
                   target={href.includes("wa.me") ? "_blank" : "_self"}
                   rel={href.includes("wa.me") ? "noopener noreferrer" : undefined}
-                  className="bg-white text-slate-800 p-2 rounded-full hover:bg-gray-200 transition-colors"
+                  className="bg-white text-slate-800 p-2.5 rounded-full hover:bg-gray-200 transition-colors flex items-center justify-center"
                 >
                   <Icon className="w-5 h-5" />
                 </a>

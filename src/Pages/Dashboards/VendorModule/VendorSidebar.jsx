@@ -60,6 +60,11 @@ export default function VendorSidebar() {
           ),
         },
         {
+          title: t('vendor_dashboard.sidebar.receipts', 'Receipts'),
+          url: "/vendor/dashboard/receipts",
+          icon: <FileText className="h-5 w-5 text-gray-400" />
+        },
+        {
           title: t('vendor_dashboard.sidebar.orders'),
           url: "/vendor/dashboard/orders",
           icon: (
@@ -103,7 +108,12 @@ export default function VendorSidebar() {
       items: [
         { title: t('navbar.home', 'Home'), url: "/", icon: <Home className="h-5 w-5 text-gray-400" /> },
         { title: t('navbar.shop', 'Shop'), url: "/shop", icon: <ShoppingCart className="h-5 w-5 text-gray-400" /> },
-        { title: t('navbar.hire_freelancers', 'Hire Freelancers'), url: "/hire-freelancers", icon: <Users className="h-5 w-5 text-gray-400" /> },
+        { 
+          title: t('navbar.hire_freelancers', 'Hire Freelancers'), 
+          url: "", 
+          icon: <Users className="h-5 w-5 text-gray-400" />,
+          onClick: () => alert(t('vendor_dashboard.hire_freelancer_denied', 'Switch to Client profile to hire freelancers.'))
+        },
         { title: t('navbar.locations', 'Locations'), url: "/locations", icon: <MapPin className="h-5 w-5 text-gray-400" /> },
         { title: t('navbar.tech_services', 'Tech Services'), url: "/tech-services", icon: <Wrench className="h-5 w-5 text-gray-400" /> },
       ],

@@ -6,6 +6,7 @@ import LaptopStore from './LaptopStore';
 import DesktopStore from './DesktopStore';
 import AccessoriesStore from './AccessoriesStore';
 import ComponentsStore from './ComponentsStore';
+import PrintersStore from './PrintersStore';
 import ShopHero from '../../components/ShopHero';
 
 import { useTranslation } from "react-i18next";
@@ -13,6 +14,8 @@ import { useTranslation } from "react-i18next";
 const Shop = () => {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState('Smartphones');
+  const [filterBrand, setFilterBrand] = useState('All');
+  const [filterCondition, setFilterCondition] = useState('All');
   const [timeRemaining, setTimeRemaining] = useState({
     days: 45,
     hours: 12,
@@ -80,7 +83,8 @@ const Shop = () => {
               { name: 'Laptops', onSale: true },
               { name: 'Desktops', onSale: false },
               { name: 'Accessories', onSale: true },
-              { name: 'Components', onSale: false }
+              { name: 'Components', onSale: false },
+              { name: 'Printers', onSale: true }
             ].map((category) => (
               <button
                 key={category.name}
@@ -102,6 +106,36 @@ const Shop = () => {
         </div>
       </div>
 
+      {/* Global Shop Filters */}
+      <div className="bg-gray-50 border-b border-gray-200 py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row gap-4 items-center justify-between">
+          <div className="text-sm font-medium text-gray-700">Filter Products:</div>
+          <div className="flex gap-4 w-full sm:w-auto">
+            <select
+              value={filterCondition}
+              onChange={(e) => setFilterCondition(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 text-sm bg-white"
+            >
+              <option value="All">All Conditions</option>
+              <option value="Brand New">Brand New</option>
+              <option value="Sold/Used">Sold Out / Used</option>
+            </select>
+            <select
+              value={filterBrand}
+              onChange={(e) => setFilterBrand(e.target.value)}
+              className="border border-gray-300 rounded-md p-2 text-sm bg-white"
+            >
+              <option value="All">All Brands</option>
+              <option value="HP">HP</option>
+              <option value="Apple">Apple</option>
+              <option value="Dell">Dell</option>
+              <option value="Samsung">Samsung</option>
+              <option value="Epson">Epson</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       {/* Render Content Based on Selected Category */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {selectedCategory === 'Smartphones' && <SmartphoneStore />}
@@ -109,6 +143,7 @@ const Shop = () => {
         {selectedCategory === 'Desktops' && <DesktopStore />}
         {selectedCategory === 'Accessories' && <AccessoriesStore />}
         {selectedCategory === 'Components' && <ComponentsStore />}
+        {selectedCategory === 'Printers' && <PrintersStore />}
       </div>
 
 

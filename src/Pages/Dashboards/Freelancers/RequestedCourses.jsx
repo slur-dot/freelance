@@ -71,6 +71,8 @@ export default function RequestedCourses() {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [addOpen, setAddOpen] = useState(false);
+  const [addForm, setAddForm] = useState({ title: '', category: '', price: 0 });
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState({ id: '', title: '', price: 0, status: 'pending' });
 
@@ -137,7 +139,15 @@ export default function RequestedCourses() {
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6">{t('requested_courses_page.title')}</h1>
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">{t('requested_courses_page.title')}</h1>
+        <RCButton 
+          className="bg-blue-600 hover:bg-blue-700 text-white border-0"
+          onClick={() => setAddOpen(true)}
+        >
+          + Request New Course
+        </RCButton>
+      </div>
       <RCCard className="p-4 md:p-6">
         {loading && <div className="mb-4">{t('requested_courses_page.loading') || 'Loading...'}</div>}
         {error && !loading && <div className="mb-4 text-red-600">{error}</div>}
@@ -275,6 +285,67 @@ export default function RequestedCourses() {
                 }}
               >
                 {t('requested_courses_page.modals.edit.save')}
+              </RCButton>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Modal */}
+      {addOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <h3 className="text-lg font-semibold mb-4">Request New Course</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.course_title')}</label>
+                <input
+                  className="w-full border rounded-md px-3 py-2 mt-1"
+                  value={addForm.title}
+                  onChange={(e) => setAddForm({ ...addForm, title: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-600">Category</label>
+                <input
+                  className="w-full border rounded-md px-3 py-2 mt-1"
+                  value={addForm.category}
+                  onChange={(e) => setAddForm({ ...addForm, category: e.target.value })}
+                />
+              </div>
+            </div>
+            <div className="mt-6 flex items-center justify-end gap-2">
+              <RCButton variant="outline" onClick={() => setAddOpen(false)}>{t('requested_courses_page.modals.edit.cancel')}</RCButton>
+              <RCButton
+                className="bg-blue-600 text-white hover:bg-blue-700"
+                onClick={async () => {
+                  try {
+                    const newCourse = await FreelancerService.requestCourse(FREELANCER_ID, {
+                      title: addForm.title,
+                      category: addForm.category || addForm.title,
+                      price: 0
+                    });
+                    
+                    const mapped = {
+                      id: newCourse.id,
+                      title: newCourse.title,
+                      category: newCourse.category,
+                      rawStatus: newCourse.status,
+                      price: 0,
+                      status: 'Under Review',
+                      requestDate: new Date().toLocaleDateString()
+                    };
+                    
+                    setCourses([mapped, ...courses]);
+                    setAddOpen(false);
+                    setAddForm({ title: '', category: '', price: 0 });
+                  } catch (e) {
+                    setError('Failed to request course');
+                    console.error(e);
+                  }
+                }}
+              >
+                Submit Request
               </RCButton>
             </div>
           </div>

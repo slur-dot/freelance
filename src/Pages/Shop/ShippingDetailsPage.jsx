@@ -648,21 +648,6 @@ export default function ShippingDetailsPage() {
                   </div>
                 )}
 
-                {/* Cash on Delivery Form */}
-                {selectedPaymentMethod === 'cash-on-delivery' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t('shipping.delivery_address')}
-                    </label>
-                    <textarea
-                      placeholder={t('shipping.enter_address')}
-                      value={paymentDetails.deliveryAddress || ''}
-                      onChange={(e) => handlePaymentDetailsChange('deliveryAddress', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent bg-white"
-                      rows="3"
-                    />
-                  </div>
-                )}
 
                 {/* YMO Form */ }
                 {selectedPaymentMethod === 'ymo' && (

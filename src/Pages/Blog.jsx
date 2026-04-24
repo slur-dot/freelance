@@ -14,6 +14,8 @@ export default function Blog() {
     { id: "tech", name: t('blog.tech'), count: 8 },
     { id: "business", name: t('blog.business'), count: 20 },
     { id: "training", name: t('blog.training'), count: 29 },
+    { id: "company", name: t('blog.company', 'Company'), count: 15 },
+    { id: "vendor", name: t('blog.vendor', 'Vendor'), count: 12 },
   ];
 
   const blogPosts = Array(9).fill({

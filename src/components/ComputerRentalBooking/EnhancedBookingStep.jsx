@@ -91,7 +91,6 @@ export default function EnhancedBookingStep({ onContinue, formData }) {
                   <option value="national_id">National ID Card</option>
                   <option value="passport">Passport</option>
                   <option value="driver_license">Driver's License</option>
-                  <option value="student_id">Student ID</option>
                 </select>
               </div>
 

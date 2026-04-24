@@ -253,8 +253,29 @@ export default function FreelancerDashboard() {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="max-w-7xl mx-auto mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="max-w-7xl mx-auto mb-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Available Funds Card - Prominently at top */}
+        <div className="lg:col-span-1">
+          <Card className="flex flex-col h-full bg-gradient-to-br from-green-50 to-white border-green-100 border-2">
+            <div className="flex flex-row items-center justify-between p-5 pb-2">
+              <h3 className="text-lg font-bold text-gray-800">{text.availableFunds}</h3>
+              <Info className="h-5 w-5 text-green-600 flex-shrink-0" />
+            </div>
+            <CardContent className="flex flex-col justify-between flex-grow p-5 pt-2">
+              <p className="text-sm text-gray-500 mb-1">{text.balanceAvailable}</p>
+              <div className="text-3xl md:text-4xl font-extrabold text-green-700 tracking-tight">
+                {loading ? '...' : `${(netEarnings || 0).toLocaleString()} GNF`}
+              </div>
+              <Button className="mt-6 w-full text-md py-3 shadow-md bg-green-600 hover:bg-green-700" onClick={() => setShowWithdrawModal(true)}>
+                <DollarSign className="w-5 h-5 mr-2 inline" />
+                {text.withdraw}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.total_earned')}</div>
@@ -280,24 +301,9 @@ export default function FreelancerDashboard() {
           </CardContent>
         </Card>
       </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-        {/* Available Funds Card */}
-        <div className="md:col-span-1">
-          <h3 className="text-lg font-semibold mb-2">{text.availableFunds}</h3>
-          <Card className="flex flex-col h-fit">
-            <div className="flex flex-row items-center justify-between p-4">
-              <p className="text-sm md:text-base font-medium">{text.balanceAvailable}</p>
-              <Info className="h-4 w-4 text-gray-500 flex-shrink-0" />
-            </div>
-            <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-2xl md:text-3xl lg:text-4xl font-bold">{loading ? '...' : `${(netEarnings || 0).toLocaleString()} GNF`}</div>
-              <Button variant="outline" className="mt-4 w-fit" onClick={() => setShowWithdrawModal(true)}>
-                {text.withdraw}
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
         {/* Messages Section */}
         <div className="md:col-span-1 md:row-span-2 flex flex-col">
           <h3 className="text-lg font-semibold mb-2">{t('freelancer_dashboard.messages.title')}</h3>

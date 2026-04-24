@@ -1,15 +1,11 @@
 import { useTranslation } from "react-i18next";
 import faqHeroImage from "../assets/FAQ_Hero.jpg";
-
 export default function FaqHeroSection() {
   const { t } = useTranslation();
   return (
     <section
-      className="relative w-full py-16 sm:py-20 md:py-32 lg:py-48 bg-cover bg-center"
-      style={{ backgroundImage: `url(${faqHeroImage})` }}
+      className="relative w-full py-8 md:py-12 bg-green-700"
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-60"></div>
 
       <div className="relative container mx-auto px-4 sm:px-6 text-center text-white z-10">
         <div className="mx-auto space-y-4 sm:space-y-6">

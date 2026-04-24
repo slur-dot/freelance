@@ -3,6 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChatPopup from "../components/ChatPopup";
+import { useCart } from "../contexts/CartContext";
 import FreelanceImage from "../assets/HireFreelanceImage.png";
 import EmilyImage from "../assets/Emily.jpg";
 import DefaultAvatar from "../assets/profile-image.jpg";
@@ -17,6 +18,7 @@ export default function FreelancerInfo() {
 
   const [showChat, setShowChat] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const { clearCart, addToCart } = useCart();
 
   const [bidsWon] = useState(0);
 
@@ -80,6 +82,19 @@ export default function FreelancerInfo() {
 
   const isOwner = currentUser?.uid === profile.ownerId; // Check ownership
 
+  const handleHireNow = () => {
+    const item = {
+      id: profile.ownerId,
+      name: `Hire ${profile.name}`,
+      currentPrice: 150000,
+      image: profile.avatarUrl || DefaultAvatar,
+      vendor: "Freelancer"
+    };
+    clearCart();
+    addToCart(item);
+    navigate("/shipping-details");
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
@@ -123,7 +138,13 @@ export default function FreelancerInfo() {
                 )}
               </div>
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-black mb-1">{profile.name}</h1>
+                <div className="flex items-center gap-2 mb-1">
+                  <h1 className="text-3xl font-bold text-black">{profile.name}</h1>
+                  <span className="bg-blue-100 text-blue-800 text-xs px-2.5 py-0.5 rounded-full border border-blue-200 font-semibold flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path></svg>
+                    Verified Profile
+                  </span>
+                </div>
                 <div className="text-black mb-2">{profile.city || ""}</div>
                 <div className="text-sm text-gray-600">{profile.bio}</div>
 
@@ -180,6 +201,21 @@ export default function FreelancerInfo() {
                   </div>
                 </div>
               </div>
+              
+              {/* Add Comment Section */}
+              <div className="mt-4 border border-gray-200 p-4 rounded-lg bg-gray-50">
+                <h3 className="font-semibold text-gray-900 mb-2">{t('freelancer.profile.leaveComment') || 'Leave a Comment'}</h3>
+                <textarea 
+                  className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-white" 
+                  rows="3" 
+                  placeholder={t('freelancer.profile.commentPlaceholder') || 'Share your experience working with this freelancer...'}
+                ></textarea>
+                <div className="flex justify-end mt-2">
+                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    {t('freelancer.profile.postComment') || 'Post Comment'}
+                  </button>
+                </div>
+              </div>
             </div>
 
 
@@ -199,7 +235,7 @@ export default function FreelancerInfo() {
 
             {/* Hire Now Button */}
             <button 
-              onClick={() => setShowChat(true)}
+              onClick={handleHireNow}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center transition-all shadow-md hover:shadow-lg mb-4"
             >
               {t('freelancer.profile.hireNow') || 'Hire Now'}

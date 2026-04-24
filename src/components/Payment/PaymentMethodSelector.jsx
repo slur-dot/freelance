@@ -28,30 +28,12 @@ const PaymentMethodSelector = ({
 
   const paymentMethods = [
     {
-      id: 'stripe',
-      name: 'Stripe',
-      description: 'Pay securely with your credit or debit card',
-      icon: StripeIcon,
-      iconComponent: CreditCard,
-      color: 'bg-blue-600',
-      available: true
-    },
-    {
-      id: 'ymo',
-      name: 'YMO Payment Gateway',
-      description: 'Pay securely with YMO',
-      icon: null,
-      iconComponent: CreditCard,
-      color: 'bg-green-500',
-      available: true
-    },
-    {
-      id: 'djomy',
-      name: 'Djomy Gateway',
-      description: 'Pay via Djomy (OM, MoMo, Card)',
-      icon: null,
-      iconComponent: CreditCard,
-      color: 'bg-purple-600',
+      id: 'mtn',
+      name: 'MTN MoMo',
+      description: 'Pay with MTN Mobile Money',
+      icon: MTNIcon,
+      iconComponent: Smartphone,
+      color: 'bg-yellow-600',
       available: true
     },
     {
@@ -64,30 +46,39 @@ const PaymentMethodSelector = ({
       available: true
     },
     {
-      id: 'mtn',
-      name: 'MTN MoMo',
-      description: 'Pay with MTN Mobile Money',
-      icon: MTNIcon,
-      iconComponent: Smartphone,
-      color: 'bg-yellow-600',
+      id: 'ymo',
+      name: 'YMO Payment Gateway',
+      description: 'Pay securely with YMO',
+      icon: null,
+      iconComponent: CreditCard,
+      color: 'bg-green-500',
+      available: true
+    },
+    {
+      id: 'yi-gateway',
+      name: 'YI Gateway',
+      description: 'Pay via YI Gateway (partnership)',
+      icon: null,
+      iconComponent: CreditCard,
+      color: 'bg-teal-600',
+      available: true
+    },
+    {
+      id: 'stripe',
+      name: 'Card (Visa / Mastercard)',
+      description: 'Pay securely with your credit or debit card',
+      icon: StripeIcon,
+      iconComponent: CreditCard,
+      color: 'bg-blue-600',
       available: true
     },
     {
       id: 'bank-transfer',
-      name: 'Bank Transfer',
+      name: 'Bank Transfer (IBAN)',
       description: 'Transfer directly to our bank account',
       icon: null,
       iconComponent: Building2,
       color: 'bg-green-600',
-      available: true
-    },
-    {
-      id: 'cash-on-delivery',
-      name: 'Cash on Delivery',
-      description: 'Pay when your order is delivered',
-      icon: CashOnDelivery,
-      iconComponent: Truck,
-      color: 'bg-gray-600',
       available: true
     }
   ];
@@ -197,16 +188,16 @@ const PaymentMethodSelector = ({
           </div>
         );
 
-      case 'djomy':
+      case 'yi-gateway':
         return (
           <div className="space-y-4">
-            <div className="bg-purple-50 p-4 rounded-md">
-              <div className="flex items-center gap-2 text-purple-800">
+            <div className="bg-teal-50 p-4 rounded-md">
+              <div className="flex items-center gap-2 text-teal-800">
                 <AlertCircle className="h-4 w-4" />
-                <span className="font-medium">Djomy Integration</span>
+                <span className="font-medium">YI Gateway</span>
               </div>
-              <p className="text-sm text-purple-700 mt-1">
-                You will be redirected to the Djomy Payment Gateway to complete your payment securely.
+              <p className="text-sm text-teal-700 mt-1">
+                You will be redirected to the YI Payment Gateway to complete your payment securely.
               </p>
             </div>
             <div>
@@ -215,11 +206,16 @@ const PaymentMethodSelector = ({
               </label>
               <input
                 type="tel"
-                placeholder="00224..."
+                placeholder="+224..."
                 value={paymentDetails.phoneNumber || ''}
                 onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
+            </div>
+            <div className="text-center py-2">
+              <button className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-md font-medium transition-colors">
+                Continue to YI Gateway
+              </button>
             </div>
           </div>
         );
@@ -295,32 +291,7 @@ const PaymentMethodSelector = ({
           </div>
         );
 
-      case 'cash-on-delivery':
-        return (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Delivery Address *
-              </label>
-              <textarea
-                placeholder="Enter your complete delivery address"
-                value={paymentDetails.deliveryAddress}
-                onChange={(e) => handleInputChange('deliveryAddress', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                rows="3"
-              />
-            </div>
-            <div className="bg-gray-50 p-3 rounded-md">
-              <div className="flex items-center gap-2 text-gray-800">
-                <Truck className="h-4 w-4" />
-                <span className="text-sm font-medium">Cash on Delivery</span>
-              </div>
-              <p className="text-xs text-gray-700 mt-1">
-                Payment will be collected when your order is delivered
-              </p>
-            </div>
-          </div>
-        );
+
 
       default:
         return null;

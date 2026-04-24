@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { Menu, X, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Menu, X, LogOut, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 export default function DashboardLayout({ navItems, user, onLogout }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -9,6 +10,7 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
   const location = useLocation();
   const activePath = location.pathname;
   const { userRole } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <div className="flex bg-gray-50 min-h-screen font-sans">
@@ -21,7 +23,12 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
           <img src="/logo.png" alt="Freelance" className="w-8 h-8 rounded-full" />
           <span className="font-bold text-lg text-gray-800">Freelance</span>
         </div>
-        <div className="w-6" /> {/* Spacer */}
+        <div className="flex items-center gap-3">
+          <button className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.messages', 'Messages')}>
+            <MessageSquare className="h-5 w-5" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">0</span>
+          </button>
+        </div>
       </div>
 
       {/* Backdrop for Mobile */}
@@ -108,8 +115,14 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
                     return (
                       <li key={i} className="px-3">
                         <Link
-                          to={item.url}
-                          onClick={() => setIsMobileOpen(false)}
+                          to={item.url || '#'}
+                          onClick={(e) => {
+                            if (item.onClick) {
+                              e.preventDefault();
+                              item.onClick();
+                            }
+                            setIsMobileOpen(false);
+                          }}
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group
                             ${isExactActive 
                               ? 'bg-blue-600/10 text-blue-400' 
@@ -138,6 +151,21 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
               </div>
             ))}
           </div>
+
+          {/* Logout Button - Pinned to Bottom */}
+          {onLogout && (
+            <div className={`border-t border-slate-800 p-3 ${isCollapsed ? 'px-2' : 'px-4'}`}>
+              <button
+                onClick={onLogout}
+                className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 group ${isCollapsed ? 'justify-center' : ''}`}
+              >
+                <LogOut className="w-5 h-5 group-hover:text-red-400 transition-colors" />
+                {!isCollapsed && (
+                  <span className="font-medium text-sm">{t('navbar.logout', 'Déconnexion')}</span>
+                )}
+              </button>
+            </div>
+          )}
 
         </div>
       </aside>
