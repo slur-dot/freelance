@@ -108,6 +108,12 @@ export default function FreelancerDashboard() {
   const [withdrawProcessing, setWithdrawProcessing] = useState(false);
   const [plans, setPlans] = useState([]);
 
+  // Trainer / Course Upload State
+  const [isTrainer, setIsTrainer] = useState(false); // Mock value for now
+  const [requestedTrainer, setRequestedTrainer] = useState(false);
+  const [showCourseModal, setShowCourseModal] = useState(false);
+  const [courseForm, setCourseForm] = useState({ title: '', category: '', description: '', price: '', videoUrl: '' });
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
       setUser(u);
@@ -521,6 +527,47 @@ export default function FreelancerDashboard() {
         </div>
       </div>
 
+      {/* Trainer Hub */}
+      <div className="max-w-7xl mx-auto mt-6">
+        <h3 className="text-lg font-semibold mb-2">{t('freelancer_dashboard.trainer.title', 'Trainer Hub')}</h3>
+        <Card className="border-l-4 border-l-blue-500">
+          <CardContent className="p-6">
+            {!isTrainer ? (
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-xl font-bold">{t('freelancer_dashboard.trainer.become', 'Become a Trainer')}</h4>
+                  <p className="text-gray-600 mt-1 max-w-2xl">{t('freelancer_dashboard.trainer.desc', 'Share your expertise with the community. Apply to become a certified trainer and start uploading your courses.')}</p>
+                </div>
+                <Button 
+                  onClick={() => {
+                    setRequestedTrainer(true);
+                    alert(t('freelancer_dashboard.trainer.requested', 'Trainer request submitted successfully! We will review your profile.'));
+                  }} 
+                  className={requestedTrainer ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                  disabled={requestedTrainer}
+                >
+                  {requestedTrainer ? t('freelancer_dashboard.trainer.pending', 'Request Pending Review') : t('freelancer_dashboard.trainer.request_btn', 'Request Trainer Status')}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-xl font-bold text-blue-700">{t('freelancer_dashboard.trainer.welcome', 'Welcome, Trainer!')}</h4>
+                  <p className="text-gray-600 mt-1">{t('freelancer_dashboard.trainer.upload_desc', 'You have trainer privileges. Upload and manage your courses here.')}</p>
+                </div>
+                <Button 
+                  onClick={() => setShowCourseModal(true)} 
+                  className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30 flex items-center gap-2"
+                >
+                  <Upload className="w-4 h-4" />
+                  {t('freelancer_dashboard.trainer.upload_btn', 'Upload New Course')}
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Plans (from backend subscription) */}
       <div className="max-w-7xl mx-auto mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -773,6 +820,93 @@ export default function FreelancerDashboard() {
           </div>
         )
       }
+
+      {/* Course Upload Modal */}
+      {showCourseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+            <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between z-10">
+              <h3 className="text-xl font-bold text-gray-900">{t('freelancer_dashboard.trainer.upload_course_title', 'Upload New Course')}</h3>
+              <button onClick={() => setShowCourseModal(false)} className="text-gray-400 hover:text-gray-600 transition">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.course_title', 'Course Title')}</label>
+                  <input 
+                    type="text" 
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
+                    value={courseForm.title}
+                    onChange={(e) => setCourseForm({...courseForm, title: e.target.value})}
+                    placeholder="e.g. Advanced React Development"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.category', 'Category')}</label>
+                    <select 
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white"
+                      value={courseForm.category}
+                      onChange={(e) => setCourseForm({...courseForm, category: e.target.value})}
+                    >
+                      <option value="">Select a category</option>
+                      <option value="development">Web Development</option>
+                      <option value="design">Design & UI/UX</option>
+                      <option value="business">Business & Marketing</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.price', 'Price (GNF)')}</label>
+                    <input 
+                      type="number" 
+                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
+                      value={courseForm.price}
+                      onChange={(e) => setCourseForm({...courseForm, price: e.target.value})}
+                      placeholder="e.g. 500000"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.description', 'Course Description')}</label>
+                  <textarea 
+                    rows="4"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none" 
+                    value={courseForm.description}
+                    onChange={(e) => setCourseForm({...courseForm, description: e.target.value})}
+                    placeholder="Describe what students will learn..."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">{t('freelancer_dashboard.trainer.video', 'Upload Video')}</label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition cursor-pointer">
+                    <Upload className="w-8 h-8 mx-auto text-blue-500 mb-2" />
+                    <p className="text-sm font-medium text-gray-700">Click to upload or drag and drop</p>
+                    <p className="text-xs text-gray-500 mt-1">MP4, WebM up to 500MB</p>
+                    <input type="file" className="hidden" accept="video/*" id="video-upload" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
+              <Button variant="outline" onClick={() => setShowCourseModal(false)} className="px-6 border-gray-300 text-gray-700 hover:bg-gray-100">Cancel</Button>
+              <Button className="px-6 bg-blue-600 hover:bg-blue-700 text-white shadow-md" onClick={() => {
+                alert(t('freelancer_dashboard.trainer.upload_success', 'Course uploaded successfully!'));
+                setShowCourseModal(false);
+                setCourseForm({ title: '', category: '', description: '', price: '', videoUrl: '' });
+              }}>
+                {t('freelancer_dashboard.trainer.submit_course', 'Submit Course')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div >
   );
 }

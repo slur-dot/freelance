@@ -4,6 +4,8 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { Link } from "react-router-dom";
 import ShopAppleImage from "../../assets/ShopAppleImage.jpg";
 import IphoneImage from "../../assets/iphone.png";
 import MobileImage from "../../assets/mobile.jpg";
@@ -12,6 +14,7 @@ export default function IPhoneProductPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { currentUser } = useAuth();
 
   // Currency state
   const [currency, setCurrency] = useState("GNF");
@@ -226,58 +229,67 @@ export default function IPhoneProductPage() {
               </div>
 
               {/* Review Form */}
-              <form
-                onSubmit={handleReviewSubmit}
-                className="p-4 border rounded-lg space-y-3"
-              >
-                <h3 className="font-semibold">{t('shop.product.leave_review')}</h3>
-
-                {/* Name Input */}
-                <input
-                  type="text"
-                  value={reviewName}
-                  onChange={(e) => setReviewName(e.target.value)}
-                  placeholder={t('shop.product.enter_name')}
-                  className="w-full border rounded p-2 text-sm"
-                  required
-                />
-
-                {/* Rating */}
-                <div className="flex space-x-2">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <FaStar
-                      key={star}
-                      className={`cursor-pointer ${rating >= star ? "text-yellow-400" : "text-gray-300"
-                        }`}
-                      onClick={() => setRating(star)}
-                    />
-                  ))}
-                </div>
-
-                {/* Review Text */}
-                <textarea
-                  value={reviewText}
-                  onChange={(e) => setReviewText(e.target.value)}
-                  placeholder={t('shop.product.write_review')}
-                  className="w-full border rounded p-2 text-sm"
-                  required
-                />
-
-                {/* Image Upload */}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="text-sm"
-                />
-
-                <button
-                  type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              {currentUser ? (
+                <form
+                  onSubmit={handleReviewSubmit}
+                  className="p-4 border rounded-lg space-y-3"
                 >
-                  {t('shop.product.submit_review')}
-                </button>
-              </form>
+                  <h3 className="font-semibold">{t('shop.product.leave_review')}</h3>
+
+                  {/* Name Input */}
+                  <input
+                    type="text"
+                    value={reviewName}
+                    onChange={(e) => setReviewName(e.target.value)}
+                    placeholder={t('shop.product.enter_name')}
+                    className="w-full border rounded p-2 text-sm"
+                    required
+                  />
+
+                  {/* Rating */}
+                  <div className="flex space-x-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <FaStar
+                        key={star}
+                        className={`cursor-pointer ${rating >= star ? "text-yellow-400" : "text-gray-300"
+                          }`}
+                        onClick={() => setRating(star)}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Review Text */}
+                  <textarea
+                    value={reviewText}
+                    onChange={(e) => setReviewText(e.target.value)}
+                    placeholder={t('shop.product.write_review')}
+                    className="w-full border rounded p-2 text-sm"
+                    required
+                  />
+
+                  {/* Image Upload */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="text-sm"
+                  />
+
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                  >
+                    {t('shop.product.submit_review')}
+                  </button>
+                </form>
+              ) : (
+                <div className="p-6 border border-gray-200 bg-gray-50 rounded-lg text-center">
+                  <p className="text-gray-600 mb-3">{t('shop.product.login_to_review', 'Please log in to submit a review.')}</p>
+                  <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg inline-block font-medium shadow-sm transition">
+                    {t('nav.login', 'Log In')}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
 
