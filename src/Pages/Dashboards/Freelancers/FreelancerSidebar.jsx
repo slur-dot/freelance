@@ -20,6 +20,7 @@ import {
   Mail,
   Store,
   Handshake,
+  GraduationCap,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -83,6 +84,12 @@ export default function FreelancerSidebar() {
       items: [
         { title: t('sidebar.my_jobs', 'My Projects / Services'), url: "/freelancer/dashboard/work-management", icon: Briefcase },
         { title: t('sidebar.earnings', 'Earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
+      ],
+    },
+    {
+      section: t('sidebar.training', 'Training'),
+      items: [
+        { title: t('sidebar.trainer_hub', 'Become a Trainer'), url: "/freelancer/dashboard", icon: GraduationCap },
       ],
     },
     {

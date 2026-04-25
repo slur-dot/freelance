@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaSearch, FaBars, FaTimes, FaShoppingCart } from "react-icons/fa";
 import { HiChevronDown } from "react-icons/hi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, LayoutDashboard, LogOut, MessageSquare } from "lucide-react";
+import { Eye, EyeOff, LayoutDashboard, LogOut, MessageSquare, Bell } from "lucide-react";
 import userAvatar from "../assets/UserPic.jpg";
 import { useTranslation } from "react-i18next";
 
@@ -174,16 +174,28 @@ export default function Navbar() {
               <button onClick={() => changeLanguage('fr')} className={`text-xs xl:text-sm font-medium ${i18n.language === 'fr' ? 'text-blue-600' : 'text-gray-700'}`}>FR</button>
             </div>
             {currentUser && (
-              <button
-                onClick={() => navigate(getDashboardRoute())}
-                className="relative ml-2 xl:ml-3 flex items-center text-gray-600 hover:text-blue-600 transition-colors"
-                title={t('navbar.messages', 'Messages')}
-              >
-                <MessageSquare className="w-5 h-5" />
-                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
-                  0
-                </span>
-              </button>
+              <>
+                <button
+                  onClick={() => navigate(getDashboardRoute())}
+                  className="relative ml-2 xl:ml-3 flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+                  title={t('navbar.notifications', 'Notifications')}
+                >
+                  <Bell className="w-5 h-5" />
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                    0
+                  </span>
+                </button>
+                <button
+                  onClick={() => navigate(getDashboardRoute())}
+                  className="relative ml-2 xl:ml-3 flex items-center text-gray-600 hover:text-blue-600 transition-colors"
+                  title={t('navbar.messages', 'Messages')}
+                >
+                  <MessageSquare className="w-5 h-5" />
+                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                    0
+                  </span>
+                </button>
+              </>
             )}
             <Link to="/shop/cart" className="relative ml-2 xl:ml-3 flex items-center">
               <FaShoppingCart className="text-black text-[18px] cursor-pointer" />

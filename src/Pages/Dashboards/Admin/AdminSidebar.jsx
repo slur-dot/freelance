@@ -27,6 +27,8 @@ import {
   Mail,
   Store,
   Handshake,
+  PlusCircle,
+  Info,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import DashboardLayout from "../../../components/DashboardLayout";
@@ -47,6 +49,7 @@ export default function AdminSidebar() {
       section: t('admin_dashboard.sidebar.listings.title'),
       items: [
         { title: t('admin_dashboard.sidebar.listings.course'), url: "/admin/dashboard/course-listing", icon: BookOpen },
+        { title: t('admin_dashboard.sidebar.listings.add_course', 'Add Course'), url: "/admin/dashboard/course-form", icon: PlusCircle },
         { title: t('admin_dashboard.sidebar.listings.product'), url: "/admin/dashboard/product-listing", icon: ShoppingCart },
         { title: t('admin_dashboard.sidebar.listings.tickets'), url: "/admin/dashboard/ticket-listing", icon: Ticket },
       ],
@@ -87,6 +90,7 @@ export default function AdminSidebar() {
         { title: t('navbar.contact_us', 'Contact Us'), url: "/contact", icon: Mail },
         { title: t('navbar.vendor_profiles', 'Vendor Profiles'), url: "/vendor-profiles", icon: Store },
         { title: t('navbar.partnership', 'Partnership'), url: "/partnership", icon: Handshake },
+        { title: t('navbar.about_us', 'About Us'), url: "/company-history", icon: Info },
       ],
     },
   ];

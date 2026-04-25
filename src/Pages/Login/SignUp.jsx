@@ -197,8 +197,8 @@ export default function SignUp() {
                 countryCode={countryCode}
                 onCountryCodeChange={setCountryCode}
                 className="overflow-hidden rounded-full border border-green-600 focus-within:ring-2 focus-within:ring-green-500"
-                selectClassName="bg-transparent border-none pr-2 py-2"
-                inputClassName="bg-transparent border-none py-2 px-2"
+                selectClassName="bg-gray-50 border-none border-r border-green-300 pr-2 py-2"
+                inputClassName="bg-white border-none py-2 px-2"
                 required
               />
             </div>

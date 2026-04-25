@@ -193,6 +193,7 @@ function AppContent() {
             <Route path="Hired-Freelancers" element={<HiredFreelancers />} />
             <Route path="Project-List" element={<ProjectList />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<ClientProfile />} />
           </Route>
 
@@ -218,6 +219,7 @@ function AppContent() {
             <Route path="orders" element={<Orders />}></Route>
             <Route path="payouts" element={<Payouts />}></Route>
             <Route path="ads" element={<AdsManagement />}></Route>
+            <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<VendorProfile />}></Route>
           </Route>
 
@@ -230,6 +232,7 @@ function AppContent() {
             <Route path="ads" element={<SellerAds />}></Route>
             <Route path="notifications" element={<SellerNotifications />}></Route>
             <Route path="settings" element={<SellerSettings />}></Route>
+            <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<SellerProfile />}></Route>
           </Route>
 

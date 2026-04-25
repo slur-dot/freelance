@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { User, Home, ShoppingCart, Users, MapPin, Wrench, Monitor, BookOpen, Briefcase, HelpCircle, FileText, Mail, Store, Handshake } from "lucide-react";
+import { User, Home, ShoppingCart, Users, MapPin, Wrench, Monitor, BookOpen, Briefcase, HelpCircle, FileText, Mail, Store, Handshake, Share2 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
 import { VendorService } from "../../../services/vendorService";
@@ -100,6 +100,11 @@ export default function VendorSidebar() {
           title: t('navbar.profile'),
           url: "/vendor/dashboard/profile",
           icon: <User className="h-5 w-5 text-gray-400" />,
+        },
+        {
+          title: t('sidebar.referral', 'Referral Program'),
+          url: "/vendor/dashboard/referrals",
+          icon: <Share2 className="h-5 w-5 text-gray-400" />,
         },
       ],
     },

@@ -10,6 +10,8 @@ export default function Courseform({ onContinue }) {
     name: "",
     description: "",
     price: "",
+    videoUrl: "",
+    videoFile: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -135,6 +137,46 @@ export default function Courseform({ onContinue }) {
                 required
               />
               <span className="text-sm font-medium text-gray-700">GNF</span>
+            </div>
+          </div>
+
+          {/* Video URL */}
+          <div className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4">
+            <label htmlFor="videoUrl" className="font-medium text-sm sm:text-base">
+              {t('admin_dashboard.listings.course.form_page.labels.video_url', 'Video URL')}
+            </label>
+            <input
+              id="videoUrl"
+              type="url"
+              placeholder={t('admin_dashboard.listings.course.form_page.placeholders.video_url', 'https://youtube.com/watch?v=...')}
+              value={formData.videoUrl}
+              onChange={(e) => handleInputChange("videoUrl", e.target.value)}
+              className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Video File Upload */}
+          <div className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4">
+            <label htmlFor="videoFile" className="font-medium text-sm sm:text-base">
+              {t('admin_dashboard.listings.course.form_page.labels.video_file', 'Upload Video')}
+            </label>
+            <div className="w-full">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:bg-gray-50 transition cursor-pointer">
+                <input
+                  type="file"
+                  id="videoFile"
+                  accept="video/*"
+                  onChange={(e) => handleInputChange("videoFile", e.target.files[0])}
+                  className="hidden"
+                />
+                <label htmlFor="videoFile" className="cursor-pointer">
+                  <p className="text-sm font-medium text-gray-700">{t('admin_dashboard.listings.course.form_page.placeholders.video_upload', 'Click to upload or drag and drop')}</p>
+                  <p className="text-xs text-gray-500 mt-1">MP4, WebM up to 500MB</p>
+                  {formData.videoFile && (
+                    <p className="text-xs text-green-600 mt-2 font-medium">✓ {formData.videoFile.name}</p>
+                  )}
+                </label>
+              </div>
             </div>
           </div>
 

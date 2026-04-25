@@ -20,6 +20,7 @@ import {
   Mail,
   Store,
   Handshake,
+  GraduationCap,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
@@ -90,6 +91,12 @@ export default function CompanySidebar() {
           url: "/company/dashboard/issues",
           icon: HelpCircle,
         },
+      ],
+    },
+    {
+      section: t('sidebar.training', 'Training'),
+      items: [
+        { title: t('sidebar.trainer_hub', 'Become a Trainer'), url: "/company/dashboard", icon: GraduationCap },
       ],
     },
     {

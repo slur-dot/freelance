@@ -22,6 +22,7 @@ import {
   Mail,
   Store,
   Handshake,
+  Share2,
 } from "lucide-react";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -112,6 +113,7 @@ export default function SellerSidebar() {
       items: [
         { title: t('sidebar.settings'), url: "/seller/dashboard/settings", icon: Settings },
         { title: t('navbar.profile'), url: "/seller/dashboard/profile", icon: User },
+        { title: t('sidebar.referral', 'Referral Program'), url: "/seller/dashboard/referrals", icon: Share2 },
       ],
     },
     {

@@ -63,6 +63,7 @@ export default function ClientSidebar() {
       section: t('sidebar.settings', 'Settings'),
       items: [
         { title: t('navbar.profile'), url: "/Clients/dashboard/profile", icon: User },
+        { title: t('sidebar.referral', 'Referral Program'), url: "/Clients/dashboard/referrals", icon: Share2 },
       ],
     },
     {

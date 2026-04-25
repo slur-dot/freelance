@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { Menu, X, LogOut, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
+import { Menu, X, LogOut, ChevronLeft, ChevronRight, MessageSquare, Bell } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +24,10 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
           <span className="font-bold text-lg text-gray-800">Freelance</span>
         </div>
         <div className="flex items-center gap-3">
+          <button className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.notifications', 'Notifications')}>
+            <Bell className="h-5 w-5" />
+            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">0</span>
+          </button>
           <button className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.messages', 'Messages')}>
             <MessageSquare className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">0</span>
