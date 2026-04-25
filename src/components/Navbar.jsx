@@ -111,6 +111,7 @@ export default function Navbar() {
                   <Link to="/locations" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.locations')}</Link>
                   <Link to="/tech-services" className="block xl:hidden px-4 py-2 hover:bg-gray-100">{t('navbar.tech_services')}</Link>
                   <Link to="/training-modules" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.training_upskilling')}</Link>
+                  <Link to="/company-history" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.about_us', 'About Us')}</Link>
                   <Link to="/faq" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.faq')}</Link>
                 <Link to="/blog" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.blog')}</Link>
                 <Link to="/contact" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.contact_us')}</Link>
@@ -293,6 +294,10 @@ export default function Navbar() {
 
                       <Link to="/corporate-sales" className="block hover:text-blue-600">
                         {t("navbar.corporate_sales")}
+                      </Link>
+
+                      <Link to="/company-history" className="block hover:text-blue-600">
+                        {t("navbar.about_us", "About Us")}
                       </Link>
 
                       <Link to="/faq" className="block hover:text-blue-600">

@@ -92,7 +92,7 @@ const Footer = () => {
             <h4 className="text-white font-semibold mb-4 text-base">{t('footer.company')}</h4>
             <ul className="space-y-3">
               {[
-                { label: t('footer.about_freelance'), href: "/about-freelance" },
+                { label: t('footer.about_freelance'), href: "/company-history" },
                 { label: t('footer.contact_support'), href: "/contact" },
                 { label: t('footer.faqs', 'FAQs'), href: "/faq" },
                 { label: t('footer.privacy_policy'), href: "/privacy-policy" },
