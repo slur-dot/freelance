@@ -8,6 +8,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserService } from "../../../services/userService";
 import { ProductService } from "../../../services/productService";
 import { OrderService } from "../../../services/orderService";
+import PhoneInput from "../../../components/PhoneInput";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -56,6 +57,8 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
     website: sellerData?.socialLinks?.website || '',
     paymentNumber: sellerData?.paymentMethod?.number || ''
   });
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+224");
+  const [paymentCountryCode, setPaymentCountryCode] = useState("+224");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -158,24 +161,24 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.phone')}</label>
-              <input
-                type="tel"
-                name="phone"
+              <PhoneInput
                 value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
+                countryCode={phoneCountryCode}
+                onCountryCodeChange={setPhoneCountryCode}
+                className="rounded-md"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.payment_number')}</label>
-              <input
-                type="tel"
-                name="paymentNumber"
+              <PhoneInput
                 value={formData.paymentNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
+                countryCode={paymentCountryCode}
+                onCountryCodeChange={setPaymentCountryCode}
+                className="rounded-md"
                 required
               />
             </div>

@@ -5,6 +5,7 @@ import AlexandraImg from "../../../assets/Alexandra.png";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
 import CompanyStatsDashboard from "../../../components/CompanyStatsDashboard";
 import ProfileCard from "./components/ProfileCard";
+import PhoneInput from "../../../components/PhoneInput";
 import { storage, auth } from "../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
@@ -69,6 +70,8 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
     website: companyData?.socialLinks?.website || '',
     paymentNumber: companyData?.paymentMethod?.number || ''
   });
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+224");
+  const [paymentCountryCode, setPaymentCountryCode] = useState("+224");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -171,24 +174,24 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-              <input
-                type="tel"
-                name="phone"
+              <PhoneInput
                 value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
+                countryCode={phoneCountryCode}
+                onCountryCodeChange={setPhoneCountryCode}
+                className="rounded-md"
                 required
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Payment Number</label>
-              <input
-                type="tel"
-                name="paymentNumber"
+              <PhoneInput
                 value={formData.paymentNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
+                countryCode={paymentCountryCode}
+                onCountryCodeChange={setPaymentCountryCode}
+                className="rounded-md"
                 required
               />
             </div>
