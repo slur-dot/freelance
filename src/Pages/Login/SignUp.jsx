@@ -190,15 +190,15 @@ export default function SignUp() {
             </div>
 
             {/* Phone Number with Country Code */}
-            <div className="relative">
+            <div className="relative" style={{ zIndex: 20 }}>
               <PhoneInput
                 value={phone}
                 onChange={setPhone}
                 countryCode={countryCode}
                 onCountryCodeChange={setCountryCode}
-                className="overflow-hidden rounded-full border border-green-600 focus-within:ring-2 focus-within:ring-green-500"
-                selectClassName="bg-gray-50 border-none border-r border-green-300 pr-2 py-2"
-                inputClassName="bg-white border-none py-2 px-2"
+                className="rounded-full border border-green-600 focus-within:ring-2 focus-within:ring-green-500"
+                selectClassName="bg-gray-50 border-none border-r border-green-300 pr-2 py-2 rounded-l-full"
+                inputClassName="bg-white border-none py-2 px-2 rounded-r-full"
                 required
               />
             </div>
