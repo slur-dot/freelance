@@ -68,7 +68,7 @@ export default function PhoneInput({
     };
 
     return (
-        <div className={`flex items-stretch w-full relative ${className}`} ref={dropdownRef}>
+        <div className={`react-tel-input flex items-stretch w-full relative ${className}`} ref={dropdownRef}>
             {/* Country selector button */}
             <button
                 type="button"
