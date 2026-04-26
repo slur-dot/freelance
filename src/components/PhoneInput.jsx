@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import { countryData as countryCodes } from "../utils/countryData";
 
@@ -15,57 +15,44 @@ export default function PhoneInput({
     selectClassName = "",
     inputClassName = ""
 }) {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
     const selectedCountry = countryCodes.find(c => c.code === countryCode) || countryCodes[0];
     const activePlaceholder = placeholder || selectedCountry.placeholder;
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setIsDropdownOpen(false);
+                setSearchTerm("");
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const filteredCountries = countryCodes.filter(c =>
+        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.iso.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.code.includes(searchTerm)
+    );
+
+    const sanitizePhoneDigits = (val) => {
+        return val.replace(/[^\d]/g, '');
+    };
+
     const formatPhoneNumber = (val, code) => {
-        const digits = val.replace(/\D/g, '');
+        const digits = sanitizePhoneDigits(val);
         if (!digits) return '';
 
-        // Limit to max digits for the selected country
         const country = countryCodes.find(c => c.code === code) || countryCodes[0];
         const trimmedDigits = digits.substring(0, country.digits);
 
-        if (code === '+225' || code === '+33' || code === '+212' || code === '+213') {
-            // 10 digits (CI) or 9 digits (FR/MA/DZ): XX XX XX XX XX or X XX XX XX XX
-            return trimmedDigits.match(/.{1,2}/g)?.join(' ') || '';
-        } else if (code === '+221' || code === '+224') {
-            // 9 digits: XX XXX XX XX or XXX XX XX XX
-            if (code === '+221') {
-                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,2})(\d{0,2})$/);
-                if (match) {
-                    return [match[1], match[2], match[3], match[4]].filter(Boolean).join(' ');
-                }
-            } else {
-                const match = trimmedDigits.match(/^(\d{0,3})(\d{0,2})(\d{0,2})(\d{0,2})$/);
-                if (match) {
-                    return [match[1], match[2], match[3], match[4]].filter(Boolean).join(' ');
-                }
-            }
-        } else if (code === '+233' || code === '+1' || code === '+234' || code === '+44') {
-            // Generic pattern
-            if (code === '+233') {
-                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,4})$/);
-                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
-            } else if (code === '+1' || code === '+234') {
-                const match = trimmedDigits.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
-            } else if (code === '+44') {
-                const match = trimmedDigits.match(/^(\d{0,4})(\d{0,6})$/);
-                if (match) return [match[1], match[2]].filter(Boolean).join(' ');
-            }
-        } else if (code === '+216' || code === '+223') {
-            // Tunisia (8 digits): XX XXX XXX
-            // Mali (8 digits): XX XX XX XX
-            if (code === '+216') {
-                const match = trimmedDigits.match(/^(\d{0,2})(\d{0,3})(\d{0,3})$/);
-                if (match) return [match[1], match[2], match[3]].filter(Boolean).join(' ');
-            } else {
-                return trimmedDigits.match(/.{1,2}/g)?.join(' ') || '';
-            }
-        }
-        
-        return trimmedDigits;
+        // Generic grouping: XX XX XX XX XX (pairs)
+        return trimmedDigits.match(/.{1,2}/g)?.join(' ') || '';
     };
 
     const handleInputChange = (e) => {
@@ -73,39 +60,79 @@ export default function PhoneInput({
         onChange(formatted);
     };
 
-    const handleCountryChange = (e) => {
-        const newCode = e.target.value;
+    const handleCountrySelect = (code) => {
         if (onCountryCodeChange) {
-            onCountryCodeChange(newCode);
+            onCountryCodeChange(code);
         }
-        
-        // Clean existing value and re-format for new country rules
-        const currentDigits = value.replace(/\D/g, '');
-        onChange(formatPhoneNumber(currentDigits, newCode));
+        const currentDigits = sanitizePhoneDigits(value);
+        onChange(formatPhoneNumber(currentDigits, code));
+        setIsDropdownOpen(false);
+        setSearchTerm("");
     };
 
     return (
-        <div className={`flex items-stretch w-full ${className}`}>
-            <select
-                value={countryCode}
-                onChange={handleCountryChange}
-                className={`${selectClassName || "rounded-l-md border-y border-l border-gray-300 bg-gray-100"} px-3 text-sm focus:outline-none flex-shrink-0 min-w-[120px] ${error ? "border-red-500 text-red-500" : "text-gray-700"
-                    }`}
+        <div className={`flex items-stretch w-full relative ${className}`} ref={dropdownRef}>
+            {/* Country selector button */}
+            <button
+                type="button"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className={`${selectClassName || "rounded-l-md border-y border-l border-gray-300 bg-gray-100"} px-3 text-sm focus:outline-none flex-shrink-0 flex items-center gap-1 min-w-[110px] ${error ? "border-red-500 text-red-500" : "text-gray-700"}`}
             >
-                {countryCodes.map((country) => (
-                    <option key={country.code} value={country.code}>
-                        {country.flag} {country.iso} {country.code}
-                    </option>
-                ))}
-            </select>
+                <span>{selectedCountry.flag}</span>
+                <span>{selectedCountry.iso}</span>
+                <span>{selectedCountry.code}</span>
+                <svg className="w-3 h-3 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            {/* Dropdown */}
+            {isDropdownOpen && (
+                <div className="absolute top-full left-0 z-50 bg-white border border-gray-200 rounded-lg shadow-xl w-72 max-h-64 overflow-hidden mt-1"
+                    style={{ minWidth: '280px' }}
+                >
+                    {/* Search input */}
+                    <div className="p-2 border-b border-gray-100 sticky top-0 bg-white">
+                        <input
+                            type="text"
+                            placeholder="Search country..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                            autoFocus
+                        />
+                    </div>
+                    {/* Country list */}
+                    <div className="overflow-y-auto max-h-48">
+                        {filteredCountries.map((country) => (
+                            <button
+                                key={`${country.iso}-${country.code}`}
+                                type="button"
+                                onClick={() => handleCountrySelect(country.code)}
+                                className={`w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-green-50 transition-colors text-left ${
+                                    country.code === countryCode ? 'bg-green-50 font-medium text-green-700' : 'text-gray-700'
+                                }`}
+                            >
+                                <span className="text-lg">{country.flag}</span>
+                                <span className="flex-1 truncate">{country.name}</span>
+                                <span className="text-gray-400 text-xs">{country.code}</span>
+                            </button>
+                        ))}
+                        {filteredCountries.length === 0 && (
+                            <div className="px-3 py-4 text-sm text-gray-400 text-center">No countries found</div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Phone number input */}
             <input
                 id={id}
                 type="tel"
                 placeholder={activePlaceholder}
                 value={value}
                 onChange={handleInputChange}
-                className={`w-full ${inputClassName || "rounded-r-md border border-gray-300 bg-gray-100"} px-4 text-sm focus:outline-none ${error ? "border-red-500" : ""
-                    }`}
+                className={`w-full ${inputClassName || "rounded-r-md border border-gray-300 bg-gray-100"} px-4 text-sm focus:outline-none ${error ? "border-red-500" : ""}`}
                 required={required}
             />
         </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Info, Upload, Star, Edit, Lock, Trash2, Eye, EyeOff } from "lucide-react";
+import PhoneInput from "../../../components/PhoneInput";
 import AlexandraImg from "../../../assets/Alexandra.png";
 import DefaultAvatarImg from "../../../assets/profile-image.jpg";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
@@ -204,6 +205,8 @@ function EditProfileModal({ vendorData, onClose, onUpdate }) {
     website: vendorData?.socialLinks?.website || '',
     paymentNumber: vendorData?.paymentMethod?.number || ''
   });
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+224");
+  const [paymentCountryCode, setPaymentCountryCode] = useState("+224");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
@@ -276,12 +279,26 @@ function EditProfileModal({ vendorData, onClose, onUpdate }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.phone')}</label>
-              <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
+              <PhoneInput
+                value={formData.phone}
+                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
+                countryCode={phoneCountryCode}
+                onCountryCodeChange={setPhoneCountryCode}
+                className="rounded-md"
+                required
+              />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.payment_number')}</label>
-              <input type="tel" name="paymentNumber" value={formData.paymentNumber} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
+              <PhoneInput
+                value={formData.paymentNumber}
+                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
+                countryCode={paymentCountryCode}
+                onCountryCodeChange={setPaymentCountryCode}
+                className="rounded-md"
+                required
+              />
             </div>
           </div>
 

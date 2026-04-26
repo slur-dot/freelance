@@ -116,3 +116,23 @@ export const validateFile = (file, options = {}) => {
   
   return { valid: true, error: null };
 };
+
+/**
+ * Sanitizes a phone number by stripping non-digit chars and prepending country code.
+ * @param {string} phone - The raw phone number (may contain spaces/dashes)
+ * @param {string} countryCode - The country code (e.g. "+224")
+ * @returns {string} Sanitized phone number in international format (e.g. "+224621234567")
+ */
+export const sanitizePhoneNumber = (phone, countryCode = "+224") => {
+  if (!phone || typeof phone !== 'string') return '';
+  
+  // Strip everything except digits
+  const digits = phone.replace(/[^\d]/g, '');
+  
+  if (!digits) return '';
+  
+  // Ensure country code is properly formatted
+  const cleanCode = countryCode.startsWith('+') ? countryCode : `+${countryCode}`;
+  
+  return `${cleanCode}${digits}`;
+};
