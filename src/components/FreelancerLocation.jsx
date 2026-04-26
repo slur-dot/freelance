@@ -489,7 +489,7 @@ export default function FreelancerLocation({ activeTab = "freelancers" }) {
     <section className="bg-gray-50 py-6 px-3 sm:px-6 lg:px-8 overflow-x-auto">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Left Column */}
-        <div className="space-y-8">
+        <div className="space-y-8 order-2 md:order-1">
           {/* Stats Card */}
           <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-3 mb-3">
@@ -645,7 +645,7 @@ export default function FreelancerLocation({ activeTab = "freelancers" }) {
         </div>
 
         {/* Right Column: Leaflet Map */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 order-1 md:order-2">
           <div className="relative w-full h-[200px] md:h-[300px] lg:h-[470px] rounded-lg overflow-hidden shadow-md bg-gray-200">
             <MapContainer
               center={[9.9456, -9.6966]}
