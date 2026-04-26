@@ -266,6 +266,7 @@ export default function ShippingDetailsPage() {
         <div className="lg:col-span-2 grid gap-8">
           {/* Shipping Method */}
           {!hasFreelanceItem && (
+          <>
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
             <h2 className="text-xl font-semibold mb-4 text-gray-900">{t('shipping.method_title')}</h2>
 
@@ -446,6 +447,7 @@ export default function ShippingDetailsPage() {
               )}
             </div>
           </div>
+          </>
           )}
 
           {/* Payment Method */}
