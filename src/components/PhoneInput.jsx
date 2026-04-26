@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { countryData as countryCodes } from "../utils/countryData";
+import 'react-phone-input-2/lib/style.css';
 
 export default function PhoneInput({
     value,
@@ -74,7 +75,9 @@ export default function PhoneInput({
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className={`${selectClassName || "rounded-l-md border-y border-l border-gray-300 bg-gray-100"} px-3 py-2 text-sm focus:outline-none flex-shrink-0 flex items-center gap-1.5 ${error ? "border-red-500 text-red-500" : "text-gray-700"}`}
             >
-                <span className="text-base leading-none">{selectedCountry.flag}</span>
+                <div className="flex items-center justify-center w-5 h-4 overflow-hidden rounded-[2px]">
+                    <div className={`flag ${selectedCountry.iso.toLowerCase()}`} style={{ transform: 'scale(1.2)', transformOrigin: 'center' }} />
+                </div>
                 <span className="font-medium">{selectedCountry.code}</span>
                 <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -116,7 +119,9 @@ export default function PhoneInput({
                                         : 'text-gray-700'
                                 }`}
                             >
-                                <span className="text-lg leading-none w-6 text-center">{country.flag}</span>
+                                <div className="flex items-center justify-center w-6 h-4 overflow-hidden rounded-[2px] flex-shrink-0">
+                                    <div className={`flag ${country.iso.toLowerCase()}`} style={{ transform: 'scale(1.2)', transformOrigin: 'center' }} />
+                                </div>
                                 <span className="flex-1 truncate">{country.name}</span>
                                 <span className="text-gray-400 text-xs font-mono">{country.code}</span>
                             </button>
