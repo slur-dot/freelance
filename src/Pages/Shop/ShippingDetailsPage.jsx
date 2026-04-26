@@ -77,6 +77,15 @@ export default function ShippingDetailsPage() {
 
   const { cartItems, subtotal, clearCart } = useCart();
   const { currentUser } = useAuth();
+  
+  const hasFreelanceItem = cartItems.some(item => item.isFreelance);
+
+  useEffect(() => {
+    if (hasFreelanceItem && selectedPaymentMethod !== 'djomy') {
+      setSelectedPaymentMethod('djomy');
+      setShowPaymentForm(true);
+    }
+  }, [hasFreelanceItem, selectedPaymentMethod]);
 
   // Fetch Vendors
   useEffect(() => {
@@ -256,6 +265,7 @@ export default function ShippingDetailsPage() {
         {/* Left Column */}
         <div className="lg:col-span-2 grid gap-8">
           {/* Shipping Method */}
+          {!hasFreelanceItem && (
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
             <h2 className="text-xl font-semibold mb-4 text-gray-900">{t('shipping.method_title')}</h2>
 
@@ -436,6 +446,7 @@ export default function ShippingDetailsPage() {
               )}
             </div>
           </div>
+          )}
 
           {/* Payment Method */}
           <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
@@ -496,7 +507,7 @@ export default function ShippingDetailsPage() {
                   desc: t('shipping.cod_desc'),
                   icon: CashOnDelivery,
                 },
-              ].map((method) => (
+              ].filter(method => hasFreelanceItem ? method.id === 'djomy' : true).map((method) => (
                 <label
                   key={method.id}
                   className="flex flex-col sm:flex-row sm:justify-between sm:items-center border rounded-lg p-4 cursor-pointer transition-colors bg-white hover:border-blue-500 hover:bg-gray-50"

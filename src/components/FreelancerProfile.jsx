@@ -172,7 +172,8 @@ function FreelancerCard({ freelancer }) {
       name: `Hire ${freelancer.name} - ${freelancer.category}`,
       currentPrice: price,
       image: freelancer.image,
-      vendor: freelancer.company || "Freelancer"
+      vendor: freelancer.company || "Freelancer",
+      isFreelance: true
     };
     clearCart();
     addToCart(item);

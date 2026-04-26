@@ -380,7 +380,8 @@ export default function JobPostForm() {
                         name: "Hire Emily Lewis",
                         currentPrice: 150000,
                         image: EmilyImage,
-                        vendor: "Independent Freelancer"
+                        vendor: "Independent Freelancer",
+                        isFreelance: true
                     };
                     clearCart();
                     addToCart(item);
