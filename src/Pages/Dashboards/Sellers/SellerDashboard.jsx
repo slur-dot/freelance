@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2, ExternalLink, TrendingUp, Package, DollarSign, Users } from "lucide-react";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
 import { storage, auth } from "../../../firebaseConfig";
@@ -645,9 +645,22 @@ export default function SellerDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
+      {/* Quick Management Hub - New Prominent Section */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+           <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-3xl font-bold">{t('freelancer_dashboard.welcome', 'Welcome back,')} {selectedSeller?.name || user?.displayName || "Seller"}!</h2>
+              <p className="text-blue-100 font-medium">{t('seller_dashboard.hub_desc', 'Manage your products and track your sales from your centralized vendor hub.')}</p>
+           </div>
+           <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/seller/dashboard/listings" className="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-blue-50 transition-all active:scale-95 whitespace-nowrap">
+                 {t('seller_dashboard.go_to_hub', 'Manage Listings')}
+              </Link>
+           </div>
+        </div>
+      </div>
+
       <div className="mb-6 max-w-7xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2">{t('seller_dashboard.title')}</h1>
-        <p className="text-gray-600">{t('seller_dashboard.welcome', { name: selectedSeller?.name || "Seller" })}</p>
         {error && (
           <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-md p-2">
             <p className="text-yellow-700 text-sm">

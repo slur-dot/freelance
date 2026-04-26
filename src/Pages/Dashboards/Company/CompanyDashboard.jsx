@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2, ExternalLink } from "lucide-react";
 import AlexandraImg from "../../../assets/Alexandra.png";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
@@ -786,9 +786,21 @@ export default function CompanyDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-8">
+      {/* Quick Management Hub - New Prominent Section */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+           <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-3xl font-bold">Welcome back, {selectedCompany?.name || 'Fatoumata SARL'}!</h2>
+              <p className="text-blue-100 font-medium">Manage your contracts, job postings, and company profile from your centralized business hub.</p>
+           </div>
+           <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/company/dashboard/contracts" className="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-blue-50 transition-all active:scale-95 whitespace-nowrap">
+                 Manage Contracts
+              </Link>
+           </div>
+        </div>
+      </div>
       <div className="mb-6 max-w-7xl mx-auto">
-        <h1 className="text-2xl md:text-3xl font-bold mb-2">Company Dashboard</h1>
-        <p className="text-gray-600">Fatoumata SARL - Trader in Matam</p>
         {error && (
           <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-md p-2">
             <p className="text-yellow-700 text-sm">

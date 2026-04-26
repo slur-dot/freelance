@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Info, Upload, Star, Edit, MapPin, Phone, ShoppingBag, TrendingUp, Bell, Globe, Shield, Users, Package, MessageCircle } from "lucide-react";
 import AlexandraImg from "../../../assets/Alexandra.png";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
@@ -493,7 +493,20 @@ export default function ClientDashbaord() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6 max-w-7xl mx-auto">{t('sidebar.dashboard')}</h1>
+      {/* Quick Management Hub - New Prominent Section */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8 animate-in fade-in slide-in-from-top-4 duration-700">
+           <div className="space-y-2 text-center md:text-left">
+              <h2 className="text-3xl font-bold">{t('freelancer_dashboard.welcome', 'Welcome back,')} {profile?.name || profile?.fullName || user?.displayName || 'Client'}!</h2>
+              <p className="text-blue-100 font-medium">{t('client_dashboard.hub_desc', 'Manage your purchases, hire freelancers, and track your global progress from your centralized client hub.')}</p>
+           </div>
+           <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/Clients/dashboard/Project-List" className="bg-white text-blue-600 px-8 py-3 rounded-2xl font-bold shadow-lg hover:bg-blue-50 transition-all active:scale-95 whitespace-nowrap">
+                 {t('client_dashboard.go_to_hub', 'View Purchases')}
+              </Link>
+           </div>
+        </div>
+      </div>
 
       <div className="max-w-7xl mx-auto">
         {/* Profile Card */}
