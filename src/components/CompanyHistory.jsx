@@ -57,7 +57,7 @@ export default function CompanyHistory() {
     );
     document.querySelectorAll(".ch-anim").forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [activeTab]);
 
   return (
     <>
