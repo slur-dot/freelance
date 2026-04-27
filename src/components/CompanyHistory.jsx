@@ -70,6 +70,7 @@ export default function CompanyHistory() {
 
         /* HERO */
         .ch-hero{background:linear-gradient(135deg,#1E3A8A 0%,#1E40AF 40%,#2563EB 100%);padding:4rem 2rem 3.5rem;position:relative;overflow:hidden}
+        @media(max-width:640px){.ch-hero{padding:3rem 1.25rem 2.5rem}}
         .ch-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
         .ch-arc{position:absolute;right:-80px;top:-80px;width:400px;height:400px;border-radius:50%;border:1px solid rgba(255,255,255,.07);pointer-events:none}
         .ch-arc::before,.ch-arc::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.04)}
@@ -92,6 +93,10 @@ export default function CompanyHistory() {
 
         /* CONNEXION BAND */
         .ch-cxband{background:#1D4ED8;padding:1rem 2rem;display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap}
+        @media(max-width:640px){
+          .ch-cxband{flex-direction:column;gap:1rem;text-align:center;padding:1.5rem}
+          .ch-cxarrow{transform:rotate(90deg);margin:-4px 0}
+        }
         .ch-cxi{display:flex;align-items:center;gap:8px}
         .ch-cxarrow{color:rgba(255,255,255,.35);font-size:16px}
         .ch-cxtxt{font-size:13px;color:rgba(255,255,255,.78);font-weight:400}
@@ -99,22 +104,26 @@ export default function CompanyHistory() {
 
         /* STATS */
         .ch-stats{display:grid;grid-template-columns:repeat(4,1fr)}
-        @media(max-width:640px){.ch-stats{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:768px){.ch-stats{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:480px){.ch-stats{grid-template-columns:1fr}}
         .ch-st{background:#fff;border-bottom:1px solid #E5E7EB;padding:1.25rem 1.5rem}
-        .ch-st+.ch-st{border-left:1px solid #E5E7EB}
+        @media(min-width:769px){.ch-st+.ch-st{border-left:1px solid #E5E7EB}}
         .ch-slbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#6B7280;margin-bottom:6px}
         .ch-sval{font-size:1.4rem;font-weight:700;color:#111827;margin-bottom:3px}
 
         /* TABS */
-        .ch-tabs{background:#fff;border-bottom:1px solid #E5E7EB;display:flex;padding:0 2rem;overflow-x:auto}
+        .ch-tabs{background:#fff;border-bottom:1px solid #E5E7EB;display:flex;padding:0 2rem;overflow-x:auto;-webkit-overflow-scrolling:touch}
+        @media(max-width:640px){.ch-tabs{padding:0 1rem}}
         .ch-tab{padding:1rem 1.25rem;font-size:14px;font-weight:500;color:#6B7280;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;background:none;font-family:inherit;transition:color .15s,border-color .15s}
         .ch-tab.on{color:#2563EB;border-bottom-color:#2563EB}
 
         /* CONTENT */
         .ch-main{max-width:860px;margin:0 auto;padding:3rem 2rem}
+        @media(max-width:640px){.ch-main{padding:2rem 1.25rem}}
 
         /* LETTER */
         .ch-letter{background:linear-gradient(135deg,#EFF6FF,#F8FAFF);border:1px solid #DBEAFE;border-radius:16px;padding:2.5rem;margin-bottom:3rem}
+        @media(max-width:640px){.ch-letter{padding:1.5rem;margin-bottom:2rem}}
         .ch-lfrom{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#2563EB;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
         .ch-lfrom::before{content:'';width:16px;height:2px;background:#2563EB;border-radius:1px}
         .ch-letter h2{font-size:1.45rem;color:#1E3A8A;font-weight:700;line-height:1.35;margin-bottom:1.25rem}
@@ -147,6 +156,7 @@ export default function CompanyHistory() {
         .ch-pq cite{display:block;font-size:12px;color:#6B7280;font-style:normal;margin-top:10px}
 
         .ch-divider{height:1px;background:#E5E7EB;margin:2.75rem 0}
+        @media(max-width:640px){.ch-divider{margin:2rem 0}}
 
         /* TIMELINE */
         .ch-tl{position:relative;padding-left:2.2rem;margin:1.75rem 0 2.5rem}
@@ -161,7 +171,8 @@ export default function CompanyHistory() {
 
         /* PILLARS */
         .ch-pls{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:1.5rem 0 2rem}
-        @media(max-width:600px){.ch-pls{grid-template-columns:repeat(3,1fr)}}
+        @media(max-width:640px){.ch-pls{grid-template-columns:repeat(3,1fr)}}
+        @media(max-width:480px){.ch-pls{grid-template-columns:repeat(2,1fr)}}
         .ch-pl{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:1.1rem .75rem;text-align:center;transition:border-color .2s,box-shadow .2s}
         .ch-pl:hover{border-color:#2563EB;box-shadow:0 0 0 3px #EFF6FF}
         .ch-plico{width:38px;height:38px;border-radius:9px;background:#EFF6FF;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
@@ -170,6 +181,7 @@ export default function CompanyHistory() {
 
         /* NUMBERS */
         .ch-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:1.75rem 0}
+        @media(max-width:640px){.ch-nums{grid-template-columns:1fr}}
         .ch-nc{background:#EFF6FF;border-radius:12px;padding:1.4rem;text-align:center}
         .ch-nb{font-size:2.2rem;font-weight:700;color:#1E3A8A;margin-bottom:4px}
         .ch-nl{font-size:12px;color:#3B82F6;font-weight:500;line-height:1.4}
@@ -188,7 +200,9 @@ export default function CompanyHistory() {
 
         /* VISION */
         .ch-vis{background:linear-gradient(135deg,#1E3A8A 0%,#1E40AF 60%,#1D4ED8 100%);border-radius:20px;padding:3rem;margin:2.5rem 0;position:relative;overflow:hidden}
+        @media(max-width:640px){.ch-vis{padding:1.5rem;margin:2rem 0}}
         .ch-vis::before{content:'\\201C';font-size:18rem;color:rgba(255,255,255,.03);position:absolute;top:-4rem;left:1rem;line-height:1;pointer-events:none;font-style:italic}
+        @media(max-width:640px){.ch-vis::before{font-size:10rem;top:-2rem;left:.5rem}}
         .ch-vis .ch-tag{color:#93C5FD}.ch-vis .ch-tag::before{background:#93C5FD}
         .ch-vis h3{font-size:clamp(1.4rem,3vw,1.9rem);color:#fff;line-height:1.35;margin-bottom:1.5rem;font-weight:700}
         .ch-vp{font-size:.95rem;color:rgba(255,255,255,.62);line-height:1.95;margin-bottom:1.1rem}
@@ -198,10 +212,12 @@ export default function CompanyHistory() {
 
         /* PARTNER */
         .ch-pband{background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:2.25rem;margin:2.5rem 0}
+        @media(max-width:640px){.ch-pband{padding:1.5rem;margin:2rem 0}}
         .ch-pband h4{font-size:1.2rem;font-weight:700;color:#111827;margin-bottom:.5rem}
         .ch-pband > p{font-size:.9rem;color:#6B7280;margin-bottom:1.5rem;line-height:1.7}
         .ch-ptypes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
-        @media(max-width:500px){.ch-ptypes{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:540px){.ch-ptypes{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:360px){.ch-ptypes{grid-template-columns:1fr}}
         .ch-pt{background:#F8FAFF;border:1px solid #E5E7EB;border-radius:8px;padding:.75rem;text-align:center}
         .ch-ptlbl{font-size:11px;font-weight:600;color:#374151;margin-top:5px}
         .ch-ctarow{display:flex;gap:10px;flex-wrap:wrap}
