@@ -65,7 +65,7 @@ export default function ShopHero() {
         <img
           src={PhoneImage}
           alt="Smartphone"
-          className="absolute bottom-[-10] left-[-50px] w-[140px] sm:w-[160px] md:w-[250px] lg:w-[300px] rotate-30 z-0 opacity-90"
+          className="absolute bottom-[-10px] left-[-50px] w-[140px] sm:w-[160px] md:w-[250px] lg:w-[300px] rotate-30 z-0 opacity-90"
         />
         <img
           src={LaptopImage}

@@ -88,7 +88,7 @@ export default function PhoneInput({
             {isDropdownOpen && (
                 <div 
                     className="absolute left-0 bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden"
-                    style={{ top: '100%', marginTop: '4px', width: '300px', zIndex: 9999 }}
+                    style={{ top: '100%', marginTop: '4px', width: '300px', maxWidth: 'calc(100vw - 2rem)', zIndex: 9999 }}
                 >
                     {/* Search input */}
                     <div className="p-2 border-b border-gray-100 bg-white">

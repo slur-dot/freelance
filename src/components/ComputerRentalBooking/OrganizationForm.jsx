@@ -50,8 +50,8 @@ export default function OrganizationForm({ onContinue }) {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="w-full max-w-3xl rounded-lg bg-white px-4 py-6 shadow-lg sm:p-6 md:p-8">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-2 py-6 sm:px-6 lg:px-8">
+      <div className="w-full max-w-3xl rounded-lg bg-white px-3 py-6 shadow-lg sm:p-6 md:p-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
           <div>

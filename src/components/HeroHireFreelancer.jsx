@@ -43,9 +43,9 @@ export default function HeroHireFreelancer() {
             <input
               type="text"
               placeholder={t('freelancer.hero.search_placeholder')}
-              className="w-full pl-10 pr-28 py-2 rounded-md bg-gray-200 text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
+              className="w-full pl-10 pr-20 sm:pr-28 py-2 rounded-md bg-gray-200 text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-xs sm:text-sm md:text-base"
             />
-            <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-[#008060] hover:bg-[#00664d] text-white px-4 py-1.5 rounded-full flex items-center gap-1 text-sm h-auto cursor-pointer">
+            <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-[#008060] hover:bg-[#00664d] text-white px-2 sm:px-4 py-1 sm:py-1.5 rounded-full flex items-center gap-1 text-[10px] sm:text-xs md:text-sm h-auto cursor-pointer">
               {t('freelancer.hero.search_button')} <FaArrowRight size={14} />
             </button>
           </div>

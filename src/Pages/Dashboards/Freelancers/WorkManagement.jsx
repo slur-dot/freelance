@@ -171,14 +171,14 @@ export default function WorkManagement() {
                    <div className="absolute top-5 left-0 w-full h-1 bg-gray-100 z-0"></div>
                    <div className="absolute top-5 left-0 h-1 bg-blue-600 z-0 transition-all duration-1000" style={{ width: '40%' }}></div>
                    
-                   <div className="relative z-10 flex justify-between">
+                   <div className="relative z-10 flex flex-wrap md:flex-nowrap justify-between gap-y-8 gap-x-4">
                       {[
                         { step: 1, label: 'Pending', desc: 'Awaiting start' },
                         { step: 2, label: 'Active', desc: 'In development' },
                         { step: 3, label: 'Review', desc: 'Client feedback' },
                         { step: 4, label: 'Paid', desc: 'Funds released' }
                       ].map((s) => (
-                        <div key={s.step} className="flex flex-col items-center text-center max-w-[120px]">
+                        <div key={s.step} className="flex flex-col items-center text-center w-[calc(50%-1rem)] md:w-auto md:max-w-[120px]">
                            <div className={`w-10 h-10 rounded-full flex items-center justify-center border-4 transition-colors duration-500 ${
                              getStatusStep('active') >= s.step 
                              ? 'bg-blue-600 border-blue-100 text-white' 

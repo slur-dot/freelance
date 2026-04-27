@@ -70,36 +70,36 @@ export default function ContactPage() {
                 </div>
                 <form className="space-y-4">
                   <div className="grid grid-cols-1 gap-4">
-                    <div className="flex items-center gap-4">
-                      <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                      <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
                         {t('contact.full_name')}
                       </label>
                       <input
                         id="fullName"
                         type="text"
                         placeholder="John Doe"
-                        className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                       />
                     </div>
-                    <div className="flex items-center gap-4">
-                      <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                      <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
                         {t('contact.company_name')}
                       </label>
                       <input
                         id="companyName"
                         type="text"
                         placeholder="Supreme Workers and Co."
-                        className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                       />
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
                       Job Title / Position
                     </label>
                     <select
                       id="jobTitle"
-                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100 appearance-none pr-8"
+                      className="w-full p-2 border border-gray-300 rounded-md bg-gray-100 appearance-none pr-8"
                     >
                       <option value="">Select an Option</option>
                       <option value="developer">Developer</option>
@@ -107,36 +107,36 @@ export default function ContactPage() {
                       <option value="manager">Manager</option>
                     </select>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
                       Address
                     </label>
                     <input
                       id="address"
                       type="text"
                       placeholder="123 Street"
-                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                      className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                   </div>
-                  <div className="flex items-center gap-4">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
                       Email Address
                     </label>
                     <input
                       id="email"
                       type="email"
                       placeholder="123@gmail.com"
-                      className="flex-1 p-2 border border-gray-300 rounded-md bg-gray-100"
+                      className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                     />
                   </div>
-                  <div className="flex items-start gap-4">
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 w-32 flex-shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-4">
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0 sm:mt-2">
                       {t('contact.message')}
                     </label>
                     <textarea
                       id="message"
                       placeholder="Write your message here"
-                      className="flex-1 min-h-[100px] p-2 border border-gray-300 rounded-md bg-gray-100"
+                      className="w-full min-h-[100px] p-2 border border-gray-300 rounded-md bg-gray-100"
                     ></textarea>
                   </div>
                   <div className="flex flex-col gap-4 items-center">

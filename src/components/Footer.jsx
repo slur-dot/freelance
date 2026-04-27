@@ -34,7 +34,7 @@ const Footer = () => {
     <footer className="bg-slate-800 text-gray-300">
       {/* Main footer content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 text-center md:text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 text-center md:text-left">
           {/* Logo and description */}
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center justify-center md:justify-start mb-4">

@@ -315,7 +315,7 @@ export default function TechServiceBooking() {
   return (
     <div className="w-full min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
       {/* Search Nearby Toggle / Header area */}
-      <div className="max-w-4xl w-full mb-6 flex justify-between items-center">
+      <div className="max-w-4xl w-full mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">{t("tech_booking.title")}</h1>
           <p className="text-gray-600 text-sm mt-1">{t("tech_booking.subtitle")}</p>
