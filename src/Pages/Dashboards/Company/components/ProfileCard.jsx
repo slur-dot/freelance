@@ -241,7 +241,7 @@ function ChangePasswordModal({ companyData, onClose }) {
   );
 }
 
-export default function ProfileCard({ onContact, companyData, onAvatarUpdate }) {
+export default function ProfileCard({ onContact, companyData, onAvatarUpdate, showActions = false }) {
   const { t } = useTranslation();
   const [avatar, setAvatar] = useState(DefaultAvatar);
   const [progress, setProgress] = useState(70);
@@ -384,23 +384,25 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate }) 
         <span className="ml-2 text-sm text-gray-500">• {companyData?.status?.transactions || 0} {t('company_dashboard.profile_transactions')}</span>
       </div>
 
-      <div className="mt-4 space-y-2">
-        <div className="flex gap-2">
-          <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowEditModal(true)}>
-            <Edit className="h-3 w-3 mr-1" />
-            {t('company_dashboard.profile_edit_btn')}
-          </Button>
-          <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowPasswordModal(true)}>
-            <Lock className="h-3 w-3 mr-1" />
-            {t('company_dashboard.profile_change_pwd_btn')}
+      {showActions && (
+        <div className="mt-4 space-y-2">
+          <div className="flex gap-2">
+            <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowEditModal(true)}>
+              <Edit className="h-3 w-3 mr-1" />
+              {t('company_dashboard.profile_edit_btn')}
+            </Button>
+            <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowPasswordModal(true)}>
+              <Lock className="h-3 w-3 mr-1" />
+              {t('company_dashboard.profile_change_pwd_btn')}
+            </Button>
+          </div>
+          <Button className="w-full text-xs" onClick={onContact}>{t('company_dashboard.profile_contact_btn')}</Button>
+          <Button variant="outline" className="w-full text-xs text-red-600 border-red-300 hover:bg-red-50" onClick={() => setShowDeleteModal(true)}>
+            <Trash2 className="h-3 w-3 mr-1" />
+            {t('company_dashboard.profile_delete_btn')}
           </Button>
         </div>
-        <Button className="w-full text-xs" onClick={onContact}>{t('company_dashboard.profile_contact_btn')}</Button>
-        <Button variant="outline" className="w-full text-xs text-red-600 border-red-300 hover:bg-red-50" onClick={() => setShowDeleteModal(true)}>
-          <Trash2 className="h-3 w-3 mr-1" />
-          {t('company_dashboard.profile_delete_btn')}
-        </Button>
-      </div>
+      )}
 
       {showEditModal && (
         <EditProfileModal companyData={companyData} onClose={() => setShowEditModal(false)} onUpdate={onAvatarUpdate} />
