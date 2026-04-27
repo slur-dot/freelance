@@ -216,17 +216,7 @@ export default function CompanyHistory() {
         {/* ── HERO ── */}
         <section className="ch-hero">
           <div className="ch-arc" />
-          <div className="ch-flag">
-            <span style={{ fontSize: 22 }}>🇬🇳</span>
-            <div className="ch-fs" style={{ width: 20, background: "#CE1126" }} />
-            <div className="ch-fs" style={{ width: 20, background: "#FCD116" }} />
-            <div className="ch-fs" style={{ width: 20, background: "#009A44" }} />
-            <span className="ch-farrow">→</span>
-            <span style={{ fontSize: 22 }}>🇫🇷</span>
-            <span className="ch-farrow">→</span>
-            <span style={{ fontSize: 22 }}>🌍</span>
-          </div>
-          <div className="ch-live"><div className="ch-ldot" /><span>{t('company_history.hero.live_lbl', "Lancement officiel · 1er mai 2026 · Conakry")}</span></div>
+
           <h1 className="ch-anim">
             {t('company_history.hero.title_p1', "Un rêve forgé")} <em>{t('company_history.hero.title_p2', "loin de chez soi")}</em>.<br />
             {t('company_history.hero.title_p3', "Une réalité bâtie")} <span className="acc">{t('company_history.hero.title_p4', "pour la Guinée")}</span>.
