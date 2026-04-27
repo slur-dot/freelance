@@ -390,8 +390,8 @@ export default function CompanyHistory() {
               ))}
             </div>
             <div className="ch-ctarow">
-              <button className="ch-btnp" onClick={() => window.location.href = "/register"}>{t('company_history.partner.btn_join', "Rejoindre la plateforme")}</button>
-              <button className="ch-btno" onClick={() => window.location.href = "/contact"}>{t('company_history.partner.btn_contact', "Proposer un partenariat →")}</button>
+              <button className="ch-btnp" onClick={() => window.location.href = "/login"}>{t('company_history.partner.btn_join', "Rejoindre la plateforme")}</button>
+              <button className="ch-btno" onClick={() => window.location.href = "/partnership"}>{t('company_history.partner.btn_contact', "Proposer un partenariat →")}</button>
             </div>
           </div>
 
