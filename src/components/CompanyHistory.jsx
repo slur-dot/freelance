@@ -256,8 +256,8 @@ export default function CompanyHistory() {
 
         {/* ── MAIN ── */}
         <div className="ch-main">
-
-          {/* LETTRE */}
+          {activeTab === 0 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="ch-letter ch-anim">
             <div className="ch-lfrom">{t('company_history.letter.from', "Une lettre de la diaspora guinéenne")}</div>
             <h2>« {t('company_history.letter.quote', "J'ai réussi à l'étranger. Mais ma victoire ne compte vraiment que si elle sert la Guinée.")} »</h2>
@@ -312,8 +312,12 @@ export default function CompanyHistory() {
               </div>
             ))}
           </div>
+            </div>
+          )}
 
-          {/* PILLARS */}
+          {activeTab === 1 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* PILLARS */}
           <p className="ch-tag ch-anim">{t('company_history.pillars.tag', "L'écosystème")}</p>
           <h2 className="ch-sh ch-anim">{t('company_history.pillars.title', "Cinq piliers. Zéro compromis.")}</h2>
           <p className="ch-bp ch-anim">{t('company_history.pillars.desc', "Chaque pilier répond à un manque réel identifié depuis la diaspora et confirmé sur le terrain. Ensemble, ils couvrent l'intégralité du parcours d'un talent guinéen de la formation au premier salaire.")}</p>
@@ -333,8 +337,12 @@ export default function CompanyHistory() {
               </div>
             ))}
           </div>
+            </div>
+          )}
 
-          <div className="ch-nums">
+          {activeTab === 2 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="ch-nums">
             <div className="ch-nc ch-anim"><div className="ch-nb">60%</div><div className="ch-nl">{t('company_history.numbers.stat_1', "des Guinéens ont moins de 25 ans")}</div></div>
             <div className="ch-nc ch-anim ch-d1"><div className="ch-nb">20+</div><div className="ch-nl">{t('company_history.numbers.stat_2', "secteurs économiques couverts")}</div></div>
             <div className="ch-nc ch-anim ch-d2"><div className="ch-nb">50 000</div><div className="ch-nl">{t('company_history.numbers.stat_3', "jeunes à autonomiser d'ici 2030")}</div></div>
@@ -362,8 +370,12 @@ export default function CompanyHistory() {
               </div>
             ))}
           </div>
+            </div>
+          )}
 
-          {/* VISION */}
+          {activeTab === 1 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* VISION */}
           <div className="ch-vis ch-anim">
             <p className="ch-tag">{t('company_history.vision.tag', "Notre raison d'être")}</p>
             <h3>{t('company_history.vision.title_pt1', "Nous ne construisons pas une startup.")}<br />{t('company_history.vision.title_pt2', "Nous rendons à la Guinée ce qu'elle nous a donné.")}</h3>
@@ -374,8 +386,12 @@ export default function CompanyHistory() {
               <p><strong>{t('company_history.vision.hl_title', "Notre engagement pour 2030 :")}</strong> {t('company_history.vision.hl_text', "50 000 jeunes guinéens vivant dignement de leurs compétences numériques. Un écosystème rayonnant vers les 10 pays d'Afrique de l'Ouest. Une Guinée qui exporte ses solutions et non plus seulement ses cerveaux.")}</p>
             </div>
           </div>
+            </div>
+          )}
 
-          {/* PARTNER */}
+          {activeTab === 3 && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* PARTNER */}
           <div className="ch-pband ch-anim">
             <h4>{t('company_history.partner.title', "Construisons ensemble.")}</h4>
             <p>{t('company_history.partner.desc', "FREELANCE-224 est ouverte à tout partenariat qui partage notre vision : une Guinée où le talent est valorisé, rémunéré et célébré. Que vous soyez une institution publique, une ONG, un investisseur ou un acteur du secteur privé parlons-nous.")}</p>
@@ -394,6 +410,8 @@ export default function CompanyHistory() {
               <button className="ch-btno" onClick={() => window.location.href = "/partnership"}>{t('company_history.partner.btn_contact', "Proposer un partenariat →")}</button>
             </div>
           </div>
+            </div>
+          )}
 
         </div>
       </div>
