@@ -832,7 +832,7 @@ export default function CompanyDashboard() {
               <div className="text-2xl sm:text-4xl font-bold">
                 {selectedCompany?.status?.transactions || 0} {t('company_dashboard.dashboard_transactions_label')}
               </div>
-              <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("#")}>
+              <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("/company/dashboard/contracts")}>
                 {t('company_dashboard.dashboard_view_transactions')}
               </Button>
             </CardContent>
@@ -851,7 +851,7 @@ export default function CompanyDashboard() {
               <div className="text-2xl sm:text-4xl font-bold">
                 {selectedCompany?.profileCompletion || 0}%
               </div>
-              <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("#")}>
+              <Button className="mt-4 w-full sm:w-fit" onClick={() => navigate("/company/dashboard/profile")}>
                 {t('company_dashboard.dashboard_complete_profile_btn')}
               </Button>
             </CardContent>
