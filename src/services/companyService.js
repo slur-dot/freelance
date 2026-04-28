@@ -1,6 +1,7 @@
 import { db } from "../firebaseConfig";
-import { doc, getDoc, updateDoc, collection, getDocs, addDoc, deleteDoc, query, where } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection, getDocs, addDoc, deleteDoc, query, where, orderBy, serverTimestamp } from "firebase/firestore";
 import { UserService } from "./userService";
+import { NotificationService } from "./notificationService";
 
 export const CompanyService = {
     // Get Company Profile (wraps UserService but ensures type safety or specific fields if needed)
@@ -67,7 +68,69 @@ export const CompanyService = {
         }
     },
 
-    // --- Dashboard Data Aggregation ---
+    // --- Job Description / Job Posting CRUD ---
+
+    async postJobDescription(companyId, jobData) {
+        try {
+            const jobsRef = collection(db, "jobDescriptions");
+            const docRef = await addDoc(jobsRef, {
+                ...jobData,
+                companyId,
+                status: "open",
+                applicants: 0,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            });
+
+            // Create a notification for the company
+            await NotificationService.createNotification(
+                companyId,
+                "Job Posted Successfully",
+                `Your job "${jobData.title}" has been published and is now visible to freelancers.`,
+                "success"
+            );
+
+            return { id: docRef.id, ...jobData, companyId, status: "open", applicants: 0 };
+        } catch (error) {
+            console.error("Error posting job description:", error);
+            throw error;
+        }
+    },
+
+    async getCompanyJobs(companyId) {
+        try {
+            const jobsRef = collection(db, "jobDescriptions");
+            const q = query(jobsRef, where("companyId", "==", companyId), orderBy("createdAt", "desc"));
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (error) {
+            console.error("Error fetching company jobs:", error);
+            return [];
+        }
+    },
+
+    async getJobApplications(jobId) {
+        try {
+            const appsRef = collection(db, "jobApplications");
+            const q = query(appsRef, where("jobId", "==", jobId), orderBy("createdAt", "desc"));
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (error) {
+            console.error("Error fetching job applications:", error);
+            return [];
+        }
+    },
+
+    async updateJobStatus(jobId, status) {
+        try {
+            const jobRef = doc(db, "jobDescriptions", jobId);
+            await updateDoc(jobRef, { status, updatedAt: serverTimestamp() });
+            return { success: true };
+        } catch (error) {
+            console.error("Error updating job status:", error);
+            throw error;
+        }
+    },
 
     // --- Dashboard Data Aggregation ---
 
@@ -122,7 +185,21 @@ export const CompanyService = {
                     enterprise: { name: 'Enterprise', price: 2000000, currency: 'GNF', features: ['Custom'] }
                 }
             }];
-            const notifications = []; // Should use NotificationService.getUserNotifications
+            let notifications = [];
+            try {
+                notifications = await NotificationService.getUserNotifications(companyId);
+            } catch (e) {
+                console.warn("Could not fetch notifications:", e);
+            }
+
+            // Fetch real job postings for the freelancer marketplace section
+            let freelancerMarketplaceReal = [];
+            try {
+                freelancerMarketplaceReal = await this.getCompanyJobs(companyId);
+            } catch (e) {
+                console.warn("Could not fetch job postings:", e);
+            }
+
             const messages = [];
 
             return {
@@ -133,7 +210,7 @@ export const CompanyService = {
                 equipmentTracking,
                 notifications,
                 transactionHistory,
-                freelancerMarketplace,
+                freelancerMarketplace: freelancerMarketplaceReal.length > 0 ? freelancerMarketplaceReal : freelancerMarketplace,
                 subscriptions,
                 messages
             };

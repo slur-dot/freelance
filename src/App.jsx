@@ -56,6 +56,7 @@ import CompanyDashboard from './Pages/Dashboards/Company/CompanyDashboard';
 import ContractManagement from './Pages/Dashboards/Company/ContractManagement';
 import EquipmentTracking from './Pages/Dashboards/Company/EquipmentTracking';
 import IssueReporting from './Pages/Dashboards/Company/IssueReporting';
+import JobPostings from './Pages/Dashboards/Company/JobPostings';
 import UserLogin from "./Pages/Login/UserLogin";
 import SuccessfulPage from './Pages/Login/SuccessfulPage';
 import VerifyCodePage from './Pages/Login/VerifyCodePage';
@@ -207,6 +208,7 @@ function AppContent() {
             <Route path="contracts" element={<ContractManagement />} />
             <Route path="equipment" element={<EquipmentTracking />} />
             <Route path="issues" element={<IssueReporting />} />
+            <Route path="jobs" element={<JobPostings />} />
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<CompanyProfile />} />
           </Route>

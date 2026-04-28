@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   TrendingUp,
   Users,
@@ -15,6 +16,7 @@ import {
 import { CompanyService } from "../services/companyService";
 import { auth } from "../firebaseConfig";
 import { useTranslation } from "react-i18next";
+import PostJobModal from "./Modals/PostJobModal";
 
 // Card Component
 function Card({ children, className = "" }) {
@@ -110,6 +112,7 @@ function PieChart({ data, className = "" }) {
 
 export default function CompanyStatsDashboard() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [data, setData] = useState({
     stats: null,
     leaseContracts: [],
@@ -126,6 +129,7 @@ export default function CompanyStatsDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [user, setUser] = useState(auth.currentUser);
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -514,44 +518,78 @@ export default function CompanyStatsDashboard() {
 
       {/* Freelancer Marketplace */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.freelancer_marketplace')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.post_jd')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.view_applications')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.bid_project')}</Button>
+          <div className="flex flex-wrap gap-2">
+            <Button onClick={() => setIsPostJobOpen(true)} className="text-sm">{t('company_dashboard.post_jd')}</Button>
+            <Button variant="outline" className="text-sm" onClick={() => navigate('/company/dashboard/jobs')}>{t('company_dashboard.view_applications')}</Button>
+            <Button variant="outline" className="text-sm" onClick={() => navigate('/hire-freelancers')}>{t('company_dashboard.bid_project')}</Button>
           </div>
         </div>
 
         <div className="space-y-3">
           {freelancerMarketplace.length > 0 ? (
             freelancerMarketplace.map((item) => (
-              <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <div className="font-medium">{item.title}</div>
-                  <div className="text-sm text-gray-600">{item.description}</div>
-                  <div className="text-sm text-gray-600">
-                    {item.applicants ? `${t('company_dashboard.applicants')} ${item.applicants}` : `${t('company_dashboard.posted_by')} ${item.postedBy}`}
+              <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 rounded-lg gap-3 hover:bg-gray-100 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="font-medium text-gray-900">{item.title}</div>
+                  <div className="text-sm text-gray-600 line-clamp-1 mt-1">{item.description || item.category || 'No description'}</div>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                    {item.applicants !== undefined && (
+                      <span className="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium">
+                        {item.applicants} {t('company_dashboard.applicants', 'applicants')}
+                      </span>
+                    )}
+                    {item.status && (
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                        item.status === 'open' ? 'bg-green-100 text-green-700' :
+                        item.status === 'closed' ? 'bg-red-100 text-red-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {item.status}
+                      </span>
+                    )}
+                    {item.location && (
+                      <span className="text-xs text-gray-500">📍 {item.location}</span>
+                    )}
                   </div>
                 </div>
-                <div className="text-right">
-                  <div className="font-medium">{item.budget.toLocaleString()} GNF</div>
-                  <div className="text-sm text-gray-600">
-                    {item.deadline ? `${t('company_dashboard.deadline')} ${formatTimestamp(item.deadline).toLocaleDateString()}` : t('company_dashboard.no_deadline')}
+                <div className="text-right flex-shrink-0">
+                  <div className="font-semibold text-green-700">{(item.budget || 0).toLocaleString()} GNF</div>
+                  <div className="text-sm text-gray-500">
+                    {item.deadline ? `${t('company_dashboard.deadline', 'Deadline:')} ${typeof item.deadline === 'string' ? item.deadline : formatTimestamp(item.deadline).toLocaleDateString()}` : t('company_dashboard.no_deadline', 'No deadline')}
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-4 text-gray-500">
-              <p>{t('company_dashboard.no_marketplace_activity')}</p>
+            <div className="text-center py-8 text-gray-400">
+              <Users className="h-12 w-12 mx-auto mb-3 opacity-20" />
+              <p className="font-medium">{t('company_dashboard.no_marketplace_activity')}</p>
+              <p className="text-sm mt-1">Post your first job to start hiring freelancers.</p>
+              <Button onClick={() => setIsPostJobOpen(true)} className="mt-4 text-sm">
+                {t('company_dashboard.post_jd', 'Post a New Job')}
+              </Button>
             </div>
           )}
         </div>
       </Card>
+
+      {/* Post Job Modal */}
+      <PostJobModal
+        isOpen={isPostJobOpen}
+        onClose={() => setIsPostJobOpen(false)}
+        user={user}
+        onSave={(newJob) => {
+          setData(prev => ({
+            ...prev,
+            freelancerMarketplace: [newJob, ...prev.freelancerMarketplace]
+          }));
+        }}
+      />
 
       {/* Digital Growth Bundle - Subscription Plans */}
       <Card>

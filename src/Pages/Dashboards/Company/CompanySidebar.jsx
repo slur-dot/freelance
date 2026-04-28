@@ -94,6 +94,21 @@ export default function CompanySidebar() {
       ],
     },
     {
+      section: t('company_dashboard.sidebar_recruitment', 'Recruitment'),
+      items: [
+        {
+          title: t('company_dashboard.sidebar_job_postings', 'Job Postings'),
+          url: "/company/dashboard/jobs",
+          icon: Briefcase,
+        },
+        {
+          title: t('company_dashboard.sidebar_browse_freelancers', 'Browse Freelancers'),
+          url: "/hire-freelancers",
+          icon: Users,
+        },
+      ],
+    },
+    {
       section: t('sidebar.training', 'Training'),
       items: [
         { title: t('sidebar.trainer_hub', 'Become a Trainer'), url: "/company/dashboard", icon: GraduationCap },
