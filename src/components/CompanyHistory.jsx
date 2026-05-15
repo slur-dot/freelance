@@ -1,17 +1,51 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { collection, query, where, getCountFromServer } from "firebase/firestore";
+import { db } from "../firebaseConfig";
+import { Briefcase, GraduationCap, Store, Building2, CreditCard } from "lucide-react";
 
 export default function CompanyHistory() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(0);
   const rootRef = useRef(null);
 
-  const STATS = [
-    { lbl: t('company_history.stats.active_users_lbl', "Utilisateurs actifs"),  val: "10 000+", sub: t('company_history.stats.active_users_sub', "+500 ce mois"),           green: true },
-    { lbl: t('company_history.stats.completed_projects_lbl', "Projets complétés"),    val: "25 000+", sub: t('company_history.stats.completed_projects_sub', "98% taux de succès"),      green: true },
-    { lbl: t('company_history.stats.expert_freelancers_lbl', "Freelanceurs experts"), val: "1 500+",  sub: t('company_history.stats.expert_freelancers_sub', "Professionnels vérifiés"), green: true },
+  const [statsData, setStatsData] = useState([
+    { lbl: t('company_history.stats.active_users_lbl', "Utilisateurs actifs"),  val: "...", sub: t('company_history.stats.active_users_sub', "+500 ce mois"),           green: true },
+    { lbl: t('company_history.stats.completed_projects_lbl', "Projets complétés"),    val: "...", sub: t('company_history.stats.completed_projects_sub', "98% taux de succès"),      green: true },
+    { lbl: t('company_history.stats.expert_freelancers_lbl', "Freelanceurs experts"), val: "...",  sub: t('company_history.stats.expert_freelancers_sub', "Professionnels vérifiés"), green: true },
     { lbl: t('company_history.stats.partners_lbl', "Partenaires"),          val: "50+",     sub: t('company_history.stats.partners_sub', "Local & international"),   green: true },
-  ];
+  ]);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const usersRef = collection(db, "users");
+        const ordersRef = collection(db, "orders");
+        const freelancersQuery = query(usersRef, where("role", "==", "freelancer"));
+
+        const [usersSnap, ordersSnap, freelancersSnap] = await Promise.all([
+          getCountFromServer(usersRef),
+          getCountFromServer(ordersRef),
+          getCountFromServer(freelancersQuery)
+        ]);
+
+        const formatCount = (base, count) => {
+          const total = base + count;
+          return `${total.toLocaleString('fr-FR')}+`;
+        };
+
+        setStatsData([
+          { lbl: t('company_history.stats.active_users_lbl', "Utilisateurs actifs"),  val: formatCount(10000, usersSnap.data().count), sub: t('company_history.stats.active_users_sub', "+500 ce mois"), green: true },
+          { lbl: t('company_history.stats.completed_projects_lbl', "Projets complétés"), val: formatCount(25000, ordersSnap.data().count), sub: t('company_history.stats.completed_projects_sub', "98% taux de succès"), green: true },
+          { lbl: t('company_history.stats.expert_freelancers_lbl', "Freelanceurs experts"), val: formatCount(1500, freelancersSnap.data().count), sub: t('company_history.stats.expert_freelancers_sub', "Professionnels vérifiés"), green: true },
+          { lbl: t('company_history.stats.partners_lbl', "Partenaires"), val: "50+", sub: t('company_history.stats.partners_sub', "Local & international"), green: true },
+        ]);
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    }
+    fetchStats();
+  }, [t]);
 
   const EMOTIONS = [
     { color: "#2563EB", bg: "#EFF6FF", icon: "📡", title: t('company_history.emotions.title_1', "La distance qui révèle"),   text: t('company_history.emotions.text_1', "Depuis la France, on comprend exactement ce qui manque. On a vu comment marchent les plateformes ici. On sait ce que la Guinée mérite d'avoir. Et on a décidé de le construire.") },
@@ -30,11 +64,11 @@ export default function CompanyHistory() {
   ];
 
   const PILLARS = [
-    { num: "01", name: t('company_history.pillars.freelancing', "Freelancing") },
-    { num: "02", name: t('company_history.pillars.academy', "Académie Digitale") },
-    { num: "03", name: t('company_history.pillars.marketplace', "Marketplace IT") },
-    { num: "04", name: t('company_history.pillars.b2b', "Location B2B") },
-    { num: "05", name: t('company_history.pillars.payments', "Paiements GNF") },
+    { num: "01", name: t('company_history.pillars.freelancing', "Freelancing"), icon: <Briefcase size={18} color="#2563EB" /> },
+    { num: "02", name: t('company_history.pillars.academy', "Académie Digitale"), icon: <GraduationCap size={18} color="#2563EB" /> },
+    { num: "03", name: t('company_history.pillars.marketplace', "Marketplace IT"), icon: <Store size={18} color="#2563EB" /> },
+    { num: "04", name: t('company_history.pillars.b2b', "Location B2B"), icon: <Building2 size={18} color="#2563EB" /> },
+    { num: "05", name: t('company_history.pillars.payments', "Paiements GNF"), icon: <CreditCard size={18} color="#2563EB" /> },
   ];
 
   const AUDIENCES = [
@@ -254,7 +288,7 @@ export default function CompanyHistory() {
 
         {/* ── STATS ── */}
         <div className="ch-stats">
-          {STATS.map((s) => (
+          {statsData.map((s) => (
             <div key={s.lbl} className="ch-st">
               <div className="ch-slbl">{s.lbl}</div>
               <div className="ch-sval">{s.val}</div>
@@ -341,12 +375,7 @@ export default function CompanyHistory() {
             {PILLARS.map((p) => (
               <div key={p.num} className="ch-pl ch-anim">
                 <div className="ch-plico">
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <rect x="2" y="2" width="6" height="6" rx="1.5" fill="#2563EB" />
-                    <rect x="10" y="2" width="6" height="6" rx="1.5" fill="#2563EB" opacity=".35" />
-                    <rect x="2" y="10" width="6" height="6" rx="1.5" fill="#2563EB" opacity=".35" />
-                    <rect x="10" y="10" width="6" height="6" rx="1.5" fill="#2563EB" opacity=".35" />
-                  </svg>
+                  {p.icon}
                 </div>
                 <div className="ch-plnum">{p.num}</div>
                 <div className="ch-plname">{p.name}</div>

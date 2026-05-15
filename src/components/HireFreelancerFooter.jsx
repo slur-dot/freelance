@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import FreelanceImage from "../assets/FreelanceImage.jpg";
 import { useTranslation } from "react-i18next";
@@ -26,13 +27,13 @@ export default function HireFreelancerFooter() {
           {t('freelancer.footer.title')}
         </h2>
         <div className="flex flex-col gap-4 items-center">
-          <button className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-sm sm:text-base md:text-lg rounded-full font-semibold flex items-center justify-center gap-2">
+          <Link to="/training-modules" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 text-sm sm:text-base md:text-lg rounded-full font-semibold flex items-center justify-center gap-2">
             {t('freelancer.footer.upskill')} <ArrowRight className="h-5 w-5" />
-          </button>
+          </Link>
 
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm sm:text-base md:text-base rounded-full font-semibold flex items-center justify-center gap-2 w-fit">
+          <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm sm:text-base md:text-base rounded-full font-semibold flex items-center justify-center gap-2 w-fit">
             {t('freelancer.footer.join')} <ArrowRight className="h-4 w-4" />
-          </button>
+          </Link>
         </div>
       </div>
     </section>

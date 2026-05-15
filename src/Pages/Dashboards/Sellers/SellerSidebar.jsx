@@ -23,6 +23,7 @@ import {
   Store,
   Handshake,
   Share2,
+  MessageCircle,
 } from "lucide-react";
 import { auth } from "../../../firebaseConfig";
 import { signOut } from "firebase/auth";
@@ -105,6 +106,7 @@ export default function SellerSidebar() {
       section: t('sidebar.marketing'),
       items: [
         { title: t('sidebar.ads'), url: "/seller/dashboard/ads", icon: Megaphone },
+        { title: t('sidebar.messages', 'Messages'), url: "/seller/dashboard/messages", icon: MessageCircle },
         { title: t('sidebar.notifications'), url: "/seller/dashboard/notifications", icon: Bell },
       ],
     },

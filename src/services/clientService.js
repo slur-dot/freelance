@@ -36,7 +36,7 @@ export const ClientService = {
     // Upload Profile Avatar
     async uploadAvatar(uid, file) {
         try {
-            const storageRef = ref(storage, `client-avatars/${uid}/avatar-${Date.now()}`);
+            const storageRef = ref(storage, `ads/avatars/${uid}_${Date.now()}`);
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
 
@@ -98,21 +98,46 @@ export const ClientService = {
         return await OrderService.getUserOrders(uid);
     },
 
-    // Get Hired Freelancers (Derived from Orders)
+    // Add Hired Freelancer (Manual tracking)
+    async addHiredFreelancer(uid, freelancerData) {
+        try {
+            const { serverTimestamp, addDoc } = await import("firebase/firestore");
+            const ref = collection(db, "users", uid, "hiredFreelancers");
+            const docRef = await addDoc(ref, {
+                ...freelancerData,
+                createdAt: serverTimestamp()
+            });
+            return { id: docRef.id, ...freelancerData };
+        } catch (error) {
+            console.error("Error adding hired freelancer:", error);
+            throw error;
+        }
+    },
+
+    // Get Hired Freelancers (Manual tracking + Orders)
     async getHiredFreelancers(uid) {
         try {
+            // 1. Fetch manually added freelancers
+            const ref = collection(db, "users", uid, "hiredFreelancers");
+            const snapshot = await getDocs(ref);
+            const manualFreelancers = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            // 2. Fetch from orders
             const orders = await OrderService.getUserOrders(uid);
-            // Mocking freelancer extraction since we don't have a direct 'freelancerId' on orders yet for all types
-            // In a real app, orders would link to a freelancer profile.
-            // We will return empty or map orders if they have freelancer info
-            return orders.map(order => ({
+            const orderFreelancers = orders.map(order => ({
                 id: order.id,
                 name: order.sellerName || "Unknown Freelancer",
                 project: order.items?.[0]?.name || "Project",
                 status: order.status || "Pending",
                 completionDate: order.updatedAt?.toDate().toLocaleDateString() || "N/A",
                 amount: order.totalAmount
-            })).filter(f => f.name !== "Unknown Freelancer"); // Basic filter
+            })).filter(f => f.name !== "Unknown Freelancer");
+
+            // 3. Combine both
+            return [...manualFreelancers, ...orderFreelancers];
         } catch (error) {
             console.error("Error getting hired freelancers:", error);
             return [];

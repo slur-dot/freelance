@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Search, Trash2, Loader2 } from "lucide-react";
+import { Search, Trash2, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import ChatPopup from "../../../components/ChatPopup";
 import { CompanyService } from "../../../services/companyService";
 import { auth } from "../../../firebaseConfig";
@@ -101,39 +101,32 @@ export default function TrainingProgress() {
     fetchData();
   }, [user]);
 
+  const [expandedUsers, setExpandedUsers] = useState({});
+
   // Transform employees data into training courses format
-  const courses = useMemo(() => {
+  const groupedEmployees = useMemo(() => {
     if (!employees.length) return [];
 
-    const trainingCourses = [];
-
-    // Deduplicate employees by name to avoid duplicate training records
     const uniqueEmployees = new Map();
     employees.forEach(employee => {
-      if (!uniqueEmployees.has(employee.name)) {
+      if (!uniqueEmployees.has(employee.name) && employee.training && Array.isArray(employee.training) && employee.training.length > 0) {
         uniqueEmployees.set(employee.name, employee);
       }
     });
 
-    // Use unique employee data since it contains training information
-    Array.from(uniqueEmployees.values()).forEach(employee => {
-      if (employee.training && Array.isArray(employee.training)) {
-        employee.training.forEach(training => {
-          trainingCourses.push({
-            id: `${training.courseName}-${employee.name}`,
-            employee: employee.name,
-            title: training.courseName,
-            completion: training.progress,
-            status: training.progress >= 100 ? "Completed" : "Active",
-            employeeId: employee.id
-          });
-        });
-      }
+    return Array.from(uniqueEmployees.values()).map(employee => {
+      return {
+        id: employee.id || Math.random().toString(),
+        name: employee.name,
+        courses: employee.training.map((t, idx) => ({
+          id: `${t.courseName}-${employee.id}-${idx}`,
+          title: t.courseName,
+          completion: t.progress || 0,
+          status: t.progress >= 100 ? "Completed" : t.progress > 0 ? "In Progress" : "Accepted",
+          deliveryMode: t.deliveryMode || (Math.random() > 0.5 ? "Remote" : "On-site")
+        }))
+      };
     });
-
-    // Only use data from API - no fallback data
-
-    return trainingCourses;
   }, [employees, companyStats]);
 
   const handleDelete = (id) => {
@@ -142,11 +135,15 @@ export default function TrainingProgress() {
     alert('Delete functionality will be implemented with API integration');
   };
 
-  const filteredCourses = useMemo(() => {
+  const filteredEmployees = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (!term) return courses;
-    return courses.filter((c) => c.title.toLowerCase().includes(term) || c.employee.toLowerCase().includes(term));
-  }, [searchTerm, courses]);
+    if (!term) return groupedEmployees;
+    return groupedEmployees.filter((e) => e.name.toLowerCase().includes(term) || e.courses.some(c => c.title.toLowerCase().includes(term)));
+  }, [searchTerm, groupedEmployees]);
+
+  const toggleUser = (id) => {
+    setExpandedUsers(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   const handleOpenChat = (courseId) => {
     setChatCourseId(courseId);
@@ -208,45 +205,78 @@ export default function TrainingProgress() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_name')}</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_course')}</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_completion')}</th>
-              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_status')}</th>
-              <th className="px-6 py-3 text-right font-medium text-gray-500 uppercase">{t('company_dashboard.tp_col_action')}</th>
+              <th className="px-6 py-3 text-left font-medium text-gray-500 uppercase">Assigned Courses</th>
+              <th className="px-6 py-3 text-right font-medium text-gray-500 uppercase">Details</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredCourses.map((course) => (
-              <tr key={course.id}>
-                <td className="px-6 py-4 font-medium text-gray-900">{course.employee}</td>
-                <td className="px-6 py-4 text-gray-700">{course.title}</td>
-                <td className="px-6 py-4 text-gray-500">
-                  <div className="flex items-center space-x-2">
-                    <span>{course.completion}%</span>
-                    <div className="relative w-24 h-2 bg-gray-200 rounded-full">
-                      <div className="absolute h-full bg-green-700 rounded-full" style={{ width: `${course.completion}%` }} />
-                      <div className="absolute top-1/2 -translate-y-1/2 h-4 w-4 bg-green-700 rounded-full shadow" style={{ left: `calc(${course.completion}% - 8px)` }} />
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-gray-500">
-                  <div className="flex items-center bg-green-100 rounded-full p-1">
-                    <span className="ml-4 h-2 w-2 bg-green-700 rounded-full mr-2" />
-                    {course.status === 'Completed' ? t('company_dashboard.tp_status_completed') : t('company_dashboard.tp_status_active')}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center space-x-2 justify-end">
-                    <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
-                      <Trash2 className="h-4 w-4 text-gray-500" />
-                    </TPButton>
-                    <TPButton onClick={() => handleOpenChat(course.id)}>{t('company_dashboard.tp_message')}</TPButton>
-                  </div>
-                </td>
-              </tr>
+            {filteredEmployees.map((emp) => (
+              <React.Fragment key={emp.id}>
+                <tr className="cursor-pointer hover:bg-gray-50" onClick={() => toggleUser(emp.id)}>
+                  <td className="px-6 py-4 font-medium text-gray-900">{emp.name}</td>
+                  <td className="px-6 py-4 text-gray-700">{emp.courses.length} courses</td>
+                  <td className="px-6 py-4 text-right text-blue-600 flex justify-end items-center gap-1">
+                    {expandedUsers[emp.id] ? "Hide Details" : "View Details"}
+                    {expandedUsers[emp.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </td>
+                </tr>
+                {expandedUsers[emp.id] && (
+                  <tr>
+                    <td colSpan={3} className="px-0 py-0 bg-gray-50">
+                      <div className="p-4 pl-12 border-l-4 border-blue-500">
+                        <table className="min-w-full text-sm">
+                          <thead>
+                            <tr>
+                              <th className="pb-2 text-left text-gray-500 font-medium">Course</th>
+                              <th className="pb-2 text-left text-gray-500 font-medium">Delivery Mode</th>
+                              <th className="pb-2 text-left text-gray-500 font-medium">Status</th>
+                              <th className="pb-2 text-left text-gray-500 font-medium">Progress</th>
+                              <th className="pb-2 text-right text-gray-500 font-medium">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {emp.courses.map(course => (
+                              <tr key={course.id} className="border-t border-gray-200">
+                                <td className="py-3 text-gray-900 font-medium">{course.title}</td>
+                                <td className="py-3 text-gray-600">{course.deliveryMode}</td>
+                                <td className="py-3">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    course.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                                    course.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }`}>
+                                    {course.status}
+                                  </span>
+                                </td>
+                                <td className="py-3">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="text-gray-500 w-8">{course.completion}%</span>
+                                    <div className="relative w-24 h-2 bg-gray-200 rounded-full">
+                                      <div className="absolute h-full bg-green-700 rounded-full" style={{ width: `${course.completion}%` }} />
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="py-3 text-right">
+                                  <div className="flex items-center space-x-2 justify-end">
+                                    <TPButton variant="outline" size="icon" onClick={(e) => { e.stopPropagation(); handleDelete(course.id); }}>
+                                      <Trash2 className="h-4 w-4 text-gray-500" />
+                                    </TPButton>
+                                    <TPButton size="sm" onClick={(e) => { e.stopPropagation(); handleOpenChat(course.id); }}>{t('company_dashboard.tp_message')}</TPButton>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
-            {filteredCourses.length === 0 && (
+            {filteredEmployees.length === 0 && (
               <tr>
-                <td colSpan={5} className="px-6 py-10 text-center text-gray-500">{t('company_dashboard.tp_no_records')}</td>
+                <td colSpan={3} className="px-6 py-10 text-center text-gray-500">{t('company_dashboard.tp_no_records')}</td>
               </tr>
             )}
           </tbody>
@@ -255,26 +285,55 @@ export default function TrainingProgress() {
 
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
-        {filteredCourses.length > 0 ? (
-          filteredCourses.map((course) => (
-            <div key={course.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-              <h3 className="font-semibold text-gray-900">{course.employee}</h3>
-              <p className="text-gray-600 text-sm">{course.title}</p>
-              <div className="flex items-center justify-between mt-2">
-                <span className="text-sm text-gray-500">{course.completion}% Complete</span>
-                <div className="relative w-20 h-2 bg-gray-200 rounded-full">
-                  <div className="absolute h-full bg-green-700 rounded-full" style={{ width: `${course.completion}%` }} />
+        {filteredEmployees.length > 0 ? (
+          filteredEmployees.map((emp) => (
+            <div key={emp.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div 
+                className="flex items-center justify-between cursor-pointer" 
+                onClick={() => toggleUser(emp.id)}
+              >
+                <div>
+                  <h3 className="font-semibold text-gray-900">{emp.name}</h3>
+                  <p className="text-gray-500 text-sm">{emp.courses.length} Assigned Courses</p>
+                </div>
+                <div className="text-blue-600">
+                  {expandedUsers[emp.id] ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </div>
               </div>
-              <div className="flex items-center justify-between mt-3">
-                <span className="flex items-center text-xs text-green-700 bg-green-100 px-2 py-1 rounded-full">{course.status}</span>
-                <div className="flex space-x-2">
-                  <TPButton variant="outline" size="icon" onClick={() => handleDelete(course.id)}>
-                    <Trash2 className="h-4 w-4 text-gray-500" />
-                  </TPButton>
-                  <TPButton size="sm" onClick={() => handleOpenChat(course.id)}>Message</TPButton>
+
+              {expandedUsers[emp.id] && (
+                <div className="mt-4 pt-4 border-t border-gray-100 space-y-4">
+                  {emp.courses.map((course) => (
+                    <div key={course.id} className="bg-gray-50 p-3 rounded-md">
+                      <h4 className="font-medium text-gray-800 text-sm">{course.title}</h4>
+                      <p className="text-xs text-gray-500 mt-1">{course.deliveryMode}</p>
+                      
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="text-xs text-gray-500">{course.completion}% Complete</span>
+                        <div className="relative w-20 h-2 bg-gray-200 rounded-full">
+                          <div className="absolute h-full bg-green-700 rounded-full" style={{ width: `${course.completion}%` }} />
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-3">
+                        <span className={`flex items-center text-[10px] sm:text-xs px-2 py-1 rounded-full font-medium ${
+                          course.status === 'Completed' ? 'bg-green-100 text-green-800' :
+                          course.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                          'bg-gray-200 text-gray-800'
+                        }`}>
+                          {course.status}
+                        </span>
+                        <div className="flex space-x-2">
+                          <TPButton variant="outline" size="icon" onClick={(e) => { e.stopPropagation(); handleDelete(course.id); }}>
+                            <Trash2 className="h-4 w-4 text-gray-500" />
+                          </TPButton>
+                          <TPButton size="sm" onClick={(e) => { e.stopPropagation(); handleOpenChat(course.id); }}>Message</TPButton>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
+              )}
             </div>
           ))
         ) : (
@@ -293,7 +352,7 @@ export default function TrainingProgress() {
       {chatCourseId !== null && (
         <ChatPopup
           courseId={chatCourseId}
-          courseTitle={courses.find(c => c.id === chatCourseId)?.title}
+          courseTitle={groupedEmployees.flatMap(e => e.courses).find(c => c.id === chatCourseId)?.title}
           onClose={handleCloseChat}
         />
       )}

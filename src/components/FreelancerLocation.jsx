@@ -3,6 +3,8 @@ import { ChevronRight, SlidersHorizontal, MapPin, Users, Briefcase } from "lucid
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useTranslation } from 'react-i18next';
+import { SKILLS_LIST } from '../utils/skillsData';
 
 // Fix for Leaflet default markers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -45,8 +47,10 @@ export default function FreelancerLocation({ activeTab = "freelancers" }) {
   const [selectedPrefecture, setSelectedPrefecture] = useState(null);
   const [selectedSubPrefecture, setSelectedSubPrefecture] = useState(null);
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const [skillSearch, setSkillSearch] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [filteredLocations, setFilteredLocations] = useState([]);
+  const { t } = useTranslation();
   
   const filters = ["Region", "Prefecture", "Sub-Prefecture", "Skills"];
 
@@ -574,27 +578,31 @@ export default function FreelancerLocation({ activeTab = "freelancers" }) {
             {/* Skills Filter */}
             <div className="mt-3">
               <label className="block text-sm font-medium text-gray-700 mb-1">Skills</label>
+              
+              {/* Search Box for Skills */}
+              <input
+                type="text"
+                placeholder={t('freelancer_location.search_skills', 'Search skills...')}
+                value={skillSearch}
+                onChange={(e) => setSkillSearch(e.target.value)}
+                className="w-full p-2 mb-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#15803D]"
+              />
+
               <select
                 multiple
                 value={selectedSkills}
                 onChange={(e) => setSelectedSkills(Array.from(e.target.selectedOptions, option => option.value))}
                 className="w-full p-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#15803D]"
-                style={{ backgroundColor: selectedSkills.length > 0 ? '#15803D' : '#E5E7EB', color: selectedSkills.length > 0 ? 'white' : 'black' }}
+                style={{ backgroundColor: selectedSkills.length > 0 ? '#15803D' : '#E5E7EB', color: selectedSkills.length > 0 ? 'white' : 'black', minHeight: '120px' }}
               >
-                <option value="IT">IT Specialists</option>
-                <option value="Mining">Mining</option>
-                <option value="Agriculture">Agriculture for NGOs</option>
-                <option value="Graphic Designers">Graphic Designers</option>
-                <option value="Business Consultants">Business Consultants</option>
-                <option value="Marketers">Marketers</option>
-                <option value="Software Engineers">Software Engineers</option>
-                <option value="App Developers">App Developers</option>
-                <option value="Agricultural Experts">Agricultural Experts</option>
-                <option value="Construction Specialists">Construction Specialists</option>
-                <option value="Miners">Miners</option>
-                <option value="Surveyors">Surveyors</option>
-                <option value="Electricians">Electricians</option>
-                <option value="Agronomists">Agronomists</option>
+                {SKILLS_LIST.filter(skill => {
+                  const translatedSkill = t(`skills.${skill.key}`, skill.en).toLowerCase();
+                  return translatedSkill.includes(skillSearch.toLowerCase());
+                }).map((skill, index) => (
+                  <option key={index} value={skill.en}>
+                    {t(`skills.${skill.key}`, skill.en)}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -615,6 +623,7 @@ export default function FreelancerLocation({ activeTab = "freelancers" }) {
                 setSelectedPrefecture(null);
                 setSelectedSubPrefecture(null);
                 setSelectedSkills([]);
+                setSkillSearch('');
               }}
             >
               Clear All Filters

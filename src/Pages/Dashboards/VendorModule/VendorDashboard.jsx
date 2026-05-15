@@ -8,7 +8,10 @@ import DefaultAvatarImg from "../../../assets/profile-image.jpg";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
 import { auth } from "../../../firebaseConfig";
 import { VendorService } from "../../../services/vendorService";
+import { OrderService } from "../../../services/orderService";
+import { NotificationService } from "../../../services/notificationService";
 import { updatePassword, reauthenticateWithCredential, EmailAuthProvider, deleteUser } from "firebase/auth";
+import { ChangePasswordModal, DeleteAccountModal } from "../../../components/Modals/SecurityModals";
 
 // 🔹 Default Avatar (local asset to avoid DNS failures)
 const DefaultAvatar = DefaultAvatarImg;
@@ -55,7 +58,7 @@ function AvatarImage({ src, alt }) {
 }
 
 // 🔹 Profile Card Component
-function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDeleteAccount }) {
+function ProfileCard({ vendor, onUpload }) {
   const { t } = useTranslation();
   const [avatar, setAvatar] = useState(vendor?.avatar || DefaultAvatar);
   const progress = Math.round(vendor?.status?.profileCompletion || 0);
@@ -92,37 +95,37 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
   return (
     <Card className="p-4 md:col-span-3">
       <h3 className="text-lg font-semibold mb-3">{t('vendor_dashboard.profile.title')}</h3>
-      <div className="flex items-start gap-4 flex-wrap">
-        <div className="relative">
-          <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center">
+      <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
+        <div className="relative shrink-0 flex flex-col items-center">
+          <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center relative">
             <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
+            {isVendorOwner && (
+              <label className="absolute bottom-0 right-0 bg-green-600 text-white rounded-full p-1.5 shadow cursor-pointer transform translate-x-1/4 translate-y-1/4">
+                <Upload className="w-3.5 h-3.5" />
+                <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+              </label>
+            )}
           </div>
-          {isVendorOwner && (
-            <label className="absolute -bottom-1 -right-1 bg-green-600 text-white rounded-full p-2 shadow cursor-pointer">
-              <Upload className="w-4 h-4" />
-              <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
-            </label>
-          )}
-        </div>
-        <div className="w-full text-sm italic text-gray-600 mt-1">
-          {t('vendor_dashboard.profile.upload_photo')}
+          <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
+            {t('vendor_dashboard.profile.upload_photo')}
+          </div>
         </div>
 
-        <div className="flex-grow">
-          <p className="font-semibold">{vendor?.businessName || "Vendor"}</p>
+        <div className="flex-grow min-w-0">
+          <p className="font-semibold text-lg">{vendor?.businessName || "Vendor"}</p>
           <p className="text-sm text-gray-500">{vendor?.name}</p>
           <p className="text-sm text-gray-500">📍 {vendor?.location || "-"}</p>
           {vendor?.visibility?.email && (
-            <p className="text-sm text-gray-500">Email: {vendor?.email}</p>
+            <p className="text-sm text-gray-500 truncate">Email: {vendor?.email}</p>
           )}
           {vendor?.visibility?.phone && (
             <p className="text-sm text-gray-500">Phone: {vendor?.phone}</p>
           )}
           {vendor?.visibility?.socialLinks && (
-            <div className="text-sm text-gray-500 flex gap-3 flex-wrap">
-              {vendor?.socialLinks?.linkedin && <a className="text-blue-600" href={vendor.socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>}
-              {vendor?.socialLinks?.facebook && <a className="text-blue-600" href={vendor.socialLinks.facebook} target="_blank" rel="noreferrer">Facebook</a>}
-              {vendor?.socialLinks?.website && <a className="text-blue-600" href={vendor.socialLinks.website} target="_blank" rel="noreferrer">Website</a>}
+            <div className="text-sm text-gray-500 flex gap-3 flex-wrap mt-1">
+              {vendor?.socialLinks?.linkedin && <a className="text-blue-600 hover:underline" href={vendor.socialLinks.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>}
+              {vendor?.socialLinks?.facebook && <a className="text-blue-600 hover:underline" href={vendor.socialLinks.facebook} target="_blank" rel="noreferrer">Facebook</a>}
+              {vendor?.socialLinks?.website && <a className="text-blue-600 hover:underline" href={vendor.socialLinks.website} target="_blank" rel="noreferrer">Website</a>}
             </div>
           )}
         </div>
@@ -145,9 +148,6 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
         {vendor?.businessLicense?.licenseNumber && (
           <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('vendor_dashboard.profile.license', { number: vendor.businessLicense.licenseNumber })}</span>
         )}
-        {vendor?.paymentMethod?.type && (
-          <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">{t('vendor_dashboard.profile.payment', { type: vendor.paymentMethod.type, number: vendor.paymentMethod.number })}</span>
-        )}
       </div>
 
       <div className="flex items-center gap-1 mt-3 text-yellow-500">
@@ -157,267 +157,13 @@ function ProfileCard({ vendor, onUpload, onEditProfile, onChangePassword, onDele
         <span className="ml-2 text-sm text-gray-600">({vendor?.status?.rating || 0} / 5)</span>
       </div>
 
-      {/* Action Buttons */}
-      <div className="mt-4 space-y-2">
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="flex-1 text-xs"
-            onClick={onEditProfile}
-          >
-            <Edit className="h-3 w-3 mr-1" />
-            {t('vendor_dashboard.profile.edit')}
-          </Button>
-          <Button
-            variant="outline"
-            className="flex-1 text-xs"
-            onClick={onChangePassword}
-          >
-            <Lock className="h-3 w-3 mr-1" />
-            {t('vendor_dashboard.profile.change_password')}
-          </Button>
-        </div>
-
-        <Button
-          variant="outline"
-          className="w-full text-xs text-red-600 border-red-300 hover:bg-red-50"
-          onClick={onDeleteAccount}
-        >
-          <Trash2 className="h-3 w-3 mr-1" />
-          {t('vendor_dashboard.profile.delete_account')}
-        </Button>
-      </div>
     </Card>
   );
 }
 
-// Edit Profile Modal Component
-function EditProfileModal({ vendorData, onClose, onUpdate }) {
-  const { t } = useTranslation();
-  const [formData, setFormData] = useState({
-    name: vendorData?.name || '',
-    businessName: vendorData?.businessName || '',
-    location: vendorData?.location || '',
-    email: vendorData?.email || '',
-    phone: vendorData?.phone || '',
-    linkedin: vendorData?.socialLinks?.linkedin || '',
-    facebook: vendorData?.socialLinks?.facebook || '',
-    website: vendorData?.socialLinks?.website || '',
-    paymentNumber: vendorData?.paymentMethod?.number || ''
-  });
-  const [phoneCountryCode, setPhoneCountryCode] = useState("+224");
-  const [paymentCountryCode, setPaymentCountryCode] = useState("+224");
-  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
 
-    try {
-      await VendorService.updateVendorProfile(vendorData.id, {
-        name: formData.name,
-        businessName: formData.businessName,
-        location: formData.location,
-        email: formData.email,
-        phone: formData.phone,
-        socialLinks: {
-          linkedin: formData.linkedin,
-          facebook: formData.facebook,
-          website: formData.website
-        },
-        paymentMethod: {
-          ...vendorData.paymentMethod,
-          number: formData.paymentNumber
-        }
-      });
-
-      alert('Profile updated successfully!');
-      onUpdate(); // Refresh data
-      onClose();
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-4">{t('vendor_dashboard.modals.edit_profile.title')}</h3>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.name')}</label>
-              <input type="text" name="name" value={formData.name} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.business_name')}</label>
-              <input type="text" name="businessName" value={formData.businessName} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.location')}</label>
-              <input type="text" name="location" value={formData.location} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.email')}</label>
-              <input type="email" name="email" value={formData.email} onChange={handleInputChange} className="w-full px-3 py-2 border border-gray-300 rounded-md" required />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.phone')}</label>
-              <PhoneInput
-                value={formData.phone}
-                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
-                countryCode={phoneCountryCode}
-                onCountryCodeChange={setPhoneCountryCode}
-                className="rounded-md"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('vendor_dashboard.modals.edit_profile.payment_number')}</label>
-              <PhoneInput
-                value={formData.paymentNumber}
-                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
-                countryCode={paymentCountryCode}
-                onCountryCodeChange={setPaymentCountryCode}
-                className="rounded-md"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">{t('vendor_dashboard.modals.edit_profile.social_links')}</label>
-            <div className="space-y-2">
-              <input type="url" name="linkedin" value={formData.linkedin} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.linkedin')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <input type="url" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.facebook')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-              <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.edit_profile.website')} className="w-full px-3 py-2 border border-gray-300 rounded-md" />
-            </div>
-          </div>
-
-          <div className="flex gap-2 pt-4">
-            <Button type="submit" className="flex-1" disabled={loading}>{loading ? t('vendor_dashboard.modals.edit_profile.updating_btn') : t('vendor_dashboard.modals.edit_profile.update_btn')}</Button>
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>{t('vendor_dashboard.modals.edit_profile.cancel')}</Button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-// Change Password Modal Component
-function ChangePasswordModal({ vendorData, onClose }) {
-  const { t } = useTranslation();
-  const [formData, setFormData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
-  };
-
-  const validatePassword = (password) => {
-    const minLength = password.length >= 10;
-    const hasNumber = /\d/.test(password);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    return { minLength, hasNumber, hasSpecialChar, isValid: minLength && hasNumber && hasSpecialChar };
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrors({});
-
-    // Validation
-    const newPasswordValidation = validatePassword(formData.newPassword);
-    const newErrors = {};
-
-    if (!formData.currentPassword) newErrors.currentPassword = 'Current password is required';
-    if (!newPasswordValidation.isValid) newErrors.newPassword = 'Password must be at least 10 characters with 1 number and 1 special character';
-    if (formData.newPassword !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const user = auth.currentUser;
-      if (!user || user.uid !== vendorData.id) throw new Error("No authenticated user found");
-
-      // Re-authenticate
-      const credential = EmailAuthProvider.credential(user.email, formData.currentPassword);
-      await reauthenticateWithCredential(user, credential);
-
-      // Update password
-      await updatePassword(user, formData.newPassword);
-
-      alert('Password changed successfully!');
-      onClose();
-    } catch (error) {
-      console.error('Error changing password:', error);
-      let msg = error.message;
-      if (error.code === 'auth/wrong-password') msg = 'Incorrect current password.';
-      alert(msg || 'Failed to change password. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 className="text-lg font-semibold mb-4">{t('vendor_dashboard.modals.change_password.title')}</h3>
-        <p className="text-sm text-gray-600 mb-4">
-          {t('vendor_dashboard.modals.change_password.desc')}
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.current')} className={`w-full px-3 py-2 border rounded-md ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.currentPassword && <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>}
-          </div>
-          <div>
-            <input type="password" name="newPassword" value={formData.newPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.new')} className={`w-full px-3 py-2 border rounded-md ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.newPassword && <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>}
-          </div>
-          <div>
-            <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder={t('vendor_dashboard.modals.change_password.confirm')} className={`w-full px-3 py-2 border rounded-md ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
-          </div>
-
-          <div className="flex gap-2 mt-4">
-            <Button type="submit" className="flex-1" disabled={loading}>{loading ? t('vendor_dashboard.modals.change_password.changing_btn') : t('vendor_dashboard.modals.change_password.change_btn')}</Button>
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose} disabled={loading}>{t('vendor_dashboard.modals.change_password.cancel')}</Button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
 
 export default function VendorDashboard() {
   const { t } = useTranslation();
@@ -426,12 +172,12 @@ export default function VendorDashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [newSerial, setNewSerial] = useState({ product: "", serialNumber: "", status: "Available" });
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const [vendor, setVendor] = React.useState(null);
   const [dashboard, setDashboard] = React.useState(null);
   const [reviews, setReviews] = React.useState([]); // ADDED
+  const [recentOrders, setRecentOrders] = React.useState([]);
+  const [notifications, setNotifications] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
 
@@ -455,16 +201,20 @@ export default function VendorDashboard() {
           return;
         }
         setLoading(true);
-        const [vendorRes, dashStats, reviewsRes] = await Promise.all([
+        const [vendorRes, dashStats, reviewsRes, ordersRes, notifsRes] = await Promise.all([
           VendorService.getVendorProfile(user.uid),
           VendorService.getDashboardStats(user.uid),
-          VendorService.getVendorReviews(user.uid) // ADDED
+          VendorService.getVendorReviews(user.uid),
+          OrderService.getSellerOrders(user.uid),
+          NotificationService.getUserNotifications(user.uid)
         ]);
 
         if (!mounted) return;
         setVendor(vendorRes);
         setDashboard(dashStats);
-        setReviews(reviewsRes || []); // ADDED
+        setReviews(reviewsRes || []); 
+        setRecentOrders((ordersRes || []).slice(0, 5));
+        setNotifications((notifsRes || []).slice(0, 5));
       } catch (e) {
         if (!mounted) return;
         console.error("Dashboard load failed", e);
@@ -488,29 +238,7 @@ export default function VendorDashboard() {
     }
   };
 
-  const refreshVendorData = async () => {
-    try {
-      const vendorRes = await VendorService.getVendorProfile(user.uid);
-      setVendor(vendorRes);
-    } catch (e) {
-      console.error('Error refreshing vendor data:', e);
-    }
-  };
 
-  const handleDeleteAccount = async () => {
-    if (!vendor?.id) return;
-    if (!window.confirm(t('vendor_dashboard.profile.delete_confirm'))) return;
-
-    try {
-      await VendorService.deleteVendor(vendor.id);
-      await deleteUser(user);
-      alert('Account deleted successfully');
-      window.location.href = '/';
-    } catch (error) {
-      console.error('Error deleting account:', error);
-      alert('Failed to delete account. Please try again.');
-    }
-  };
 
   const [serialNumbers, setSerialNumbers] = useState(() => {
     const saved = localStorage.getItem('vendorSerialNumbers');
@@ -577,9 +305,6 @@ export default function VendorDashboard() {
         <ProfileCard
           vendor={vendor}
           onUpload={uploadAvatar}
-          onEditProfile={() => setShowEditModal(true)}
-          onChangePassword={() => setShowPasswordModal(true)}
-          onDeleteAccount={handleDeleteAccount}
         />
 
         {/* Orders Card */}
@@ -647,21 +372,75 @@ export default function VendorDashboard() {
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center flex-grow">
-                <h4 className="text-lg md:text-xl font-bold mb-2">{t('vendor_dashboard.overview.get_started_orders')}</h4>
-                <p className="text-gray-500 w-full">
-                  {t('vendor_dashboard.overview.orders_info')}
-                </p>
+                {recentOrders.length > 0 ? (
+                  <div className="w-full space-y-2 p-2 max-h-[350px] overflow-y-auto text-left">
+                    {recentOrders.map(order => (
+                      <div key={order.id} className="grid grid-cols-6 min-w-[600px] gap-4 text-sm py-3 border-b border-gray-100 hover:bg-gray-50 px-4">
+                        <div className="text-gray-500">{order.createdAt?.seconds ? new Date(order.createdAt.seconds * 1000).toLocaleDateString() : '-'}</div>
+                        <div className="font-medium">{order.buyerName || '-'}</div>
+                        <div>{order.product || '-'}</div>
+                        <div className="text-gray-500">{order.quantity || 1}</div>
+                        <div>
+                          <span className={`px-2 py-0.5 rounded text-[10px] ${order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                            {order.status || 'pending'}
+                          </span>
+                        </div>
+                        <div className="font-medium">{order.totalAmount ? `${order.totalAmount} GNF` : '-'}</div>
+                      </div>
+                    ))}
+                    <div className="flex justify-center pt-4">
+                      <Button onClick={() => navigate("/vendor/dashboard/orders")}>{t('vendor_dashboard.overview.view_all_orders')}</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h4 className="text-lg md:text-xl font-bold mb-2">{t('vendor_dashboard.overview.get_started_orders')}</h4>
+                    <p className="text-gray-500 w-full md:w-2/3">{t('vendor_dashboard.overview.orders_desc')}</p>
+                    <Button className="mt-4" onClick={() => navigate("/vendor/dashboard/orders")}>{t('vendor_dashboard.overview.view_all_orders')}</Button>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Reviews Section (Right) */}
-        <div className="md:col-span-1 md:row-span-2 flex flex-col">
-          <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.reviews')}</h3>
-          <Card className="flex-grow">
-            <CardContent className="flex flex-col h-full p-0">
-              <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
+        {/* Notifications & Reviews Section (Right) */}
+        <div className="md:col-span-1 md:row-span-2 flex flex-col gap-6">
+          {/* Notifications */}
+          <div className="flex flex-col">
+            <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.notifications', 'Notifications')}</h3>
+            <Card className="flex-grow">
+              <CardContent className="flex flex-col h-full p-0">
+                <div className="flex-grow overflow-y-auto max-h-[250px] p-4 space-y-3">
+                  {notifications.length > 0 ? (
+                    notifications.map(notif => (
+                      <div key={notif.id} className="flex gap-3 text-sm bg-gray-50 p-3 rounded-lg border border-gray-100">
+                        <div className="p-1.5 h-8 w-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <Info className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <p className="font-medium text-gray-800">{notif.title}</p>
+                          <p className="text-gray-600 text-xs mt-1">{notif.message}</p>
+                          <p className="text-[10px] text-gray-400 mt-1">{notif.createdAt?.seconds ? new Date(notif.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-8">
+                      <p className="text-sm">You'll receive notifications here for new orders, stock alerts, and platform updates.</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Reviews */}
+          <div className="flex flex-col">
+            <h3 className="text-base md:text-lg font-semibold mb-2">{t('vendor_dashboard.overview.reviews')}</h3>
+            <Card className="flex-grow">
+              <CardContent className="flex flex-col h-full p-0">
+                <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
                 {reviews.length === 0 ? (
                   <div className="p-4 text-center text-gray-500 italic">
                     {t('vendor_dashboard.overview.no_reviews')}
@@ -703,6 +482,7 @@ export default function VendorDashboard() {
               </div>
             </CardContent>
           </Card>
+          </div>
         </div>
       </div>
 
@@ -863,23 +643,6 @@ export default function VendorDashboard() {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Edit Profile Modal */}
-      {showEditModal && (
-        <EditProfileModal
-          vendorData={vendor}
-          onClose={() => setShowEditModal(false)}
-          onUpdate={refreshVendorData}
-        />
-      )}
-
-      {/* Change Password Modal */}
-      {showPasswordModal && (
-        <ChangePasswordModal
-          vendorData={vendor}
-          onClose={() => setShowPasswordModal(false)}
-        />
       )}
     </div>
   );

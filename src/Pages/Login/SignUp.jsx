@@ -9,6 +9,7 @@ import { auth } from "../../firebaseConfig";
 import { UserService } from "../../services/userService";
 
 import PhoneInput from "../../components/PhoneInput";
+import { guineaCitiesByRegion } from "../../data/guineaCities";
 
 export default function SignUp() {
   const { t } = useTranslation();
@@ -19,6 +20,15 @@ export default function SignUp() {
   const [role, setRole] = useState(""); 
   const [countryCode, setCountryCode] = useState("+224");
   const [phone, setPhone] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedPrefecture, setSelectedPrefecture] = useState("");
+  const [selectedSubPrefecture, setSelectedSubPrefecture] = useState("");
+
+  // Derived data for cascading dropdowns
+  const regionData = guineaCitiesByRegion.find(r => r.region === selectedRegion);
+  const prefectures = regionData ? regionData.prefectures : [];
+  const prefectureData = prefectures.find(p => p.name === selectedPrefecture);
+  const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) =>
@@ -90,6 +100,9 @@ export default function SignUp() {
         email,
         phone: `${countryCode}${phoneDigits}`,
         role: userRole,
+        region: selectedRegion || null,
+        prefecture: selectedPrefecture || null,
+        subPrefecture: selectedSubPrefecture || null,
       };
 
       // Save user profile to Firestore via UserService
@@ -222,6 +235,81 @@ export default function SignUp() {
                 <option value="Seller">{t('signup_page.form.roles.seller') || "Seller"}</option>
               </select>
             </div>
+
+            {/* Country */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
+                {t('signup_page.form.country') || "Country"}
+              </label>
+              <select
+                className="w-full px-3 py-2 border border-green-600 rounded-full bg-gray-100 text-gray-600 cursor-not-allowed focus:outline-none"
+                disabled
+              >
+                <option value="Guinea">Guinea</option>
+              </select>
+            </div>
+
+            {/* Region */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
+                {t('signup_page.form.region') || "Region"}
+              </label>
+              <select
+                value={selectedRegion}
+                onChange={(e) => {
+                  setSelectedRegion(e.target.value);
+                  setSelectedPrefecture("");
+                  setSelectedSubPrefecture("");
+                }}
+                className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+              >
+                <option value="">{t('signup_page.form.select_region') || "Select Region"}</option>
+                {guineaCitiesByRegion.map(r => (
+                  <option key={r.region} value={r.region}>{r.region}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Prefecture */}
+            {selectedRegion && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
+                  {t('signup_page.form.prefecture') || "Prefecture"}
+                </label>
+                <select
+                  value={selectedPrefecture}
+                  onChange={(e) => {
+                    setSelectedPrefecture(e.target.value);
+                    setSelectedSubPrefecture("");
+                  }}
+                  className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="">{t('signup_page.form.select_prefecture') || "Select Prefecture"}</option>
+                  {prefectures.map(p => (
+                    <option key={p.name} value={p.name}>{p.name}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Sub-Prefecture */}
+            {selectedPrefecture && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
+                  {t('signup_page.form.sub_prefecture') || "Sub-Prefecture"}
+                </label>
+                <select
+                  value={selectedSubPrefecture}
+                  onChange={(e) => setSelectedSubPrefecture(e.target.value)}
+                  className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  <option value="">{t('signup_page.form.select_sub_prefecture') || "Select Sub-Prefecture"}</option>
+                  {subPrefectures.map(sp => (
+                    <option key={sp} value={sp}>{sp}</option>
+                  ))}
+                </select>
+              </div>
+            )}
 
 
             {/* Password */}

@@ -75,6 +75,9 @@ const SubscriptionPlan = ({
       setPaymentResult(result);
 
       if (result.success) {
+        // Record purchase in localStorage for immediate access
+        localStorage.setItem('hasPurchasedTraining', 'true');
+        
         // Show success message in the UI
         setPaymentResult({
           success: true,

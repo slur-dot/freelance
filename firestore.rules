@@ -63,6 +63,20 @@ service cloud.firestore {
       allow update, delete: if (isAuthenticated() && resource.data.sellerId == request.auth.uid) || isAdmin(); // Owner or Admin
     }
 
+    // Job Descriptions Collection
+    match /jobDescriptions/{jobId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.companyId == request.auth.uid);
+    }
+
+    // Job Applications Collection
+    match /jobApplications/{appId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.freelancerId == request.auth.uid);
+    }
+
     // Orders Collection
     match /orders/{orderId} {
       // Admin can list/count all orders

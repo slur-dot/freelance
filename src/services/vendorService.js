@@ -76,11 +76,11 @@ export const VendorService = {
             if (typeof fileBlob === 'string' && fileBlob.startsWith('data:')) {
                 const response = await fetch(fileBlob);
                 const blob = await response.blob();
-                const storageRef = ref(storage, `avatars/${vendorId}_${Date.now()}.jpg`);
+                const storageRef = ref(storage, `ads/avatars/${vendorId}_${Date.now()}.jpg`);
                 const uploadResult = await uploadBytes(storageRef, blob);
                 uploadRef = uploadResult.ref;
             } else {
-                const storageRef = ref(storage, `avatars/${vendorId}_${fileBlob.name}`);
+                const storageRef = ref(storage, `ads/avatars/${vendorId}_${fileBlob.name}`);
                 const uploadResult = await uploadBytes(storageRef, fileBlob);
                 uploadRef = uploadResult.ref;
             }

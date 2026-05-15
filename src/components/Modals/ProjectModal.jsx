@@ -56,12 +56,12 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
           >
             <X className="w-5 h-5" />
           </button>
-          <div className="flex items-center gap-4">
-             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md">
+          <div className="flex items-start sm:items-center gap-4 pr-12">
+             <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-md shrink-0">
                 <Briefcase className="w-8 h-8" />
              </div>
              <div>
-                <h3 className="text-2xl font-bold">{t('freelancer_dashboard.modals.post_project.title', 'Post New Service')}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold leading-tight">{t('freelancer_dashboard.modals.post_project.title', 'Post New Service')}</h3>
                 <p className="text-white/70 text-sm mt-1">{t('freelancer_dashboard.modals.post_project.subtitle', 'Offer your expertise to potential clients.')}</p>
              </div>
           </div>
@@ -119,17 +119,17 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 pt-4">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 pt-4">
             <button 
               onClick={onClose}
-              className="flex-1 px-8 py-4 rounded-2xl text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors"
+              className="flex-1 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors text-center"
             >
               {t('freelancer_dashboard.modals.post_project.cancel', 'Cancel')}
             </button>
             <button 
               disabled={saving}
               onClick={handleSubmit}
-              className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-2xl shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 disabled:bg-blue-300 disabled:translate-y-0"
+              className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-2xl shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 disabled:bg-blue-300 disabled:translate-y-0 text-center"
             >
               {saving ? t('freelancer_dashboard.modals.post_project.saving', 'Posting...') : t('freelancer_dashboard.modals.post_project.save', 'Post Service')}
             </button>

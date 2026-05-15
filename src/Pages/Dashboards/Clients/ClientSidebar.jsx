@@ -20,6 +20,8 @@ import {
   Mail,
   Store,
   Handshake,
+  Bell,
+  MessageCircle,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
@@ -50,6 +52,16 @@ export default function ClientSidebar() {
           title: t('sidebar.hired_freelancers'),
           url: "/Clients/dashboard/Hired-Freelancers",
           icon: MoreHorizontal,
+        },
+        {
+          title: 'Messages',
+          url: "/Clients/dashboard/messages",
+          icon: MessageCircle,
+        },
+        {
+          title: 'Notifications',
+          url: "/Clients/dashboard/notifications",
+          icon: Bell,
         },
       ],
     },

@@ -32,6 +32,8 @@ import Contact from './Pages/Contact';
 import HireFreelancer from "./Pages/HireFreelancer";
 import FreelancerInfo from './Pages/FreelancerInfo';
 import JobPostForm from './components/JobPostForm';
+import JobBoard from './Pages/JobBoard';
+import JobDetailPage from './Pages/JobDetailPage';
 import FreelancerSidebar from "./Pages/Dashboards/Freelancers/FreelancerSidebar";
 import FreelancerDashboard from "./Pages/Dashboards/Freelancers/FreelancerDashboard";
 import TrainingProgress from "./Pages/Dashboards/Freelancers/TrainingProgress";
@@ -51,12 +53,15 @@ import ClientDashboard from './Pages/Dashboards/Clients/ClientDashboard';
 import HiredFreelancers from './Pages/Dashboards/Clients/HiredFreelancers';
 import Payments from './Pages/Dashboards/Clients/Payments';
 import ProjectList from './Pages/Dashboards/Clients/ProjectList';
+import ClientNotifications from './Pages/Dashboards/Clients/ClientNotifications';
+import ClientMessages from './Pages/Dashboards/Clients/ClientMessages';
 import CompanySidebar from './Pages/Dashboards/Company/CompanySidebar';
 import CompanyDashboard from './Pages/Dashboards/Company/CompanyDashboard';
 import ContractManagement from './Pages/Dashboards/Company/ContractManagement';
 import EquipmentTracking from './Pages/Dashboards/Company/EquipmentTracking';
 import IssueReporting from './Pages/Dashboards/Company/IssueReporting';
 import JobPostings from './Pages/Dashboards/Company/JobPostings';
+import Transactions from './Pages/Dashboards/Company/Transactions';
 import UserLogin from "./Pages/Login/UserLogin";
 import SuccessfulPage from './Pages/Login/SuccessfulPage';
 import VerifyCodePage from './Pages/Login/VerifyCodePage';
@@ -100,6 +105,7 @@ import VendorProfiles from './Pages/VendorProfiles';
 import CompanyHistory from './components/CompanyHistory';
 import VendorInfo from './Pages/VendorInfo';
 import Partnership from './Pages/Partnership';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
 
 import './App.css';
 import LiveChatWidget from './components/Support/LiveChatWidget';
@@ -159,6 +165,8 @@ function AppContent() {
           <Route path="/tech-services/booking" element={<TechServiceBooking />} />
           <Route path="/corporate-sales" element={<CorporateSales />} />
           <Route path="/contact" element={< Contact />} />
+          <Route path="/job-board" element={<JobBoard />} />
+          <Route path="/job-board/:id" element={<JobDetailPage />} />
           <Route path="/hire-freelancers" element={<HireFreelancer />} />
           <Route path="/hire-freelancers/info" element={<FreelancerInfo />} />
           <Route path="/hire-freelancers/info/job-post" element={<JobPostForm />} />
@@ -166,6 +174,7 @@ function AppContent() {
           <Route path="/company-history" element={<CompanyHistory />} />
           <Route path="/vendor-profiles/info" element={<VendorInfo />} />
           <Route path="/partnership" element={<Partnership />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
           {/* Login Page */}
           <Route path="/login" element={<UserLogin />} />
@@ -194,6 +203,8 @@ function AppContent() {
             <Route path="Hired-Freelancers" element={<HiredFreelancers />} />
             <Route path="Project-List" element={<ProjectList />} />
             <Route path="payments" element={<Payments />} />
+            <Route path="notifications" element={<ClientNotifications />} />
+            <Route path="messages" element={<ClientMessages />} />
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<ClientProfile />} />
           </Route>
@@ -209,6 +220,7 @@ function AppContent() {
             <Route path="equipment" element={<EquipmentTracking />} />
             <Route path="issues" element={<IssueReporting />} />
             <Route path="jobs" element={<JobPostings />} />
+            <Route path="transactions" element={<Transactions />} />
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<CompanyProfile />} />
           </Route>

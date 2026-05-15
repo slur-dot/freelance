@@ -1,66 +1,78 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { PlayCircle, ChevronRight, Download, Award, BookOpen } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { PlayCircle, ChevronRight, Download, Award, BookOpen, Lock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import coursesImg from "../../assets/Courses_image.png";
 import VideoPlayer from "../../components/Training/VideoPlayer";
 import ProgressTracker from "../../components/Training/ProgressTracker";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function CourseDetailPage() {
   const [tab, setTab] = useState("videos");
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  
+  const hasPurchasedTraining = localStorage.getItem('hasPurchasedTraining') === 'true';
   const course = location.state?.course;
   const progressValue = 50;
 
   const courseTitle = course?.title || t('training.courses.freelance.course_1.title');
   const courseDescription = course?.description || t('training.courses.freelance.course_1.description');
 
-  const courseLessons = [
+  const rawLessons = [
     {
+      id: 1,
       title: t('training.detail_content.lessons.l1'),
       videoUrl: "https://www.youtube.com/watch?v=qz0aGY077lh",
       duration: "15:30",
-      completed: false
     },
     {
+      id: 2,
       title: t('training.detail_content.lessons.l2'),
       videoUrl: "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
       duration: "18:45",
-      completed: false
     },
     {
+      id: 3,
       title: t('training.detail_content.lessons.l3'),
       videoUrl: "https://www.youtube.com/watch?v=W6NZfCO5SIk",
       duration: "22:10",
-      completed: true
     },
     {
+      id: 4,
       title: t('training.detail_content.lessons.l4'),
       videoUrl: "https://www.youtube.com/watch?v=srvUrASGdCw",
       duration: "20:15",
-      completed: false
     },
     {
+      id: 5,
       title: t('training.detail_content.lessons.l5'),
       videoUrl: "https://www.youtube.com/watch?v=0pThnRneDjw",
       duration: "25:30",
-      completed: false
     },
     {
+      id: 6,
       title: t('training.detail_content.lessons.l6'),
       videoUrl: "https://www.youtube.com/watch?v=8Vq8KqJ8Q8Q",
       duration: "30:45",
-      completed: false
     },
   ];
+
+  const courseLessons = rawLessons.map((lesson, index) => {
+    const isIntro = index < 2;
+    const isUnlocked = currentUser && (isIntro || hasPurchasedTraining);
+    const completed = hasPurchasedTraining && index < 3; // mock completed for first 3 if purchased
+    return { ...lesson, isUnlocked, completed };
+  });
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">
       {/* full-width max container */}
       <div className="max-w-6xl mx-auto p-6 md:p-8 bg-white shadow-md">
         {/* internal horizontal margin for all content */}
-        <div className="mx-4 sm:mx-8 lg:mx-16">
+        <div className="sm:mx-8 lg:mx-16">
           {/* Static Breadcrumb */}
           <nav className="text-sm text-gray-500 mb-6 flex items-center flex-wrap">
             <Link to="/" className="hover:underline hover:text-blue-600">
@@ -124,14 +136,14 @@ export default function CourseDetailPage() {
 
           {/* Tabs Container  */}
           <div className="bg-gray-50 p-4 border border-gray-300">
-            <div className="grid w-full grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-4">
+            <div className="flex overflow-x-auto whitespace-nowrap scrollbar-hide gap-2 sm:gap-4 pb-2">
               {["videos", "progress", "resources", "certificate", "notes"].map((item) => (
                 <button
                   key={item}
                   onClick={() => setTab(item)}
-                  className={`py-1 px-2 text-sm sm:text-base font-medium rounded-none flex items-center gap-2 ${tab === item
-                      ? "text-black"
-                      : "text-gray-600 hover:text-black"
+                  className={`py-2 px-3 text-sm sm:text-base font-medium rounded-none flex items-center gap-2 flex-shrink-0 ${tab === item
+                      ? "text-black border-b-2 border-black"
+                      : "text-gray-600 hover:text-black border-b-2 border-transparent"
                     }`}
                 >
                   {item === "videos" && <PlayCircle className="h-4 w-4" />}
@@ -152,34 +164,53 @@ export default function CourseDetailPage() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold mb-4">{t('training.detail.lessons.title')}</h3>
                   {courseLessons.map((lesson, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between">
+                    <div key={index} className={`border rounded-lg p-4 transition-shadow overflow-hidden ${lesson.isUnlocked ? 'border-gray-200 hover:shadow-md bg-white' : 'border-gray-100 bg-gray-50 opacity-80'}`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <div className="flex items-center space-x-4">
                           <div className="flex-shrink-0">
                             {lesson.completed ? (
                               <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                                 <span className="text-white text-sm">✓</span>
                               </div>
+                            ) : !lesson.isUnlocked ? (
+                              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                                <Lock className="w-4 h-4 text-gray-500" />
+                              </div>
                             ) : (
-                              <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                                <PlayCircle className="w-4 h-4 text-gray-600" />
+                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <PlayCircle className="w-4 h-4 text-blue-600" />
                               </div>
                             )}
                           </div>
                           <div>
-                            <h4 className="font-medium text-gray-900">{lesson.title}</h4>
-                            <p className="text-sm text-gray-500">{t('training.detail.lessons.duration', { duration: lesson.duration })}</p>
+                            <h4 className={`font-medium leading-tight ${lesson.isUnlocked ? 'text-gray-900' : 'text-gray-500'}`}>{lesson.title}</h4>
+                            <p className="text-sm text-gray-500 mt-1">{t('training.detail.lessons.duration', { duration: lesson.duration })}</p>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={() => window.open(lesson.videoUrl, '_blank')}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                          >
-                            {t('training.detail.lessons.watch')}
-                          </button>
-                          {lesson.completed && (
-                            <span className="text-green-600 text-sm font-medium">{t('training.detail.lessons.completed')}</span>
+                        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto sm:pl-0">
+                          {!currentUser ? (
+                            <button
+                              onClick={() => navigate('/login')}
+                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+                            >
+                              Log in to Watch
+                            </button>
+                          ) : lesson.isUnlocked ? (
+                            <>
+                              <button
+                                onClick={() => window.open(lesson.videoUrl, '_blank')}
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+                              >
+                                {t('training.detail.lessons.watch')}
+                              </button>
+                              {lesson.completed && (
+                                <span className="text-green-600 text-sm font-medium whitespace-nowrap">{t('training.detail.lessons.completed')}</span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="text-gray-500 text-sm font-medium whitespace-nowrap flex items-center gap-1">
+                              <Lock className="w-4 h-4" /> {t('training.status.locked')}
+                            </span>
                           )}
                         </div>
                       </div>

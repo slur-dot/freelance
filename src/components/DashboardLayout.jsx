@@ -12,6 +12,14 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
   const { userRole } = useAuth();
   const { t } = useTranslation();
 
+  const getBasePath = () => {
+    const parts = activePath.split('/');
+    if (parts.length >= 3 && parts[2] === 'dashboard') {
+      return `/${parts[1]}/dashboard`;
+    }
+    return `/${parts[1]}`;
+  };
+
   return (
     <div className="flex bg-gray-50 min-h-screen font-sans">
       {/* Mobile Topbar */}
@@ -24,14 +32,14 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
           <span className="font-bold text-lg text-gray-800">Freelance</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.notifications', 'Notifications')}>
+          <Link to={`${getBasePath()}/notifications`} className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.notifications', 'Notifications')}>
             <Bell className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">0</span>
-          </button>
-          <button className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.messages', 'Messages')}>
+          </Link>
+          <Link to={`${getBasePath()}/messages`} className="relative text-gray-600 hover:text-blue-600 transition-colors" title={t('navbar.messages', 'Messages')}>
             <MessageSquare className="h-5 w-5" />
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-bold rounded-full h-3.5 w-3.5 flex items-center justify-center">0</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -176,6 +184,20 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 lg:mt-0 mt-16 overflow-x-hidden">
+        {/* Desktop Topbar */}
+        <header className="hidden lg:flex items-center justify-end px-8 py-4 bg-white border-b border-gray-200 sticky top-0 z-30">
+          <div className="flex items-center gap-4">
+            <Link to={`${getBasePath()}/notifications`} className="relative p-2 text-gray-500 hover:text-blue-600 transition-colors" title={t('navbar.notifications', 'Notifications')}>
+              <Bell className="h-5 w-5" />
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white">0</span>
+            </Link>
+            <Link to={`${getBasePath()}/messages`} className="relative p-2 text-gray-500 hover:text-blue-600 transition-colors" title={t('navbar.messages', 'Messages')}>
+              <MessageSquare className="h-5 w-5" />
+              <span className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center border-2 border-white">0</span>
+            </Link>
+          </div>
+        </header>
+
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           <Outlet />
         </main>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { User, Home, ShoppingCart, Users, MapPin, Wrench, Monitor, BookOpen, Briefcase, HelpCircle, FileText, Mail, Store, Handshake, Share2 } from "lucide-react";
+import { User, Home, ShoppingCart, Users, MapPin, Wrench, Monitor, BookOpen, Briefcase, HelpCircle, FileText, Mail, Store, Handshake, Share2, Bell, MessageCircle } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
 import { VendorService } from "../../../services/vendorService";
@@ -73,15 +73,7 @@ export default function VendorSidebar() {
             </svg>
           ),
         },
-        {
-          title: t('vendor_dashboard.sidebar.payouts'),
-          url: "/vendor/dashboard/payouts",
-          icon: (
-            <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20.5833 16.0052V7.33854C20.5833 6.14688 19.6083 5.17188 18.4166 5.17188H3.24992C2.05825 5.17188 1.08325 6.14688 1.08325 7.33854V16.0052C1.08325 17.1969 2.05825 18.1719 3.24992 18.1719H18.4166C19.6083 18.1719 20.5833 17.1969 20.5833 16.0052ZM10.8333 14.9219C9.03492 14.9219 7.58325 13.4702 7.58325 11.6719C7.58325 9.87354 9.03492 8.42188 10.8333 8.42188C12.6316 8.42188 14.0833 9.87354 14.0833 11.6719C14.0833 13.4702 12.6316 14.9219 10.8333 14.9219Z" fill="#667085" />
-            </svg>
-          ),
-        },
+
         {
           title: t('vendor_dashboard.sidebar.ads'),
           url: "/vendor/dashboard/ads",
@@ -90,6 +82,16 @@ export default function VendorSidebar() {
               <path d="M18.4999 18.5055V15.2555H15.2499V13.0889H18.4999V9.83887H20.6666V13.0889H23.9166V15.2555H20.6666V18.5055H18.4999ZM2.24992 19.5889C1.65409 19.5889 1.1442 19.3769 0.720252 18.953C0.296308 18.529 0.0839742 18.0188 0.083252 17.4222V2.25553C0.083252 1.6597 0.295585 1.14981 0.720252 0.725867C1.14492 0.301923 1.65481 0.0895894 2.24992 0.0888672H17.4166C18.0124 0.0888672 18.5227 0.301201 18.9473 0.725867C19.372 1.15053 19.584 1.66042 19.5833 2.25553V7.6722H17.4166V5.50553H2.24992V17.4222H16.3333V19.5889H2.24992Z" fill="#667085" />
             </svg>
           ),
+        },
+        {
+          title: t('sidebar.messages', 'Messages'),
+          url: "/vendor/dashboard/messages",
+          icon: <MessageCircle className="h-5 w-5 text-gray-400" />
+        },
+        {
+          title: t('sidebar.notifications', 'Notifications'),
+          url: "/vendor/dashboard/notifications",
+          icon: <Bell className="h-5 w-5 text-gray-400" />
         },
       ],
     },

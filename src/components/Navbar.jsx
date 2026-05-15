@@ -11,6 +11,7 @@ import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
+import ITSupportLogo from "../assets/ITSupport.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -74,8 +75,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16 gap-3 xl:gap-6 w-full">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
-            <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-full object-cover" />
-            <span className="ml-2 text-xl font-bold text-gray-900">Freelance</span>
+            <img src={current.startsWith("/tech-services") ? ITSupportLogo : "/logo.png"} alt="Logo" className="w-10 h-10 rounded-full object-cover" />
+            <span className="ml-2 text-xl font-bold text-gray-900">{current.startsWith("/tech-services") ? "Tech Services" : "Freelance"}</span>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -88,7 +89,7 @@ export default function Navbar() {
               </button>
               <div className="absolute left-0 top-full pt-1 w-48 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-[100]">
                 <div className="bg-white border border-gray-200 rounded shadow-lg py-1 text-sm text-gray-700 font-normal">
-                  <Link to="/shop" className="block px-4 py-2 hover:bg-gray-100">All Products</Link>
+                  <Link to="/shop" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.all_products', 'All Products')}</Link>
                   {userRole !== 'freelancer' && (
                     <Link to="/computer-rental" className="block px-4 py-2 hover:bg-gray-100">{t('navbar.device_rental', 'Device Rental')}</Link>
                   )}
@@ -97,6 +98,7 @@ export default function Navbar() {
               </div>
             </div>
             <Link to="/hire-freelancers" className={isActive("/hire-freelancers")}>{t('navbar.hire_freelancers')}</Link>
+            <Link to="/job-board" className={isActive("/job-board")}>{t('navbar.job_board', 'Job Board')}</Link>
             <Link to="/locations" className={`${isActive("/locations")} hidden xl:inline-block`}>{t('navbar.locations')}</Link>
             <Link to="/tech-services" className={`${isActive("/tech-services")} hidden xl:inline-block`}>{t('navbar.tech_services')}</Link>
 
@@ -153,20 +155,22 @@ export default function Navbar() {
                 </button>
               </div>
             ) : (
-              <>
-                <button
-                  onClick={handleLogin}
-                  className="text-white bg-blue-500 rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-blue-600 transition whitespace-nowrap"
-                >
-                  {t('navbar.login')}
-                </button>
-                <button
-                  onClick={handleSignup}
-                  className="bg-green-700 text-white rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-green-800 transition whitespace-nowrap"
-                >
-                  {t('navbar.signup')}
-                </button>
-              </>
+              !current.startsWith("/tech-services") && (
+                <>
+                  <button
+                    onClick={handleLogin}
+                    className="text-white bg-blue-500 rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-blue-600 transition whitespace-nowrap"
+                  >
+                    {t('navbar.login')}
+                  </button>
+                  <button
+                    onClick={handleSignup}
+                    className="bg-green-700 text-white rounded-2xl px-3 xl:px-4 py-1 text-sm hover:bg-green-800 transition whitespace-nowrap"
+                  >
+                    {t('navbar.signup')}
+                  </button>
+                </>
+              )
             )}
             <div className="flex space-x-1 xl:space-x-2 ml-2">
               <button onClick={() => changeLanguage('en')} className={`text-xs xl:text-sm font-medium ${i18n.language === 'en' ? 'text-blue-600' : 'text-gray-700'}`}>EN</button>
@@ -237,8 +241,8 @@ export default function Navbar() {
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b">
                   <div className="flex items-center space-x-2">
-                    <img src="/logo.png" className="w-8 h-8 rounded-full" />
-                    <span className="font-bold text-gray-800 text-lg">Freelance</span>
+                    <img src={current.startsWith("/tech-services") ? ITSupportLogo : "/logo.png"} className="w-8 h-8 rounded-full" />
+                    <span className="font-bold text-gray-800 text-lg">{current.startsWith("/tech-services") ? "Tech Services" : "Freelance"}</span>
                   </div>
 
                   <div className="flex items-center space-x-4">
@@ -275,6 +279,10 @@ export default function Navbar() {
 
                     <Link to="/hire-freelancers" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
                       {t("navbar.hire_freelancers")}
+                    </Link>
+
+                    <Link to="/job-board" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
+                      {t("navbar.job_board", "Job Board")}
                     </Link>
 
                     <Link to="/locations" onClick={() => setIsMobileMenuOpen(false)} className="block hover:text-blue-600">
@@ -340,7 +348,7 @@ export default function Navbar() {
                   {/* Language Switch */}
                   <div>
                     <p className="text-sm font-semibold text-gray-400 uppercase mb-3">
-                      Language
+                      {t('navbar.language', 'Language')}
                     </p>
 
                     <div className="flex gap-3">
@@ -400,21 +408,23 @@ export default function Navbar() {
                       </div>
                     </div>
                   ) : (
-                    <>
-                      <button
-                        onClick={handleLogin}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
-                      >
-                        {t("navbar.login")}
-                      </button>
+                    !current.startsWith("/tech-services") && (
+                      <>
+                        <button
+                          onClick={handleLogin}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition"
+                        >
+                          {t("navbar.login")}
+                        </button>
 
-                      <button
-                        onClick={handleSignup}
-                        className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition"
-                      >
-                        {t("navbar.signup")}
-                      </button>
-                    </>
+                        <button
+                          onClick={handleSignup}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition"
+                        >
+                          {t("navbar.signup")}
+                        </button>
+                      </>
+                    )
                   )}
                 </div>
               </div>

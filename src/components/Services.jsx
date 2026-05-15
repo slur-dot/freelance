@@ -34,17 +34,48 @@ const ServiceCard = ({ icon, title, description, buttonText, additionalContent, 
   );
 };
 
+import { db } from "../firebaseConfig";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
+import HireFreelanceImage from "../assets/HireFreelanceImage.png";
+
 export default function Services() {
   const { t } = useTranslation();
+  const [profiles, setProfiles] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
-  const profiles = [
-    { name: t('services_page.profiles.mariama.name'), role: t('services_page.profiles.mariama.role') },
-    { name: t('services_page.profiles.ibrahima.name'), role: t('services_page.profiles.ibrahima.role') },
-    { name: t('services_page.profiles.fatou.name'), role: t('services_page.profiles.fatou.role') },
-    { name: t('services_page.profiles.sekou.name'), role: t('services_page.profiles.sekou.role') },
-    { name: t('services_page.profiles.aminata.name'), role: t('services_page.profiles.aminata.role') },
-    { name: t('services_page.profiles.mohamed.name'), role: t('services_page.profiles.mohamed.role') },
-  ];
+  React.useEffect(() => {
+    async function loadFreelancers() {
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("role", "in", ["freelancer", "Freelancer"]), limit(10));
+        const snap = await getDocs(q);
+        
+        if (!snap.empty) {
+          const liveProfiles = snap.docs.map(doc => {
+            const data = doc.data();
+            const skill = (data.skills && data.skills[0]) || data.category || "Freelancer";
+            const location = data.location || data.city || "";
+            return {
+              name: data.name || data.fullName || data.displayName || "Freelancer",
+              role: location ? `${skill} à ${location}` : skill,
+              image: data.avatar || data.profileImage || data.photoURL || HireFreelanceImage
+            };
+          });
+          setProfiles(liveProfiles);
+          setLoading(false);
+          return;
+        }
+      } catch (error) {
+        console.error("Error fetching freelancers for carousel:", error);
+      }
+
+      // Fallback to empty if fetch fails or no data, so static fake users don't show
+      setProfiles([]);
+      setLoading(false);
+    }
+    loadFreelancers();
+  }, [t]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Header Section */}

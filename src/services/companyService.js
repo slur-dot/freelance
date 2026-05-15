@@ -72,10 +72,23 @@ export const CompanyService = {
 
     async postJobDescription(companyId, jobData) {
         try {
-            const jobsRef = collection(db, "jobDescriptions");
+            // Fetch company name for public display
+            let companyName = "Company";
+            try {
+                const userDoc = await getDoc(doc(db, "users", companyId));
+                if (userDoc.exists()) {
+                    const u = userDoc.data();
+                    companyName = u.businessName || u.name || u.fullName || u.displayName || "Company";
+                }
+            } catch (e) { /* ignore */ }
+
+            const jobsRef = collection(db, "projects");
             const docRef = await addDoc(jobsRef, {
                 ...jobData,
+                type: "job_posting",
                 companyId,
+                clientId: companyId,
+                companyName,
                 status: "open",
                 applicants: 0,
                 createdAt: serverTimestamp(),
@@ -90,7 +103,7 @@ export const CompanyService = {
                 "success"
             );
 
-            return { id: docRef.id, ...jobData, companyId, status: "open", applicants: 0 };
+            return { id: docRef.id, ...jobData, companyId, companyName, status: "open", applicants: 0 };
         } catch (error) {
             console.error("Error posting job description:", error);
             throw error;
@@ -99,8 +112,8 @@ export const CompanyService = {
 
     async getCompanyJobs(companyId) {
         try {
-            const jobsRef = collection(db, "jobDescriptions");
-            const q = query(jobsRef, where("companyId", "==", companyId), orderBy("createdAt", "desc"));
+            const jobsRef = collection(db, "projects");
+            const q = query(jobsRef, where("type", "==", "job_posting"), where("companyId", "==", companyId), orderBy("createdAt", "desc"));
             const snapshot = await getDocs(q);
             return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         } catch (error) {
@@ -111,8 +124,8 @@ export const CompanyService = {
 
     async getJobApplications(jobId) {
         try {
-            const appsRef = collection(db, "jobApplications");
-            const q = query(appsRef, where("jobId", "==", jobId), orderBy("createdAt", "desc"));
+            const appsRef = collection(db, "projects");
+            const q = query(appsRef, where("type", "==", "job_application"), where("jobId", "==", jobId), orderBy("createdAt", "desc"));
             const snapshot = await getDocs(q);
             return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         } catch (error) {
@@ -123,7 +136,7 @@ export const CompanyService = {
 
     async updateJobStatus(jobId, status) {
         try {
-            const jobRef = doc(db, "jobDescriptions", jobId);
+            const jobRef = doc(db, "projects", jobId);
             await updateDoc(jobRef, { status, updatedAt: serverTimestamp() });
             return { success: true };
         } catch (error) {

@@ -3,6 +3,9 @@ import { Star, X, ArrowRight, MessageSquare, Heart, AlignJustify, Briefcase, Awa
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+import { db } from "../firebaseConfig";
+import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
 
 import EmilyImage from "../assets/Emily.jpg";
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
@@ -14,8 +17,17 @@ export default function JobPostForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clearCart, addToCart } = useCart();
+  const { currentUser } = useAuth();
   const [skills, setSkills] = useState(["Cyber Security", "SAP", "IT Support Specialist"]);
   const [showLiveChat, setShowLiveChat] = useState(false);
+  const [posting, setPosting] = useState(false);
+
+  // Controlled form state
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
+  const [assignTo, setAssignTo] = useState("");
+  const [budget, setBudget] = useState("1000000");
+  const [deadline, setDeadline] = useState("10");
   
   // Custom Autocomplete State
   const [inputValue, setInputValue] = useState("");
@@ -77,8 +89,68 @@ export default function JobPostForm() {
     setSkills(skills.filter((_, i) => i !== index));
   };
 
-  const handlePostJob = () => {
-    alert(t('job_post.form.success'));
+  const handlePostJob = async () => {
+    if (!currentUser) {
+      navigate("/login");
+      return;
+    }
+    if (!jobTitle.trim()) {
+      alert(t('job_post.form.validation_title', 'Please enter a job title.'));
+      return;
+    }
+    if (!budget || Number(budget) <= 0) {
+      alert(t('job_post.form.validation_budget', 'Please enter a valid budget.'));
+      return;
+    }
+
+    try {
+      setPosting(true);
+      // Fetch user/company name
+      let companyName = "Company";
+      try {
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+          const u = userDoc.data();
+          companyName = u.businessName || u.name || u.fullName || u.displayName || currentUser.displayName || "Company";
+        }
+      } catch (e) { /* ignore */ }
+
+      const deadlineDate = new Date();
+      deadlineDate.setDate(deadlineDate.getDate() + (Number(deadline) || 10));
+
+      const jobData = {
+        type: "job_posting",
+        title: jobTitle.trim(),
+        description: jobDescription.trim(),
+        skills: skills,
+        budget: Number(budget) || 0,
+        deadline: deadlineDate.toISOString().split('T')[0],
+        location: "Guinea",
+        category: skills.includes("Cyber Security") ? "Cyber Security" :
+                  skills.includes("SAP") ? "SAP" :
+                  skills.includes("Web Development") || skills.includes("React") ? "Software Development" :
+                  skills.includes("UI/UX Design") ? "Design & Creative" :
+                  skills.includes("Cloud Computing") || skills.includes("AWS") ? "Cloud & Infrastructure" :
+                  skills.includes("Data Analysis") ? "Data & Analytics" : "Software Development",
+        companyId: currentUser.uid,
+        clientId: currentUser.uid,
+        companyName,
+        assignTo: assignTo.trim() || null,
+        status: "open",
+        applicants: 0,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      };
+
+      await addDoc(collection(db, "projects"), jobData);
+      alert(t('job_post.form.success', 'Job posted successfully! It will appear on the Job Board.'));
+      navigate("/job-board");
+    } catch (err) {
+      console.error("Error posting job:", err);
+      alert(t('job_post.form.error', 'Failed to post job. Please try again.'));
+    } finally {
+      setPosting(false);
+    }
   };
 
   return (
@@ -97,6 +169,8 @@ export default function JobPostForm() {
               <h3 className="text-lg font-semibold">{t('job_post.form.job_title')}</h3>
               <input
                 type="text"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
                 placeholder={t('job_post.form.job_title_placeholder')}
                 className="flex-grow border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
               />
@@ -111,6 +185,8 @@ export default function JobPostForm() {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <h3 className="text-lg font-semibold">{t('job_post.form.description')}</h3>
               <textarea
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
                 placeholder={t('job_post.form.description_placeholder')}
                 className="min-h-[100px] flex-grow border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
               />
@@ -126,7 +202,9 @@ export default function JobPostForm() {
               <h3 className="text-lg font-semibold">Assign to (Optional)</h3>
               <input
                 type="text"
-                placeholder="Enter freelancer name to lock bid..."
+                value={assignTo}
+                onChange={(e) => setAssignTo(e.target.value)}
+                placeholder={t('job_post.form.assign_placeholder', 'Enter freelancer name to lock bid...')}
                 className="flex-grow w-full md:w-auto border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
               />
             </div>
@@ -159,7 +237,8 @@ export default function JobPostForm() {
                   <div className="flex items-center space-x-2">
                     <input
                       type="number"
-                      defaultValue="1000000"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
                       className="w-32 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
                     />
                     <span className="text-gray-500">GNF</span>
@@ -179,7 +258,8 @@ export default function JobPostForm() {
                   <div className="flex items-center space-x-2">
                     <input
                       type="number"
-                      defaultValue="10"
+                      value={deadline}
+                      onChange={(e) => setDeadline(e.target.value)}
                       className="w-20 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-100"
                     />
                     <span className="text-gray-500">{t('job_post.form.days')}</span>
@@ -285,8 +365,9 @@ export default function JobPostForm() {
           <div className="pt-6 border-t flex justify-center">
             <button
               onClick={handlePostJob}
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium text-sm flex items-center justify-center gap-2"
-              style={{ backgroundColor: '#15803D' }}
+              disabled={posting}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-medium text-sm flex items-center justify-center gap-2 disabled:bg-green-300 disabled:cursor-not-allowed"
+              style={{ backgroundColor: posting ? '#86efac' : '#15803D' }}
             >
               <ArrowRight className="w-4 h-4" />
               {t('job_post.form.post_btn')}

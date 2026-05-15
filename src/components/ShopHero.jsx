@@ -12,8 +12,8 @@ export default function ShopHero() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    // Set your target end date: September 10, 2025, 11:59 PM
-    const endDate = new Date("2025-09-10T23:59:59").getTime();
+    // Set your target end date: September 30, 2026, 11:59 PM
+    const endDate = new Date("2026-09-30T23:59:59").getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();

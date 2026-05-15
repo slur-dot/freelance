@@ -86,8 +86,8 @@ export default function ComputerDeliveryDetails({ onContinue }) {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-6 lg:p-8">
-      <div className="w-full max-w-4xl rounded-lg bg-white p-6 shadow-lg md:p-8">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+      <div className="w-full max-w-4xl rounded-lg bg-white p-6 shadow-lg md:p-8 overflow-x-hidden">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl sm:text-3xl font-bold">Booking Form</h1>
@@ -170,7 +170,7 @@ export default function ComputerDeliveryDetails({ onContinue }) {
             <div className="space-y-6 animate-fadeIn">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* List */}
-                <div className="lg:col-span-1 h-[300px] sm:h-[400px] overflow-y-auto border rounded-lg p-2 bg-gray-50">
+                <div className="lg:col-span-1 h-[300px] sm:h-[400px] overflow-y-auto border rounded-lg p-2 bg-gray-50 min-w-0">
                   <h3 className="font-bold mb-2 sticky top-0 bg-gray-50 p-2 text-sm sm:text-base">Select a Pickup Point</h3>
                   <div className="space-y-2">
                     {vendors.map(vendor => (
@@ -190,7 +190,7 @@ export default function ComputerDeliveryDetails({ onContinue }) {
                 </div>
 
                 {/* Map */}
-                <div className="lg:col-span-2 h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-gray-300 relative z-0">
+                <div className="lg:col-span-2 h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-gray-300 relative z-0 min-w-0">
                   <MapContainer
                     center={mapCenter}
                     zoom={13}
@@ -235,7 +235,7 @@ export default function ComputerDeliveryDetails({ onContinue }) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <label className="block text-sm font-medium mb-1">Pickup Date*</label>
                   <input
                     type="date"
@@ -246,7 +246,7 @@ export default function ComputerDeliveryDetails({ onContinue }) {
                     required
                   />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <label className="block text-sm font-medium mb-1">Pickup Time*</label>
                   <select
                     value={formData.deliveryTime}

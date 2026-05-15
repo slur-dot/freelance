@@ -88,20 +88,30 @@ export default function HiredFreelancers() {
   const openHire = () => setShowHireModal(true);
   const closeHire = () => setShowHireModal(false);
 
-  const handleHireSubmit = (e) => {
+  const handleHireSubmit = async (e) => {
     e.preventDefault();
-    // Frontend-only add (no Firestore write as requested)
-    const newFreelancer = {
-      id: Date.now(),
-      name: hireForm.name || "Unnamed",
-      project: hireForm.project || "New Project",
-      status: hireForm.status || "In progress",
-      completionDate: hireForm.completionDate || new Date().toLocaleDateString(),
-      amount: hireForm.amount || "0 GNF"
-    };
-    setFreelancers((prev) => [newFreelancer, ...prev]);
-    setHireForm({ name: "", project: "", status: "In progress", completionDate: "", amount: "" });
-    closeHire();
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("User not authenticated");
+
+      const newFreelancer = {
+        name: hireForm.name || "Unnamed",
+        project: hireForm.project || "New Project",
+        status: hireForm.status || "In progress",
+        completionDate: hireForm.completionDate || new Date().toLocaleDateString(),
+        amount: hireForm.amount || "0 GNF"
+      };
+
+      // Save to Firestore
+      const savedFreelancer = await ClientService.addHiredFreelancer(user.uid, newFreelancer);
+      
+      setFreelancers((prev) => [savedFreelancer, ...prev]);
+      setHireForm({ name: "", project: "", status: "In progress", completionDate: "", amount: "" });
+      closeHire();
+    } catch (error) {
+      console.error("Error hiring freelancer:", error);
+      alert("Failed to hire freelancer. Please try again.");
+    }
   };
 
   return (

@@ -4,13 +4,30 @@ import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ProfileLayout from "../Common/ProfileLayout";
 import PaymentManagement from "../../../components/Payment/PaymentManagement";
-import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Briefcase, Award, ExternalLink, CreditCard } from "lucide-react";
+import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Briefcase, Award, ExternalLink, CreditCard, MapPin } from "lucide-react";
+import { UserService } from "../../../services/userService";
+import { guineaCitiesByRegion } from "../../../data/guineaCities";
 
 export default function FreelancerProfile() {
   const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    bio: "Full-stack developer specializing in React and Node.js solutions for businesses in West Africa.",
+    currency: "GNF",
+    region: "",
+    prefecture: "",
+    subPrefecture: "",
+  });
+
+  // Derived data for cascading dropdowns
+  const regionData = guineaCitiesByRegion.find(r => r.region === form.region);
+  const prefectures = regionData ? regionData.prefectures : [];
+  const prefectureData = prefectures.find(p => p.name === form.prefecture);
+  const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
@@ -27,6 +44,14 @@ export default function FreelancerProfile() {
             role: "Freelancer",
             createdAt: userData.createdAt?.toDate() || new Date(),
           });
+          setForm({
+            name: userData.fullName || currentUser.displayName || "Freelancer",
+            bio: userData.bio || "Full-stack developer specializing in React and Node.js solutions for businesses in West Africa.",
+            currency: userData.currency || "GNF",
+            region: userData.region || "",
+            prefecture: userData.prefecture || "",
+            subPrefecture: userData.subPrefecture || ""
+          });
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
@@ -37,10 +62,10 @@ export default function FreelancerProfile() {
   }, []);
 
   const stats = [
-    { label: t('freelancer_dashboard.stats.completed_jobs', 'Completed Jobs'), value: '24', trend: 'up', trendNote: '5/5 Average Rating' },
-    { label: t('freelancer_dashboard.stats.total_earned', 'Total Earned'), value: '85M GNF', trend: 'up', trendNote: '+15M this month' },
-    { label: t('freelancer_dashboard.stats.active_bids', 'Active Bids'), value: '12', trend: 'up', trendNote: '3 high probability' },
-    { label: t('freelancer_dashboard.stats.success_rate', 'Success Rate'), value: '98%', trend: 'up', trendNote: 'Top Rated' },
+    { label: t('freelancer_dashboard.stats.completed_jobs', 'Completed Jobs'), value: user?.stats?.completedJobs || '24', trend: 'up', trendNote: '5/5 Average Rating' },
+    { label: t('freelancer_dashboard.stats.total_earned', 'Total Earned'), value: user?.stats?.totalEarned || '85M GNF', trend: 'up', trendNote: '+15M this month' },
+    { label: t('freelancer_dashboard.stats.active_bids', 'Active Bids'), value: user?.stats?.activeBids || '12', trend: 'up', trendNote: '3 high probability' },
+    { label: t('freelancer_dashboard.stats.success_rate', 'Success Rate'), value: user?.stats?.successRate || '98%', trend: 'up', trendNote: 'Top Rated' },
   ];
 
   if (loading) {
@@ -85,7 +110,8 @@ export default function FreelancerProfile() {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                     <input 
                       type="text" 
-                      defaultValue={user?.name}
+                      value={form.name}
+                      onChange={(e) => setForm({...form, name: e.target.value})}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium"
                     />
                   </div>
@@ -108,9 +134,10 @@ export default function FreelancerProfile() {
                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.bio', 'Professional Bio')}</label>
                 <textarea 
                   rows="4"
+                  value={form.bio}
+                  onChange={(e) => setForm({...form, bio: e.target.value})}
                   className="w-full px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium resize-none text-gray-800"
                   placeholder="Tell clients about your expertise..."
-                  defaultValue="Full-stack developer specializing in React and Node.js solutions for businesses in West Africa."
                 />
              </div>
 
@@ -118,7 +145,8 @@ export default function FreelancerProfile() {
                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.preferred_currency', 'Preferred Currency')}</label>
                 <select 
                   className="w-full px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium text-gray-800"
-                  defaultValue="GNF"
+                  value={form.currency}
+                  onChange={(e) => setForm({...form, currency: e.target.value})}
                 >
                   <option value="GNF">GNF (Guinean Franc)</option>
                   <option value="USD">USD (US Dollar)</option>
@@ -127,10 +155,80 @@ export default function FreelancerProfile() {
                 </select>
              </div>
 
+              <div className="space-y-4">
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.country', 'Country')}</label>
+                    <select className="w-full px-4 py-3 bg-gray-100 border border-gray-100 rounded-xl text-gray-500 cursor-not-allowed font-medium" disabled>
+                      <option value="Guinea">Guinea</option>
+                    </select>
+                 </div>
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.region', 'Region')}</label>
+                      <select 
+                        value={form.region}
+                        onChange={(e) => setForm({...form, region: e.target.value, prefecture: "", subPrefecture: ""})}
+                        className="w-full px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium text-gray-800"
+                      >
+                        <option value="">{t('profile.select_region', 'Select Region')}</option>
+                        {guineaCitiesByRegion.map((r, i) => <option key={i} value={r.region}>{r.region}</option>)}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.prefecture', 'Prefecture')}</label>
+                      <select 
+                        value={form.prefecture}
+                        onChange={(e) => setForm({...form, prefecture: e.target.value, subPrefecture: ""})}
+                        disabled={!form.region}
+                        className="w-full px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium text-gray-800 disabled:opacity-50"
+                      >
+                        <option value="">{t('profile.select_prefecture', 'Select Prefecture')}</option>
+                        {prefectures.map((p, i) => <option key={i} value={p.name}>{p.name}</option>)}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t('profile.subprefecture', 'Sub-Prefecture')}</label>
+                      <select 
+                        value={form.subPrefecture}
+                        onChange={(e) => setForm({...form, subPrefecture: e.target.value})}
+                        disabled={!form.prefecture}
+                        className="w-full px-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium text-gray-800 disabled:opacity-50"
+                      >
+                        <option value="">{t('profile.select_subprefecture', 'Select Sub-Prefecture')}</option>
+                        {subPrefectures.map((sp, i) => <option key={i} value={sp}>{sp}</option>)}
+                      </select>
+                    </div>
+                 </div>
+              </div>
+
              <div className="pt-4 flex justify-end">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 flex items-center gap-2 transition-all hover:-translate-y-1">
+                <button 
+                  onClick={async () => {
+                    if (!user) return;
+                    setSaving(true);
+                    try {
+                      await UserService.updateUserProfile(user.uid, {
+                        fullName: form.name,
+                        bio: form.bio,
+                        currency: form.currency,
+                        region: form.region,
+                        prefecture: form.prefecture,
+                        subPrefecture: form.subPrefecture
+                      });
+                      setUser({...user, name: form.name});
+                      alert(t('profile.update_success', 'Profile updated successfully!'));
+                    } catch (err) {
+                      console.error(err);
+                      alert(t('profile.update_failed', 'Failed to update profile.'));
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  disabled={saving}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 flex items-center gap-2 transition-all hover:-translate-y-1 disabled:opacity-50"
+                >
                   <Save className="w-4 h-4" />
-                  {t('profile.save_changes', 'Save Changes')}
+                  {saving ? t('profile.saving', 'Saving...') : t('profile.save_changes', 'Save Changes')}
                 </button>
              </div>
           </div>

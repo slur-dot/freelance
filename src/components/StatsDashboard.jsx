@@ -1,12 +1,55 @@
+import { useState, useEffect } from "react";
 import { Users, Shield, Award, TrendingUp } from "lucide-react";
 import chartImage from "../assets/Chart.png";
 import illustrationImage from "../assets/illustration.png";
 import testimonialImage from "../assets/partnership-humanImage.jpeg";
-
+import { db } from "../firebaseConfig";
+import { collection, getCountFromServer, query, where } from "firebase/firestore";
 import { useTranslation } from "react-i18next";
 
 const StatsDashboard = () => {
   const { t } = useTranslation();
+  const [stats, setStats] = useState({
+    totalUsers: null,
+    freelancers: null,
+    companies: null,
+    loading: true,
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const usersRef = collection(db, "users");
+        const freelancersQuery = query(usersRef, where("role", "in", ["freelancer", "Freelancer"]));
+        const companiesQuery = query(usersRef, where("role", "in", ["company", "Company"]));
+
+        const [totalSnap, freelancerSnap, companySnap] = await Promise.all([
+          getCountFromServer(usersRef),
+          getCountFromServer(freelancersQuery),
+          getCountFromServer(companiesQuery),
+        ]);
+
+        setStats({
+          totalUsers: totalSnap.data().count,
+          freelancers: freelancerSnap.data().count,
+          companies: companySnap.data().count,
+          loading: false,
+        });
+      } catch (error) {
+        console.error("Failed to fetch platform stats:", error);
+        setStats({ totalUsers: null, freelancers: null, companies: null, loading: false });
+      }
+    }
+    fetchStats();
+  }, []);
+
+  const formatCount = (count) => {
+    if (count === null) return "—";
+    if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
+    if (count >= 1000) return `${(count / 1000).toFixed(1)}K`;
+    return count.toLocaleString();
+  };
+
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 overflow-hidden">
       {/* Background Pattern */}
@@ -61,7 +104,11 @@ const StatsDashboard = () => {
                   <Users className="w-8 h-8 text-white/80 mr-2" />
                 </div>
                 <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
-                  963,237<span className="text-2xl">+</span>
+                  {stats.loading ? (
+                    <span className="inline-block w-32 h-10 bg-white/20 rounded-lg animate-pulse" />
+                  ) : (
+                    <>{formatCount(stats.totalUsers)}<span className="text-2xl">+</span></>
+                  )}
                 </div>
                 <p className="text-white/80 text-sm lg:text-base">{t('home.stats.daily_users')}</p>
               </div>
@@ -71,7 +118,11 @@ const StatsDashboard = () => {
                   <Shield className="w-8 h-8 text-white/80 mr-2" />
                 </div>
                 <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
-                  20<span className="text-2xl">+</span>
+                  {stats.loading ? (
+                    <span className="inline-block w-24 h-10 bg-white/20 rounded-lg animate-pulse" />
+                  ) : (
+                    <>{formatCount(stats.companies)}<span className="text-2xl">+</span></>
+                  )}
                 </div>
                 <p className="text-white/80 text-sm lg:text-base">
                   {t('home.stats.trusted_by')}
@@ -85,7 +136,11 @@ const StatsDashboard = () => {
                   <TrendingUp className="w-8 h-8 text-white/80 mr-2" />
                 </div>
                 <div className="text-4xl lg:text-5xl font-bold text-white mb-2">
-                  1,000<span className="text-2xl">+</span>
+                  {stats.loading ? (
+                    <span className="inline-block w-24 h-10 bg-white/20 rounded-lg animate-pulse" />
+                  ) : (
+                    <>{formatCount(stats.freelancers)}<span className="text-2xl">+</span></>
+                  )}
                 </div>
                 <p className="text-white/80 text-sm lg:text-base">{t('home.stats.freelancers_count')}</p>
               </div>

@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { UserService } from "../../../services/userService";
 import { ProjectService } from "../../../services/projectService";
 import { FreelancerService } from "../../../services/freelancerService";
+import { CourseService } from "../../../services/courseService";
+import { guineaCitiesByRegion } from "../../../data/guineaCities";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -64,7 +66,7 @@ export default function FreelancerDashboard() {
   const [jdApplications, setJdApplications] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [subscription, setSubscription] = useState(null);
-  const [mainStats, setMainStats] = useState({ totalEarned: 0, projectsPosted: 0, jdsApplied: 0, hires: 0 });
+  const [mainStats, setMainStats] = useState({ totalEarned: 0, jdsApplied: 0, hires: 0 });
   const [freelancer, setFreelancer] = useState(null);
   const [plan, setPlan] = useState('basic');
   const [loading, setLoading] = useState(true);
@@ -102,17 +104,26 @@ export default function FreelancerDashboard() {
   const [form, setForm] = useState({
     name: '', skills: '', experience: '', email: '', phone: '',
     paymentType: 'MoMo', paymentNumber: '',
-    bankName: '', accountNumber: '', swiftCode: '', accountHolder: ''
+    bankName: '', accountNumber: '', swiftCode: '', accountHolder: '',
+    region: '', prefecture: '', subPrefecture: ''
   });
+
+  // Derived data for cascading dropdowns
+  const regionData = guineaCitiesByRegion.find(r => r.region === form.region);
+  const prefectures = regionData ? regionData.prefectures : [];
+  const prefectureData = prefectures.find(p => p.name === form.prefecture);
+  const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawProcessing, setWithdrawProcessing] = useState(false);
   const [plans, setPlans] = useState([]);
 
   // Trainer / Course Upload State
-  const [isTrainer, setIsTrainer] = useState(false); // Mock value for now
-  const [requestedTrainer, setRequestedTrainer] = useState(false);
+  const [isTrainer, setIsTrainer] = useState(false);
+  const [trainerStatus, setTrainerStatus] = useState('none'); // none | pending | approved | rejected
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [courseForm, setCourseForm] = useState({ title: '', category: '', description: '', price: '', videoUrl: '' });
+  const [courseVideoFile, setCourseVideoFile] = useState(null);
+  const [courseUploading, setCourseUploading] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -150,7 +161,10 @@ export default function FreelancerDashboard() {
             bankName: profile.paymentMethod?.swift?.bankName || '',
             accountNumber: profile.paymentMethod?.swift?.accountNumber || '',
             swiftCode: profile.paymentMethod?.swift?.swiftCode || '',
-            accountHolder: profile.paymentMethod?.swift?.accountHolder || ''
+            accountHolder: profile.paymentMethod?.swift?.accountHolder || '',
+            region: profile.region || '',
+            prefecture: profile.prefecture || '',
+            subPrefecture: profile.subPrefecture || ''
           });
 
           // Fetch other data in parallel
@@ -168,7 +182,6 @@ export default function FreelancerDashboard() {
           setSubscription({ plan: profile.plan || 'basic' });
           setMainStats({
             totalEarned: profile.totalEarned || 0,
-            projectsPosted: 0,
             jdsApplied: apps.length,
             hires: 0
           });
@@ -179,7 +192,12 @@ export default function FreelancerDashboard() {
 
         // 2. Fetch Projects (e.g., all available projects or recommended)
         const projects = await ProjectService.getProjects();
-        setRecentProjects(projects.slice(0, 10));
+        setRecentProjects(projects.filter(p => p.type !== "job_posting" && p.type !== "job_application").slice(0, 10));
+
+        // 3. Fetch trainer status
+        const trainerInfo = await CourseService.getTrainerStatus(user.uid);
+        setIsTrainer(trainerInfo.isTrainer);
+        setTrainerStatus(trainerInfo.status);
 
       } catch (err) {
         console.error("Error loading dashboard data:", err);
@@ -211,7 +229,7 @@ export default function FreelancerDashboard() {
       setUploading(true);
       const timestamp = Date.now();
       const ext = file.name.split('.').pop();
-      const fileName = `freelancer-avatars/${user.uid}/avatar-${timestamp}.${ext}`;
+      const fileName = `ads/avatars/${user.uid}_${timestamp}.${ext}`;
       const storageRef = ref(storage, fileName);
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -281,17 +299,11 @@ export default function FreelancerDashboard() {
         </div>
 
         {/* Quick Stats */}
-        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.total_earned')}</div>
             <div className="text-xl font-semibold mt-1">{(mainStats.totalEarned || 0).toLocaleString()} GNF</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.projects_posted')}</div>
-            <div className="text-xl font-semibold mt-1">{mainStats.projectsPosted || 0}</div>
           </CardContent>
         </Card>
         <Card>
@@ -398,8 +410,8 @@ export default function FreelancerDashboard() {
                 )}
               </div>
               <div className="mt-4 flex items-center gap-2">
-                <Link to="/freelancer/dashboard/work-management">
-                  <Button className="bg-blue-600 hover:bg-blue-700">{t('freelancer_dashboard.projects.post_new', 'Post & Manage')}</Button>
+                <Link to="/job-board">
+                  <Button className="bg-blue-600 hover:bg-blue-700">{t('freelancer_dashboard.projects.browse_jobs', 'Browse Jobs')}</Button>
                 </Link>
               </div>
             </CardContent>
@@ -443,16 +455,16 @@ export default function FreelancerDashboard() {
             <CardContent className="p-4">
               <p className="text-xs text-gray-500 mb-3">{text.escrowHeld} (Web ID: 1)</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {[
-                  { method: "Orange Money", ref: "OM-2024-0912", amount: "350,000 GNF", status: "Completed" },
-                  { method: "MTN Mobile Money", ref: "MTN-2024-0910", amount: "120,000 GNF", status: "Escrow" },
-                ].map((p, i) => (
-                  <div key={i} className="border rounded-md p-3 bg-gray-50">
-                    <p className="font-medium">{p.method}</p>
-                    <p className="text-xs text-gray-500">{p.ref} • {p.status}</p>
-                    <p className="text-sm mt-1">{p.amount}</p>
-                  </div>
-                ))}
+                {jdApplications.filter(a => a.status === 'hired' || a.status === 'completed').length > 0 ? (
+                  jdApplications.filter(a => a.status === 'hired' || a.status === 'completed').map((p, i) => (
+                    <div key={i} className="border rounded-md p-3 bg-gray-50">
+                      <p className="font-medium">{p.title}</p>
+                      <p className="text-xs text-gray-500">{p.status} • {(p.budget || 0).toLocaleString()} GNF</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500 col-span-2">{t('freelancer_dashboard.payments.no_transactions', 'No payment transactions yet. Complete a project to see payments here.')}</p>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -539,14 +551,20 @@ export default function FreelancerDashboard() {
                   <p className="text-gray-600 mt-1 max-w-2xl">{t('freelancer_dashboard.trainer.desc', 'Share your expertise with the community. Apply to become a certified trainer and start uploading your courses.')}</p>
                 </div>
                 <Button 
-                  onClick={() => {
-                    setRequestedTrainer(true);
-                    alert(t('freelancer_dashboard.trainer.requested', 'Trainer request submitted successfully! We will review your profile.'));
+                  onClick={async () => {
+                    try {
+                      await CourseService.requestTrainerStatus(user.uid);
+                      setTrainerStatus('pending');
+                      alert(t('freelancer_dashboard.trainer.requested', 'Trainer request submitted successfully! We will review your profile.'));
+                    } catch (err) {
+                      console.error('Trainer request failed:', err);
+                      alert('Failed to submit trainer request. Please try again.');
+                    }
                   }} 
-                  className={requestedTrainer ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
-                  disabled={requestedTrainer}
+                  className={trainerStatus === 'pending' ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                  disabled={trainerStatus === 'pending'}
                 >
-                  {requestedTrainer ? t('freelancer_dashboard.trainer.pending', 'Request Pending Review') : t('freelancer_dashboard.trainer.request_btn', 'Request Trainer Status')}
+                  {trainerStatus === 'pending' ? t('freelancer_dashboard.trainer.pending', 'Request Pending Review') : t('freelancer_dashboard.trainer.request_btn', 'Request Trainer Status')}
                 </Button>
               </div>
             ) : (
@@ -644,6 +662,45 @@ export default function FreelancerDashboard() {
                     placeholder="+224-123-45-67-89"
                   />
                 </div>
+                
+                {/* Location Fields */}
+                <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4 border-t pt-4 mt-2">
+                  <div>
+                    <label className="text-sm text-gray-600">{t('profile.region', 'Region')}</label>
+                    <select
+                      className="w-full border rounded-md px-3 py-2 mt-1"
+                      value={form.region}
+                      onChange={(e) => setForm({ ...form, region: e.target.value, prefecture: '', subPrefecture: '' })}
+                    >
+                      <option value="">{t('profile.select_region', 'Select Region')}</option>
+                      {guineaCitiesByRegion.map((r, i) => <option key={i} value={r.region}>{r.region}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">{t('profile.prefecture', 'Prefecture')}</label>
+                    <select
+                      className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
+                      value={form.prefecture}
+                      onChange={(e) => setForm({ ...form, prefecture: e.target.value, subPrefecture: '' })}
+                      disabled={!form.region}
+                    >
+                      <option value="">{t('profile.select_prefecture', 'Select Prefecture')}</option>
+                      {prefectures.map((p, i) => <option key={i} value={p.name}>{p.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-600">{t('profile.subprefecture', 'Sub-Prefecture')}</label>
+                    <select
+                      className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
+                      value={form.subPrefecture}
+                      onChange={(e) => setForm({ ...form, subPrefecture: e.target.value })}
+                      disabled={!form.prefecture}
+                    >
+                      <option value="">{t('profile.select_subprefecture', 'Select Sub-Prefecture')}</option>
+                      {subPrefectures.map((sp, i) => <option key={i} value={sp}>{sp}</option>)}
+                    </select>
+                  </div>
+                </div>
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.payment_type')}</label>
                   <select
@@ -710,6 +767,9 @@ export default function FreelancerDashboard() {
                         experience: form.experience,
                         email: form.email,
                         phone: form.phone,
+                        region: form.region,
+                        prefecture: form.prefecture,
+                        subPrefecture: form.subPrefecture,
                         paymentMethod: {
                           type: form.paymentType,
                           number: form.paymentType !== 'SWIFT' ? form.paymentNumber : null,
@@ -748,71 +808,76 @@ export default function FreelancerDashboard() {
         showWithdrawModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.withdrawal.title')}</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.withdrawal.title', 'Withdraw Funds')}</h3>
 
               {freelancer?.paymentMethod?.type === 'SWIFT' ? (
-                <div className="mb-4 space-y-3">
+                <div className="mb-4 space-y-4">
                   <div className="bg-gray-50 p-3 rounded text-sm">
-                    <p className="font-semibold text-gray-700">{t('freelancer_dashboard.modals.withdrawal.receiving_bank')}</p>
+                    <p className="font-semibold text-gray-700">{t('freelancer_dashboard.modals.withdrawal.receiving_bank', 'Receiving Bank Account')}</p>
                     <p>{freelancer.paymentMethod.swift.bankName} ••• {freelancer.paymentMethod.swift.accountNumber.slice(-4)}</p>
                   </div>
 
+                  <div className="bg-green-50 p-3 rounded border border-green-200">
+                    <p className="text-sm text-green-800 font-medium">
+                      {t('freelancer_dashboard.modals.withdrawal.available_balance', 'Available Balance')}: {Number(netEarnings || 0).toLocaleString()} GNF
+                    </p>
+                  </div>
+
                   <div>
-                    <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.withdrawal.amount_label')}</label>
+                    <label className="text-sm font-medium text-gray-700">{t('freelancer_dashboard.modals.withdrawal.amount_label', 'Withdrawal Amount (GNF)')}</label>
                     <input
                       type="number"
-                      className="w-full border rounded-md px-3 py-2 mt-1"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:ring-2 focus:ring-green-500 outline-none"
                       value={withdrawAmount}
                       onChange={(e) => setWithdrawAmount(e.target.value)}
-                      placeholder={t('freelancer_dashboard.modals.withdrawal.min_amount')}
+                      placeholder={t('freelancer_dashboard.modals.withdrawal.min_amount', 'Min: 500,000 GNF')}
                     />
                   </div>
 
-                  {withdrawAmount && !isNaN(withdrawAmount) && (
-                    <div className="bg-green-50 p-3 rounded border border-green-100 space-y-1 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">{t('freelancer_dashboard.modals.withdrawal.requested')}</span>
-                        <span className="font-medium">{Number(withdrawAmount).toLocaleString()} GNF</span>
-                      </div>
-                      <div className="flex justify-between text-red-600">
-                        <span>{t('freelancer_dashboard.modals.withdrawal.bank_fee')}</span>
-                        <span>- 150,000 GNF</span>
-                      </div>
-                      <div className="border-t pt-1 mt-1 flex justify-between font-bold text-gray-800">
-                        <span>{t('freelancer_dashboard.modals.withdrawal.net_receipt')}</span>
-                        <span>{(Math.max(0, Number(withdrawAmount) - 150000)).toLocaleString()} GNF</span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1 text-right">
-                        {t('freelancer_dashboard.modals.withdrawal.est_usd')} {(Math.max(0, Number(withdrawAmount) - 150000) / 8600).toFixed(2)} USD
-                      </div>
+                  <div className="bg-gray-50 p-3 rounded border border-gray-200 space-y-2 text-sm mt-4">
+                    <div className="flex justify-between text-gray-600">
+                      <span>{t('freelancer_dashboard.modals.withdrawal.requested', 'Requested Amount')}</span>
+                      <span className="font-medium">{Number(withdrawAmount || 0).toLocaleString()} GNF</span>
                     </div>
-                  )}
+                    <div className="flex justify-between text-red-600">
+                      <span>{t('freelancer_dashboard.modals.withdrawal.bank_fee', 'Swift Wire Fee')}</span>
+                      <span>- 150,000 GNF</span>
+                    </div>
+                    <div className="border-t pt-2 mt-1 flex justify-between font-bold text-gray-800">
+                      <span>{t('freelancer_dashboard.modals.withdrawal.net_receipt', 'Net to Receive')}</span>
+                      <span>{(Math.max(0, Number(withdrawAmount || 0) - 150000)).toLocaleString()} GNF</span>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1 text-right">
+                      {t('freelancer_dashboard.modals.withdrawal.est_usd', '~ Est. USD')} ${(Math.max(0, Number(withdrawAmount || 0) - 150000) / 8600).toFixed(2)} USD
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="mb-4 text-center py-4">
-                  <p className="text-gray-600 mb-4">{t('freelancer_dashboard.modals.withdrawal.setup_swift')}</p>
+                  <p className="text-gray-600 mb-4">{t('freelancer_dashboard.modals.withdrawal.setup_swift', 'Please set up a SWIFT payment method first.')}</p>
                   <Button variant="outline" onClick={() => { setShowWithdrawModal(false); setShowEdit(true); }}>
-                    {t('freelancer_dashboard.modals.withdrawal.update_profile')}
+                    {t('freelancer_dashboard.modals.withdrawal.update_profile', 'Update Profile')}
                   </Button>
                 </div>
               )}
 
-              <div className="flex justify-end gap-2 mt-2">
-                <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>{t('freelancer_dashboard.modals.withdrawal.cancel')}</Button>
+              <div className="flex justify-end gap-2 mt-4">
+                <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>{t('freelancer_dashboard.modals.withdrawal.cancel', 'Cancel')}</Button>
                 {freelancer?.paymentMethod?.type === 'SWIFT' && (
                   <Button
-                    disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000 || Number(withdrawAmount) > Number(netEarnings || 0)}
                     onClick={() => {
                       setWithdrawProcessing(true);
                       setTimeout(() => {
                         setWithdrawProcessing(false);
                         setShowWithdrawModal(false);
-                        alert(t('freelancer_dashboard.modals.withdrawal.success_alert'));
+                        alert(t('freelancer_dashboard.modals.withdrawal.success_alert', 'Withdrawal Requested Successfully!'));
                         setWithdrawAmount('');
                       }, 2000);
                     }}
                   >
-                    {withdrawProcessing ? t('freelancer_dashboard.modals.withdrawal.processing') : t('freelancer_dashboard.modals.withdrawal.confirm')}
+                    {withdrawProcessing ? t('freelancer_dashboard.modals.withdrawal.processing', 'Processing...') : t('freelancer_dashboard.modals.withdrawal.confirm', 'Confirm Withdrawal')}
                   </Button>
                 )}
               </div>
@@ -888,7 +953,16 @@ export default function FreelancerDashboard() {
                     <Upload className="w-8 h-8 mx-auto text-blue-500 mb-2" />
                     <p className="text-sm font-medium text-gray-700">Click to upload or drag and drop</p>
                     <p className="text-xs text-gray-500 mt-1">MP4, WebM up to 500MB</p>
-                    <input type="file" className="hidden" accept="video/*" id="video-upload" />
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="video/*"
+                      id="video-upload"
+                      onChange={(e) => setCourseVideoFile(e.target.files[0] || null)}
+                    />
+                    <label htmlFor="video-upload" className="cursor-pointer text-sm text-blue-600 underline mt-2 inline-block">
+                      {courseVideoFile ? courseVideoFile.name : 'Choose file'}
+                    </label>
                   </div>
                 </div>
               </div>
@@ -896,12 +970,27 @@ export default function FreelancerDashboard() {
 
             <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
               <Button variant="outline" onClick={() => setShowCourseModal(false)} className="px-6 border-gray-300 text-gray-700 hover:bg-gray-100">Cancel</Button>
-              <Button className="px-6 bg-blue-600 hover:bg-blue-700 text-white shadow-md" onClick={() => {
-                alert(t('freelancer_dashboard.trainer.upload_success', 'Course uploaded successfully!'));
-                setShowCourseModal(false);
-                setCourseForm({ title: '', category: '', description: '', price: '', videoUrl: '' });
-              }}>
-                {t('freelancer_dashboard.trainer.submit_course', 'Submit Course')}
+              <Button
+                className="px-6 bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+                disabled={courseUploading || !courseForm.title}
+                onClick={async () => {
+                  if (!user || !courseForm.title) return;
+                  try {
+                    setCourseUploading(true);
+                    await CourseService.uploadCourse(user.uid, courseForm, courseVideoFile);
+                    alert(t('freelancer_dashboard.trainer.upload_success', 'Course uploaded successfully! It will be reviewed by an admin.'));
+                    setShowCourseModal(false);
+                    setCourseForm({ title: '', category: '', description: '', price: '', videoUrl: '' });
+                    setCourseVideoFile(null);
+                  } catch (err) {
+                    console.error('Course upload failed:', err);
+                    alert('Failed to upload course. Please try again.');
+                  } finally {
+                    setCourseUploading(false);
+                  }
+                }}
+              >
+                {courseUploading ? 'Uploading...' : t('freelancer_dashboard.trainer.submit_course', 'Submit Course')}
               </Button>
             </div>
           </div>

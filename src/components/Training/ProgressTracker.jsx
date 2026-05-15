@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Circle, Award, Download, BookOpen } from 'lucide-react';
+import { CheckCircle, Circle, Award, Download, BookOpen, Lock } from 'lucide-react';
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/AuthContext";
 
 export default function ProgressTracker({ courseId, userId }) {
   const { t } = useTranslation();
+  const { currentUser } = useAuth();
+  const hasPurchasedTraining = localStorage.getItem('hasPurchasedTraining') === 'true';
   const [progress, setProgress] = useState({
     courseId: courseId,
     userId: userId,
@@ -16,18 +19,26 @@ export default function ProgressTracker({ courseId, userId }) {
     resources: []
   });
 
-  const [lessons] = useState([
-    { id: 1, title: "Introduction to Web Development", duration: 15, completed: true },
-    { id: 2, title: "HTML Fundamentals", duration: 25, completed: true },
-    { id: 3, title: "CSS Styling", duration: 30, completed: true },
-    { id: 4, title: "JavaScript Basics", duration: 35, completed: false, current: true },
-    { id: 5, title: "DOM Manipulation", duration: 40, completed: false },
-    { id: 6, title: "React Introduction", duration: 45, completed: false },
-    { id: 7, title: "React Components", duration: 50, completed: false },
-    { id: 8, title: "State Management", duration: 55, completed: false },
-    { id: 9, title: "API Integration", duration: 60, completed: false },
-    { id: 10, title: "Project Deployment", duration: 30, completed: false }
+  const [rawLessons] = useState([
+    { id: 1, title: "Introduction to Web Development", duration: 15 },
+    { id: 2, title: "HTML Fundamentals", duration: 25 },
+    { id: 3, title: "CSS Styling", duration: 30 },
+    { id: 4, title: "JavaScript Basics", duration: 35 },
+    { id: 5, title: "DOM Manipulation", duration: 40 },
+    { id: 6, title: "React Introduction", duration: 45 },
+    { id: 7, title: "React Components", duration: 50 },
+    { id: 8, title: "State Management", duration: 55 },
+    { id: 9, title: "API Integration", duration: 60 },
+    { id: 10, title: "Project Deployment", duration: 30 }
   ]);
+
+  const lessons = rawLessons.map((lesson, index) => {
+    const isIntro = index < 2;
+    const isUnlocked = currentUser && (isIntro || hasPurchasedTraining);
+    const completed = hasPurchasedTraining && index < 3; // mock completed for first 3
+    const current = isUnlocked && ((hasPurchasedTraining && index === 3) || (!hasPurchasedTraining && index === 0));
+    return { ...lesson, completed, current, isUnlocked };
+  });
 
   const [resources] = useState([
     { id: 1, name: "HTML Cheat Sheet", type: "PDF", size: "2.3 MB", downloaded: true },
@@ -128,29 +139,33 @@ export default function ProgressTracker({ courseId, userId }) {
                 ? 'border-blue-500 bg-blue-50'
                 : lesson.completed
                   ? 'border-green-500 bg-green-50'
-                  : 'border-gray-200 bg-gray-50'
+                  : lesson.isUnlocked
+                    ? 'border-gray-300 bg-white'
+                    : 'border-gray-200 bg-gray-50 opacity-80'
                 }`}
             >
               <div className="flex-shrink-0">
                 {lesson.completed ? (
                   <CheckCircle className="h-6 w-6 text-green-600" />
+                ) : !lesson.isUnlocked ? (
+                  <Lock className="h-6 w-6 text-gray-400" />
                 ) : (
                   <Circle className="h-6 w-6 text-gray-400" />
                 )}
               </div>
 
-              <div className="flex-1">
-                <h4 className="font-medium">{lesson.title}</h4>
+              <div className="flex-1 min-w-0">
+                <h4 className={`font-medium truncate ${lesson.isUnlocked ? 'text-gray-900' : 'text-gray-500'}`}>{lesson.title}</h4>
                 <p className="text-sm text-gray-600">{lesson.duration} {t('training.progress.minutes')}</p>
               </div>
 
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 ml-2">
                 {lesson.completed ? (
-                  <span className="text-green-600 text-sm font-medium">{t('training.status.completed')}</span>
+                  <span className="text-green-600 text-xs sm:text-sm font-medium">{t('training.status.completed')}</span>
                 ) : lesson.current ? (
-                  <span className="text-blue-600 text-sm font-medium">{t('training.status.current')}</span>
+                  <span className="text-blue-600 text-xs sm:text-sm font-medium">{t('training.status.current')}</span>
                 ) : (
-                  <span className="text-gray-500 text-sm">{t('training.status.locked')}</span>
+                  <span className="text-gray-500 text-xs sm:text-sm">{t('training.status.locked')}</span>
                 )}
               </div>
             </div>

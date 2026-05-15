@@ -1,12 +1,56 @@
+import React, { useRef, useState, useEffect } from 'react';
 import { Camera, Mail, MapPin, Calendar, Edit2, Shield, Layout, LogOut, Trash2, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { storage } from '../../../firebaseConfig';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { UserService } from '../../../services/userService';
 
 const ProfileLayout = ({ user, stats, children, roleActions }) => {
   const { t } = useTranslation();
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [localAvatar, setLocalAvatar] = useState(null);
+
+  useEffect(() => {
+    if (user?.avatar || user?.profileImage) {
+      setLocalAvatar(user.avatar || user.profileImage);
+    }
+  }, [user]);
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !user?.uid) return;
+    if (!file.type.startsWith('image/')) {
+      alert(t('profile.upload_error_image', 'Please select a valid image file.'));
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      alert(t('profile.upload_error_size', 'Image must be under 2MB.'));
+      return;
+    }
+
+    try {
+      setUploadingAvatar(true);
+      const ext = file.name.split('.').pop();
+      const fileName = `ads/avatars/${user.uid}_${Date.now()}.${ext}`;
+      const storageRef = ref(storage, fileName);
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      await UserService.updateUserProfile(user.uid, { avatar: downloadURL, profileImage: downloadURL });
+      setLocalAvatar(downloadURL);
+    } catch (err) {
+      console.error('Avatar upload failed:', err);
+      alert(t('profile.upload_failed', 'Failed to upload avatar. Please try again.'));
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -42,14 +86,24 @@ const ProfileLayout = ({ user, stats, children, roleActions }) => {
             <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 p-6 border border-gray-100 backdrop-blur-sm bg-white/80">
               <div className="relative -mt-20 flex flex-col items-center">
                 <div className="relative">
-                  <div className="w-32 h-32 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 p-1 shadow-2xl">
+                  <div className="w-32 h-32 rounded-3xl bg-gradient-to-tr from-blue-500 to-indigo-600 p-1 shadow-2xl relative group">
                     <img 
-                      src={user?.avatar || `https://ui-avatars.com/api/?name=${user?.name || 'User'}&background=random`}
+                      src={localAvatar || `https://ui-avatars.com/api/?name=${user?.name || 'User'}&background=random`}
                       alt="Avatar" 
-                      className="w-full h-full rounded-[1.4rem] object-cover bg-white"
+                      className={`w-full h-full rounded-[1.4rem] object-cover bg-white ${uploadingAvatar ? 'opacity-50' : ''}`}
                     />
+                    {uploadingAvatar && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white"></div>
+                      </div>
+                    )}
                   </div>
-                  <button className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-xl shadow-lg transition-transform hover:scale-110">
+                  <input type="file" hidden ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" />
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingAvatar}
+                    className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-xl shadow-lg transition-transform hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
                     <Edit2 className="w-4 h-4" />
                   </button>
                 </div>

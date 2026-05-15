@@ -8,7 +8,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UserService } from "../../../services/userService";
 import { ProductService } from "../../../services/productService";
 import { OrderService } from "../../../services/orderService";
+import { NotificationService } from "../../../services/notificationService";
 import PhoneInput from "../../../components/PhoneInput";
+import { ChangePasswordModal, DeleteAccountModal } from "../../../components/Modals/SecurityModals";
 
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
@@ -91,10 +93,10 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
         }
       };
 
-      await UserService.updateUserProfile(sellerData.id, updatePayload); // Assuming sellerData.id is user uid
+      await UserService.updateUserProfile(sellerData.id, updatePayload); 
 
       alert('Profile updated successfully!');
-      onUpdate(); // Refresh data
+      onUpdate(); 
       onClose();
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -239,14 +241,13 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
 }
 
 // Profile Card
-function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
+function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordModal, setShowDeleteModal }) {
   const { t } = useTranslation();
   const [avatar, setAvatar] = useState(DefaultAvatar);
   const [progress, setProgress] = useState(70);
   const [uploading, setUploading] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // Update avatar and progress when seller data changes
   useEffect(() => {
     if (sellerData) {
       if (sellerData.avatar) {
@@ -262,13 +263,11 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Check if file is an image
     if (!file.type.startsWith('image/')) {
       alert("Please select an image file");
       return;
     }
 
-    // Check file size limit (2MB)
     if (file.size > 2 * 1024 * 1024) {
       alert("Image must be under 2MB");
       return;
@@ -281,33 +280,15 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
 
     try {
       setUploading(true);
-
-      // Create a unique filename
       const timestamp = Date.now();
-      const fileName = `seller-avatars/${sellerData.id}/avatar-${timestamp}.${file.name.split('.').pop()}`;
-
-      // Create storage reference
+      const fileName = `ads/avatars/${sellerData.id}_${timestamp}.${file.name.split('.').pop()}`;
       const storageRef = ref(storage, fileName);
-
-      // Upload file to Firebase Storage
       const snapshot = await uploadBytes(storageRef, file);
-
-      // Get download URL
       const downloadURL = await getDownloadURL(snapshot.ref);
-
-      // Update local avatar immediately
       setAvatar(downloadURL);
-
-      // Update seller document in Firestore
       await UserService.updateUserProfile(sellerData.id, { avatar: downloadURL });
-
-      // Notify parent component to refresh data
-      if (onAvatarUpdate) {
-        onAvatarUpdate();
-      }
-
+      if (onAvatarUpdate) onAvatarUpdate();
       alert("Avatar updated successfully!");
-
     } catch (error) {
       console.error('Error uploading avatar:', error);
       alert("Failed to upload avatar. Please try again.");
@@ -316,19 +297,15 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
     }
   };
 
-  // Toggle visibility for email/phone
   const toggleVisibility = async (field) => {
     if (!sellerData?.id) return;
-
     try {
       const newVisibility = {
         ...sellerData.visibility,
         [field]: !sellerData.visibility?.[field]
       };
-
       await UserService.updateUserProfile(sellerData.id, { visibility: newVisibility });
-
-      onAvatarUpdate(); // Refresh data
+      onAvatarUpdate(); 
     } catch (error) {
       console.error('Error updating visibility:', error);
       alert('Failed to update visibility settings');
@@ -336,207 +313,77 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
   };
 
   return (
-    <Card className="p-4 col-span-1 md:col-span-3">
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <img
-            src={avatar}
-            alt="Avatar"
-            className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-sm"
-            onError={(e) => {
-              e.target.src = DefaultAvatar;
-            }}
-          />
-          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
-          <label className={`absolute bottom-0 right-0 p-1 rounded-full transition-colors ${uploading
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-green-600 cursor-pointer hover:bg-green-700'
-            }`}>
-            {uploading ? (
-              <Loader2 className="h-4 w-4 text-white animate-spin" />
-            ) : (
-              <Upload className="h-4 w-4 text-white" />
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleAvatarChange}
-              className="hidden"
-              disabled={uploading}
+    <Card className="p-4 md:col-span-3">
+      <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
+        <div className="relative shrink-0 flex flex-col items-center">
+          <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center relative">
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="w-full h-full object-cover"
+              onError={(e) => { e.target.src = DefaultAvatar; }}
             />
-          </label>
+            <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
+              {uploading ? <Loader2 className="h-3.5 w-3.5 text-white animate-spin" /> : <Upload className="h-3.5 w-3.5 text-white" />}
+              <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
+            </label>
+          </div>
+          <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
+            {t('seller_dashboard.profile.add_photo')}
+          </div>
+        </div>
+
+        <div className="flex-grow min-w-0">
+          <p className="font-semibold text-lg">{sellerData?.name || "Loading..."}</p>
+          <p className="text-sm text-gray-500">{sellerData?.businessName || "Loading..."}</p>
+          <p className="text-sm text-gray-500">📍 {sellerData?.location || "Loading..."}</p>
+
+          {sellerData?.socialLinks && (
+            <div className="mt-2">
+              <p className="text-xs font-medium text-gray-600 mb-1">{t('seller_dashboard.profile.social_links')}</p>
+              <div className="flex gap-2 text-xs flex-wrap">
+                {sellerData.socialLinks.linkedin && <a href={sellerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>}
+                {sellerData.socialLinks.facebook && <a href={sellerData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Facebook</a>}
+                {sellerData.socialLinks.website && <a href={sellerData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Website</a>}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Avatar Upload Prompt */}
-      <div className="mt-2">
-        <p className="text-xs text-gray-500 italic">
-          {t('seller_dashboard.profile.add_photo')}
-        </p>
-      </div>
-
-      <div className="mt-3">
-        <p className="font-semibold">{sellerData?.name || "Loading..."}</p>
-        <p className="text-sm text-gray-500">{sellerData?.businessName || "Loading..."}</p>
-        <p className="text-sm text-gray-500">📍 {sellerData?.location || "Loading..."}</p>
-
-        {/* Social Links */}
-        {sellerData?.socialLinks && (
-          <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600 mb-1">{t('seller_dashboard.profile.social_links')}</p>
-            <div className="flex gap-2 text-xs">
-              {sellerData.socialLinks.linkedin && (
-                <a href={sellerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline">LinkedIn</a>
-              )}
-              {sellerData.socialLinks.facebook && (
-                <a href={sellerData.socialLinks.facebook} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline">Facebook</a>
-              )}
-              {sellerData.socialLinks.website && (
-                <a href={sellerData.socialLinks.website} target="_blank" rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline">Website</a>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Contact Information */}
         <div className="mt-2 space-y-1">
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500">📧 {sellerData?.email || "Loading..."}</p>
-            <button
-              onClick={() => toggleVisibility('email')}
-              className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${sellerData?.visibility?.email
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-500'
-                }`}
-            >
+            <button onClick={() => toggleVisibility('email')} className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${sellerData?.visibility?.email ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
               {sellerData?.visibility?.email ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
               {sellerData?.visibility?.email ? 'Public' : 'Private'}
             </button>
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500">📱 {sellerData?.phone || "Loading..."}</p>
-            <button
-              onClick={() => toggleVisibility('phone')}
-              className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${sellerData?.visibility?.phone
-                ? 'bg-green-100 text-green-700'
-                : 'bg-gray-100 text-gray-500'
-                }`}
-            >
+            <button onClick={() => toggleVisibility('phone')} className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${sellerData?.visibility?.phone ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
               {sellerData?.visibility?.phone ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
               {sellerData?.visibility?.phone ? 'Public' : 'Private'}
             </button>
           </div>
         </div>
 
-        {/* Payment Method */}
-        {sellerData?.paymentMethod && (
-          <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600">{t('seller_dashboard.profile.payment_method')}</p>
-            <p className="text-sm text-gray-500">
-              {sellerData.paymentMethod.type}: {sellerData.paymentMethod.number}
-              {sellerData.paymentMethod.verified && <span className="text-green-600 ml-1">✓ {t('seller_dashboard.profile.verified')}</span>}
-            </p>
-          </div>
-        )}
-
-        {/* Business License */}
-        {sellerData?.businessLicense && (
-          <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600">{t('seller_dashboard.profile.business_license')}</p>
-            <p className="text-sm text-gray-500">
-              {sellerData.businessLicense.licenseNumber}
-              {sellerData.businessLicense.verified && <span className="text-green-600 ml-1">✓ {t('seller_dashboard.profile.verified')}</span>}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Progress */}
-      <div className="mt-3">
-        <div className="text-sm mb-1">{t('seller_dashboard.profile.profile_complete')} {progress}%</div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div className="bg-green-600 h-2 rounded-full" style={{ width: `${progress}%` }}></div>
-        </div>
-      </div>
-
-      {/* Badges */}
-      <div className="flex gap-2 mt-3">
-        <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-          {sellerData?.status?.verified ? t('seller_dashboard.profile.verified_seller') : t('seller_dashboard.profile.profile_complete')}
-        </span>
-        {sellerData?.subscription?.plan === 'Premium' && (
-          <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">{t('seller_dashboard.profile.premium_plan')}</span>
-        )}
-        {sellerData?.subscription?.plan === 'Basic' && (
-          <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('seller_dashboard.profile.basic_plan')}</span>
-        )}
-      </div>
-
-      {/* Rating */}
-      <div className="flex items-center gap-1 mt-3 text-yellow-500">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 ${i < Math.floor(sellerData?.status?.rating || 0) ? 'fill-yellow-500' : 'text-gray-300'}`}
-          />
-        ))}
-        <span className="ml-2 text-sm text-gray-600">
-          ({sellerData?.status?.rating || 0} / 5)
-        </span>
-        <span className="ml-2 text-sm text-gray-500">
-          • {t('seller_dashboard.profile.transactions', { count: sellerData?.status?.transactions || 0 })}
-        </span>
-      </div>
-
-      {/* Action Buttons */}
       <div className="mt-4 space-y-2">
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="flex-1 text-xs"
-            onClick={() => setShowEditModal(true)}
-          >
-            <Edit className="h-3 w-3 mr-1" />
-            {t('seller_dashboard.profile.edit')}
+          <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowEditModal(true)}>
+            <Edit className="h-3 w-3 mr-1" /> {t('seller_dashboard.profile.edit')}
           </Button>
-          <Button
-            variant="outline"
-            className="flex-1 text-xs"
-            onClick={() => alert('Change Password functionality - Coming Soon!')}
-          >
-            <Lock className="h-3 w-3 mr-1" />
-            {t('seller_dashboard.profile.change_password')}
+          <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowPasswordModal(true)}>
+            <Lock className="h-3 w-3 mr-1" /> {t('seller_dashboard.profile.change_password')}
           </Button>
         </div>
-
-        <Button
-          className="w-full text-xs"
-          onClick={onContact}
-        >
-          {t('seller_dashboard.profile.contact_admin')}
-        </Button>
-
-        <Button
-          variant="outline"
-          className="w-full text-xs text-red-600 border-red-300 hover:bg-red-50"
-          onClick={() => alert('Delete Seller Account functionality - Coming Soon!')}
-        >
-          <Trash2 className="h-3 w-3 mr-1" />
-          {t('seller_dashboard.profile.delete_account')}
+        <Button className="w-full text-xs" onClick={onContact}>{t('seller_dashboard.profile.contact_admin')}</Button>
+        <Button variant="outline" className="w-full text-xs text-red-600 border-red-300 hover:bg-red-50" onClick={() => setShowDeleteModal(true)}>
+          <Trash2 className="h-3 w-3 mr-1" /> {t('seller_dashboard.profile.delete_account')}
         </Button>
       </div>
 
-      {/* Edit Profile Modal */}
-      {showEditModal && (
-        <EditProfileModal
-          sellerData={sellerData}
-          onClose={() => setShowEditModal(false)}
-          onUpdate={onAvatarUpdate}
-        />
-      )}
+      {showEditModal && <EditProfileModal sellerData={sellerData} onClose={() => setShowEditModal(false)} onUpdate={onAvatarUpdate} />}
     </Card>
   );
 }
@@ -544,10 +391,13 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate }) {
 export default function SellerDashboard() {
   const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
-  const [sellers, setSellers] = useState([]);
   const [selectedSeller, setSelectedSeller] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(auth.currentUser);
 
@@ -558,44 +408,35 @@ export default function SellerDashboard() {
     return () => unsubscribe();
   }, []);
 
-  // Fetch seller data for the logged-in user
   const fetchMySeller = async () => {
     if (!user) {
-      if (!auth.currentUser) setError("User not authenticated");
       setLoading(false);
-      navigate('/login');
       return;
     }
-
     try {
       setLoading(true);
-      setError(null);
-
-      // 1. Fetch Profile
-      const profile = await UserService.getUserProfile(user.uid);
-
+      const [profile, products, orders, notifs] = await Promise.all([
+        UserService.getUserProfile(user.uid),
+        ProductService.getSellerProducts(user.uid),
+        OrderService.getSellerOrders(user.uid),
+        NotificationService.getUserNotifications(user.uid)
+      ]);
       if (profile) {
-        // 2. Fetch Aggregated Stats (Products, Orders)
-        // Note: For now we fetch all and count. In production, use aggregation queries or maintain counters in profile.
-        const products = await ProductService.getSellerProducts(user.uid);
-        const orders = await OrderService.getSellerOrders(user.uid);
-
         const sellerProfile = {
           ...profile,
-          id: user.uid, // Ensure ID availability
+          id: user.uid,
           status: {
             ...profile.status,
             activeListings: products.length,
             transactions: orders.length,
-            // Simple calculation for total sales: sum of order amounts where status is completed
             totalSales: orders
               .filter(o => o.status === 'completed' || o.status === 'delivered')
               .reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
           }
         };
-
         setSelectedSeller(sellerProfile);
-        setSellers([sellerProfile]);
+        setRecentOrders((orders || []).slice(0, 5));
+        setNotifications((notifs || []).slice(0, 5));
       } else {
         setError("Seller profile not found. Please complete setup.");
       }
@@ -758,12 +599,31 @@ export default function SellerDashboard() {
           <Card className="flex-grow">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
-                <div className="p-4 text-center text-gray-500">
-                  <h4 className="text-lg font-bold mb-2">{t('seller_dashboard.recent_activity.welcome_title')}</h4>
-                  <p className="text-sm">
-                    {t('seller_dashboard.recent_activity.welcome_desc')}
-                  </p>
-                </div>
+                {recentOrders.length > 0 ? (
+                  <div className="space-y-2 p-4">
+                    {recentOrders.map((order) => (
+                      <div key={order.id} className="flex justify-between items-center text-sm border-b pb-2">
+                        <div className="flex flex-col">
+                          <span className="font-medium truncate max-w-[150px]">{order.product || `Order #${order.id.slice(0, 6)}`}</span>
+                          <span className="text-xs text-gray-500">{order.buyerName}</span>
+                        </div>
+                        <div className="flex flex-col items-end">
+                          <span className="font-bold">{order.totalAmount ? `${order.totalAmount} GNF` : '-'}</span>
+                          <span className={`px-2 py-0.5 rounded text-[10px] mt-1 ${order.status === 'completed' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                            {order.status || 'pending'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-gray-500">
+                    <h4 className="text-lg font-bold mb-2">{t('seller_dashboard.recent_activity.welcome_title')}</h4>
+                    <p className="text-sm">
+                      {t('seller_dashboard.recent_activity.welcome_desc')}
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="p-4 border-t">
                 <Button
@@ -825,19 +685,30 @@ export default function SellerDashboard() {
           <Card className="h-[300px]">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
-                <div className="space-y-3">
-                  <div className="p-6 text-center text-gray-500">
-                    <h4 className="text-lg font-bold mb-2">Welcome to Your Seller Dashboard!</h4>
-                    <p className="text-sm mb-4">
-                      You'll receive notifications here for new orders, payouts, and important updates.
-                    </p>
-                    <div className="space-y-2 text-xs text-gray-400">
-                      <p>• New order notifications</p>
-                      <p>• Payout confirmations</p>
-                      <p>• Stock alerts</p>
-                      <p>• Performance updates</p>
+                <div className="space-y-3 p-4">
+                  {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                      <div key={notification.id} className="flex items-start gap-3 text-sm p-3 bg-gray-50 rounded-lg">
+                        <div className="p-2 bg-blue-100 text-blue-600 rounded-full">
+                          <Bell className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-semibold text-gray-800">{notification.title}</p>
+                          <p className="text-gray-600 mt-0.5">{notification.message}</p>
+                          <p className="text-xs text-gray-400 mt-1">
+                            {notification.createdAt?.seconds ? new Date(notification.createdAt.seconds * 1000).toLocaleDateString() : 'Just now'}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-6 text-center text-gray-500">
+                      <h4 className="text-lg font-bold mb-2">Welcome to Your Seller Dashboard!</h4>
+                      <p className="text-sm mb-4">
+                        You'll receive notifications here for new orders, payouts, and important updates.
+                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
               <div className="p-4 border-t">

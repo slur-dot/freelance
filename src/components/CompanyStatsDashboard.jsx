@@ -130,6 +130,7 @@ export default function CompanyStatsDashboard() {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(auth.currentUser);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
+  const [selectedEmployees, setSelectedEmployees] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((u) => {
@@ -299,14 +300,14 @@ export default function CompanyStatsDashboard() {
 
       {/* Active Lease Contracts */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <Laptop className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.active_contracts')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.view_all_contracts')}</Button>
-            <Button className="text-sm">{t('company_dashboard.request_lease')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard/contracts')}>{t('company_dashboard.view_all_contracts')}</Button>
+            <Button className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/computer-rental')}>{t('company_dashboard.request_lease')}</Button>
           </div>
         </div>
 
@@ -342,14 +343,14 @@ export default function CompanyStatsDashboard() {
 
       {/* Recent Purchases */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <ShoppingCart className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.recent_purchases')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.view_all_purchases')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.track_order')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/shop')}>{t('company_dashboard.view_all_purchases')}</Button>
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/shop')}>{t('company_dashboard.track_order')}</Button>
           </div>
         </div>
 
@@ -386,14 +387,14 @@ export default function CompanyStatsDashboard() {
 
       {/* Equipment Tracking */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.equipment_tracking')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.view_tracking')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.report_issue')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard/equipment')}>{t('company_dashboard.view_tracking')}</Button>
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard/issues')}>{t('company_dashboard.report_issue')}</Button>
           </div>
         </div>
 
@@ -436,13 +437,13 @@ export default function CompanyStatsDashboard() {
 
       {/* Notifications */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.notifications')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.settings')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard/profile')}>{t('company_dashboard.settings')}</Button>
           </div>
         </div>
 
@@ -472,14 +473,14 @@ export default function CompanyStatsDashboard() {
 
       {/* Transaction History */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.transaction_history')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.view_all_transactions')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.export_pdf')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard')}>{t('company_dashboard.view_all_transactions')}</Button>
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => alert(t('company_dashboard.export_pdf') + ' - Coming soon!')}>{t('company_dashboard.export_pdf')}</Button>
           </div>
         </div>
 
@@ -647,15 +648,39 @@ export default function CompanyStatsDashboard() {
 
       {/* Employees */}
       <Card>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-green-600" />
             <h3 className="text-lg font-semibold">{t('company_dashboard.employees')}</h3>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="text-sm">{t('company_dashboard.add_employee')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.assign_equipment')}</Button>
-            <Button variant="outline" className="text-sm">{t('company_dashboard.request_training')}</Button>
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+            <Button variant="outline" className="text-sm flex-1 sm:flex-none whitespace-nowrap" onClick={() => navigate('/company/dashboard/emplolyee-list')}>{t('company_dashboard.add_employee')}</Button>
+            <Button 
+              variant="outline" 
+              className="text-sm flex-1 sm:flex-none whitespace-nowrap" 
+              onClick={() => {
+                if (selectedEmployees.length === 0) {
+                  alert(t('company_dashboard.select_employee_warning', 'Please select at least one employee first.'));
+                  return;
+                }
+                navigate('/company/dashboard/equipment', { state: { action: 'assign', selectedEmployees } });
+              }}
+            >
+              {t('company_dashboard.assign_equipment')}
+            </Button>
+            <Button 
+              variant="outline" 
+              className="text-sm flex-1 sm:flex-none whitespace-nowrap" 
+              onClick={() => {
+                if (selectedEmployees.length === 0) {
+                  alert(t('company_dashboard.select_employee_warning', 'Please select at least one employee first.'));
+                  return;
+                }
+                navigate('/company/dashboard/training-quotes', { state: { action: 'request', selectedEmployees } });
+              }}
+            >
+              {t('company_dashboard.request_training')}
+            </Button>
           </div>
         </div>
 
@@ -663,10 +688,24 @@ export default function CompanyStatsDashboard() {
           {employees.length > 0 ? (
             employees.map((employee) => (
               <div key={employee.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <div className="font-medium">{employee.name}</div>
-                  <div className="text-sm text-gray-600">{t('company_dashboard.role')} {employee.role}</div>
-                  <div className="text-sm text-gray-600">{t('company_dashboard.equipment')} {employee.equipment} ({employee.equipmentSource})</div>
+                <div className="flex items-center gap-3">
+                  <input 
+                    type="checkbox" 
+                    className="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500 cursor-pointer"
+                    checked={selectedEmployees.includes(employee.id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedEmployees([...selectedEmployees, employee.id]);
+                      } else {
+                        setSelectedEmployees(selectedEmployees.filter(id => id !== employee.id));
+                      }
+                    }}
+                  />
+                  <div>
+                    <div className="font-medium">{employee.name}</div>
+                    <div className="text-sm text-gray-600">{t('company_dashboard.role')} {employee.role}</div>
+                    <div className="text-sm text-gray-600">{t('company_dashboard.equipment')} {employee.equipment} ({employee.equipmentSource})</div>
+                  </div>
                 </div>
                 <div className="text-right">
                   {Array.isArray(employee.training) && employee.training.map((training, index) => (

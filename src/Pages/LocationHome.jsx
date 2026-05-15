@@ -12,9 +12,9 @@ export default function LocationHome() {
       <LocationHero />
 
       {/* Breadcrumb + Tabs Row  */}
-      <div className="flex flex-wrap items-center justify-start gap-6 mb-4 px-4 sm:px-6 lg:px-8 pt-4">
+      <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-start gap-2 sm:gap-6 mb-4 px-4 sm:px-6 lg:px-8 pt-4">
         {/* Breadcrumbs */}
-        <nav className="text-sm text-gray-500 flex items-center ml-25 ">
+        <nav className="text-sm text-gray-500 flex items-center">
           <ol className="inline-flex p-0 list-none">
             <li className="flex items-center">
               <Link to="/" className="text-gray-600 hover:underline">
@@ -29,11 +29,11 @@ export default function LocationHome() {
         </nav>
 
         {/* Tabs  */}
-        <div className="flex ml-50 space-x-4">
+        <div className="flex space-x-4 overflow-x-auto w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setActiveTab("freelancers")}
-            className={`rounded-none px-0 pb-2  ${
+            className={`rounded-none px-0 pb-2 whitespace-nowrap  ${
               activeTab === "freelancers"
                 ? "text-[#228B22]  "
                 : "text-gray-600 hover:text-[#228B22]"
@@ -44,7 +44,7 @@ export default function LocationHome() {
           <button
             type="button"
             onClick={() => setActiveTab("pickup")}
-            className={`rounded-none px-0 pb-2  ${
+            className={`rounded-none px-0 pb-2 whitespace-nowrap  ${
               activeTab === "pickup"
                 ? "text-[#228B22] "
                 : "text-gray-600 hover:text-[#228B22]"

@@ -21,6 +21,8 @@ import {
   Store,
   Handshake,
   GraduationCap,
+  Bell,
+  MessageCircle,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -62,6 +64,8 @@ export default function FreelancerSidebar() {
       section: t('sidebar.home'),
       items: [
         { title: t('sidebar.dashboard'), url: "/freelancer/dashboard", icon: BarChart3 },
+        { title: t('sidebar.messages', 'Messages'), url: "/freelancer/dashboard/messages", icon: MessageCircle },
+        { title: t('sidebar.notifications', 'Notifications'), url: "/freelancer/dashboard/notifications", icon: Bell },
       ],
     },
     {
@@ -82,7 +86,7 @@ export default function FreelancerSidebar() {
     {
       section: t('sidebar.work_management', 'Work Management'),
       items: [
-        { title: t('sidebar.my_jobs', 'My Projects / Services'), url: "/freelancer/dashboard/work-management", icon: Briefcase },
+        { title: t('sidebar.my_jobs', 'My Applications'), url: "/freelancer/dashboard/work-management", icon: Briefcase },
         { title: t('sidebar.earnings', 'Earnings'), url: "/freelancer/dashboard/earnings", icon: Wallet },
       ],
     },

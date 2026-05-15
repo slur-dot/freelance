@@ -21,6 +21,8 @@ import {
   Store,
   Handshake,
   GraduationCap,
+  Bell,
+  MessageCircle,
 } from "lucide-react";
 import userAvatar from "../../../assets/UserPic.jpg";
 import { auth } from "../../../firebaseConfig";
@@ -46,6 +48,8 @@ export default function CompanySidebar() {
       section: t('company_dashboard.sidebar_home'),
       items: [
         { title: t('company_dashboard.sidebar_dashboard'), url: "/company/dashboard", icon: BarChart3 },
+        { title: t('sidebar.messages', 'Messages'), url: "/company/dashboard/messages", icon: MessageCircle },
+        { title: t('sidebar.notifications', 'Notifications'), url: "/company/dashboard/notifications", icon: Bell },
       ],
     },
     {
@@ -90,6 +94,11 @@ export default function CompanySidebar() {
           title: t('company_dashboard.sidebar_issues', 'Issue Reporting'),
           url: "/company/dashboard/issues",
           icon: HelpCircle,
+        },
+        {
+          title: t('company_dashboard.sidebar_transactions', 'Transactions'),
+          url: "/company/dashboard/transactions",
+          icon: FileText,
         },
       ],
     },

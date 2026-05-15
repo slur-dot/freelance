@@ -1,12 +1,12 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import {
   ChevronDown,
-  SlidersHorizontal,
   Star,
   Heart,
   MessageSquareText,
   AlignJustify,
   ExternalLink,
+  Loader2,
 } from "lucide-react";
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
 import FilterSidebar from "./FilterSidebar";
@@ -14,142 +14,106 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCart } from "../contexts/CartContext";
 import { Search } from "lucide-react";
+import { db } from "../firebaseConfig";
+import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
 
-// Enhanced freelancer data with specialized skills
-const mockFreelancers = [
+// Fallback data shown when no freelancers are registered yet
+const fallbackFreelancers = [
   {
-    id: "freelancer-1",
-    name: "Fatima Diallo",
-    company: "Tech Solutions Guinea",
-    skills: ["SAP Consultant", "IT Support Specialist", "Business Applications"],
-    category: "Business Applications",
-    rating: 4.9,
-    reviews: 15,
-    hourlyRate: "150,000 GNF",
-    quote: "Excellent SAP implementation skills, delivered our ERP project ahead of schedule!",
-    quoteAuthor: "Moussa Camara",
-    image: HireFreelanceImage,
-    location: "Conakry (Kaloum)",
-    experience: "5+ years",
-    availability: "Available Now",
-    portfolio: "https://portfolio.fatima-diallo.com"
-  },
-  {
-    id: "freelancer-2",
-    name: "Ibrahim Bah",
-    company: "CloudTech Africa",
-    skills: ["AWS", "Azure", "Cloud Infrastructure", "DevOps"],
-    category: "Cloud & Infrastructure",
-    rating: 4.8,
-    reviews: 22,
-    hourlyRate: "180,000 GNF",
-    quote: "Outstanding cloud migration expertise. Highly recommended for infrastructure projects.",
-    quoteAuthor: "Fatoumata Barry",
-    image: HireFreelanceImage,
-    location: "Kindia (Prefecture)",
-    experience: "7+ years",
-    availability: "Available Now",
-    portfolio: "https://portfolio.ibrahim-bah.com"
-  },
-  {
-    id: "freelancer-3",
-    name: "Mariama Keita",
-    company: "CyberSec Pro",
-    skills: ["Penetration Testing", "Security Audits", "Network Security"],
-    category: "Cyber Security",
-    rating: 4.9,
-    reviews: 18,
-    hourlyRate: "200,000 GNF",
-    quote: "Top-notch security expert. Helped us identify and fix critical vulnerabilities.",
-    quoteAuthor: "Alpha Diallo",
-    image: HireFreelanceImage,
-    location: "Conakry (Dixinn)",
-    experience: "6+ years",
-    availability: "Available Now",
-    portfolio: "https://portfolio.mariama-keita.com"
-  },
-  {
-    id: "freelancer-4",
-    name: "Sekou Traore",
-    company: "Data Insights Guinea",
-    skills: ["Python", "Machine Learning", "Data Visualization", "SQL"],
-    category: "Data & Analytics",
-    rating: 4.7,
-    reviews: 25,
-    hourlyRate: "160,000 GNF",
-    quote: "Brilliant data analyst. Transformed our business intelligence capabilities.",
-    quoteAuthor: "Aissatou Diallo",
-    image: HireFreelanceImage,
-    location: "Kankan (Prefecture)",
-    experience: "4+ years",
-    availability: "Available Now",
-    portfolio: "https://portfolio.sekou-traore.com"
-  },
-  {
-    id: "freelancer-5",
-    name: "Fatou Camara",
-    company: "SAP Solutions West Africa",
-    skills: ["SAP FICO", "SAP MM", "SAP SD", "SAP HANA"],
-    category: "SAP",
-    rating: 4.9,
-    reviews: 30,
-    hourlyRate: "220,000 GNF",
-    quote: "Exceptional SAP consultant. Deep expertise in multiple SAP modules.",
-    quoteAuthor: "Mohamed Bah",
-    image: HireFreelanceImage,
-    location: "Conakry",
-    experience: "8+ years",
-    availability: "Available Now"
-  },
-  {
-    id: "freelancer-6",
-    name: "Boubacar Diallo",
-    company: "CodeCraft Guinea",
-    skills: ["React", "Node.js", "Python", "Mobile Development"],
+    id: "f1",
+    name: "Ibrahim Diallo",
+    company: "TechGuinee Solutions",
+    skills: ["React", "Node.js", "Firebase"],
     category: "Software Development",
     rating: 4.8,
-    reviews: 20,
-    hourlyRate: "140,000 GNF",
-    quote: "Excellent developer. Clean code and great communication throughout the project.",
-    quoteAuthor: "Kadiatou Barry",
+    reviews: 15,
+    hourlyRate: "150,000 GNF",
+    quote: "Expert in building scalable web applications for local businesses.",
+    quoteAuthor: "Client",
     image: HireFreelanceImage,
     location: "Conakry",
-    experience: "5+ years",
-    availability: "Available Now"
+    experience: "5+ Years",
+    availability: "Available Now",
+    portfolio: "https://example.com"
   },
   {
-    id: "freelancer-7",
-    name: "Aicha Sow",
-    company: "BusinessTech Solutions",
-    skills: ["Oracle ERP", "Business Process", "System Integration"],
-    category: "Business Applications",
-    rating: 4.6,
-    reviews: 12,
-    hourlyRate: "170,000 GNF",
-    quote: "Professional business application expert. Great attention to detail.",
-    quoteAuthor: "Ibrahima Keita",
+    id: "f2",
+    name: "Fatoumata Camara",
+    company: "Creative Conakry",
+    skills: ["UI/UX", "Figma", "Web Design"],
+    category: "Design",
+    rating: 4.9,
+    reviews: 24,
+    hourlyRate: "120,000 GNF",
+    quote: "Passionate about creating intuitive user experiences.",
+    quoteAuthor: "Previous Client",
     image: HireFreelanceImage,
     location: "Conakry",
-    experience: "6+ years",
-    availability: "Available Now"
+    experience: "3 Years",
+    availability: "Part Time",
+    portfolio: "https://example.com"
   },
   {
-    id: "freelancer-8",
-    name: "Mamadou Barry",
-    company: "CloudFirst Africa",
-    skills: ["Docker", "Kubernetes", "Terraform", "AWS"],
-    category: "Cloud & Infrastructure",
+    id: "f3",
+    name: "Amadou Barry",
+    company: "Data Insight GN",
+    skills: ["Python", "Data Analysis", "SQL"],
+    category: "Data Science",
     rating: 4.7,
-    reviews: 16,
-    hourlyRate: "190,000 GNF",
-    quote: "Outstanding DevOps engineer. Automated our entire deployment pipeline.",
-    quoteAuthor: "Mariama Diallo",
+    reviews: 8,
+    hourlyRate: "180,000 GNF",
+    quote: "Helping businesses make data-driven decisions.",
+    quoteAuthor: "NGO Partner",
     image: HireFreelanceImage,
-    location: "Conakry",
-    experience: "5+ years",
-    availability: "Available Now"
+    location: "Labé",
+    experience: "4 Years",
+    availability: "Available Now",
+    portfolio: "https://example.com"
   }
 ];
+
+
+async function fetchFreelancersFromFirebase() {
+  try {
+    const usersRef = collection(db, "users");
+    // Try lowercase first
+    let q = query(usersRef, where("role", "==", "freelancer"), limit(20));
+    let snap = await getDocs(q);
+    
+    // If empty, try capitalized
+    if (snap.empty) {
+      q = query(usersRef, where("role", "==", "Freelancer"), limit(20));
+      snap = await getDocs(q);
+    }
+    
+    if (snap.empty) return null;
+
+    return snap.docs.map((docSnap) => {
+      const d = docSnap.data();
+      return {
+        id: docSnap.id,
+        name: d.name || d.fullName || d.displayName || "Freelancer",
+        company: d.company || d.businessName || "",
+        skills: d.skills || d.specializations || [],
+        category: (d.skills || [])[0] || d.category || "Tech",
+        rating: d.rating || 4.5,
+        reviews: d.reviewCount || 0,
+        hourlyRate: d.hourlyRate || "—",
+        quote: d.bio || "",
+        quoteAuthor: "",
+        image: d.avatar || d.profileImage || d.photoURL || HireFreelanceImage,
+        location: d.location || d.city || d.prefecture || "Guinea",
+        experience: d.experience || "",
+        availability: d.availability || "Available Now",
+        portfolio: d.portfolio || "",
+        isExample: false,
+      };
+    });
+  } catch (err) {
+    console.error("Error fetching freelancers:", err);
+    return null;
+  }
+}
 
 function Loading() {
   return (
@@ -326,6 +290,8 @@ export default function FreelancerProfile() {
   const [sortOpen, setSortOpen] = useState(false);
   const { t } = useTranslation();
   const [sortValue, setSortValue] = useState(t('freelancer.sort.options.popular'));
+  const [freelancers, setFreelancers] = useState([]);
+  const [loadingFreelancers, setLoadingFreelancers] = useState(true);
 
   const sortOptions = [
     t('freelancer.sort.options.popular'),
@@ -334,9 +300,19 @@ export default function FreelancerProfile() {
     t('freelancer.sort.options.newest')
   ];
 
+  useEffect(() => {
+    async function load() {
+      setLoadingFreelancers(true);
+      const firebaseData = await fetchFreelancersFromFirebase();
+      setFreelancers(firebaseData && firebaseData.length > 0 ? firebaseData : fallbackFreelancers);
+      setLoadingFreelancers(false);
+    }
+    load();
+  }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredFreelancers = mockFreelancers.filter(f => 
+  const filteredFreelancers = freelancers.filter(f =>
     f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     f.skills.some(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -371,7 +347,7 @@ export default function FreelancerProfile() {
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="Search freelancers by name or skill..."
+                    placeholder={t('freelancer.search_placeholder', 'Search freelancers by name or skill...')}
                     className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -379,7 +355,7 @@ export default function FreelancerProfile() {
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 w-full sm:w-auto justify-end">
-                  <p>{t('freelancer.sort.showing', { start: 1, end: filteredFreelancers.length, total: mockFreelancers.length })}</p>
+                  <p>{t('freelancer.sort.showing', { start: 1, end: filteredFreelancers.length, total: freelancers.length })}</p>
                   <span>{t('freelancer.sort.label')}</span>
                   <div className="relative">
                     <button
@@ -409,9 +385,16 @@ export default function FreelancerProfile() {
               </div>
 
               {/* Freelancer Cards */}
-              <Suspense fallback={<Loading />}>
-                <FreelancerList freelancers={filteredFreelancers} />
-              </Suspense>
+              {loadingFreelancers ? (
+                <div className="flex flex-col items-center justify-center py-20 gap-4 text-gray-400">
+                  <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+                  <p className="text-sm">{t('freelancer.loading', 'Loading freelancers...')}</p>
+                </div>
+              ) : (
+                <Suspense fallback={<Loading />}>
+                  <FreelancerList freelancers={filteredFreelancers} />
+                </Suspense>
+              )}
 
               {/* Pagination Dots */}
               <div className="flex justify-center mt-8">

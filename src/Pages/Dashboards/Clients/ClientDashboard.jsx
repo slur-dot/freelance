@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
-import { Info, Upload, Star, Edit, MapPin, Phone, ShoppingBag, TrendingUp, Bell, Globe, Shield, Users, Package, MessageCircle } from "lucide-react";
+import { Info, Upload, Star, Edit, MapPin, Phone, ShoppingBag, TrendingUp, Bell, Users, MessageCircle, Monitor, AlertCircle, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 import AlexandraImg from "../../../assets/Alexandra.png";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
 import { ClientService } from "../../../services/clientService";
@@ -94,65 +94,77 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
     }
   };
 
+  const navigate = useNavigate();
   // Provide defaults if profileData is null (loading)
   const displayProfile = profileData || { name: t('client_dashboard.profile.your_name'), bio: "", location: "", whatsapp: "", verificationStatus: false };
   const avatarSrc = displayProfile.avatar || DefaultAvatar;
 
-  const progress = displayProfile.name && displayProfile.bio && displayProfile.whatsapp ? 100 :
-    displayProfile.name && displayProfile.bio ? 75 :
-      displayProfile.name ? 50 : 25;
+  const missingFields = [];
+  if (!displayProfile.bio) missingFields.push('Bio');
+  if (!displayProfile.location) missingFields.push('Location');
+  if (!displayProfile.whatsapp && !displayProfile.phone) missingFields.push('Phone');
+  if (!displayProfile.avatar) missingFields.push('Photo');
+  const progress = Math.round(((4 - missingFields.length) / 4) * 100);
 
   return (
-    <Card className="p-6 col-span-1 md:col-span-3">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-4">
-          <div className="relative">
-            <img
-              src={avatarSrc}
-              alt="Avatar"
-              className="w-20 h-20 rounded-full object-cover border-2 border-gray-200 shadow-sm"
-              onError={(e) => { e.target.src = DefaultAvatar; }}
-            />
-            <label className={`absolute bottom-0 right-0 bg-green-600 p-1 rounded-full cursor-pointer hover:bg-green-700 transition-colors ${uploading ? 'opacity-50' : ''}`}>
-              <Upload className="h-4 w-4 text-white" />
-              <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
-            </label>
+    <Card className="p-6 md:col-span-3">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-4">
+        <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap w-full">
+          <div className="relative shrink-0 flex flex-col items-center">
+            <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center relative">
+              <img
+                src={avatarSrc}
+                alt="Avatar"
+                className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = DefaultAvatar; }}
+              />
+              <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
+                {uploading ? <Loader2 className="h-3.5 w-3.5 text-white animate-spin" /> : <Upload className="h-3.5 w-3.5 text-white" />}
+                <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
+              </label>
+            </div>
+            {!displayProfile.avatar && (
+              <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
+                {t('client_dashboard.profile.add_photo')}
+              </div>
+            )}
           </div>
-          <div className="flex-1">
+          
+          <div className="flex-1 min-w-0">
             {/* Name & Bio Editing Logic */}
             {isEditing ? (
-              <div className="space-y-2">
+              <div className="space-y-2 w-full">
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="text-xl font-bold border border-gray-300 rounded px-2 py-1 block w-full"
+                  className="text-xl font-bold border border-gray-300 rounded px-2 py-1 block w-full outline-none focus:ring-2 focus:ring-green-500"
                   placeholder={t('client_dashboard.profile.your_name')}
                 />
                 <textarea
                   value={formData.bio}
                   onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 w-full block"
+                  className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 w-full block outline-none focus:ring-2 focus:ring-green-500"
                   rows={2}
                   placeholder={t('client_dashboard.profile.bio_placeholder')}
                 />
               </div>
             ) : (
               <div>
-                <h2 className="text-xl font-bold">{displayProfile.name || displayProfile.fullName || t('client_dashboard.profile.your_name')}</h2>
-                <p className="text-sm text-gray-600">{displayProfile.bio || t('client_dashboard.profile.no_bio')}</p>
-                {!displayProfile.avatar && <p className="text-sm text-blue-600 mt-1">{t('client_dashboard.profile.add_photo')}</p>}
+                <h2 className="text-xl font-bold break-words">{displayProfile.name || displayProfile.fullName || t('client_dashboard.profile.your_name')}</h2>
+                <p className="text-sm text-gray-600 mt-1 break-words">{displayProfile.bio || t('client_dashboard.profile.no_bio')}</p>
               </div>
             )}
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setIsEditing(!isEditing)}>
-            <Edit className="w-4 h-4 mr-1" />
+        
+        <div className="flex gap-2 shrink-0 w-full sm:w-auto">
+          <Button variant="outline" className="flex-1 sm:flex-none text-xs" onClick={() => setIsEditing(!isEditing)}>
+            <Edit className="w-3.5 h-3.5 mr-1" />
             {isEditing ? t('client_dashboard.profile.cancel') : t('client_dashboard.profile.edit_profile')}
           </Button>
           {isEditing && (
-            <Button onClick={handleSaveProfile}>
+            <Button className="flex-1 sm:flex-none text-xs" onClick={handleSaveProfile}>
               {t('client_dashboard.profile.save')}
             </Button>
           )}
@@ -192,10 +204,16 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
       </div>
 
       {/* Progress Bar & Badges */}
-      <div className="mb-4">
-        <div className="text-sm mb-1">{t('client_dashboard.profile.profile_complete', { progress })}</div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div className="bg-green-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
+      <div className="mb-4 cursor-pointer" onClick={() => navigate('/Clients/dashboard/profile')}>
+        {progress < 100 && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
+            <p className="text-sm font-bold text-amber-800 flex items-center gap-1">⚡ Complete your profile to unlock all features</p>
+            <p className="text-xs text-amber-600 mt-1">Missing: {missingFields.join(', ')}</p>
+          </div>
+        )}
+        <div className="text-sm mb-1 font-medium">{t('client_dashboard.profile.profile_complete', { progress })}</div>
+        <div className="w-full bg-gray-200 rounded-full h-2.5 hover:bg-gray-300 transition-colors">
+          <div className={`h-2.5 rounded-full transition-all ${progress === 100 ? 'bg-green-600' : 'bg-amber-500'}`} style={{ width: `${progress}%` }}></div>
         </div>
       </div>
 
@@ -247,8 +265,10 @@ function RecentOrders({ orders }) {
               })}
             </div>
           ) : (
-            <div className="text-center text-gray-500 text-sm py-4">
-              {t('client_dashboard.recent_orders.no_orders')}
+            <div className="text-center py-4">
+              <ShoppingBag className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-500 text-sm">{t('client_dashboard.recent_orders.no_orders')}</p>
+              <p className="text-xs text-gray-400 mt-1">Your recent purchases will appear here.</p>
             </div>
           )}
           <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
@@ -263,10 +283,11 @@ function RecentOrders({ orders }) {
 // Statistics Component
 function Statistics({ stats }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const realStats = [
-    { label: t('client_dashboard.stats.total_spent'), value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp },
-    { label: t('client_dashboard.stats.orders'), value: stats?.totalOrders || 0, icon: ShoppingBag },
-    { label: t('client_dashboard.stats.freelancers_hired'), value: stats?.freelancersHired || 0, icon: Users }
+    { label: t('client_dashboard.stats.total_spent'), value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp, isEmpty: !stats?.totalSpent, emptyMsg: 'Start shopping to track your spending', cta: 'Discover services', ctaUrl: '/shop' },
+    { label: t('client_dashboard.stats.orders'), value: stats?.totalOrders || 0, icon: ShoppingBag, isEmpty: !stats?.totalOrders, emptyMsg: 'Place your first order to get started', cta: 'Create an order', ctaUrl: '/shop' },
+    { label: t('client_dashboard.stats.freelancers_hired'), value: stats?.freelancersHired || 0, icon: Users, isEmpty: !stats?.freelancersHired, emptyMsg: 'Find skilled professionals for your projects', cta: 'Hire a freelancer', ctaUrl: '/hire-freelancers' }
   ];
 
   return (
@@ -281,9 +302,18 @@ function Statistics({ stats }) {
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{stat.value}</div>
-              <Button className="mt-4 w-fit" onClick={() => { }}>
-                {t('client_dashboard.stats.view_details')}
-              </Button>
+              {stat.isEmpty ? (
+                <div>
+                  <p className="text-xs text-gray-400 mt-1">{stat.emptyMsg}</p>
+                  <Button className="mt-2 w-fit text-xs" onClick={() => navigate(stat.ctaUrl)}>
+                    {stat.cta} →
+                  </Button>
+                </div>
+              ) : (
+                <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
+                  {t('client_dashboard.stats.view_details')}
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -301,28 +331,27 @@ function DeviceTracking({ devices = [] }) {
       <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.device_tracking.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
-          <div className="space-y-2 overflow-y-auto max-h-[100px]">
-            {devices.length > 0 ? (
-              devices.map((device) => (
+          {devices.length > 0 ? (
+            <div className="space-y-2 overflow-y-auto max-h-[100px]">
+              {devices.map((device) => (
                 <div key={device.id} className="flex justify-between items-center text-sm">
                   <div className="flex flex-col">
                     <span className="font-medium">{device.name}</span>
                     <span className="text-xs text-gray-500">{device.location}</span>
                   </div>
-                  <span className={`px-2 py-1 rounded text-xs ${device.ready ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                    }`}>
-                    {device.status}
-                  </span>
+                  <span className={`px-2 py-1 rounded text-xs ${device.ready ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>{device.status}</span>
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 text-sm py-4">
-                {t('client_dashboard.device_tracking.no_tracking')}
-              </div>
-            )}
-          </div>
-          <Button className="mt-4 w-fit" onClick={() => navigate("#")}>
-            {t('client_dashboard.device_tracking.view_map')}
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <Monitor className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-500 text-sm">{t('client_dashboard.device_tracking.no_tracking')}</p>
+              <p className="text-xs text-gray-400 mt-1">Track rented or assigned devices in real-time.</p>
+            </div>
+          )}
+          <Button className="mt-4 w-fit" onClick={() => navigate('/computer-rental')}>
+            Rent a device →
           </Button>
         </CardContent>
       </Card>
@@ -330,108 +359,42 @@ function DeviceTracking({ devices = [] }) {
   );
 }
 
-// Digital Growth Bundle Component
-function DigitalGrowthBundle() {
-  const { t } = useTranslation();
-  const [selectedPlan, setSelectedPlan] = useState('monthly');
 
-  return (
-    <div className="md:col-span-2">
-      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.growth_bundle.title')}</h3>
-      <Card className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Basic Plan */}
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h4 className="text-lg font-semibold mb-2">{t('client_dashboard.growth_bundle.free_plan.title')}</h4>
-            <ul className="text-sm text-gray-600 space-y-1 mb-4">
-              <li>• {t('client_dashboard.growth_bundle.free_plan.purchases')}</li>
-              <li>• {t('client_dashboard.growth_bundle.free_plan.no_monitoring')}</li>
-              <li>• {t('client_dashboard.growth_bundle.free_plan.support')}</li>
-            </ul>
-            <Button variant="outline" className="w-full" disabled>
-              {t('client_dashboard.growth_bundle.free_plan.current')}
-            </Button>
-          </div>
-
-          {/* Premium Plan */}
-          <div className="border-2 border-green-500 rounded-lg p-4 bg-green-50">
-            <div className="flex justify-between items-center mb-2">
-              <h4 className="text-lg font-semibold">{t('client_dashboard.growth_bundle.premium_plan.title')}</h4>
-              <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">{t('client_dashboard.growth_bundle.premium_plan.limited_slots')}</span>
-            </div>
-
-            <div className="mb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl font-bold text-green-600">
-                  {selectedPlan === 'monthly' ? '40,000 GNF' : '200,000 GNF'}
-                </span>
-                <span className="text-sm text-gray-500">
-                  /{selectedPlan === 'monthly' ? t('client_dashboard.growth_bundle.premium_plan.month') : t('client_dashboard.growth_bundle.premium_plan.six_months')}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm line-through text-gray-500">{t('client_dashboard.growth_bundle.premium_plan.regular_price')}</span>
-                <span className="text-xs bg-green-100 text-green-700 px-1 rounded">{t('client_dashboard.growth_bundle.premium_plan.discount')}</span>
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">{t('client_dashboard.growth_bundle.premium_plan.total_value')}</p>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.unlimited')}</li>
-                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.monitoring')}</li>
-                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.priority')}</li>
-                <li>• {t('client_dashboard.growth_bundle.premium_plan.features.guarantee')}</li>
-              </ul>
-            </div>
-
-            <div className="space-y-2">
-              <Button className="w-full">
-                {t('client_dashboard.growth_bundle.premium_plan.buy_now')}
-              </Button>
-              <div className="flex gap-2">
-                <Button variant="outline" className="flex-1" onClick={() => setSelectedPlan('monthly')}>
-                  {t('client_dashboard.growth_bundle.premium_plan.monthly_btn')}
-                </Button>
-                <Button variant="outline" className="flex-1" onClick={() => setSelectedPlan('semiannual')}>
-                  {t('client_dashboard.growth_bundle.premium_plan.semiannual_btn')}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
-  );
-}
 
 // Notifications Component
 function Notifications({ notifications = [] }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const unreadCount = notifications.filter(n => !n.read).length;
   return (
     <div className="md:col-span-1">
-      <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.notifications.title')}</h3>
+      <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
+        {t('client_dashboard.notifications.title')}
+        {unreadCount > 0 && <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">{unreadCount}</span>}
+      </h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
-          <div className="space-y-2 overflow-y-auto max-h-[100px]">
-            {notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <div key={notification.id} className="flex items-start gap-2 text-sm">
-                  <Bell className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+          {notifications.length > 0 ? (
+            <div className="space-y-2 overflow-y-auto max-h-[100px]">
+              {notifications.map((notification) => (
+                <div key={notification.id} className={`flex items-start gap-2 text-sm ${!notification.read ? 'bg-blue-50 -mx-2 px-2 py-1 rounded' : ''}`}>
+                  <Bell className={`w-4 h-4 mt-0.5 flex-shrink-0 ${!notification.read ? 'text-blue-600' : 'text-gray-400'}`} />
                   <div className="flex-1">
                     <p className="text-gray-800">{notification.message}</p>
                     <p className="text-xs text-gray-500">{notification.time}</p>
                   </div>
+                  {!notification.read && <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />}
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 text-sm py-4">
-                {t('client_dashboard.notifications.none')}
-              </div>
-            )}
-          </div>
-          <Button className="mt-4 w-fit" onClick={() => navigate("#")}>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-500 text-sm">You have no notifications at the moment.</p>
+              <p className="text-xs text-gray-400 mt-1">Order updates and alerts will show here.</p>
+            </div>
+          )}
+          <Button className="mt-4 w-fit" onClick={() => navigate('/Clients/dashboard/notifications')}>
             {t('client_dashboard.notifications.view_all')}
           </Button>
         </CardContent>
@@ -530,8 +493,7 @@ export default function ClientDashbaord() {
           <Notifications notifications={stats?.notifications} />
         </div>
 
-        {/* Digital Growth Bundle */}
-        <DigitalGrowthBundle />
+
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div className="md:col-span-2 flex flex-col">

@@ -233,6 +233,23 @@ export default function AdminDashboard() {
       const ordersDocsSnap = await getDocs(ordersQuery);
       const totalRev = ordersDocsSnap.docs.reduce((acc, doc) => acc + (parseFloat(doc.data().totalAmount) || 0), 0);
 
+      // Fetch counts for tickets, training requests, ads, courses
+      let ticketsCount = 0, trainingCount = 0, adsCount = 0, coursesCount = 0;
+      try {
+        const [ticketsSnap, trainingSnap, adsSnap, coursesSnap] = await Promise.all([
+          getCountFromServer(collection(db, "tickets")),
+          getCountFromServer(collection(db, "training_requests")),
+          getCountFromServer(collection(db, "advertisements")),
+          getCountFromServer(collection(db, "courses"))
+        ]);
+        ticketsCount = ticketsSnap.data().count;
+        trainingCount = trainingSnap.data().count;
+        adsCount = adsSnap.data().count;
+        coursesCount = coursesSnap.data().count;
+      } catch (countErr) {
+        console.warn("Some collection counts failed (collections may not exist yet):", countErr);
+      }
+
       // Fetch recent messages/chats
       const chatQuery = query(collection(db, "chatSessions"), orderBy("lastMessageAt", "desc"), limit(5));
       const chatSnap = await getDocs(chatQuery);
@@ -245,10 +262,10 @@ export default function AdminDashboard() {
         totalFreelancers: freelancersSnap.data().count,
         totalSellers: sellersSnap.data().count,
         totalRevenue: totalRev,
-        totalCourses: 0,
-        totalTickets: 0,
-        totalTrainingRequests: 0,
-        totalAdvertisements: 0
+        totalCourses: coursesCount,
+        totalTickets: ticketsCount,
+        totalTrainingRequests: trainingCount,
+        totalAdvertisements: adsCount
       });
 
       setRecentChats(chats);

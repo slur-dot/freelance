@@ -234,10 +234,11 @@ export default function ShippingDetailsPage() {
           return;
         }
         
-        // Redirect to invoice page
-        navigate("/download-invoice", { state: { orderId: orderRes.orderId } });
+        // Complete mock payment immediately
+        await OrderService.updateOrderStatus(orderRes.orderId, 'paid');
+        navigate("/shop/payment-success?ref=" + orderRes.orderId);
       } else {
-        OrderService.updateOrderStatus(orderRes.orderId, 'payment_failed');
+        await OrderService.updateOrderStatus(orderRes.orderId, 'payment_failed');
         setPaymentResult(result);
       }
     } catch (error) {

@@ -4,13 +4,29 @@ import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ProfileLayout from "../Common/ProfileLayout";
 import PaymentManagement from "../../../components/Payment/PaymentManagement";
-import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Building, CreditCard } from "lucide-react";
+import { User, Shield, Key, Mail, Save, ChevronRight, Lock, Bell, Building, CreditCard, MapPin } from "lucide-react";
+import { UserService } from "../../../services/userService";
+import { guineaCitiesByRegion } from "../../../data/guineaCities";
 
 export default function CompanyProfile() {
   const { t } = useTranslation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    company: "Tech Corp Guinea",
+    region: "",
+    prefecture: "",
+    subPrefecture: "",
+  });
+
+  // Derived data for cascading dropdowns
+  const regionData = guineaCitiesByRegion.find(r => r.region === form.region);
+  const prefectures = regionData ? regionData.prefectures : [];
+  const prefectureData = prefectures.find(p => p.name === form.prefecture);
+  const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
@@ -27,6 +43,13 @@ export default function CompanyProfile() {
             role: "Company",
             createdAt: userData.createdAt?.toDate() || new Date(),
           });
+          setForm({
+            name: userData.fullName || currentUser.displayName || "Company Admin",
+            company: userData.company || "Tech Corp Guinea",
+            region: userData.region || "",
+            prefecture: userData.prefecture || "",
+            subPrefecture: userData.subPrefecture || ""
+          });
         } catch (error) {
           console.error("Error fetching user details:", error);
         }
@@ -37,10 +60,10 @@ export default function CompanyProfile() {
   }, []);
 
   const stats = [
-    { label: t('company_dashboard.stats.employees', 'Employees'), value: '45', trend: 'up', trendNote: '+5 new this month' },
-    { label: t('company_dashboard.stats.devices', 'Leased Devices'), value: '32', trend: 'up', trendNote: 'All active' },
-    { label: t('company_dashboard.stats.training', 'Training Hours'), value: '1.2k', trend: 'up', trendNote: '8 courses ongoing' },
-    { label: t('company_dashboard.stats.compliance', 'Compliance'), value: '100%', trend: 'up', trendNote: 'All systems secure' },
+    { label: t('company_dashboard.stats.employees', 'Employees'), value: user?.stats?.employees || '45', trend: 'up', trendNote: '+5 new this month' },
+    { label: t('company_dashboard.stats.devices', 'Leased Devices'), value: user?.stats?.devices || '32', trend: 'up', trendNote: 'All active' },
+    { label: t('company_dashboard.stats.training', 'Training Hours'), value: user?.stats?.trainingHours || '1.2k', trend: 'up', trendNote: '8 courses ongoing' },
+    { label: t('company_dashboard.stats.compliance', 'Compliance'), value: user?.stats?.compliance || '100%', trend: 'up', trendNote: 'All systems secure' },
   ];
 
   if (loading) {
@@ -85,7 +108,8 @@ export default function CompanyProfile() {
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                     <input 
                       type="text" 
-                      defaultValue={user?.name}
+                      value={form.name}
+                      onChange={(e) => setForm({...form, name: e.target.value})}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium"
                     />
                   </div>
@@ -122,7 +146,8 @@ export default function CompanyProfile() {
                     <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input 
                       type="text" 
-                      defaultValue={user?.company || "Tech Corp Guinea"}
+                      value={form.company}
+                      onChange={(e) => setForm({...form, company: e.target.value})}
                       className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none font-medium text-gray-800"
                     />
                   </div>
@@ -176,9 +201,28 @@ export default function CompanyProfile() {
              </div>
 
              <div className="pt-4 flex justify-end">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 flex items-center gap-2 transition-all hover:-translate-y-1">
+                <button 
+                  onClick={async () => {
+                    if (!user) return;
+                    setSaving(true);
+                    try {
+                      await UserService.updateUserProfile(user.uid, {
+                        company: form.company
+                      });
+                      setUser({...user, company: form.company});
+                      alert(t('profile.update_success', 'Profile updated successfully!'));
+                    } catch (err) {
+                      console.error(err);
+                      alert(t('profile.update_failed', 'Failed to update profile.'));
+                    } finally {
+                      setSaving(false);
+                    }
+                  }}
+                  disabled={saving}
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-600/20 flex items-center gap-2 transition-all hover:-translate-y-1 disabled:opacity-50"
+                >
                   <Save className="w-4 h-4" />
-                  {t('profile.save_company', 'Update Company Profile')}
+                  {saving ? t('profile.saving', 'Saving...') : t('profile.save_company', 'Update Company Profile')}
                 </button>
              </div>
           </div>

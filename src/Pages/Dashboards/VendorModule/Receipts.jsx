@@ -3,35 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Download, FileText, Search, CreditCard, Calendar, Filter } from 'lucide-react';
 import html2pdf from 'html2pdf.js';
 
-// Mock data until Firestore is connected
-const MOCK_RECEIPTS = [
-  {
-    id: 'RCP-2024-001',
-    orderId: 'ORD-75892',
-    date: '2024-04-18',
-    customer: 'Tech Corp SARL',
-    items: [
-      { name: 'MacBook Pro M3', quantity: 2, price: 1999, serials: ['F224-20240418-A1B2', 'F224-20240418-C3D4'] }
-    ],
-    amount: 3998,
-    currency: 'USD',
-    status: 'completed',
-    paymentMethod: 'Stripe'
-  },
-  {
-    id: 'RCP-2024-002',
-    orderId: 'ORD-75895',
-    date: '2024-04-19',
-    customer: 'John Doe',
-    items: [
-      { name: 'iPhone 15 Pro Max', quantity: 1, price: 1199, serials: ['F224-20240419-X9Y8'] }
-    ],
-    amount: 1199,
-    currency: 'USD',
-    status: 'completed',
-    paymentMethod: 'Mobile Money'
-  }
-];
+import { auth } from '../../../firebaseConfig';
+import { OrderService } from '../../../services/orderService';
 
 export default function Receipts() {
   const { t } = useTranslation();
@@ -40,11 +13,47 @@ export default function Receipts() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // In a real app, fetch from vendorService.getReceipts(vendorId)
-    setTimeout(() => {
-      setReceipts(MOCK_RECEIPTS);
-      setIsLoading(false);
-    }, 800);
+    const fetchReceipts = async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
+      try {
+        // Fetch real orders from OrderService
+        const vendorOrders = await OrderService.getSellerOrders(user.uid);
+        
+        // Filter for completed/delivered orders and map to receipt shape
+        const mappedReceipts = vendorOrders
+          .filter(order => order.status === 'completed' || order.status === 'delivered')
+          .map(order => ({
+            id: `RCP-${order.id.substring(0, 8).toUpperCase()}`,
+            orderId: order.id,
+            date: order.createdAt?.seconds ? new Date(order.createdAt.seconds * 1000).toISOString() : new Date().toISOString(),
+            customer: order.buyerName || 'Unknown Customer',
+            items: [
+              { 
+                name: order.product || 'Product', 
+                quantity: order.quantity || 1, 
+                price: parseFloat(order.totalAmount || 0) / (order.quantity || 1),
+                serials: order.assignedSerials || [] 
+              }
+            ],
+            amount: parseFloat(order.totalAmount || 0),
+            currency: 'GNF',
+            status: 'completed',
+            paymentMethod: order.paymentMethod || 'Online Payment'
+          }));
+          
+        setReceipts(mappedReceipts);
+      } catch (err) {
+        console.error("Error fetching receipts:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchReceipts();
   }, []);
 
   const filteredReceipts = receipts.filter(receipt => 

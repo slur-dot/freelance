@@ -4,9 +4,6 @@ import {
   Mail,
   Linkedin,
   Instagram,
-  Apple,
-  Play,
-  Monitor,
   MapPin,
   Phone,
   Send,
@@ -49,17 +46,7 @@ const Footer = () => {
               {t('footer.description')}
             </p>
 
-            {/* App download buttons */}
-            <div className="flex justify-center md:justify-start space-x-3">
-              {[Apple, Play, Monitor].map((Icon, i) => (
-                <div
-                  key={i}
-                  className="bg-slate-700 p-2 rounded-full hover:bg-slate-600 transition-colors cursor-pointer"
-                >
-                  <Icon className="w-5 h-5" />
-                </div>
-              ))}
-            </div>
+
           </div>
 
           {/* Links Column 1 */}
@@ -120,11 +107,11 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:hello@freelance-224.com"
+                  href="mailto:contact@freelance-224.com"
                   className="hover:text-white flex items-center justify-center md:justify-start gap-2"
                 >
                   <Mail className="w-4 h-4 text-[#15803D]" />
-                  hello@freelance-224.com
+                  contact@freelance-224.com
                 </a>
               </li>
               <li>
@@ -135,7 +122,7 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="https://wa.me/224629653636"
+                  href="https://api.whatsapp.com/message/OXB7BDU2UQQPD1?autoload=1&app_absent=0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white flex items-center justify-center md:justify-start gap-2"
@@ -175,11 +162,11 @@ const Footer = () => {
             {/* Social Media */}
             <div className="flex flex-wrap justify-center lg:justify-end gap-3 items-center">
               {[
-                { icon: Facebook, href: "#" },
+                { icon: Facebook, href: "https://www.facebook.com/freelance00224" },
                 { icon: FaXTwitter, href: "#" },
-                { icon: Instagram, href: "#" },
-                { icon: Linkedin, href: "#" },
-                { icon: FaWhatsapp, href: "https://wa.me/224629653636" }
+                { icon: Instagram, href: "https://www.instagram.com/freelance00224/" },
+                { icon: Linkedin, href: "https://www.linkedin.com/company/freelance-224/" },
+                { icon: FaWhatsapp, href: "https://api.whatsapp.com/message/OXB7BDU2UQQPD1?autoload=1&app_absent=0" }
               ].map(({ icon: Icon, href }, i) => (
                 <a
                   key={i}
@@ -199,11 +186,11 @@ const Footer = () => {
       {/* Bottom copyright */}
       <div className="py-4 border-t border-slate-700">
         <div className="container mx-auto px-4 text-center text-sm text-gray-400">
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
             <FaFlag className="w-4 h-4 text-[#15803D]" />
-            <span>© 2025</span>
-            <span className="text-blue-400 font-semibold">FREELANCE-224</span>
-            <span>{t('footer.all_rights_reserved')}</span>
+            <span className="whitespace-nowrap">© 2025</span>
+            <span className="text-blue-400 font-semibold whitespace-nowrap">www.Freelance-224.com</span>
+            <span className="whitespace-nowrap">{t('footer.all_rights_reserved')}</span>
           </div>
         </div>
       </div>

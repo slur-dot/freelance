@@ -44,14 +44,14 @@ export default function FilterSidebar() {
         {/* Prefecture */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-blue-600" /> Prefecture
+            <MapPin className="w-4 h-4 text-blue-600" /> {t('freelancer.filters.prefecture', 'Prefecture')}
           </label>
           <select 
             value={selectedPrefecture}
             onChange={handlePrefectureChange}
             className="w-full border border-gray-300 rounded-md p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50"
           >
-            <option value="">All Prefectures</option>
+            <option value="">{t('freelancer.filters.all_prefectures', 'All Prefectures')}</option>
             {allPrefectures.map((pref, idx) => (
               <option key={idx} value={pref.name}>
                 {pref.name}
@@ -62,14 +62,14 @@ export default function FilterSidebar() {
 
         {/* Subprefecture */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-gray-700">Subprefecture</label>
+          <label className="text-sm font-medium text-gray-700">{t('freelancer.filters.subprefecture', 'Subprefecture')}</label>
           <select 
             value={selectedSubprefecture}
             onChange={handleSubprefectureChange}
             disabled={!selectedPrefecture}
             className="w-full border border-gray-300 rounded-md p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:bg-gray-100 disabled:text-gray-400 bg-gray-50"
           >
-            <option value="">{selectedPrefecture ? 'All Subprefectures' : 'Select a Prefecture first'}</option>
+            <option value="">{selectedPrefecture ? t('freelancer.filters.all_subprefectures', 'All Subprefectures') : t('freelancer.filters.select_prefecture', 'Select a Prefecture first')}</option>
             {activeSubprefectures.map((sub, idx) => (
               <option key={idx} value={sub}>
                 {sub}

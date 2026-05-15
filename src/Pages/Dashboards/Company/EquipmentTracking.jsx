@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { Monitor, Laptop, Printer, Smartphone, AlertTriangle, PenTool, CheckCircle, Search } from 'lucide-react';
+import { Monitor, Laptop, Printer, Smartphone, AlertTriangle, PenTool, CheckCircle, Search, ChevronDown, ChevronUp, MapPin, Settings, Clock } from 'lucide-react';
 
-const mockEquipment = [
-  { id: 'EQ-001', name: 'MacBook Pro 16"', assignee: 'John Doe', status: 'active', condition: 'Good', lastChecked: '2024-03-10' },
-  { id: 'EQ-042', name: 'Canon ImageRunner Printer', assignee: 'Office A', status: 'maintenance', condition: 'Needs Repair', lastChecked: '2024-04-18' },
-  { id: 'EQ-018', name: 'Dell XPS 15', assignee: 'Sarah Smith', status: 'active', condition: 'Good', lastChecked: '2024-01-20' },
-  { id: 'EQ-088', name: 'iPad Pro 12.9', assignee: 'Unassigned', status: 'available', condition: 'New', lastChecked: '2024-04-01' },
-];
+const mockEquipment = [];
 
 export default function EquipmentTracking() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [expandedItems, setExpandedItems] = useState({});
+  
+  const toggleExpand = (id) => {
+    setExpandedItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
   
   const getIcon = (name) => {
     if (name.toLowerCase().includes('macbook') || name.toLowerCase().includes('dell')) return <Laptop className="w-5 h-5 text-gray-500" />;
@@ -22,6 +22,11 @@ export default function EquipmentTracking() {
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     item.assignee.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const totalDevices = mockEquipment.length;
+  const assignedDevices = mockEquipment.filter(item => item.status === 'active').length;
+  const maintenanceDevices = mockEquipment.filter(item => item.status === 'maintenance').length;
+  const lostDamagedDevices = mockEquipment.filter(item => item.status === 'lost' || item.status === 'damaged').length;
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
@@ -39,28 +44,28 @@ export default function EquipmentTracking() {
         <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between shadow-sm">
            <div>
              <p className="text-sm font-medium text-gray-500">Total Devices</p>
-             <p className="text-2xl font-bold text-gray-900 mt-1">45</p>
+             <p className="text-2xl font-bold text-gray-900 mt-1">{totalDevices}</p>
            </div>
            <div className="bg-blue-50 p-3 rounded-full"><Monitor className="w-6 h-6 text-blue-600" /></div>
         </div>
         <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between shadow-sm">
            <div>
              <p className="text-sm font-medium text-gray-500">Assigned</p>
-             <p className="text-2xl font-bold text-green-600 mt-1">38</p>
+             <p className="text-2xl font-bold text-green-600 mt-1">{assignedDevices}</p>
            </div>
            <div className="bg-green-50 p-3 rounded-full"><CheckCircle className="w-6 h-6 text-green-600" /></div>
         </div>
         <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between shadow-sm">
            <div>
              <p className="text-sm font-medium text-gray-500">In Maintenance</p>
-             <p className="text-2xl font-bold text-yellow-600 mt-1">5</p>
+             <p className="text-2xl font-bold text-yellow-600 mt-1">{maintenanceDevices}</p>
            </div>
            <div className="bg-yellow-50 p-3 rounded-full"><PenTool className="w-6 h-6 text-yellow-600" /></div>
         </div>
         <div className="bg-white p-5 rounded-xl border border-gray-200 flex items-center justify-between shadow-sm">
            <div>
              <p className="text-sm font-medium text-gray-500">Lost / Damaged</p>
-             <p className="text-2xl font-bold text-red-600 mt-1">2</p>
+             <p className="text-2xl font-bold text-red-600 mt-1">{lostDamagedDevices}</p>
            </div>
            <div className="bg-red-50 p-3 rounded-full"><AlertTriangle className="w-6 h-6 text-red-600" /></div>
         </div>
@@ -94,25 +99,83 @@ export default function EquipmentTracking() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredItems.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-50/50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      {getIcon(item.name)}
-                      <div>
-                        <div className="font-medium text-gray-900">{item.name}</div>
-                        <div className="text-xs text-gray-400 font-mono mt-0.5">{item.id}</div>
+                <React.Fragment key={item.id}>
+                  <tr 
+                    className="hover:bg-gray-50/50 cursor-pointer transition-colors"
+                    onClick={() => toggleExpand(item.id)}
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        {getIcon(item.name)}
+                        <div>
+                          <div className="font-medium text-gray-900">{item.name}</div>
+                          <div className="text-xs text-gray-400 font-mono mt-0.5">{item.id}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">{item.assignee}</td>
-                  <td className="px-6 py-4 text-gray-900 font-medium">{item.condition}</td>
-                  <td className="px-6 py-4">
-                    {item.status === 'active' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Assigned</span>}
-                    {item.status === 'available' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Available</span>}
-                    {item.status === 'maintenance' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Maintenance</span>}
-                  </td>
-                  <td className="px-6 py-4 text-right">{item.lastChecked}</td>
-                </tr>
+                    </td>
+                    <td className="px-6 py-4">{item.assignee}</td>
+                    <td className="px-6 py-4 text-gray-900 font-medium">{item.condition}</td>
+                    <td className="px-6 py-4">
+                      {item.status === 'active' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Assigned</span>}
+                      {item.status === 'available' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Available</span>}
+                      {item.status === 'maintenance' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Maintenance</span>}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-3 text-gray-400">
+                        <span className="text-gray-900">{item.lastChecked}</span>
+                        {expandedItems[item.id] ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                      </div>
+                    </td>
+                  </tr>
+                  
+                  {expandedItems[item.id] && (
+                    <tr className="bg-blue-50/30">
+                      <td colSpan="5" className="px-6 py-6 border-b border-gray-100">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          {/* Configuration Details */}
+                          <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                              <Settings className="w-4 h-4 text-blue-600" /> Configuration
+                            </h3>
+                            <div className="bg-white p-3 rounded-lg border border-gray-200">
+                              <p className="text-sm text-gray-700">{item.configuration}</p>
+                            </div>
+                          </div>
+
+                          {/* Location & Tracking */}
+                          <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                              <MapPin className="w-4 h-4 text-blue-600" /> Location Data
+                            </h3>
+                            <div className="bg-white p-3 rounded-lg border border-gray-200">
+                              <p className="text-sm text-gray-700">{item.location}</p>
+                            </div>
+                          </div>
+
+                          {/* Assignment History */}
+                          <div className="space-y-3">
+                            <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                              <Clock className="w-4 h-4 text-blue-600" /> Assignment History
+                            </h3>
+                            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                              <ul className="divide-y divide-gray-100 text-sm">
+                                {item.assignmentHistory.map((historyItem, idx) => (
+                                  <li key={idx} className="p-3 flex justify-between items-center hover:bg-gray-50">
+                                    <div>
+                                      <span className="font-medium text-gray-900">{historyItem.user}</span>
+                                      <span className="text-xs text-gray-500 block">{historyItem.action}</span>
+                                    </div>
+                                    <span className="text-xs text-gray-400">{historyItem.date}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

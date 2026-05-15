@@ -11,36 +11,33 @@ import {
 import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
+import iphoneImg from "../assets/iphone.png";
+import phoneImg from "../assets/phone.png";
+import performanceImg from "../assets/performance.png";
 
 export default function TechServicesLanding() {
   const { t } = useTranslation();
-  const [timeRemaining, setTimeRemaining] = useState({
-    days: 1,
-    hours: 19,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [timeRemaining, setTimeRemaining] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
+    const endDate = new Date("2026-09-30T23:59:59").getTime();
+
     const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prev.days > 0) {
-          return {
-            ...prev,
-            days: prev.days - 1,
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          };
-        }
-        return prev;
-      });
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      if (distance <= 0) {
+        clearInterval(timer);
+        setTimeRemaining({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeRemaining({ days, hours, minutes, seconds });
     }, 1000);
     return () => clearInterval(timer);
   }, []);
@@ -120,12 +117,12 @@ export default function TechServicesLanding() {
             {/* Left Images */}
             <div className="flex justify-center lg:justify-start relative gap-4 mb-6 lg:mb-0">
               <img
-                src="/src/assets/iphone.png"
+                src={iphoneImg}
                 alt="Promo 1"
                 className="w-24 sm:w-32 md:w-36 h-auto rounded-xl object-cover transform rotate-12"
               />
               <img
-                src="/src/assets/phone.png"
+                src={phoneImg}
                 alt="Promo 2"
                 className="w-28 sm:w-40 md:w-44 h-auto rounded-xl object-cover -ml-6 z-20"
               />
@@ -145,7 +142,7 @@ export default function TechServicesLanding() {
             {/* Right Image */}
             <div className="flex justify-center lg:justify-end mt-6 lg:mt-0">
               <img
-                src="/src/assets/performance.png"
+                src={performanceImg}
                 alt="Preview"
                 className="w-48 sm:w-64 md:w-72 h-auto object-cover"
               />

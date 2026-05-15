@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2 } from "lucide-react";
-import { storage } from "../../../../firebaseConfig";
+import { storage, auth } from "../../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { CompanyService } from "../../../../services/companyService";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "../../../../components/PhoneInput";
@@ -198,16 +199,22 @@ function ChangePasswordModal({ companyData, onClose }) {
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); setLoading(false); return; }
 
     try {
-      const response = await fetch(`http://localhost:5092/api/companies/${companyData.id}/change-password`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(formData)
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.message || 'Failed to change password');
+      const user = auth.currentUser;
+      if (!user) throw new Error("No authenticated user found.");
+      
+      const credential = EmailAuthProvider.credential(user.email, formData.currentPassword);
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, formData.newPassword);
+
       alert('Password changed successfully!');
       onClose();
     } catch (error) {
       console.error('Error changing password:', error);
-      alert(error.message || 'Failed to change password. Please try again.');
+      let errMsg = 'Failed to change password. Please try again.';
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        errMsg = 'Incorrect current password.';
+      }
+      alert(errMsg);
     } finally {
       setLoading(false);
     }
@@ -267,7 +274,7 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
     try {
       setUploading(true);
       const timestamp = Date.now();
-      const fileName = `company-avatars/${companyData.id}/avatar-${timestamp}.${file.name.split('.').pop()}`;
+      const fileName = `ads/avatars/${companyData.id}_${timestamp}.${file.name.split('.').pop()}`;
       const storageRef = ref(storage, fileName);
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -298,36 +305,37 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
 
   return (
     <Card className="p-4 col-span-1 md:col-span-3">
-      <div className="flex items-center gap-4">
-        <div className="relative">
-          <img src={avatar} alt="Avatar" className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 shadow-sm" onError={(e) => { e.target.src = DefaultAvatar; }} />
-          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white"></div>
-          <label className={`absolute bottom-0 right-0 p-1 rounded-full transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 cursor-pointer hover:bg-green-700'}`}>
-            {uploading ? (<Loader2 className="h-4 w-4 text-white animate-spin" />) : (<Upload className="h-4 w-4 text-white" />)}
-            <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
-          </label>
+      <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
+        <div className="relative shrink-0 flex flex-col items-center">
+          <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center relative">
+            <img src={avatar} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.target.src = DefaultAvatar; }} />
+            <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
+              {uploading ? (<Loader2 className="h-3.5 w-3.5 text-white animate-spin" />) : (<Upload className="h-3.5 w-3.5 text-white" />)}
+              <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
+            </label>
+          </div>
+          <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
+            {t('company_dashboard.profile_photo_hint')}
+          </div>
+        </div>
+
+        <div className="flex-grow min-w-0">
+          <p className="font-semibold text-lg">{companyData?.name || t('company_dashboard.profile_name_not_set')}</p>
+          <p className="text-sm text-gray-500">{companyData?.sector || t('company_dashboard.profile_sector_not_set')}</p>
+          <p className="text-sm text-gray-500">📍 {companyData?.location || t('company_dashboard.profile_location_not_set')}</p>
+
+          {companyData?.socialLinks && (
+            <div className="mt-2">
+              <p className="text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.profile_social_links')}</p>
+              <div className="flex gap-2 text-xs flex-wrap">
+                {companyData.socialLinks.linkedin && (<a href={companyData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>)}
+                {companyData.socialLinks.facebook && (<a href={companyData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Facebook</a>)}
+                {companyData.socialLinks.website && (<a href={companyData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Website</a>)}
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      <div className="mt-2">
-        <p className="text-xs text-gray-500 italic">{t('company_dashboard.profile_photo_hint')}</p>
-      </div>
-
-      <div className="mt-3">
-        <p className="font-semibold">{companyData?.name || t('company_dashboard.profile_name_not_set')}</p>
-        <p className="text-sm text-gray-500">{companyData?.sector || t('company_dashboard.profile_sector_not_set')}</p>
-        <p className="text-sm text-gray-500">📍 {companyData?.location || t('company_dashboard.profile_location_not_set')}</p>
-
-        {companyData?.socialLinks && (
-          <div className="mt-2">
-            <p className="text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.profile_social_links')}</p>
-            <div className="flex gap-2 text-xs">
-              {companyData.socialLinks.linkedin && (<a href={companyData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>)}
-              {companyData.socialLinks.facebook && (<a href={companyData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Facebook</a>)}
-              {companyData.socialLinks.website && (<a href={companyData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Website</a>)}
-            </div>
-          </div>
-        )}
 
         <div className="mt-2 space-y-1">
           <div className="flex items-center justify-between">
@@ -359,7 +367,6 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
             <p className="text-sm text-gray-500">RCCM: {companyData.rccmNif.rccm} | NIF: {companyData.rccmNif.nif}{companyData.rccmNif.verified && <span className="text-green-600 ml-1">✓ {t('company_dashboard.profile_verified')}</span>}</p>
           </div>
         )}
-      </div>
 
       <div className="mt-3">
         <div className="text-sm mb-1">{t('company_dashboard.profile_complete_pct', { pct: progress })}</div>

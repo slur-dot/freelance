@@ -162,7 +162,7 @@ export default function SupportTickets() {
           <div key={ticket.id} className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-2">
+                <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{ticket.title}</h3>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(ticket.status)}`}>
                     {ticket.status.replace('_', ' ')}
@@ -174,7 +174,7 @@ export default function SupportTickets() {
                 
                 <p className="text-gray-600 mb-3">{ticket.description}</p>
                 
-                <div className="flex items-center gap-6 text-sm text-gray-500">
+                <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-gray-500">
                   <div className="flex items-center gap-1">
                     <FileText className="h-4 w-4" />
                     <span>{ticket.category}</span>
@@ -187,7 +187,7 @@ export default function SupportTickets() {
                     <MessageSquare className="h-4 w-4" />
                     <span>{ticket.messages} messages</span>
                   </div>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 w-full sm:w-auto mt-1 sm:mt-0">
                     <span>Assigned to: {ticket.assignee}</span>
                   </div>
                 </div>

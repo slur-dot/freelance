@@ -86,7 +86,21 @@ export default function BlogPost() {
           <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between">
             <h3 className="text-lg font-bold text-gray-900">{t('blog.post.share_article')}</h3>
             <div className="flex gap-4">
-              <button className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 transition-colors">
+              <button 
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: post.title,
+                      url: window.location.href
+                    }).catch(err => console.error(err));
+                  } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    alert("Link copied to clipboard!");
+                  }
+                }}
+                className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600 transition-colors"
+                title="Share this article"
+              >
                 <Share2 className="h-5 w-5" />
               </button>
             </div>
