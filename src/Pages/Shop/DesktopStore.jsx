@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
-
+import { ProductService } from '../../services/productService';
 import { useTranslation } from "react-i18next";
 
 const DesktopStore = () => {
@@ -21,8 +21,15 @@ const DesktopStore = () => {
   });
   const [filteredDesktops, setFilteredDesktops] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [desktops, setDesktops] = useState([]);
 
-  const desktops = [];
+  useEffect(() => {
+    const fetchDesktops = async () => {
+      const data = await ProductService.getProductsByCategory('Desktops');
+      setDesktops(data || []);
+    };
+    fetchDesktops();
+  }, []);
 
   useEffect(() => {
     let filtered = [...desktops];

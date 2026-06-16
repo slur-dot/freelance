@@ -6,7 +6,7 @@ import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import LaptopImage from '../../assets/Laptop.jpg';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
-
+import { ProductService } from '../../services/productService';
 import { useTranslation } from "react-i18next";
 
 const LaptopStore = () => {
@@ -23,8 +23,15 @@ const LaptopStore = () => {
   });
   const [filteredLaptops, setFilteredLaptops] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [laptops, setLaptops] = useState([]);
 
-  const laptops = [];
+  useEffect(() => {
+    const fetchLaptops = async () => {
+      const data = await ProductService.getProductsByCategory('Laptops');
+      setLaptops(data || []);
+    };
+    fetchLaptops();
+  }, []);
 
   useEffect(() => {
     let filtered = [...laptops];

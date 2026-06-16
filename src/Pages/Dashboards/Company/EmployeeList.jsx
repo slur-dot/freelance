@@ -228,7 +228,7 @@ export default function EmployeeList() {
       <div className="p-4 md:p-6 lg:p-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
-          <h1 className="text-2xl md:text-3xl font-bold">{t('company_dashboard.el_title')}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">{t('company_dashboard.el_title', 'Team Roster')}</h1>
           <RCButton onClick={() => setShowCreate(true)}>
             {t('company_dashboard.el_add_btn')}
           </RCButton>

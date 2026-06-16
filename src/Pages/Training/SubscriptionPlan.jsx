@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaCrown, FaCreditCard, FaCheckCircle, FaExclamationCircle, FaShieldAlt } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import paymentService from "../../services/paymentService";
+import { useAuth } from "../../contexts/AuthContext";
+import { UserService } from "../../services/userService";
 
 const SubscriptionPlan = ({
   planType, // 'freelancer' or 'company'
@@ -13,6 +15,7 @@ const SubscriptionPlan = ({
   const [paymentDetails, setPaymentDetails] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentResult, setPaymentResult] = useState(null);
+  const { currentUser } = useAuth();
 
   // Plan configuration
   const planConfig = {
@@ -75,9 +78,21 @@ const SubscriptionPlan = ({
       setPaymentResult(result);
 
       if (result.success) {
-        // Record purchase in localStorage for immediate access
+        // Record purchase in localStorage for immediate access (fallback)
         localStorage.setItem('hasPurchasedTraining', 'true');
         
+        // Persist subscription in Firestore
+        if (currentUser) {
+          try {
+            await UserService.updateUserProfile(currentUser.uid, {
+              hasPurchasedTraining: true,
+              trainingPlanType: planType
+            });
+          } catch (err) {
+            console.error("Failed to persist subscription to backend:", err);
+          }
+        }
+
         // Show success message in the UI
         setPaymentResult({
           success: true,

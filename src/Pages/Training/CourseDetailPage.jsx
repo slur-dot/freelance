@@ -12,23 +12,28 @@ export default function CourseDetailPage() {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, userData } = useAuth();
   
-  const hasPurchasedTraining = localStorage.getItem('hasPurchasedTraining') === 'true';
+  const hasPurchasedTraining = userData?.hasPurchasedTraining || localStorage.getItem('hasPurchasedTraining') === 'true';
   const course = location.state?.course;
-  const progressValue = 50;
 
   const courseTitle = course?.title || t('training.courses.freelance.course_1.title');
   const courseDescription = course?.description || t('training.courses.freelance.course_1.description');
-
   const rawLessons = course?.lessons || [];
 
+  const courseProgress = userData?.courseProgress || {};
+  const currentCourseProgress = courseProgress[course?.id] || [];
+  
   const courseLessons = rawLessons.map((lesson, index) => {
     const isIntro = index < 2;
     const isUnlocked = currentUser && (isIntro || hasPurchasedTraining);
-    const completed = hasPurchasedTraining && index < 3; // mock completed for first 3 if purchased
+    const completed = currentCourseProgress.includes(lesson.id);
     return { ...lesson, isUnlocked, completed };
   });
+
+  const progressValue = rawLessons.length > 0 
+    ? (currentCourseProgress.length / rawLessons.length) * 100 
+    : 0;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">

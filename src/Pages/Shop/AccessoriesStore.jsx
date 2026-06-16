@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, Filter, SlidersHorizontal } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import ShopProductCard from '../../components/ShopProductCard';
-
+import { ProductService } from '../../services/productService';
 import { useTranslation } from "react-i18next";
 
 const AccessoriesStore = () => {
@@ -18,8 +18,15 @@ const AccessoriesStore = () => {
   });
   const [filteredAccessories, setFilteredAccessories] = useState([]);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [accessories, setAccessories] = useState([]);
 
-  const accessories = [];
+  useEffect(() => {
+    const fetchAccessories = async () => {
+      const data = await ProductService.getProductsByCategory('Accessories');
+      setAccessories(data || []);
+    };
+    fetchAccessories();
+  }, []);
 
   useEffect(() => {
     let filtered = [...accessories];

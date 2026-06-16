@@ -135,17 +135,6 @@ export default function LiveChatWidget({ forceOpen = false, onClose: externalOnC
     try {
       if (sessionId && currentUser) {
         await ChatService.sendMessage(sessionId, currentUser.uid, newMessage, 'user');
-
-        // DEMO ONLY: Auto-reply from 'agent'
-        setTimeout(async () => {
-          const replies = [
-            "Thank you for contacting us. An agent will be with you shortly.",
-            "Could you provide more details?",
-            "We have received your request."
-          ];
-          const randomReply = replies[Math.floor(Math.random() * replies.length)];
-          await ChatService.sendMessage(sessionId, 'system-agent', randomReply, 'agent');
-        }, 1500);
       } else {
         // Fallback or alert if no session
         alert("Please login to chat.");

@@ -29,7 +29,7 @@ const SmartphoneStore = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await ProductService.getProducts();
+        const data = await ProductService.getProductsByCategory('Smartphones');
 
         // Filter for smartphones only if needed, or rely on collection filtering
         // For now, assume all products fetched are relevant or filter purely on frontend

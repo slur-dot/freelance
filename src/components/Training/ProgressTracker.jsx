@@ -5,8 +5,10 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function ProgressTracker({ courseId, userId }) {
   const { t } = useTranslation();
-  const { currentUser } = useAuth();
-  const hasPurchasedTraining = localStorage.getItem('hasPurchasedTraining') === 'true';
+  const { currentUser, userData } = useAuth();
+  const hasPurchasedTraining = userData?.hasPurchasedTraining || localStorage.getItem('hasPurchasedTraining') === 'true';
+  const currentCourseProgress = (userData?.courseProgress && userData.courseProgress[courseId]) || [];
+
   const [progress, setProgress] = useState({
     courseId: courseId,
     userId: userId,
@@ -35,10 +37,17 @@ export default function ProgressTracker({ courseId, userId }) {
   const lessons = rawLessons.map((lesson, index) => {
     const isIntro = index < 2;
     const isUnlocked = currentUser && (isIntro || hasPurchasedTraining);
-    const completed = hasPurchasedTraining && index < 3; // mock completed for first 3
-    const current = isUnlocked && ((hasPurchasedTraining && index === 3) || (!hasPurchasedTraining && index === 0));
+    const completed = currentCourseProgress.includes(lesson.id);
+    const current = isUnlocked && !completed && (index === 0 || currentCourseProgress.includes(rawLessons[index - 1]?.id));
     return { ...lesson, completed, current, isUnlocked };
   });
+
+  useEffect(() => {
+    setProgress(prev => ({
+      ...prev,
+      completedLessons: currentCourseProgress.length
+    }));
+  }, [currentCourseProgress]);
 
   const [resources] = useState([
     { id: 1, name: "HTML Cheat Sheet", type: "PDF", size: "2.3 MB", downloaded: true },

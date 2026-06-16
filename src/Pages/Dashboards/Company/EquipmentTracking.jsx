@@ -1,9 +1,12 @@
-import { useTranslation } from "react-i18next";import React, { useState } from 'react';
+import { useTranslation } from "react-i18next";
+import React, { useState, useEffect } from 'react';
 import { Monitor, Laptop, Printer, Smartphone, AlertTriangle, PenTool, CheckCircle, Search, ChevronDown, ChevronUp, MapPin, Settings, Clock } from 'lucide-react';
-
-const mockEquipment = [];
+import { useAuth } from '../../../contexts/AuthContext';
+import { CompanyService } from '../../../services/companyService';
 
 export default function EquipmentTracking() {
+  const { currentUser: user } = useAuth();
+  const [equipment, setEquipment] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedItems, setExpandedItems] = useState({});
 
@@ -18,15 +21,25 @@ export default function EquipmentTracking() {
     return <Monitor className="w-5 h-5 text-gray-500" />;
   };
 
-  const filteredItems = mockEquipment.filter((item) =>
-  item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  item.assignee.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      if (user) {
+        const data = await CompanyService.getEquipment(user.uid);
+        setEquipment(data || []);
+      }
+    };
+    fetchEquipment();
+  }, [user]);
+
+  const filteredItems = equipment.filter((item) =>
+  item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  item.assignee?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalDevices = mockEquipment.length;
-  const assignedDevices = mockEquipment.filter((item) => item.status === 'active').length;
-  const maintenanceDevices = mockEquipment.filter((item) => item.status === 'maintenance').length;
-  const lostDamagedDevices = mockEquipment.filter((item) => item.status === 'lost' || item.status === 'damaged').length;
+  const totalDevices = equipment.length;
+  const assignedDevices = equipment.filter((item) => item.status === 'active').length;
+  const maintenanceDevices = equipment.filter((item) => item.status === 'maintenance').length;
+  const lostDamagedDevices = equipment.filter((item) => item.status === 'lost' || item.status === 'damaged').length;
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">

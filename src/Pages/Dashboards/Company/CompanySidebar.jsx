@@ -53,7 +53,7 @@ export default function CompanySidebar() {
       ],
     },
     {
-      section: t('company_dashboard.sidebar_employees'),
+      section: t('company_dashboard.sidebar_employees', 'Company Contacts'),
       items: [
         {
           title: t('company_dashboard.sidebar_training_progress'),
@@ -61,7 +61,7 @@ export default function CompanySidebar() {
           icon: Share2,
         },
         {
-          title: t('company_dashboard.sidebar_employee_list'),
+          title: t('company_dashboard.sidebar_employee_list', 'Team Roster'),
           url: "/company/dashboard/emplolyee-list",
           icon: MoreHorizontal,
         },

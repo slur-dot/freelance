@@ -68,6 +68,60 @@ export const CompanyService = {
         }
     },
 
+    // --- Equipment Management (Subcollection: users/{uid}/equipment) ---
+
+    async getEquipment(companyId) {
+        try {
+            const equipmentRef = collection(db, "users", companyId, "equipment");
+            const snapshot = await getDocs(equipmentRef);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error("Error fetching equipment:", error);
+            return [];
+        }
+    },
+
+    async addEquipment(companyId, equipmentData) {
+        try {
+            const equipmentRef = collection(db, "users", companyId, "equipment");
+            const now = new Date();
+            const docRef = await addDoc(equipmentRef, {
+                ...equipmentData,
+                createdAt: now,
+                updatedAt: now
+            });
+            return { id: docRef.id, ...equipmentData, createdAt: now };
+        } catch (error) {
+            console.error("Error adding equipment:", error);
+            throw error;
+        }
+    },
+
+    async updateEquipment(companyId, equipmentId, equipmentData) {
+        try {
+            const equipmentRef = doc(db, "users", companyId, "equipment", equipmentId);
+            await updateDoc(equipmentRef, {
+                ...equipmentData,
+                updatedAt: new Date()
+            });
+            return { success: true };
+        } catch (error) {
+            console.error("Error updating equipment:", error);
+            throw error;
+        }
+    },
+
+    async deleteEquipment(companyId, equipmentId) {
+        try {
+            const equipmentRef = doc(db, "users", companyId, "equipment", equipmentId);
+            await deleteDoc(equipmentRef);
+            return { success: true };
+        } catch (error) {
+            console.error("Error deleting equipment:", error);
+            throw error;
+        }
+    },
+
     // --- Job Description / Job Posting CRUD ---
 
     async postJobDescription(companyId, jobData) {
@@ -172,17 +226,19 @@ export const CompanyService = {
             const ordersRef = collection(db, "orders");
             const qOrders = query(ordersRef, where("buyerId", "==", companyId)); // Assuming buyerId field on orders
             const ordersSnapshot = await getDocs(qOrders);
-            const purchases = ordersSnapshot.docs.map(d => {
-                const data = d.data();
-                return {
-                    id: d.id,
-                    item: data.paymentMethod || "Order", // Fallback title
-                    amount: data.totalAmount || 0,
-                    status: data.status,
-                    date: data.createdAt,
-                    seller: data.sellerId // In real app, fetch seller name
-                };
-            });
+            const purchases = ordersSnapshot.docs
+                .map(d => {
+                    const data = d.data();
+                    return {
+                        id: d.id,
+                        item: data.paymentMethod || "Order", // Fallback title
+                        amount: data.totalAmount || 0,
+                        status: data.status,
+                        date: data.createdAt,
+                        seller: data.sellerId // In real app, fetch seller name
+                    };
+                })
+                .filter(p => p.status !== 'pending_payment');
 
             // 4. Other subcollections (mocked or empty for now if not existing)
             // Ideally these would be separate collections or subcollections

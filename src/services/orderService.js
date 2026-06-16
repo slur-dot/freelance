@@ -142,11 +142,13 @@ export const OrderService = {
                 byId.set(d.id, { id: d.id, ...d.data() });
             });
 
-            return Array.from(byId.values()).sort((a, b) => {
-                const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-                const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
-                return timeB - timeA;
-            });
+            return Array.from(byId.values())
+                .filter(order => order.status !== ORDER_STATUS.PENDING_PAYMENT)
+                .sort((a, b) => {
+                    const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+                    const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+                    return timeB - timeA;
+                });
         } catch (error) {
             console.error("Error fetching user orders:", error);
             return [];
@@ -164,7 +166,7 @@ export const OrderService = {
             [...snapSeller.docs, ...snapIds.docs].forEach((d) => {
                 byId.set(d.id, { id: d.id, ...d.data() });
             });
-            return Array.from(byId.values());
+            return Array.from(byId.values()).filter(order => order.status !== ORDER_STATUS.PENDING_PAYMENT);
         } catch (error) {
             console.error("Error fetching seller orders:", error);
             return [];

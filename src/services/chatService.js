@@ -1,11 +1,18 @@
 import { db } from "../firebaseConfig";
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, getDocs } from "firebase/firestore";
 
 const ChatService = {
     // Start or get a chat session
     async startChat(userId, userInfo) {
-        // In a real app, you might check for an existing active session first
         const sessionRef = collection(db, "chatSessions");
+        
+        // Check for an existing active session first
+        const q = query(sessionRef, where("userId", "==", userId), where("status", "==", "active"));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            return snapshot.docs[0].id;
+        }
+
         const session = await addDoc(sessionRef, {
             userId,
             userInfo, // { name, email }
