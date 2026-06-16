@@ -18,9 +18,15 @@ i18n
             loadPath: '/locales/{{lng}}/{{ns}}.json',
         },
         detection: {
-            order: ['localStorage', 'cookie', 'querystring'],
+            order: ['localStorage', 'navigator', 'cookie', 'querystring'],
             caches: ['localStorage', 'cookie'],
         }
     });
+
+i18n.on('languageChanged', (lng) => {
+    if (typeof document !== 'undefined') {
+        document.documentElement.lang = lng;
+    }
+});
 
 export default i18n;

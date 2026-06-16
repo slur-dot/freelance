@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Search, ChevronDown } from "lucide-react";
 import { AdminService } from "../../../services/adminService";
 import { useTranslation } from "react-i18next";
 
 export default function UserManagement() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const initialRole = location.state?.roleFilter || "all";
+  const [roleFilter, setRoleFilter] = useState(initialRole);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortField, setSortField] = useState("userName");
@@ -51,6 +55,8 @@ export default function UserManagement() {
     try {
       setLoading(true);
       await AdminService.updateUser(id, { isBanned: true, updatedAt: new Date() });
+      const { SmsNotifications } = await import('../../../services/smsNotifications');
+      SmsNotifications.notifyAccountBanned(id).catch(() => {});
       setUsers((prev) => prev.map((user) => (user.id === id ? { ...user, isBanned: true } : user)));
       setError(""); // Clear any previous errors
     } catch (e) {
@@ -75,10 +81,12 @@ export default function UserManagement() {
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    (user.userName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.totalMoneySpent || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter(user => {
+    const matchesSearch = (user.userName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          (user.totalMoneySpent || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === "all" || (user.role && user.role.toLowerCase() === roleFilter.toLowerCase());
+    return matchesSearch && matchesRole;
+  });
 
   // Calculate pagination
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -92,19 +100,36 @@ export default function UserManagement() {
         <div className="p-6 pb-4" style={{ backgroundColor: '#FCFCFD' }}>
           <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('admin_dashboard.user_management.title')}</h1>
 
-          {/* Search Bar */}
-          <div className="relative mx-6">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder={t('admin_dashboard.user_management.search_placeholder')}
-              value={searchTerm}
+          {/* Search Bar & Filter */}
+          <div className="flex flex-col md:flex-row gap-4 mx-6 mb-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder={t('admin_dashboard.user_management.search_placeholder')}
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1); // Reset to first page when searching
+                }}
+                className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-md focus:outline-none text-gray-700 placeholder-gray-500"
+              />
+            </div>
+            <select
+              value={roleFilter}
               onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1); // Reset to first page when searching
+                setRoleFilter(e.target.value);
+                setCurrentPage(1);
               }}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-md focus:outline-none text-gray-700 placeholder-gray-500"
-            />
+              className="py-3 px-4 bg-white border border-gray-200 rounded-md focus:outline-none text-gray-700"
+            >
+              <option value="all">{t('common.all_roles', 'All Roles')}</option>
+              <option value="company">{t('common.company', 'Company')}</option>
+              <option value="freelancer">{t('common.freelancer', 'Freelancer')}</option>
+              <option value="seller">{t('common.seller', 'Seller')}</option>
+            </select>
+          </div>
+          <div className="mx-6">
             {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
             {loading && <div className="mt-2 text-sm text-gray-500">{t('common.loading')}</div>}
           </div>

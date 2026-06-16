@@ -119,11 +119,11 @@ export default function SellerOrders() {
     if (window.confirm('Are you sure you want to delete this order?')) {
       try {
         await OrderService.deleteOrder(orderId);
-        alert('Order deleted successfully!');
-        setOrders(prev => prev.filter(o => o.id !== orderId));
+        alert(t("order_deleted_successfully_33", "Order deleted successfully!"));
+        setOrders((prev) => prev.filter((o) => o.id !== orderId));
       } catch (error) {
         console.error('Error deleting order:', error);
-        alert('Failed to delete order. Please try again.');
+        alert(t("failed_to_delete_order_please_try_again_485", "Failed to delete order. Please try again."));
       }
     }
   };
@@ -143,21 +143,21 @@ export default function SellerOrders() {
         status: editingOrder.status
       });
 
-      alert('Order updated successfully!');
+      alert(t("order_updated_successfully_704", "Order updated successfully!"));
 
       // Optimistic update
-      setOrders(prev => prev.map(o => o.id === editingOrder.id ? { ...o, ...editingOrder } : o));
+      setOrders((prev) => prev.map((o) => o.id === editingOrder.id ? { ...o, ...editingOrder } : o));
       handleCloseEditModal();
 
     } catch (error) {
       console.error('Error updating order:', error);
-      alert('Failed to update order. Please try again.');
+      alert(t("failed_to_update_order_please_try_again_525", "Failed to update order. Please try again."));
     }
   };
 
-  const filteredOrders = orders.filter(order =>
-    (order.buyerName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
-    (order.product?.toLowerCase() || "").includes(searchTerm.toLowerCase())
+  const filteredOrders = orders.filter((order) =>
+  (order.buyerName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+  (order.product?.toLowerCase() || "").includes(searchTerm.toLowerCase())
   );
 
   // Sorting Logic (Client-side for now as we fetched all)
@@ -168,7 +168,7 @@ export default function SellerOrders() {
     if (typeof aValue === 'string') {
       return sortDirection === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
     }
-    return sortDirection === 'asc' ? (aValue - bValue) : (bValue - aValue);
+    return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
   });
 
   // Client-side pagination
@@ -183,11 +183,11 @@ export default function SellerOrders() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            <span className="ml-2 text-gray-600">Loading orders...</span>
+            <span className="ml-2 text-gray-600">{t("loading_orders_990", "Loading orders...")}</span>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -197,13 +197,13 @@ export default function SellerOrders() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{t('seller_dashboard.orders.title')}</h1>
 
-          {error && (
-            <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
+          {error &&
+          <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
               <p className="text-yellow-700 text-sm">
                 ⚠️ {error}
               </p>
             </div>
-          )}
+          }
 
           {/* Search Bar */}
           <div className="relative">
@@ -213,8 +213,8 @@ export default function SellerOrders() {
               placeholder={t('seller_dashboard.orders.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            />
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+            
           </div>
         </div>
 
@@ -226,13 +226,13 @@ export default function SellerOrders() {
                 <tr>
                   <th
                     className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort("buyerName")}
-                  >
+                    onClick={() => handleSort("buyerName")}>
+                    
                     <div className="flex items-center space-x-1">
                       <span>{t('seller_dashboard.orders.table.buyer')}</span>
-                      {sortField === "buyerName" && (
-                        <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
-                      )}
+                      {sortField === "buyerName" &&
+                      <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
+                      }
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -256,25 +256,25 @@ export default function SellerOrders() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {paginatedOrders.length === 0 ? (
-                  <tr>
+                {paginatedOrders.length === 0 ?
+                <tr>
                     <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
-                      {orders.length === 0 ? (
-                        <div>
+                      {orders.length === 0 ?
+                    <div>
                           <p className="text-lg font-medium mb-2">{t('seller_dashboard.orders.empty.title')}</p>
                           <p className="text-sm">{t('seller_dashboard.orders.empty.desc')}</p>
-                        </div>
-                      ) : (
-                        <div>
+                        </div> :
+
+                    <div>
                           <p className="text-lg font-medium mb-2">{t('seller_dashboard.orders.empty.search_title')}</p>
                           <p className="text-sm">{t('seller_dashboard.orders.empty.search_desc')}</p>
                         </div>
-                      )}
+                    }
                     </td>
-                  </tr>
-                ) : (
-                  paginatedOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50">
+                  </tr> :
+
+                paginatedOrders.map((order) =>
+                <tr key={order.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {order.buyerName || "N/A"}
                       </td>
@@ -299,59 +299,59 @@ export default function SellerOrders() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <div className="flex items-center space-x-3">
                           <button
-                            onClick={() => handleDeleteOrder(order.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                            title="Delete Order"
-                          >
+                        onClick={() => handleDeleteOrder(order.id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        title="Delete Order">
+                        
                             <Trash2 className="h-5 w-5" />
                           </button>
                           <button
-                            onClick={() => handleEditOrder(order)}
-                            className="text-gray-400 hover:text-blue-500 transition-colors"
-                            title="Edit Order"
-                          >
+                        onClick={() => handleEditOrder(order)}
+                        className="text-gray-400 hover:text-blue-500 transition-colors"
+                        title="Edit Order">
+                        
                             <Edit className="h-5 w-5" />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
+                )
+                }
               </tbody>
             </table>
           </div>
 
           {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="bg-white px-6 py-4 border-t border-gray-200">
+          {totalPages > 1 &&
+          <div className="bg-white px-6 py-4 border-t border-gray-200">
               <div className="flex items-center justify-center space-x-4">
                 <button
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Previous
-                </button>
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {t("previous_71", "Previous")}
+                
+              </button>
 
                 <span className="text-sm text-gray-700">
-                  Page {currentPage} of {totalPages}
+                  {t("page_176", "Page")} {currentPage} of {totalPages}
                 </span>
 
                 <button
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
+                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                  {t("next_466", "Next")}
+                
+              </button>
               </div>
             </div>
-          )}
+          }
         </div>
 
         {/* Edit Order Modal */}
-        {showEditModal && editingOrder && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        {showEditModal && editingOrder &&
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.orders.modal.title')}</h3>
 
@@ -359,98 +359,98 @@ export default function SellerOrders() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.id')}</label>
                   <input
-                    type="text"
-                    value={editingOrder.id || ''}
-                    disabled
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                  />
+                  type="text"
+                  value={editingOrder.id || ''}
+                  disabled
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.buyer')}</label>
                   <input
-                    type="text"
-                    value={editingOrder.buyerName || ''}
-                    onChange={(e) => setEditingOrder({ ...editingOrder, buyerName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="text"
+                  value={editingOrder.buyerName || ''}
+                  onChange={(e) => setEditingOrder({ ...editingOrder, buyerName: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.product')}</label>
                   <input
-                    type="text"
-                    value={editingOrder.product || ''}
-                    onChange={(e) => setEditingOrder({ ...editingOrder, product: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="text"
+                  value={editingOrder.product || ''}
+                  onChange={(e) => setEditingOrder({ ...editingOrder, product: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.quantity')}</label>
                     <input
-                      type="number"
-                      value={editingOrder.quantity || ''}
-                      onChange={(e) => setEditingOrder({ ...editingOrder, quantity: parseInt(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="number"
+                    value={editingOrder.quantity || ''}
+                    onChange={(e) => setEditingOrder({ ...editingOrder, quantity: parseInt(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.total')}</label>
                     <input
-                      type="number"
-                      value={editingOrder.totalAmount || ''}
-                      onChange={(e) => setEditingOrder({ ...editingOrder, totalAmount: parseInt(e.target.value) || 0 })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="number"
+                    value={editingOrder.totalAmount || ''}
+                    onChange={(e) => setEditingOrder({ ...editingOrder, totalAmount: parseInt(e.target.value) || 0 })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.status')}</label>
                   <select
-                    value={editingOrder.status || ''}
-                    onChange={(e) => setEditingOrder({ ...editingOrder, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="onDelivery">On Delivery</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
+                  value={editingOrder.status || ''}
+                  onChange={(e) => setEditingOrder({ ...editingOrder, status: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                  
+                    <option value="pending">{t("pending_367", "Pending")}</option>
+                    <option value="onDelivery">{t("on_delivery_321", "On Delivery")}</option>
+                    <option value="completed">{t("completed_203", "Completed")}</option>
+                    <option value="cancelled">{t("cancelled_974", "Cancelled")}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.orders.modal.date')}</label>
                   <input
-                    type="text"
-                    value={formatDate(editingOrder.deliveryDate)}
-                    disabled
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                  />
+                  type="text"
+                  value={formatDate(editingOrder.deliveryDate)}
+                  disabled
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                
                 </div>
               </div>
 
               <div className="flex gap-2 pt-4">
                 <button
-                  onClick={handleUpdateSubmit}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                >
+                onClick={handleUpdateSubmit}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                
                   {t('seller_dashboard.orders.modal.update')}
                 </button>
                 <button
-                  onClick={handleCloseEditModal}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
-                >
+                onClick={handleCloseEditModal}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
+                
                   {t('seller_dashboard.orders.modal.cancel')}
                 </button>
               </div>
             </div>
           </div>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }

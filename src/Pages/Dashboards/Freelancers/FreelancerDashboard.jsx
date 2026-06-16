@@ -5,7 +5,8 @@ import { storage, auth } from "../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import AlexandraImg from "../../../assets/Alexandra.png";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { PayoutService } from "../../../services/payoutService";
 import { UserService } from "../../../services/userService";
 import { ProjectService } from "../../../services/projectService";
 import { FreelancerService } from "../../../services/freelancerService";
@@ -15,20 +16,20 @@ import { guineaCitiesByRegion } from "../../../data/guineaCities";
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent"
-      : variant === "ghost"
-        ? "text-black"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent" :
+  variant === "ghost" ?
+  "text-black" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -54,6 +55,7 @@ function AvatarImage({ src, alt }) {
 }
 
 export default function FreelancerDashboard() {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [showChatWidget, setShowChatWidget] = useState(false);
   const [user, setUser] = useState(auth.currentUser);
@@ -109,9 +111,9 @@ export default function FreelancerDashboard() {
   });
 
   // Derived data for cascading dropdowns
-  const regionData = guineaCitiesByRegion.find(r => r.region === form.region);
+  const regionData = guineaCitiesByRegion.find((r) => r.region === form.region);
   const prefectures = regionData ? regionData.prefectures : [];
-  const prefectureData = prefectures.find(p => p.name === form.prefecture);
+  const prefectureData = prefectures.find((p) => p.name === form.prefecture);
   const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawProcessing, setWithdrawProcessing] = useState(false);
@@ -169,10 +171,10 @@ export default function FreelancerDashboard() {
 
           // Fetch other data in parallel
           const [requested, apps, notificationsData] = await Promise.all([
-            FreelancerService.getRequestedCourses(user.uid),
-            FreelancerService.getJDApplications(user.uid),
-            FreelancerService.getNotifications(user.uid)
-          ]);
+          FreelancerService.getRequestedCourses(user.uid),
+          FreelancerService.getJDApplications(user.uid),
+          FreelancerService.getNotifications(user.uid)]
+          );
 
           setRequestedCount(requested.length);
           setNetEarnings(profile.balance || 0); // Assuming balance is in profile
@@ -192,7 +194,7 @@ export default function FreelancerDashboard() {
 
         // 2. Fetch Projects (e.g., all available projects or recommended)
         const projects = await ProjectService.getProjects();
-        setRecentProjects(projects.filter(p => p.type !== "job_posting" && p.type !== "job_application").slice(0, 10));
+        setRecentProjects(projects.filter((p) => p.type !== "job_posting" && p.type !== "job_application").slice(0, 10));
 
         // 3. Fetch trainer status
         const trainerInfo = await CourseService.getTrainerStatus(user.uid);
@@ -214,15 +216,15 @@ export default function FreelancerDashboard() {
     const file = e.target.files[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+      alert(t("please_select_an_image_file_211", "Please select an image file"));
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      alert('Image must be under 2MB');
+      alert(t("image_must_be_under_2mb_229", "Image must be under 2MB"));
       return;
     }
     if (!freelancer?._docId) {
-      alert('Freelancer record not loaded yet');
+      alert(t("freelancer_record_not_loaded_yet_748", "Freelancer record not loaded yet"));
       return;
     }
     try {
@@ -237,10 +239,10 @@ export default function FreelancerDashboard() {
       await UserService.updateUserProfile(user.uid, { avatar: downloadURL });
 
       setFreelancer((prev) => prev ? { ...prev, avatar: downloadURL } : prev);
-      alert('Avatar updated successfully!');
+      alert(t("avatar_updated_successfully_895", "Avatar updated successfully!"));
     } catch (err) {
       console.error('Avatar upload failed:', err);
-      alert('Failed to upload avatar. Please try again.');
+      alert(t("failed_to_upload_avatar_please_try_again_506", "Failed to upload avatar. Please try again."));
     } finally {
       setUploading(false);
     }
@@ -254,9 +256,9 @@ export default function FreelancerDashboard() {
       // In a real app, you might want to call a Cloud Function to clean up Auth + Firestore
       // For now, we will just try to delete the firestore doc. Auth deletion requires re-authentication usually.
       // await UserService.deleteUserProfile(user.uid); // Assuming method exists or use deleteDoc
-      alert("Please contact support to delete your account completely.");
+      alert(t("please_contact_support_to_delete_your_account_comp_622", "Please contact support to delete your account completely."));
     } catch (err) {
-      alert('Failed to delete account. Please try again.');
+      alert(t("failed_to_delete_account_please_try_again_526", "Failed to delete account. Please try again."));
     }
   };
 
@@ -303,7 +305,7 @@ export default function FreelancerDashboard() {
         <Card>
           <CardContent className="p-4">
             <div className="text-xs text-gray-500">{t('freelancer_dashboard.stats.total_earned')}</div>
-            <div className="text-xl font-semibold mt-1">{(mainStats.totalEarned || 0).toLocaleString()} GNF</div>
+            <div className="text-xl font-semibold mt-1">{(mainStats.totalEarned || 0).toLocaleString()} {t("gnf_253", "GNF")}</div>
           </CardContent>
         </Card>
         <Card>
@@ -328,21 +330,21 @@ export default function FreelancerDashboard() {
           <Card className="flex-grow h-fit">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto">
-                {error && (
-                  <div className="p-4 text-red-600 bg-red-50 border border-red-200 rounded-md m-2">
+                {error &&
+                <div className="p-4 text-red-600 bg-red-50 border border-red-200 rounded-md m-2">
                     <div className="font-semibold">{t('freelancer_dashboard.messages.error')}</div>
                     <div className="text-sm">{error}</div>
                     <button
-                      onClick={() => window.location.reload()}
-                      className="mt-2 px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700"
-                    >
+                    onClick={() => window.location.reload()}
+                    className="mt-2 px-3 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">
+                    
                       {t('freelancer_dashboard.messages.retry')}
                     </button>
                   </div>
-                )}
+                }
                 {loading && <div className="p-4">{t('freelancer_dashboard.messages.loading')}</div>}
-                {!loading && messages.map((m, i) => (
-                  <div key={m.id || i} className="flex items-center gap-3 p-4 border-b last:border-b-0">
+                {!loading && messages.map((m, i) =>
+                <div key={m.id || i} className="flex items-center gap-3 p-4 border-b last:border-b-0">
                     <Avatar>
                       <AvatarImage src={AlexandraImg} alt="Message" />
                     </Avatar>
@@ -351,14 +353,14 @@ export default function FreelancerDashboard() {
                       <p className="text-sm text-gray-500 md:truncate">{m.message}</p>
                     </div>
                   </div>
-                ))}
+                )}
               </div>
               <div className="p-4 border-t">
                 <Button
                   variant="ghost"
                   className="w-full"
-                  onClick={() => setShowChatWidget(true)}
-                >
+                  onClick={() => setShowChatWidget(true)}>
+                  
                   {text.manageMessages}
                 </Button>
               </div>
@@ -396,18 +398,18 @@ export default function FreelancerDashboard() {
           <Card>
             <CardContent className="p-4">
               <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2">
-                {recentProjects.length === 0 ? (
-                  <div className="text-sm text-gray-500">{t('freelancer_dashboard.projects.no_recent')}</div>
-                ) : (
-                  recentProjects.map((p, i) => (
-                    <div key={p.id || i} className="min-w-[200px] md:min-w-[240px] lg:min-w-[260px] snap-start bg-gray-50 rounded-md p-4 border">
+                {recentProjects.length === 0 ?
+                <div className="text-sm text-gray-500">{t('freelancer_dashboard.projects.no_recent')}</div> :
+
+                recentProjects.map((p, i) =>
+                <div key={p.id || i} className="min-w-[200px] md:min-w-[240px] lg:min-w-[260px] snap-start bg-gray-50 rounded-md p-4 border">
                       <p className="font-semibold md:truncate">{p.title}</p>
                       <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.client')}: {p.client}</p>
-                      <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.amount')}: {(p.netAmount || p.amount || 0).toLocaleString()} GNF</p>
+                      <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.amount')}: {(p.netAmount || p.amount || 0).toLocaleString()} {t("gnf_848", "GNF")}</p>
                       <p className="text-xs text-gray-500 mt-1">{t('freelancer_dashboard.projects.status')}: {p.status}</p>
                     </div>
-                  ))
-                )}
+                )
+                }
               </div>
               <div className="mt-4 flex items-center gap-2">
                 <Link to="/job-board">
@@ -424,18 +426,18 @@ export default function FreelancerDashboard() {
           <Card>
             <CardContent className="p-4">
               <div className="flex flex-col gap-3">
-                {jdApplications.length === 0 ? (
-                  <div className="text-sm text-gray-500">{t('freelancer_dashboard.bids.no_applications')}</div>
-                ) : (
-                  jdApplications.map((b, i) => (
-                    <div key={b.id || i} className="flex items-center justify-between border rounded-md p-3">
+                {jdApplications.length === 0 ?
+                <div className="text-sm text-gray-500">{t('freelancer_dashboard.bids.no_applications')}</div> :
+
+                jdApplications.map((b, i) =>
+                <div key={b.id || i} className="flex items-center justify-between border rounded-md p-3">
                       <div className="min-w-0">
                         <p className="font-medium md:truncate">{b.title}</p>
-                        <p className="text-xs text-gray-500">{(b.budget || 0).toLocaleString()} GNF • {b.status}</p>
+                        <p className="text-xs text-gray-500">{(b.budget || 0).toLocaleString()} {t("gnf__786", "GNF \u2022")} {b.status}</p>
                       </div>
                     </div>
-                  ))
-                )}
+                )
+                }
               </div>
               <div className="mt-4 flex items-center gap-2">
                 <Link to="/freelancer/dashboard/work-management">
@@ -453,18 +455,18 @@ export default function FreelancerDashboard() {
           <h3 className="text-lg font-semibold mb-2">{text.payments}</h3>
           <Card>
             <CardContent className="p-4">
-              <p className="text-xs text-gray-500 mb-3">{text.escrowHeld} (Web ID: 1)</p>
+              <p className="text-xs text-gray-500 mb-3">{text.escrowHeld} {t("web_id_1_186", "(Web ID: 1)")}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {jdApplications.filter(a => a.status === 'hired' || a.status === 'completed').length > 0 ? (
-                  jdApplications.filter(a => a.status === 'hired' || a.status === 'completed').map((p, i) => (
-                    <div key={i} className="border rounded-md p-3 bg-gray-50">
+                {jdApplications.filter((a) => a.status === 'hired' || a.status === 'completed').length > 0 ?
+                jdApplications.filter((a) => a.status === 'hired' || a.status === 'completed').map((p, i) =>
+                <div key={i} className="border rounded-md p-3 bg-gray-50">
                       <p className="font-medium">{p.title}</p>
-                      <p className="text-xs text-gray-500">{p.status} • {(p.budget || 0).toLocaleString()} GNF</p>
+                      <p className="text-xs text-gray-500">{p.status} • {(p.budget || 0).toLocaleString()} {t("gnf_831", "GNF")}</p>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500 col-span-2">{t('freelancer_dashboard.payments.no_transactions', 'No payment transactions yet. Complete a project to see payments here.')}</p>
-                )}
+                ) :
+
+                <p className="text-sm text-gray-500 col-span-2">{t('freelancer_dashboard.payments.no_transactions', 'No payment transactions yet. Complete a project to see payments here.')}</p>
+                }
               </div>
             </CardContent>
           </Card>
@@ -476,9 +478,9 @@ export default function FreelancerDashboard() {
           <Card>
             <CardContent className="p-4">
               <div className="h-36 flex items-end gap-2">
-                {[40, 60, 30, 70, 50, 80].map((h, i) => (
-                  <div key={i} className="flex-1 bg-green-600/20 rounded-sm" style={{ height: `${h}%` }}></div>
-                ))}
+                {[40, 60, 30, 70, 50, 80].map((h, i) =>
+                <div key={i} className="flex-1 bg-green-600/20 rounded-sm" style={{ height: `${h}%` }}></div>
+                )}
               </div>
               <p className="text-xs text-gray-500 mt-2">{t('freelancer_dashboard.earnings.chart_preview')}</p>
             </CardContent>
@@ -507,15 +509,15 @@ export default function FreelancerDashboard() {
                 </div>
               </div>
               <ul className="divide-y">
-                {notifications.length === 0 ? (
-                  <li className="p-4 text-sm text-gray-500">{t('freelancer_dashboard.notifications.none')}</li>
-                ) : (
-                  notifications.map((n, i) => (
-                    <li key={n.id || i} className="p-4 text-sm">
+                {notifications.length === 0 ?
+                <li className="p-4 text-sm text-gray-500">{t('freelancer_dashboard.notifications.none')}</li> :
+
+                notifications.map((n, i) =>
+                <li key={n.id || i} className="p-4 text-sm">
                       <span className="font-medium">{n.title}</span>: {n.message}
                     </li>
-                  ))
-                )}
+                )
+                }
               </ul>
             </CardContent>
           </Card>
@@ -544,44 +546,44 @@ export default function FreelancerDashboard() {
         <h3 className="text-lg font-semibold mb-2">{t('freelancer_dashboard.trainer.title', 'Trainer Hub')}</h3>
         <Card className="border-l-4 border-l-blue-500">
           <CardContent className="p-6">
-            {!isTrainer ? (
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            {!isTrainer ?
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                   <h4 className="text-xl font-bold">{t('freelancer_dashboard.trainer.become', 'Become a Trainer')}</h4>
                   <p className="text-gray-600 mt-1 max-w-2xl">{t('freelancer_dashboard.trainer.desc', 'Share your expertise with the community. Apply to become a certified trainer and start uploading your courses.')}</p>
                 </div>
-                <Button 
-                  onClick={async () => {
-                    try {
-                      await CourseService.requestTrainerStatus(user.uid);
-                      setTrainerStatus('pending');
-                      alert(t('freelancer_dashboard.trainer.requested', 'Trainer request submitted successfully! We will review your profile.'));
-                    } catch (err) {
-                      console.error('Trainer request failed:', err);
-                      alert('Failed to submit trainer request. Please try again.');
-                    }
-                  }} 
-                  className={trainerStatus === 'pending' ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
-                  disabled={trainerStatus === 'pending'}
-                >
+                <Button
+                onClick={async () => {
+                  try {
+                    await CourseService.requestTrainerStatus(user.uid);
+                    setTrainerStatus('pending');
+                    alert(t('freelancer_dashboard.trainer.requested', 'Trainer request submitted successfully! We will review your profile.'));
+                  } catch (err) {
+                    console.error('Trainer request failed:', err);
+                    alert(t("failed_to_submit_trainer_request_please_try_again_919", "Failed to submit trainer request. Please try again."));
+                  }
+                }}
+                className={trainerStatus === 'pending' ? 'bg-gray-400 cursor-not-allowed text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                disabled={trainerStatus === 'pending'}>
+                
                   {trainerStatus === 'pending' ? t('freelancer_dashboard.trainer.pending', 'Request Pending Review') : t('freelancer_dashboard.trainer.request_btn', 'Request Trainer Status')}
                 </Button>
-              </div>
-            ) : (
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              </div> :
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 <div>
                   <h4 className="text-xl font-bold text-blue-700">{t('freelancer_dashboard.trainer.welcome', 'Welcome, Trainer!')}</h4>
                   <p className="text-gray-600 mt-1">{t('freelancer_dashboard.trainer.upload_desc', 'You have trainer privileges. Upload and manage your courses here.')}</p>
                 </div>
-                <Button 
-                  onClick={() => setShowCourseModal(true)} 
-                  className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30 flex items-center gap-2"
-                >
+                <Button
+                onClick={() => setShowCourseModal(true)}
+                className="bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-500/30 flex items-center gap-2">
+                
                   <Upload className="w-4 h-4" />
                   {t('freelancer_dashboard.trainer.upload_btn', 'Upload New Course')}
                 </Button>
               </div>
-            )}
+            }
           </CardContent>
         </Card>
       </div>
@@ -589,14 +591,14 @@ export default function FreelancerDashboard() {
       {/* Plans (from backend subscription) */}
       <div className="max-w-7xl mx-auto mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(plans && plans.length ? plans : []).map((plan) => (
-            <Card key={plan.key} className={`border ${subscription?.plan === plan.key ? 'border-green-400' : 'border-gray-200'}`}>
+          {(plans && plans.length ? plans : []).map((plan) =>
+          <Card key={plan.key} className={`border ${subscription?.plan === plan.key ? 'border-green-400' : 'border-gray-200'}`}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold">{plan.title || plan.key}</h3>
-                  {subscription?.plan === plan.key && (
-                    <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">Current</span>
-                  )}
+                  {subscription?.plan === plan.key &&
+                <span className="text-xs px-2 py-0.5 rounded bg-green-100 text-green-700">{t("current_905", "Current")}</span>
+                }
                 </div>
                 <div className="text-sm text-gray-700 mt-1">{plan.price}</div>
                 <p className="text-sm text-gray-600 mt-2">{plan.desc}</p>
@@ -606,7 +608,7 @@ export default function FreelancerDashboard() {
                 </div>
               </CardContent>
             </Card>
-          ))}
+          )}
         </div>
       </div>
 
@@ -615,52 +617,52 @@ export default function FreelancerDashboard() {
 
       {/* Edit Profile Modal */}
       {
-        showEdit && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      showEdit &&
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-xl p-6">
               <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.edit_profile.title')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.name')}</label>
                   <input
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              
                 </div>
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.experience')}</label>
                   <input
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.experience}
-                    onChange={(e) => setForm({ ...form, experience: e.target.value })}
-                  />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.experience}
+                onChange={(e) => setForm({ ...form, experience: e.target.value })} />
+              
                 </div>
                 <div className="md:col-span-2">
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.skills')}</label>
                   <input
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.skills}
-                    onChange={(e) => setForm({ ...form, skills: e.target.value })}
-                  />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.skills}
+                onChange={(e) => setForm({ ...form, skills: e.target.value })} />
+              
                 </div>
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.email')}</label>
                   <input
-                    type="email"
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  />
+                type="email"
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              
                 </div>
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.phone')}</label>
                   <input
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    placeholder="+224-123-45-67-89"
-                  />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="+224-123-45-67-89" />
+              
                 </div>
                 
                 {/* Location Fields */}
@@ -668,10 +670,10 @@ export default function FreelancerDashboard() {
                   <div>
                     <label className="text-sm text-gray-600">{t('profile.region', 'Region')}</label>
                     <select
-                      className="w-full border rounded-md px-3 py-2 mt-1"
-                      value={form.region}
-                      onChange={(e) => setForm({ ...form, region: e.target.value, prefecture: '', subPrefecture: '' })}
-                    >
+                  className="w-full border rounded-md px-3 py-2 mt-1"
+                  value={form.region}
+                  onChange={(e) => setForm({ ...form, region: e.target.value, prefecture: '', subPrefecture: '' })}>
+                  
                       <option value="">{t('profile.select_region', 'Select Region')}</option>
                       {guineaCitiesByRegion.map((r, i) => <option key={i} value={r.region}>{r.region}</option>)}
                     </select>
@@ -679,11 +681,11 @@ export default function FreelancerDashboard() {
                   <div>
                     <label className="text-sm text-gray-600">{t('profile.prefecture', 'Prefecture')}</label>
                     <select
-                      className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
-                      value={form.prefecture}
-                      onChange={(e) => setForm({ ...form, prefecture: e.target.value, subPrefecture: '' })}
-                      disabled={!form.region}
-                    >
+                  className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
+                  value={form.prefecture}
+                  onChange={(e) => setForm({ ...form, prefecture: e.target.value, subPrefecture: '' })}
+                  disabled={!form.region}>
+                  
                       <option value="">{t('profile.select_prefecture', 'Select Prefecture')}</option>
                       {prefectures.map((p, i) => <option key={i} value={p.name}>{p.name}</option>)}
                     </select>
@@ -691,11 +693,11 @@ export default function FreelancerDashboard() {
                   <div>
                     <label className="text-sm text-gray-600">{t('profile.subprefecture', 'Sub-Prefecture')}</label>
                     <select
-                      className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
-                      value={form.subPrefecture}
-                      onChange={(e) => setForm({ ...form, subPrefecture: e.target.value })}
-                      disabled={!form.prefecture}
-                    >
+                  className="w-full border rounded-md px-3 py-2 mt-1 disabled:opacity-50"
+                  value={form.subPrefecture}
+                  onChange={(e) => setForm({ ...form, subPrefecture: e.target.value })}
+                  disabled={!form.prefecture}>
+                  
                       <option value="">{t('profile.select_subprefecture', 'Select Sub-Prefecture')}</option>
                       {subPrefectures.map((sp, i) => <option key={i} value={sp}>{sp}</option>)}
                     </select>
@@ -704,18 +706,18 @@ export default function FreelancerDashboard() {
                 <div>
                   <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.payment_type')}</label>
                   <select
-                    className="w-full border rounded-md px-3 py-2 mt-1"
-                    value={form.paymentType}
-                    onChange={(e) => setForm({ ...form, paymentType: e.target.value })}
-                  >
-                    <option value="OM">OM</option>
-                    <option value="MoMo">MoMo</option>
-                    <option value="SWIFT">Bank Transfer (SWIFT)</option>
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.paymentType}
+                onChange={(e) => setForm({ ...form, paymentType: e.target.value })}>
+                
+                    <option value="OM">{t("om_420", "OM")}</option>
+                    <option value="MoMo">{t("momo_138", "MoMo")}</option>
+                    <option value="SWIFT">{t("bank_transfer_swift_407", "Bank Transfer (SWIFT)")}</option>
                   </select>
                 </div>
 
-                {form.paymentType === 'SWIFT' ? (
-                  <>
+                {form.paymentType === 'SWIFT' ?
+            <>
                     <div className="md:col-span-2">
                       <div className="bg-blue-50 p-3 rounded-md text-sm text-blue-700 mb-2 flex items-center gap-2">
                         <Lock className="h-4 w-4" />
@@ -724,94 +726,94 @@ export default function FreelancerDashboard() {
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.bank_name')}</label>
-                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.bankName} onChange={(e) => setForm({ ...form, bankName: e.target.value })} placeholder="e.g. Ecobank" />
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.bankName} onChange={(e) => setForm({ ...form, bankName: e.target.value })} placeholder={t("eg_ecobank_975", "e.g. Ecobank")} />
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.account_holder')}</label>
-                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountHolder} onChange={(e) => setForm({ ...form, accountHolder: e.target.value })} placeholder="Name on account" />
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountHolder} onChange={(e) => setForm({ ...form, accountHolder: e.target.value })} placeholder={t("name_on_account_793", "Name on account")} />
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.account_number')}</label>
-                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountNumber} onChange={(e) => setForm({ ...form, accountNumber: e.target.value })} placeholder="GN..." />
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.accountNumber} onChange={(e) => setForm({ ...form, accountNumber: e.target.value })} placeholder={t("gn_954", "GN...")} />
                     </div>
                     <div>
                       <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.swift_code')}</label>
-                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.swiftCode} onChange={(e) => setForm({ ...form, swiftCode: e.target.value })} placeholder="ECOBGN..." />
+                      <input className="w-full border rounded-md px-3 py-2 mt-1" value={form.swiftCode} onChange={(e) => setForm({ ...form, swiftCode: e.target.value })} placeholder={t("ecobgn_860", "ECOBGN...")} />
                     </div>
-                  </>
-                ) : (
-                  <div>
+                  </> :
+
+            <div>
                     <label className="text-sm text-gray-600">{t('freelancer_dashboard.modals.edit_profile.form.payment_number')}</label>
                     <input
-                      className="w-full border rounded-md px-3 py-2 mt-1"
-                      value={form.paymentNumber}
-                      onChange={(e) => setForm({ ...form, paymentNumber: e.target.value })}
-                      placeholder="+224-123-45-67-89"
-                    />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={form.paymentNumber}
+                onChange={(e) => setForm({ ...form, paymentNumber: e.target.value })}
+                placeholder="+224-123-45-67-89" />
+              
                   </div>
-                )}
+            }
               </div>
               <div className="mt-6 flex items-center justify-end gap-2">
                 <Button variant="outline" onClick={() => setShowEdit(false)}>{t('freelancer_dashboard.modals.edit_profile.cancel')}</Button>
                 <Button
-                  disabled={saving}
-                  onClick={async () => {
-                    if (!user) return;
-                    try {
-                      setSaving(true);
+              disabled={saving}
+              onClick={async () => {
+                if (!user) return;
+                try {
+                  setSaving(true);
 
-                      // Helper: Simple formatter or just basic cleanup
-                      const updatedData = {
-                        name: form.name,
-                        skills: form.skills.split(',').map(s => s.trim()).filter(Boolean),
-                        experience: form.experience,
-                        email: form.email,
-                        phone: form.phone,
-                        region: form.region,
-                        prefecture: form.prefecture,
-                        subPrefecture: form.subPrefecture,
-                        paymentMethod: {
-                          type: form.paymentType,
-                          number: form.paymentType !== 'SWIFT' ? form.paymentNumber : null,
-                          swift: form.paymentType === 'SWIFT' ? {
-                            bankName: form.bankName,
-                            accountNumber: form.accountNumber,
-                            swiftCode: form.swiftCode,
-                            accountHolder: form.accountHolder
-                          } : null
-                        }
-                      };
-
-                      await UserService.updateUserProfile(user.uid, updatedData);
-
-                      // Update local state
-                      setFreelancer(prev => ({ ...prev, ...updatedData }));
-                      setShowEdit(false);
-                      alert('Profile updated successfully');
-                    } catch (err) {
-                      console.error("Profile update error:", err);
-                      alert('Failed to update profile. Please try again.');
-                    } finally {
-                      setSaving(false);
+                  // Helper: Simple formatter or just basic cleanup
+                  const updatedData = {
+                    name: form.name,
+                    skills: form.skills.split(',').map((s) => s.trim()).filter(Boolean),
+                    experience: form.experience,
+                    email: form.email,
+                    phone: form.phone,
+                    region: form.region,
+                    prefecture: form.prefecture,
+                    subPrefecture: form.subPrefecture,
+                    paymentMethod: {
+                      type: form.paymentType,
+                      number: form.paymentType !== 'SWIFT' ? form.paymentNumber : null,
+                      swift: form.paymentType === 'SWIFT' ? {
+                        bankName: form.bankName,
+                        accountNumber: form.accountNumber,
+                        swiftCode: form.swiftCode,
+                        accountHolder: form.accountHolder
+                      } : null
                     }
-                  }}
-                >
+                  };
+
+                  await UserService.updateUserProfile(user.uid, updatedData);
+
+                  // Update local state
+                  setFreelancer((prev) => ({ ...prev, ...updatedData }));
+                  setShowEdit(false);
+                  alert(t("profile_updated_successfully_769", "Profile updated successfully"));
+                } catch (err) {
+                  console.error("Profile update error:", err);
+                  alert(t("failed_to_update_profile_please_try_again_284", "Failed to update profile. Please try again."));
+                } finally {
+                  setSaving(false);
+                }
+              }}>
+              
                   {saving ? t('freelancer_dashboard.modals.edit_profile.saving') : t('freelancer_dashboard.modals.edit_profile.save')}
                 </Button>
               </div>
             </div>
           </div>
-        )
+
       }
       {/* Withdrawal Modal */}
       {
-        showWithdrawModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      showWithdrawModal &&
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
             <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
               <h3 className="text-lg font-semibold mb-4">{t('freelancer_dashboard.modals.withdrawal.title', 'Withdraw Funds')}</h3>
 
-              {freelancer?.paymentMethod?.type === 'SWIFT' ? (
-                <div className="mb-4 space-y-4">
+              {freelancer?.paymentMethod?.type === 'SWIFT' ?
+          <div className="mb-4 space-y-4">
                   <div className="bg-gray-50 p-3 rounded text-sm">
                     <p className="font-semibold text-gray-700">{t('freelancer_dashboard.modals.withdrawal.receiving_bank', 'Receiving Bank Account')}</p>
                     <p>{freelancer.paymentMethod.swift.bankName} ••• {freelancer.paymentMethod.swift.accountNumber.slice(-4)}</p>
@@ -819,76 +821,86 @@ export default function FreelancerDashboard() {
 
                   <div className="bg-green-50 p-3 rounded border border-green-200">
                     <p className="text-sm text-green-800 font-medium">
-                      {t('freelancer_dashboard.modals.withdrawal.available_balance', 'Available Balance')}: {Number(netEarnings || 0).toLocaleString()} GNF
+                      {t('freelancer_dashboard.modals.withdrawal.available_balance', 'Available Balance')}: {Number(netEarnings || 0).toLocaleString()} {t("gnf_320", "GNF")}
                     </p>
                   </div>
 
                   <div>
                     <label className="text-sm font-medium text-gray-700">{t('freelancer_dashboard.modals.withdrawal.amount_label', 'Withdrawal Amount (GNF)')}</label>
                     <input
-                      type="number"
-                      className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:ring-2 focus:ring-green-500 outline-none"
-                      value={withdrawAmount}
-                      onChange={(e) => setWithdrawAmount(e.target.value)}
-                      placeholder={t('freelancer_dashboard.modals.withdrawal.min_amount', 'Min: 500,000 GNF')}
-                    />
+                type="number"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:ring-2 focus:ring-green-500 outline-none"
+                value={withdrawAmount}
+                onChange={(e) => setWithdrawAmount(e.target.value)}
+                placeholder={t('freelancer_dashboard.modals.withdrawal.min_amount', 'Min: 500,000 GNF')} />
+              
                   </div>
 
                   <div className="bg-gray-50 p-3 rounded border border-gray-200 space-y-2 text-sm mt-4">
                     <div className="flex justify-between text-gray-600">
                       <span>{t('freelancer_dashboard.modals.withdrawal.requested', 'Requested Amount')}</span>
-                      <span className="font-medium">{Number(withdrawAmount || 0).toLocaleString()} GNF</span>
+                      <span className="font-medium">{Number(withdrawAmount || 0).toLocaleString()} {t("gnf_197", "GNF")}</span>
                     </div>
                     <div className="flex justify-between text-red-600">
                       <span>{t('freelancer_dashboard.modals.withdrawal.bank_fee', 'Swift Wire Fee')}</span>
-                      <span>- 150,000 GNF</span>
+                      <span>{t("_150000_gnf_610", "- 150,000 GNF")}</span>
                     </div>
                     <div className="border-t pt-2 mt-1 flex justify-between font-bold text-gray-800">
                       <span>{t('freelancer_dashboard.modals.withdrawal.net_receipt', 'Net to Receive')}</span>
-                      <span>{(Math.max(0, Number(withdrawAmount || 0) - 150000)).toLocaleString()} GNF</span>
+                      <span>{Math.max(0, Number(withdrawAmount || 0) - 150000).toLocaleString()} {t("gnf_239", "GNF")}</span>
                     </div>
                     <div className="text-xs text-gray-500 mt-1 text-right">
-                      {t('freelancer_dashboard.modals.withdrawal.est_usd', '~ Est. USD')} ${(Math.max(0, Number(withdrawAmount || 0) - 150000) / 8600).toFixed(2)} USD
+                      {t('freelancer_dashboard.modals.withdrawal.est_usd', '~ Est. USD')} ${(Math.max(0, Number(withdrawAmount || 0) - 150000) / 8600).toFixed(2)} {t("usd_861", "USD")}
                     </div>
                   </div>
-                </div>
-              ) : (
-                <div className="mb-4 text-center py-4">
+                </div> :
+
+          <div className="mb-4 text-center py-4">
                   <p className="text-gray-600 mb-4">{t('freelancer_dashboard.modals.withdrawal.setup_swift', 'Please set up a SWIFT payment method first.')}</p>
-                  <Button variant="outline" onClick={() => { setShowWithdrawModal(false); setShowEdit(true); }}>
+                  <Button variant="outline" onClick={() => {setShowWithdrawModal(false);setShowEdit(true);}}>
                     {t('freelancer_dashboard.modals.withdrawal.update_profile', 'Update Profile')}
                   </Button>
                 </div>
-              )}
+          }
 
               <div className="flex justify-end gap-2 mt-4">
                 <Button variant="outline" onClick={() => setShowWithdrawModal(false)}>{t('freelancer_dashboard.modals.withdrawal.cancel', 'Cancel')}</Button>
-                {freelancer?.paymentMethod?.type === 'SWIFT' && (
-                  <Button
-                    className="bg-green-600 hover:bg-green-700 text-white"
-                    disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000 || Number(withdrawAmount) > Number(netEarnings || 0)}
-                    onClick={() => {
-                      setWithdrawProcessing(true);
-                      setTimeout(() => {
-                        setWithdrawProcessing(false);
-                        setShowWithdrawModal(false);
-                        alert(t('freelancer_dashboard.modals.withdrawal.success_alert', 'Withdrawal Requested Successfully!'));
-                        setWithdrawAmount('');
-                      }, 2000);
-                    }}
-                  >
+                {freelancer?.paymentMethod?.type === 'SWIFT' &&
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              disabled={withdrawProcessing || !withdrawAmount || Number(withdrawAmount) < 500000 || Number(withdrawAmount) > Number(netEarnings || 0)}
+              onClick={async () => {
+                setWithdrawProcessing(true);
+                try {
+                  await PayoutService.requestPayout({
+                    sellerId: user.uid,
+                    amount: Number(withdrawAmount),
+                    method: freelancer?.paymentMethod?.type || 'SWIFT',
+                    currency: 'GNF'
+                  });
+                  setShowWithdrawModal(false);
+                  alert(t('freelancer_dashboard.modals.withdrawal.success_alert', 'Withdrawal Requested Successfully!'));
+                  setWithdrawAmount('');
+                } catch (err) {
+                  console.error(err);
+                  alert(t('freelancer_dashboard.modals.withdrawal.error', 'Withdrawal request failed.'));
+                } finally {
+                  setWithdrawProcessing(false);
+                }
+              }}>
+              
                     {withdrawProcessing ? t('freelancer_dashboard.modals.withdrawal.processing', 'Processing...') : t('freelancer_dashboard.modals.withdrawal.confirm', 'Confirm Withdrawal')}
                   </Button>
-                )}
+            }
               </div>
             </div>
           </div>
-        )
+
       }
 
       {/* Course Upload Modal */}
-      {showCourseModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      {showCourseModal &&
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
             <div className="sticky top-0 bg-white border-b border-gray-100 p-6 flex items-center justify-between z-10">
               <h3 className="text-xl font-bold text-gray-900">{t('freelancer_dashboard.trainer.upload_course_title', 'Upload New Course')}</h3>
@@ -901,65 +913,65 @@ export default function FreelancerDashboard() {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.course_title', 'Course Title')}</label>
-                  <input 
-                    type="text" 
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
-                    value={courseForm.title}
-                    onChange={(e) => setCourseForm({...courseForm, title: e.target.value})}
-                    placeholder="e.g. Advanced React Development"
-                  />
+                  <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                  value={courseForm.title}
+                  onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
+                  placeholder={t("eg_advanced_react_development_446", "e.g. Advanced React Development")} />
+                
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.category', 'Category')}</label>
-                    <select 
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white"
-                      value={courseForm.category}
-                      onChange={(e) => setCourseForm({...courseForm, category: e.target.value})}
-                    >
-                      <option value="">Select a category</option>
-                      <option value="development">Web Development</option>
+                    <select
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-white"
+                    value={courseForm.category}
+                    onChange={(e) => setCourseForm({ ...courseForm, category: e.target.value })}>
+                    
+                      <option value="">{t("select_a_category_879", "Select a category")}</option>
+                      <option value="development">{t("web_development_240", "Web Development")}</option>
                       <option value="design">Design & UI/UX</option>
-                      <option value="business">Business & Marketing</option>
+                      <option value="business">{t("business_marketing_354", "Business & Marketing")}</option>
                     </select>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.price', 'Price (GNF)')}</label>
-                    <input 
-                      type="number" 
-                      className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition" 
-                      value={courseForm.price}
-                      onChange={(e) => setCourseForm({...courseForm, price: e.target.value})}
-                      placeholder="e.g. 500000"
-                    />
+                    <input
+                    type="number"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    value={courseForm.price}
+                    onChange={(e) => setCourseForm({ ...courseForm, price: e.target.value })}
+                    placeholder={t("eg_500000_715", "e.g. 500000")} />
+                  
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">{t('freelancer_dashboard.trainer.description', 'Course Description')}</label>
-                  <textarea 
-                    rows="4"
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none" 
-                    value={courseForm.description}
-                    onChange={(e) => setCourseForm({...courseForm, description: e.target.value})}
-                    placeholder="Describe what students will learn..."
-                  />
+                  <textarea
+                  rows="4"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
+                  value={courseForm.description}
+                  onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
+                  placeholder={t("describe_what_students_will_learn_501", "Describe what students will learn...")} />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">{t('freelancer_dashboard.trainer.video', 'Upload Video')}</label>
                   <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:bg-gray-50 transition cursor-pointer">
                     <Upload className="w-8 h-8 mx-auto text-blue-500 mb-2" />
-                    <p className="text-sm font-medium text-gray-700">Click to upload or drag and drop</p>
-                    <p className="text-xs text-gray-500 mt-1">MP4, WebM up to 500MB</p>
+                    <p className="text-sm font-medium text-gray-700">{t("click_to_upload_or_drag_and_drop_21", "Click to upload or drag and drop")}</p>
+                    <p className="text-xs text-gray-500 mt-1">{t("mp4_webm_up_to_500mb_489", "MP4, WebM up to 500MB")}</p>
                     <input
-                      type="file"
-                      className="hidden"
-                      accept="video/*"
-                      id="video-upload"
-                      onChange={(e) => setCourseVideoFile(e.target.files[0] || null)}
-                    />
+                    type="file"
+                    className="hidden"
+                    accept="video/*"
+                    id="video-upload"
+                    onChange={(e) => setCourseVideoFile(e.target.files[0] || null)} />
+                  
                     <label htmlFor="video-upload" className="cursor-pointer text-sm text-blue-600 underline mt-2 inline-block">
                       {courseVideoFile ? courseVideoFile.name : 'Choose file'}
                     </label>
@@ -969,33 +981,33 @@ export default function FreelancerDashboard() {
             </div>
 
             <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 rounded-b-xl">
-              <Button variant="outline" onClick={() => setShowCourseModal(false)} className="px-6 border-gray-300 text-gray-700 hover:bg-gray-100">Cancel</Button>
+              <Button variant="outline" onClick={() => setShowCourseModal(false)} className="px-6 border-gray-300 text-gray-700 hover:bg-gray-100">{t("cancel_750", "Cancel")}</Button>
               <Button
-                className="px-6 bg-blue-600 hover:bg-blue-700 text-white shadow-md"
-                disabled={courseUploading || !courseForm.title}
-                onClick={async () => {
-                  if (!user || !courseForm.title) return;
-                  try {
-                    setCourseUploading(true);
-                    await CourseService.uploadCourse(user.uid, courseForm, courseVideoFile);
-                    alert(t('freelancer_dashboard.trainer.upload_success', 'Course uploaded successfully! It will be reviewed by an admin.'));
-                    setShowCourseModal(false);
-                    setCourseForm({ title: '', category: '', description: '', price: '', videoUrl: '' });
-                    setCourseVideoFile(null);
-                  } catch (err) {
-                    console.error('Course upload failed:', err);
-                    alert('Failed to upload course. Please try again.');
-                  } finally {
-                    setCourseUploading(false);
-                  }
-                }}
-              >
+              className="px-6 bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+              disabled={courseUploading || !courseForm.title}
+              onClick={async () => {
+                if (!user || !courseForm.title) return;
+                try {
+                  setCourseUploading(true);
+                  await CourseService.uploadCourse(user.uid, courseForm, courseVideoFile);
+                  alert(t('freelancer_dashboard.trainer.upload_success', 'Course uploaded successfully! It will be reviewed by an admin.'));
+                  setShowCourseModal(false);
+                  setCourseForm({ title: '', category: '', description: '', price: '', videoUrl: '' });
+                  setCourseVideoFile(null);
+                } catch (err) {
+                  console.error('Course upload failed:', err);
+                  alert(t("failed_to_upload_course_please_try_again_611", "Failed to upload course. Please try again."));
+                } finally {
+                  setCourseUploading(false);
+                }
+              }}>
+              
                 {courseUploading ? 'Uploading...' : t('freelancer_dashboard.trainer.submit_course', 'Submit Course')}
               </Button>
             </div>
           </div>
         </div>
-      )}
-    </div >
-  );
+      }
+    </div>);
+
 }

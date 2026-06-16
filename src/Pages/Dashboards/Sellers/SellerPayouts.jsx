@@ -124,11 +124,11 @@ export default function SellerPayouts() {
     if (window.confirm('Are you sure you want to delete this payout?')) {
       try {
         await PayoutService.deletePayout(payoutId);
-        alert('Payout deleted successfully!');
-        setPayouts(prev => prev.filter(p => p.id !== payoutId));
+        alert(t("payout_deleted_successfully_963", "Payout deleted successfully!"));
+        setPayouts((prev) => prev.filter((p) => p.id !== payoutId));
       } catch (error) {
         console.error('Error deleting payout:', error);
-        alert('Failed to delete payout. Please try again.');
+        alert(t("failed_to_delete_payout_please_try_again_771", "Failed to delete payout. Please try again."));
       }
     }
   };
@@ -147,19 +147,19 @@ export default function SellerPayouts() {
         status: editingPayout.status
       });
 
-      alert('Payout updated successfully!');
+      alert(t("payout_updated_successfully_162", "Payout updated successfully!"));
       fetchPayouts();
       fetchStats();
       handleCloseEditModal();
     } catch (error) {
       console.error('Error updating payout:', error);
-      alert('Failed to update payout. Please try again.');
+      alert(t("failed_to_update_payout_please_try_again_646", "Failed to update payout. Please try again."));
     }
   };
 
-  const filteredPayouts = payouts.filter(payout =>
-    (payout.paymentMethod?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
-    (payout.status?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+  const filteredPayouts = payouts.filter((payout) =>
+  (payout.paymentMethod?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+  (payout.status?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   ).sort((a, b) => {
     const aValue = a[sortField] || 0;
     const bValue = b[sortField] || 0;
@@ -173,11 +173,11 @@ export default function SellerPayouts() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            <span className="ml-2 text-gray-600">Loading payouts...</span>
+            <span className="ml-2 text-gray-600">{t("loading_payouts_812", "Loading payouts...")}</span>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -187,13 +187,13 @@ export default function SellerPayouts() {
         <div className="p-6 pb-4">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">{t('seller_dashboard.payouts.title')}</h1>
 
-          {error && (
-            <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
+          {error &&
+          <div className="mb-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
               <p className="text-yellow-700 text-sm">
                 ⚠️ {error}
               </p>
             </div>
-          )}
+          }
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -243,8 +243,8 @@ export default function SellerPayouts() {
               placeholder={t('seller_dashboard.payouts.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-700 placeholder-gray-400"
-            />
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-700 placeholder-gray-400" />
+            
           </div>
         </div>
 
@@ -256,13 +256,13 @@ export default function SellerPayouts() {
                 <tr>
                   <th
                     className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort("amount")}
-                  >
+                    onClick={() => handleSort("amount")}>
+                    
                     <div className="flex items-center space-x-1">
                       <span>{t('seller_dashboard.payouts.table.amount')}</span>
-                      {sortField === "amount" && (
-                        <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
-                      )}
+                      {sortField === "amount" &&
+                      <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
+                      }
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
@@ -283,25 +283,25 @@ export default function SellerPayouts() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredPayouts.length === 0 ? (
-                  <tr>
+                {filteredPayouts.length === 0 ?
+                <tr>
                     <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
-                      {payouts.length === 0 ? (
-                        <div>
+                      {payouts.length === 0 ?
+                    <div>
                           <p className="text-lg font-medium mb-2">{t('seller_dashboard.payouts.empty.title')}</p>
                           <p className="text-sm">{t('seller_dashboard.payouts.empty.desc')}</p>
-                        </div>
-                      ) : (
-                        <div>
+                        </div> :
+
+                    <div>
                           <p className="text-lg font-medium mb-2">{t('seller_dashboard.payouts.empty.search_title')}</p>
                           <p className="text-sm">{t('seller_dashboard.payouts.empty.search_desc')}</p>
                         </div>
-                      )}
+                    }
                     </td>
-                  </tr>
-                ) : (
-                  filteredPayouts.map((payout) => (
-                    <tr key={payout.id} className="hover:bg-gray-50">
+                  </tr> :
+
+                filteredPayouts.map((payout) =>
+                <tr key={payout.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-800">
                         {formatPrice(payout.amount)}
                       </td>
@@ -323,32 +323,32 @@ export default function SellerPayouts() {
                       <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                         <div className="flex items-center space-x-3">
                           <button
-                            onClick={() => handleDeletePayout(payout.id)}
-                            className="text-gray-400 hover:text-red-500 transition-colors"
-                            title="Delete Payout"
-                          >
+                        onClick={() => handleDeletePayout(payout.id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        title="Delete Payout">
+                        
                             <Trash2 className="h-5 w-5" />
                           </button>
                           <button
-                            onClick={() => handleEditPayout(payout)}
-                            className="text-gray-400 hover:text-blue-500 transition-colors"
-                            title="Edit Payout"
-                          >
+                        onClick={() => handleEditPayout(payout)}
+                        className="text-gray-400 hover:text-blue-500 transition-colors"
+                        title="Edit Payout">
+                        
                             <Edit className="h-5 w-5" />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  ))
-                )}
+                )
+                }
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Edit Payout Modal */}
-        {showEditModal && editingPayout && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        {showEditModal && editingPayout &&
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-semibold mb-4">{t('seller_dashboard.payouts.modal.title')}</h3>
 
@@ -356,91 +356,91 @@ export default function SellerPayouts() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.id')}</label>
                   <input
-                    type="text"
-                    value={editingPayout.id || ''}
-                    disabled
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                  />
+                  type="text"
+                  value={editingPayout.id || ''}
+                  disabled
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.amount')}</label>
                   <input
-                    type="number"
-                    value={editingPayout.amount || ''}
-                    onChange={(e) => setEditingPayout({ ...editingPayout, amount: parseInt(e.target.value) || 0 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="number"
+                  value={editingPayout.amount || ''}
+                  onChange={(e) => setEditingPayout({ ...editingPayout, amount: parseInt(e.target.value) || 0 })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.method')}</label>
                   <select
-                    value={editingPayout.paymentMethod || ''}
-                    onChange={(e) => setEditingPayout({ ...editingPayout, paymentMethod: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="OM">OM</option>
-                    <option value="MoMo">MoMo</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                    <option value="Cash">Cash</option>
+                  value={editingPayout.paymentMethod || ''}
+                  onChange={(e) => setEditingPayout({ ...editingPayout, paymentMethod: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                  
+                    <option value="OM">{t("om_454", "OM")}</option>
+                    <option value="MoMo">{t("momo_403", "MoMo")}</option>
+                    <option value="Bank Transfer">{t("bank_transfer_535", "Bank Transfer")}</option>
+                    <option value="Cash">{t("cash_661", "Cash")}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.number')}</label>
                   <input
-                    type="text"
-                    value={editingPayout.paymentNumber || ''}
-                    onChange={(e) => setEditingPayout({ ...editingPayout, paymentNumber: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    placeholder="Enter payment number"
-                  />
+                  type="text"
+                  value={editingPayout.paymentNumber || ''}
+                  onChange={(e) => setEditingPayout({ ...editingPayout, paymentNumber: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                  placeholder={t("enter_payment_number_239", "Enter payment number")} />
+                
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.status')}</label>
                   <select
-                    value={editingPayout.status || ''}
-                    onChange={(e) => setEditingPayout({ ...editingPayout, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="failed">Failed</option>
+                  value={editingPayout.status || ''}
+                  onChange={(e) => setEditingPayout({ ...editingPayout, status: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                  
+                    <option value="pending">{t("pending_389", "Pending")}</option>
+                    <option value="completed">{t("completed_954", "Completed")}</option>
+                    <option value="failed">{t("failed_656", "Failed")}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.payouts.modal.date')}</label>
                   <input
-                    type="text"
-                    value={editingPayout.processedAt && editingPayout.processedAt.seconds ?
-                      new Date(editingPayout.processedAt.seconds * 1000).toLocaleDateString() : 'N/A'}
-                    disabled
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500"
-                  />
+                  type="text"
+                  value={editingPayout.processedAt && editingPayout.processedAt.seconds ?
+                  new Date(editingPayout.processedAt.seconds * 1000).toLocaleDateString() : 'N/A'}
+                  disabled
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                
                 </div>
               </div>
 
               <div className="flex gap-2 pt-4">
                 <button
-                  onClick={handleUpdate}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                >
+                onClick={handleUpdate}
+                className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                
                   {t('seller_dashboard.payouts.modal.update')}
                 </button>
                 <button
-                  onClick={handleCloseEditModal}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition"
-                >
+                onClick={handleCloseEditModal}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition">
+                
                   {t('seller_dashboard.payouts.modal.cancel')}
                 </button>
               </div>
             </div>
           </div>
-        )}
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }

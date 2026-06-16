@@ -8,20 +8,20 @@ import { ClientService } from "../../../services/clientService";
 import { auth } from "../../../firebaseConfig";
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -62,7 +62,7 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
         name: profileData.name || profileData.fullName || "",
         bio: profileData.bio || "",
         location: profileData.location || "",
-        whatsapp: profileData.whatsapp || profileData.phone || "",
+        whatsapp: profileData.whatsapp || profileData.phone || ""
       });
     }
   }, [profileData]);
@@ -75,7 +75,7 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
         await ClientService.uploadAvatar(profileData.id, file);
         onRefresh();
       } catch (error) {
-        alert("Failed to upload avatar");
+        alert(t("failed_to_upload_avatar_554", "Failed to upload avatar"));
       } finally {
         setUploading(false);
       }
@@ -90,7 +90,7 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
       onRefresh();
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert("Failed to save profile");
+      alert(t("failed_to_save_profile_64", "Failed to save profile"));
     }
   };
 
@@ -104,7 +104,7 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
   if (!displayProfile.location) missingFields.push('Location');
   if (!displayProfile.whatsapp && !displayProfile.phone) missingFields.push('Phone');
   if (!displayProfile.avatar) missingFields.push('Photo');
-  const progress = Math.round(((4 - missingFields.length) / 4) * 100);
+  const progress = Math.round((4 - missingFields.length) / 4 * 100);
 
   return (
     <Card className="p-6 md:col-span-3">
@@ -116,45 +116,45 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
                 src={avatarSrc}
                 alt="Avatar"
                 className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = DefaultAvatar; }}
-              />
+                onError={(e) => {e.target.src = DefaultAvatar;}} />
+              
               <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
                 {uploading ? <Loader2 className="h-3.5 w-3.5 text-white animate-spin" /> : <Upload className="h-3.5 w-3.5 text-white" />}
                 <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
               </label>
             </div>
-            {!displayProfile.avatar && (
-              <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
+            {!displayProfile.avatar &&
+            <div className="text-[10px] italic text-gray-500 mt-3 text-center max-w-[90px] leading-tight">
                 {t('client_dashboard.profile.add_photo')}
               </div>
-            )}
+            }
           </div>
           
           <div className="flex-1 min-w-0">
             {/* Name & Bio Editing Logic */}
-            {isEditing ? (
-              <div className="space-y-2 w-full">
+            {isEditing ?
+            <div className="space-y-2 w-full">
                 <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="text-xl font-bold border border-gray-300 rounded px-2 py-1 block w-full outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder={t('client_dashboard.profile.your_name')}
-                />
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="text-xl font-bold border border-gray-300 rounded px-2 py-1 block w-full outline-none focus:ring-2 focus:ring-green-500"
+                placeholder={t('client_dashboard.profile.your_name')} />
+              
                 <textarea
-                  value={formData.bio}
-                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-                  className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 w-full block outline-none focus:ring-2 focus:ring-green-500"
-                  rows={2}
-                  placeholder={t('client_dashboard.profile.bio_placeholder')}
-                />
-              </div>
-            ) : (
-              <div>
+                value={formData.bio}
+                onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                className="text-sm text-gray-600 border border-gray-300 rounded px-2 py-1 w-full block outline-none focus:ring-2 focus:ring-green-500"
+                rows={2}
+                placeholder={t('client_dashboard.profile.bio_placeholder')} />
+              
+              </div> :
+
+            <div>
                 <h2 className="text-xl font-bold break-words">{displayProfile.name || displayProfile.fullName || t('client_dashboard.profile.your_name')}</h2>
                 <p className="text-sm text-gray-600 mt-1 break-words">{displayProfile.bio || t('client_dashboard.profile.no_bio')}</p>
               </div>
-            )}
+            }
           </div>
         </div>
         
@@ -163,11 +163,11 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
             <Edit className="w-3.5 h-3.5 mr-1" />
             {isEditing ? t('client_dashboard.profile.cancel') : t('client_dashboard.profile.edit_profile')}
           </Button>
-          {isEditing && (
-            <Button className="flex-1 sm:flex-none text-xs" onClick={handleSaveProfile}>
+          {isEditing &&
+          <Button className="flex-1 sm:flex-none text-xs" onClick={handleSaveProfile}>
               {t('client_dashboard.profile.save')}
             </Button>
-          )}
+          }
         </div>
       </div>
 
@@ -175,42 +175,42 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
       <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4 text-sm text-gray-600">
         <div className="flex items-center gap-1">
           <MapPin className="w-4 h-4" />
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="border border-gray-300 rounded px-2 py-1"
-              placeholder={t('client_dashboard.profile.location_placeholder')}
-            />
-          ) : (
-            <span>{displayProfile.location || t('client_dashboard.profile.location_not_set')}</span>
-          )}
+          {isEditing ?
+          <input
+            type="text"
+            value={formData.location}
+            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+            className="border border-gray-300 rounded px-2 py-1"
+            placeholder={t('client_dashboard.profile.location_placeholder')} /> :
+
+
+          <span>{displayProfile.location || t('client_dashboard.profile.location_not_set')}</span>
+          }
         </div>
         <div className="flex items-center gap-1">
           <Phone className="w-4 h-4" />
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.whatsapp}
-              onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="border border-gray-300 rounded px-2 py-1"
-              placeholder={t('client_dashboard.profile.whatsapp_placeholder')}
-            />
-          ) : (
-            <span>{displayProfile.whatsapp || displayProfile.phone || t('client_dashboard.profile.phone_not_set')}</span>
-          )}
+          {isEditing ?
+          <input
+            type="text"
+            value={formData.whatsapp}
+            onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+            className="border border-gray-300 rounded px-2 py-1"
+            placeholder={t('client_dashboard.profile.whatsapp_placeholder')} /> :
+
+
+          <span>{displayProfile.whatsapp || displayProfile.phone || t('client_dashboard.profile.phone_not_set')}</span>
+          }
         </div>
       </div>
 
       {/* Progress Bar & Badges */}
       <div className="mb-4 cursor-pointer" onClick={() => navigate('/Clients/dashboard/profile')}>
-        {progress < 100 && (
-          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
-            <p className="text-sm font-bold text-amber-800 flex items-center gap-1">⚡ Complete your profile to unlock all features</p>
-            <p className="text-xs text-amber-600 mt-1">Missing: {missingFields.join(', ')}</p>
+        {progress < 100 &&
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-2">
+            <p className="text-sm font-bold text-amber-800 flex items-center gap-1">{t("_complete_your_profile_to_unlock_all_features_300", "\u26A1 Complete your profile to unlock all features")}</p>
+            <p className="text-xs text-amber-600 mt-1">{t("missing_721", "Missing:")} {missingFields.join(', ')}</p>
           </div>
-        )}
+        }
         <div className="text-sm mb-1 font-medium">{t('client_dashboard.profile.profile_complete', { progress })}</div>
         <div className="w-full bg-gray-200 rounded-full h-2.5 hover:bg-gray-300 transition-colors">
           <div className={`h-2.5 rounded-full transition-all ${progress === 100 ? 'bg-green-600' : 'bg-amber-500'}`} style={{ width: `${progress}%` }}></div>
@@ -227,8 +227,8 @@ function ProfileCard({ profileData, onContact, onRefresh }) {
           {t('client_dashboard.profile.contact_support')}
         </Button>
       </div>
-    </Card>
-  );
+    </Card>);
+
 }
 
 // Recent Orders Component
@@ -243,41 +243,41 @@ function RecentOrders({ orders }) {
       <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.recent_orders.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
-          {safeOrders.length > 0 ? (
-            <div className="space-y-2 overflow-y-auto max-h-[100px]">
+          {safeOrders.length > 0 ?
+          <div className="space-y-2 overflow-y-auto max-h-[100px]">
               {safeOrders.map((order) => {
-                // Format order summary safely
-                // assuming order.items is array, or take one item name if singular
-                const itemName = Array.isArray(order.items) && order.items.length > 0 ? `${order.items[0].name} ${order.items.length > 1 ? `+${order.items.length - 1} more` : ''}` : "Order #" + order.id.slice(0, 5);
+              // Format order summary safely
+              // assuming order.items is array, or take one item name if singular
+              const itemName = Array.isArray(order.items) && order.items.length > 0 ? `${order.items[0].name} ${order.items.length > 1 ? `+${order.items.length - 1} more` : ''}` : "Order #" + order.id.slice(0, 5);
 
-                return (
-                  <div key={order.id} className="flex justify-between items-center text-sm">
+              return (
+                <div key={order.id} className="flex justify-between items-center text-sm">
                     <div className="flex flex-col">
                       <span className="font-medium truncate max-w-[120px]">{itemName}</span>
                       <span className="text-xs text-gray-500">{typeof order.totalAmount === 'number' ? order.totalAmount.toLocaleString() + ' GNF' : order.totalAmount}</span>
                     </div>
-                    <span className={`px-2 py-1 rounded text-xs ${order.status === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                      }`}>
+                    <span className={`px-2 py-1 rounded text-xs ${order.status === 'delivered' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`
+                  }>
                       {order.status || t('client_dashboard.recent_orders.pending')}
                     </span>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-4">
+                  </div>);
+
+            })}
+            </div> :
+
+          <div className="text-center py-4">
               <ShoppingBag className="w-8 h-8 text-gray-300 mx-auto mb-2" />
               <p className="text-gray-500 text-sm">{t('client_dashboard.recent_orders.no_orders')}</p>
-              <p className="text-xs text-gray-400 mt-1">Your recent purchases will appear here.</p>
+              <p className="text-xs text-gray-400 mt-1">{t("your_recent_purchases_will_appear_here_784", "Your recent purchases will appear here.")}</p>
             </div>
-          )}
+          }
           <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
             {t('client_dashboard.recent_orders.view_all')}
           </Button>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>);
+
 }
 
 // Statistics Component
@@ -285,15 +285,15 @@ function Statistics({ stats }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const realStats = [
-    { label: t('client_dashboard.stats.total_spent'), value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp, isEmpty: !stats?.totalSpent, emptyMsg: 'Start shopping to track your spending', cta: 'Discover services', ctaUrl: '/shop' },
-    { label: t('client_dashboard.stats.orders'), value: stats?.totalOrders || 0, icon: ShoppingBag, isEmpty: !stats?.totalOrders, emptyMsg: 'Place your first order to get started', cta: 'Create an order', ctaUrl: '/shop' },
-    { label: t('client_dashboard.stats.freelancers_hired'), value: stats?.freelancersHired || 0, icon: Users, isEmpty: !stats?.freelancersHired, emptyMsg: 'Find skilled professionals for your projects', cta: 'Hire a freelancer', ctaUrl: '/hire-freelancers' }
-  ];
+  { label: t('client_dashboard.stats.total_spent'), value: stats?.totalSpent ? `${stats.totalSpent.toLocaleString()} GNF` : "0 GNF", icon: TrendingUp, isEmpty: !stats?.totalSpent, emptyMsg: 'Start shopping to track your spending', cta: 'Discover services', ctaUrl: '/shop' },
+  { label: t('client_dashboard.stats.orders'), value: stats?.totalOrders || 0, icon: ShoppingBag, isEmpty: !stats?.totalOrders, emptyMsg: 'Place your first order to get started', cta: 'Create an order', ctaUrl: '/shop' },
+  { label: t('client_dashboard.stats.freelancers_hired'), value: stats?.freelancersHired || 0, icon: Users, isEmpty: !stats?.freelancersHired, emptyMsg: 'Find skilled professionals for your projects', cta: 'Hire a freelancer', ctaUrl: '/hire-freelancers' }];
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-      {realStats.map((stat, index) => (
-        <div key={index} className="md:col-span-1">
+      {realStats.map((stat, index) =>
+      <div key={index} className="md:col-span-1">
           <h3 className="text-lg font-semibold mb-2">{stat.label}</h3>
           <Card className="h-[180px] flex flex-col">
             <div className="flex flex-row items-center justify-between p-4">
@@ -302,24 +302,24 @@ function Statistics({ stats }) {
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">{stat.value}</div>
-              {stat.isEmpty ? (
-                <div>
+              {stat.isEmpty ?
+            <div>
                   <p className="text-xs text-gray-400 mt-1">{stat.emptyMsg}</p>
                   <Button className="mt-2 w-fit text-xs" onClick={() => navigate(stat.ctaUrl)}>
                     {stat.cta} →
                   </Button>
-                </div>
-              ) : (
-                <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
+                </div> :
+
+            <Button className="mt-4 w-fit" onClick={() => navigate("/Clients/dashboard/Project-List")}>
                   {t('client_dashboard.stats.view_details')}
                 </Button>
-              )}
+            }
             </CardContent>
           </Card>
         </div>
-      ))}
-    </div>
-  );
+      )}
+    </div>);
+
 }
 
 // Device Tracking Component
@@ -331,32 +331,32 @@ function DeviceTracking({ devices = [] }) {
       <h3 className="text-lg font-semibold mb-2">{t('client_dashboard.device_tracking.title')}</h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
-          {devices.length > 0 ? (
-            <div className="space-y-2 overflow-y-auto max-h-[100px]">
-              {devices.map((device) => (
-                <div key={device.id} className="flex justify-between items-center text-sm">
+          {devices.length > 0 ?
+          <div className="space-y-2 overflow-y-auto max-h-[100px]">
+              {devices.map((device) =>
+            <div key={device.id} className="flex justify-between items-center text-sm">
                   <div className="flex flex-col">
                     <span className="font-medium">{device.name}</span>
                     <span className="text-xs text-gray-500">{device.location}</span>
                   </div>
                   <span className={`px-2 py-1 rounded text-xs ${device.ready ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'}`}>{device.status}</span>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-4">
+            )}
+            </div> :
+
+          <div className="text-center py-4">
               <Monitor className="w-8 h-8 text-gray-300 mx-auto mb-2" />
               <p className="text-gray-500 text-sm">{t('client_dashboard.device_tracking.no_tracking')}</p>
-              <p className="text-xs text-gray-400 mt-1">Track rented or assigned devices in real-time.</p>
+              <p className="text-xs text-gray-400 mt-1">{t("track_rented_or_assigned_devices_in_realtime_74", "Track rented or assigned devices in real-time.")}</p>
             </div>
-          )}
+          }
           <Button className="mt-4 w-fit" onClick={() => navigate('/computer-rental')}>
-            Rent a device →
+            {t("rent_a_device__579", "Rent a device \u2192")}
           </Button>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>);
+
 }
 
 
@@ -365,7 +365,7 @@ function DeviceTracking({ devices = [] }) {
 function Notifications({ notifications = [] }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
   return (
     <div className="md:col-span-1">
       <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
@@ -374,10 +374,10 @@ function Notifications({ notifications = [] }) {
       </h3>
       <Card className="h-[180px] flex flex-col">
         <CardContent className="flex flex-col justify-between flex-grow">
-          {notifications.length > 0 ? (
-            <div className="space-y-2 overflow-y-auto max-h-[100px]">
-              {notifications.map((notification) => (
-                <div key={notification.id} className={`flex items-start gap-2 text-sm ${!notification.read ? 'bg-blue-50 -mx-2 px-2 py-1 rounded' : ''}`}>
+          {notifications.length > 0 ?
+          <div className="space-y-2 overflow-y-auto max-h-[100px]">
+              {notifications.map((notification) =>
+            <div key={notification.id} className={`flex items-start gap-2 text-sm ${!notification.read ? 'bg-blue-50 -mx-2 px-2 py-1 rounded' : ''}`}>
                   <Bell className={`w-4 h-4 mt-0.5 flex-shrink-0 ${!notification.read ? 'text-blue-600' : 'text-gray-400'}`} />
                   <div className="flex-1">
                     <p className="text-gray-800">{notification.message}</p>
@@ -385,22 +385,22 @@ function Notifications({ notifications = [] }) {
                   </div>
                   {!notification.read && <div className="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0" />}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-4">
+            )}
+            </div> :
+
+          <div className="text-center py-4">
               <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-              <p className="text-gray-500 text-sm">You have no notifications at the moment.</p>
-              <p className="text-xs text-gray-400 mt-1">Order updates and alerts will show here.</p>
+              <p className="text-gray-500 text-sm">{t("you_have_no_notifications_at_the_moment_528", "You have no notifications at the moment.")}</p>
+              <p className="text-xs text-gray-400 mt-1">{t("order_updates_and_alerts_will_show_here_472", "Order updates and alerts will show here.")}</p>
             </div>
-          )}
+          }
           <Button className="mt-4 w-fit" onClick={() => navigate('/Clients/dashboard/notifications')}>
             {t('client_dashboard.notifications.view_all')}
           </Button>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function ClientDashbaord() {
@@ -431,10 +431,10 @@ export default function ClientDashbaord() {
     try {
       setLoading(true);
       const [profileData, statsData, notificationsData] = await Promise.all([
-        ClientService.getClientProfile(user.uid),
-        ClientService.getDashboardStats(user.uid),
-        ClientService.getNotifications(user.uid)
-      ]);
+      ClientService.getClientProfile(user.uid),
+      ClientService.getDashboardStats(user.uid),
+      ClientService.getNotifications(user.uid)]
+      );
       setProfile(profileData);
       setStats({ ...statsData, notifications: notificationsData });
     } catch (err) {
@@ -451,7 +451,7 @@ export default function ClientDashbaord() {
   }, [user, authResolved]);
 
   if (loading && !stats) {
-    return <div className="min-h-screen flex items-center justify-center">Loading dashboard...</div>;
+    return <div className="min-h-screen flex items-center justify-center">{t("loading_dashboard_249", "Loading dashboard...")}</div>;
   }
 
   return (
@@ -476,8 +476,8 @@ export default function ClientDashbaord() {
         <ProfileCard
           profileData={profile}
           onContact={() => setShowChatWidget(true)}
-          onRefresh={fetchDashboardData}
-        />
+          onRefresh={fetchDashboardData} />
+        
 
         {/* Statistics */}
         <Statistics stats={stats} />
@@ -532,8 +532,8 @@ export default function ClientDashbaord() {
                   <Button
                     variant="ghost"
                     className="w-full"
-                    onClick={() => setShowChatWidget(true)}
-                  >
+                    onClick={() => setShowChatWidget(true)}>
+                    
                     {t('client_dashboard.messages.start_chat')}
                   </Button>
                 </div>
@@ -545,6 +545,6 @@ export default function ClientDashbaord() {
 
       {/* LiveChatWidget */}
       {showChatWidget && <LiveChatWidget forceOpen={true} />}
-    </div>
-  );
+    </div>);
+
 }

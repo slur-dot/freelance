@@ -1,45 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Clock, CheckCircle, AlertCircle, MessageSquare, FileText } from 'lucide-react';
+import { TicketService } from '../../services/ticketService';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function SupportTickets() {
-  const [tickets, setTickets] = useState([
-    {
-      id: 1,
-      title: "Login Issues",
-      description: "Unable to log into my account",
-      status: "open",
-      priority: "high",
-      category: "Technical",
-      createdAt: "2024-01-15",
-      updatedAt: "2024-01-15",
-      messages: 3,
-      assignee: "Sarah M."
-    },
-    {
-      id: 2,
-      title: "Payment Problem",
-      description: "Payment not processed for my order",
-      status: "in_progress",
-      priority: "medium",
-      category: "Billing",
-      createdAt: "2024-01-14",
-      updatedAt: "2024-01-16",
-      messages: 5,
-      assignee: "John D."
-    },
-    {
-      id: 3,
-      title: "Feature Request",
-      description: "Would like to add dark mode to the platform",
-      status: "closed",
-      priority: "low",
-      category: "Feature",
-      createdAt: "2024-01-10",
-      updatedAt: "2024-01-12",
-      messages: 2,
-      assignee: "Sarah M."
-    }
-  ]);
+  const { currentUser } = useAuth();
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      if (!currentUser) return;
+      try {
+        const userTickets = await TicketService.getUserTickets(currentUser.uid);
+        setTickets(userTickets);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTickets();
+  }, [currentUser]);
 
   const [showNewTicket, setShowNewTicket] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,8 +36,10 @@ export default function SupportTickets() {
   });
 
   const filteredTickets = tickets.filter(ticket => {
-    const matchesSearch = ticket.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ticket.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const title = ticket.title || ticket.subject || '';
+    const description = ticket.description || '';
+    const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || ticket.status === filterStatus;
     const matchesPriority = filterPriority === 'all' || ticket.priority === filterPriority;
     
@@ -80,25 +64,28 @@ export default function SupportTickets() {
     }
   };
 
-  const handleCreateTicket = () => {
+  const handleCreateTicket = async () => {
     if (!newTicket.title || !newTicket.description || !newTicket.category) {
       alert('Please fill in all required fields');
       return;
     }
 
-    const ticket = {
-      id: tickets.length + 1,
-      ...newTicket,
-      status: 'open',
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0],
-      messages: 1,
-      assignee: 'Unassigned'
-    };
-
-    setTickets(prev => [ticket, ...prev]);
-    setNewTicket({ title: '', description: '', category: '', priority: 'medium' });
-    setShowNewTicket(false);
+    try {
+      const ticketData = {
+        subject: newTicket.title,
+        description: newTicket.description,
+        category: newTicket.category,
+        priority: newTicket.priority
+      };
+      
+      const createdTicket = await TicketService.createTicket(currentUser.uid, ticketData);
+      setTickets(prev => [createdTicket, ...prev]);
+      setNewTicket({ title: '', description: '', category: '', priority: 'medium' });
+      setShowNewTicket(false);
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      alert("Failed to create ticket.");
+    }
   };
 
   return (

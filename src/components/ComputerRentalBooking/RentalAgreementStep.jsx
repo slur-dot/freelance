@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useTranslation } from "react-i18next";import React, { useState } from 'react';
 import { FileText, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function RentalAgreementStep({ onContinue, formData }) {
@@ -8,7 +8,7 @@ export default function RentalAgreementStep({ onContinue, formData }) {
   });
 
   const handleAgreementChange = (field, value) => {
-    setAgreement(prev => ({
+    setAgreement((prev) => ({
       ...prev,
       [field]: value
     }));
@@ -19,10 +19,10 @@ export default function RentalAgreementStep({ onContinue, formData }) {
       ...formData,
       agreement
     };
-    
+
     console.log("Rental Agreement Completed:");
     console.log("All Data:", enhancedData);
-    
+
     onContinue(enhancedData);
   };
 
@@ -32,29 +32,29 @@ export default function RentalAgreementStep({ onContinue, formData }) {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Rental Agreement</h1>
-          <p className="text-gray-600">Please review and accept the rental terms and conditions</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t("rental_agreement_257", "Rental Agreement")}</h1>
+          <p className="text-gray-600">{t("please_review_and_accept_the_rental_terms_and_cond_21", "Please review and accept the rental terms and conditions")}</p>
         </div>
 
         {/* Step Indicator */}
         <div className="overflow-x-auto pb-4 mb-4">
           <div className="flex items-center justify-center min-w-max px-4">
-            {[1, 2, 3, 4, 5, 6, 7].map((step) => (
-              <div key={step} className="flex items-center">
+            {[1, 2, 3, 4, 5, 6, 7].map((step) =>
+            <div key={step} className="flex items-center">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  step <= 7 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-200 text-gray-600'
-                }`}>
+              step <= 7 ?
+              'bg-blue-600 text-white' :
+              'bg-gray-200 text-gray-600'}`
+              }>
                   {step}
                 </div>
-                {step < 7 && (
-                  <div className={`w-8 sm:w-16 h-1 mx-1 sm:mx-2 ${
-                    step < 7 ? 'bg-blue-600' : 'bg-gray-200'
-                  }`} />
-                )}
+                {step < 7 &&
+              <div className={`w-8 sm:w-16 h-1 mx-1 sm:mx-2 ${
+              step < 7 ? 'bg-blue-600' : 'bg-gray-200'}`
+              } />
+              }
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -63,24 +63,24 @@ export default function RentalAgreementStep({ onContinue, formData }) {
           <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-6">
               <FileText className="h-6 w-6 text-blue-600" />
-              <h2 className="text-xl sm:text-2xl font-bold">Rental Terms</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">{t("rental_terms_184", "Rental Terms")}</h2>
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <h3 className="font-semibold mb-3">Rental Terms & Conditions</h3>
+              <h3 className="font-semibold mb-3">{t("rental_terms_conditions_376", "Rental Terms & Conditions")}</h3>
               <div className="text-xs space-y-2 text-gray-700 max-h-[200px] overflow-y-auto pr-2">
-                <p>• Rental period: Based on your selection</p>
-                <p>• Device: {formData.deviceData?.deviceType || 'Selected device'}</p>
-                <p>• Security deposit: 50,000 GNF per device</p>
-                <p>• Late return fee: 10,000 GNF per day</p>
-                <p>• Damage policy: Customer responsible for repair costs</p>
-                <p>• ID verification required for all rentals</p>
-                <p>• Agreement valid for selected rental period only</p>
-                <p>• Device must be returned in same condition as received</p>
-                <p>• Any modifications to device are prohibited</p>
-                <p>• Customer is responsible for data backup before return</p>
-                <p>• Rental can be extended with prior notice and payment</p>
-                <p>• Early termination may incur additional fees</p>
+                <p>{t("_rental_period_based_on_your_selection_159", "\u2022 Rental period: Based on your selection")}</p>
+                <p>{t("_device_99", "\u2022 Device:")} {formData.deviceData?.deviceType || 'Selected device'}</p>
+                <p>{t("_security_deposit_50000_gnf_per_device_821", "\u2022 Security deposit: 50,000 GNF per device")}</p>
+                <p>{t("_late_return_fee_10000_gnf_per_day_218", "\u2022 Late return fee: 10,000 GNF per day")}</p>
+                <p>{t("_damage_policy_customer_responsible_for_repair_c_436", "\u2022 Damage policy: Customer responsible for repair costs")}</p>
+                <p>{t("_id_verification_required_for_all_rentals_118", "\u2022 ID verification required for all rentals")}</p>
+                <p>{t("_agreement_valid_for_selected_rental_period_only_786", "\u2022 Agreement valid for selected rental period only")}</p>
+                <p>{t("_device_must_be_returned_in_same_condition_as_rec_72", "\u2022 Device must be returned in same condition as received")}</p>
+                <p>{t("_any_modifications_to_device_are_prohibited_280", "\u2022 Any modifications to device are prohibited")}</p>
+                <p>{t("_customer_is_responsible_for_data_backup_before_r_761", "\u2022 Customer is responsible for data backup before return")}</p>
+                <p>{t("_rental_can_be_extended_with_prior_notice_and_pay_254", "\u2022 Rental can be extended with prior notice and payment")}</p>
+                <p>{t("_early_termination_may_incur_additional_fees_424", "\u2022 Early termination may incur additional fees")}</p>
               </div>
             </div>
 
@@ -90,10 +90,10 @@ export default function RentalAgreementStep({ onContinue, formData }) {
                   type="checkbox"
                   checked={agreement.agreementAccepted}
                   onChange={(e) => handleAgreementChange('agreementAccepted', e.target.checked)}
-                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                
                 <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
-                  I agree to the rental terms and conditions and understand my responsibilities as a renter.
+                  {t("i_agree_to_the_rental_terms_and_conditions_and_und_89", "I agree to the rental terms and conditions and understand my responsibilities as a renter.")}
                 </span>
               </label>
 
@@ -102,10 +102,10 @@ export default function RentalAgreementStep({ onContinue, formData }) {
                   type="checkbox"
                   checked={agreement.termsAccepted}
                   onChange={(e) => handleAgreementChange('termsAccepted', e.target.checked)}
-                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
+                  className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                
                 <span className="text-xs sm:text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
-                  I consent to the processing of my personal data for rental purposes and ID verification.
+                  {t("i_consent_to_the_processing_of_my_personal_data_fo_543", "I consent to the processing of my personal data for rental purposes and ID verification.")}
                 </span>
               </label>
             </div>
@@ -115,49 +115,49 @@ export default function RentalAgreementStep({ onContinue, formData }) {
           <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6">
             <div className="flex items-center gap-3 mb-6">
               <CheckCircle className="h-6 w-6 text-green-600" />
-              <h2 className="text-xl sm:text-2xl font-bold">Booking Summary</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">{t("booking_summary_304", "Booking Summary")}</h2>
             </div>
 
             <div className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3 text-blue-800">Rental Details</h3>
+                <h3 className="font-semibold mb-3 text-blue-800">{t("rental_details_64", "Rental Details")}</h3>
                 <div className="space-y-2 text-xs sm:text-sm">
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Organization:</span>
+                    <span className="text-gray-600">{t("organization_527", "Organization:")}</span>
                     <span className="font-medium text-right truncate max-w-[150px]">{formData.organizationData?.companyName || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Device:</span>
+                    <span className="text-gray-600">{t("device_985", "Device:")}</span>
                     <span className="font-medium">{formData.deviceData?.deviceType || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Delivery:</span>
+                    <span className="text-gray-600">{t("delivery_461", "Delivery:")}</span>
                     <span className="font-medium">{formData.deliveryData?.deliveryMethod || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Add-ons:</span>
+                    <span className="text-gray-600">{t("addons_660", "Add-ons:")}</span>
                     <span className="font-medium">{formData.addonsData?.length || 0} selected</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Payment:</span>
+                    <span className="text-gray-600">{t("payment_709", "Payment:")}</span>
                     <span className="font-medium">{formData.paymentData?.paymentMethod || 'N/A'}</span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-green-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3 text-green-800">ID Verification</h3>
+                <h3 className="font-semibold mb-3 text-green-800">{t("id_verification_344", "ID Verification")}</h3>
                 <div className="space-y-2 text-xs sm:text-sm">
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">ID Type:</span>
+                    <span className="text-gray-600">{t("id_type_507", "ID Type:")}</span>
                     <span className="font-medium">{formData.idVerification?.idType || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">ID Number:</span>
+                    <span className="text-gray-600">{t("id_number_174", "ID Number:")}</span>
                     <span className="font-medium truncate max-w-[150px] text-right">{formData.idVerification?.idNumber || 'N/A'}</span>
                   </div>
                   <div className="flex justify-between gap-2">
-                    <span className="text-gray-600">Document:</span>
+                    <span className="text-gray-600">{t("document_76", "Document:")}</span>
                     <span className="font-medium text-green-700">{formData.idVerification?.idImage ? 'Uploaded' : 'Not uploaded'}</span>
                   </div>
                 </div>
@@ -167,9 +167,9 @@ export default function RentalAgreementStep({ onContinue, formData }) {
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-yellow-800 text-sm">Important Notice</h4>
+                    <h4 className="font-semibold text-yellow-800 text-sm">{t("important_notice_72", "Important Notice")}</h4>
                     <p className="text-xs text-yellow-700 mt-1">
-                      Confirmed once payment is processed and ID is verified.
+                      {t("confirmed_once_payment_is_processed_and_id_is_veri_853", "Confirmed once payment is processed and ID is verified.")}
                     </p>
                   </div>
                 </div>
@@ -182,20 +182,20 @@ export default function RentalAgreementStep({ onContinue, formData }) {
         <div className="flex flex-col sm:flex-row justify-between gap-4 mt-8">
           <button
             onClick={() => window.history.back()}
-            className="w-full sm:w-auto bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 order-2 sm:order-1"
-          >
-            Previous
+            className="w-full sm:w-auto bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 order-2 sm:order-1">
+            {t("previous_472", "Previous")}
+          
           </button>
           <button
             onClick={handleContinue}
             disabled={!isFormValid}
-            className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2"
-          >
+            className="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2">
+            
             <CheckCircle className="h-5 w-5" />
-            Complete Booking
+            {t("complete_booking_329", "Complete Booking")}
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

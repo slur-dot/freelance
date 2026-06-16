@@ -53,7 +53,7 @@ export default function ReferralSystem() {
         await navigator.share({
           title: 'Join Freelance2414',
           text: 'Use my invite link to join Freelance2414 and start earning!',
-          url: data.referralLink,
+          url: data.referralLink
         });
       } catch (err) {
         console.error("Error sharing:", err);
@@ -67,8 +67,8 @@ export default function ReferralSystem() {
     return (
       <div className="p-6 flex justify-center items-center h-64">
         <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-green-600"></div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (error) {
@@ -80,8 +80,8 @@ export default function ReferralSystem() {
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-5xl mx-auto space-y-6">
       <header className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Referral Program</h1>
-        <p className="text-gray-600 mt-1">Invite friends and earn rewards when they complete their first project.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t("referral_program_792", "Referral Program")}</h1>
+        <p className="text-gray-600 mt-1">{t("invite_friends_and_earn_rewards_when_they_complete_164", "Invite friends and earn rewards when they complete their first project.")}</p>
       </header>
 
       {/* Main Stats Cards */}
@@ -93,32 +93,32 @@ export default function ReferralSystem() {
               <Share2 className="w-6 h-6 text-green-600" />
             </div>
             <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-              Earn 50,000 GNF
+              {t("earn_50000_gnf_162", "Earn 50,000 GNF")}
             </span>
           </div>
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Your Invite Link</h2>
-          <p className="text-sm text-gray-600 mb-6">Share this unique link to get credit for new users who sign up and complete a project.</p>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">{t("your_invite_link_41", "Your Invite Link")}</h2>
+          <p className="text-sm text-gray-600 mb-6">{t("share_this_unique_link_to_get_credit_for_new_users_415", "Share this unique link to get credit for new users who sign up and complete a project.")}</p>
           
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <input 
-                type="text" 
-                readOnly 
-                value={data.referralLink} 
-                className="w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-3 px-4 outline-none focus:border-green-400 font-mono text-sm"
-              />
+              <input
+                type="text"
+                readOnly
+                value={data.referralLink}
+                className="w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-3 px-4 outline-none focus:border-green-400 font-mono text-sm" />
+              
             </div>
-            <button 
+            <button
               onClick={handleCopy}
-              className={`px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors ${copied ? 'bg-green-500 text-white' : 'bg-gray-800 hover:bg-gray-700 text-white'}`}
-            >
+              className={`px-6 py-3 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors ${copied ? 'bg-green-500 text-white' : 'bg-gray-800 hover:bg-gray-700 text-white'}`}>
+              
               {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? 'Copied!' : 'Copy'}
             </button>
-            <button 
+            <button
               onClick={handleShare}
-              className="px-4 py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-xl font-medium flex items-center justify-center sm:hidden"
-            >
+              className="px-4 py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-xl font-medium flex items-center justify-center sm:hidden">
+              
               <Share2 className="w-4 h-4" />
             </button>
           </div>
@@ -131,40 +131,40 @@ export default function ReferralSystem() {
               <Users className="w-6 h-6" />
             </div>
             <span className="text-3xl font-bold text-gray-800">{data.totalReferrals}</span>
-            <span className="text-sm text-gray-500 font-medium">Friends Invited</span>
+            <span className="text-sm text-gray-500 font-medium">{t("friends_invited_297", "Friends Invited")}</span>
           </div>
           <div className="bg-white border text-center border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center">
             <div className="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center mb-3">
               <Gift className="w-6 h-6" />
             </div>
             <span className="text-3xl font-bold text-green-600">{data.totalEarned.toLocaleString()}</span>
-            <span className="text-sm text-gray-500 font-medium">Earned ({data.currency})</span>
+            <span className="text-sm text-gray-500 font-medium">{t("earned__377", "Earned (")}{data.currency})</span>
           </div>
         </div>
       </div>
 
       {/* How it works */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-        <h3 className="text-lg font-bold text-gray-800 mb-6">How it works</h3>
+        <h3 className="text-lg font-bold text-gray-800 mb-6">{t("how_it_works_942", "How it works")}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
           <div className="hidden md:block absolute top-6 left-[16%] right-[16%] h-0.5 bg-gray-100 z-0"></div>
           
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-gray-50 border-2 border-white shadow-sm text-gray-600 rounded-full flex items-center justify-center text-lg font-bold mb-3">1</div>
-            <h4 className="font-semibold text-gray-800 mb-1">Send Invitation</h4>
-            <p className="text-sm text-gray-500 max-w-xs">Send your referral link to friends, colleagues, or clients.</p>
+            <h4 className="font-semibold text-gray-800 mb-1">{t("send_invitation_458", "Send Invitation")}</h4>
+            <p className="text-sm text-gray-500 max-w-xs">{t("send_your_referral_link_to_friends_colleagues_or_435", "Send your referral link to friends, colleagues, or clients.")}</p>
           </div>
           
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-gray-50 border-2 border-white shadow-sm text-gray-600 rounded-full flex items-center justify-center text-lg font-bold mb-3">2</div>
-            <h4 className="font-semibold text-gray-800 mb-1">Registration</h4>
-            <p className="text-sm text-gray-500 max-w-xs">Your friend creates a verified account using your unique link.</p>
+            <h4 className="font-semibold text-gray-800 mb-1">{t("registration_844", "Registration")}</h4>
+            <p className="text-sm text-gray-500 max-w-xs">{t("your_friend_creates_a_verified_account_using_your__863", "Your friend creates a verified account using your unique link.")}</p>
           </div>
           
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="w-12 h-12 bg-green-50 border-2 border-white shadow-sm text-green-600 rounded-full flex items-center justify-center text-lg font-bold mb-3">3</div>
-            <h4 className="font-semibold text-gray-800 mb-1">Get Rewarded</h4>
-            <p className="text-sm text-gray-500 max-w-xs">Once they complete their first gig or purchase, you both get a bonus.</p>
+            <h4 className="font-semibold text-gray-800 mb-1">{t("get_rewarded_198", "Get Rewarded")}</h4>
+            <p className="text-sm text-gray-500 max-w-xs">{t("once_they_complete_their_first_gig_or_purchase_yo_15", "Once they complete their first gig or purchase, you both get a bonus.")}</p>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function ReferralSystem() {
         <div className="p-6 border-b border-gray-100 flex items-center justify-between">
           <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-gray-400" />
-            Referral History
+            {t("referral_history_213", "Referral History")}
           </h3>
         </div>
         
@@ -182,45 +182,45 @@ export default function ReferralSystem() {
           <table className="min-w-full text-left text-sm text-gray-600">
             <thead className="bg-gray-50 text-gray-500 font-medium">
               <tr>
-                <th className="px-6 py-4">User</th>
-                <th className="px-6 py-4">Date Joined</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Reward</th>
+                <th className="px-6 py-4">{t("user_641", "User")}</th>
+                <th className="px-6 py-4">{t("date_joined_59", "Date Joined")}</th>
+                <th className="px-6 py-4">{t("status_936", "Status")}</th>
+                <th className="px-6 py-4 text-right">{t("reward_29", "Reward")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {data.history.length === 0 ? (
-                <tr>
+              {data.history.length === 0 ?
+              <tr>
                   <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
-                    No referrals yet. Share your link to get started!
+                    {t("no_referrals_yet_share_your_link_to_get_started_782", "No referrals yet. Share your link to get started!")}
                   </td>
-                </tr>
-              ) : (
-                data.history.map((item) => (
-                  <tr key={item.id} className="hover:bg-gray-50/50">
+                </tr> :
+
+              data.history.map((item) =>
+              <tr key={item.id} className="hover:bg-gray-50/50">
                     <td className="px-6 py-4 font-medium text-gray-900">{item.user}</td>
                     <td className="px-6 py-4">{new Date(item.date).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      {item.status === 'completed' ? (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          Completed
+                      {item.status === 'completed' ?
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                          {t("completed_357", "Completed")}
+                        </span> :
+
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                          {t("pending_442", "Pending")}
                         </span>
-                      ) : (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                          Pending
-                        </span>
-                      )}
+                  }
                     </td>
                     <td className="px-6 py-4 text-right font-semibold text-gray-900">
                       {item.status === 'completed' ? `+${item.reward.toLocaleString()} ${data.currency}` : '-'}
                     </td>
                   </tr>
-                ))
-              )}
+              )
+              }
             </tbody>
           </table>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

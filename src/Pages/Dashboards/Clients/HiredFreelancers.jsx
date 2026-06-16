@@ -7,29 +7,29 @@ import { auth } from "../../../firebaseConfig";
 // Reusable components
 function RCButton({ children, variant = "default", size = "md", className = "", ...props }) {
   const base =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50"
-      : "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50" :
+  "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
 
   const sizeCls =
-    size === "icon"
-      ? "p-2 h-8 w-8 flex items-center justify-center rounded-md"
-      : "px-4 py-2 rounded-md text-sm font-medium";
+  size === "icon" ?
+  "p-2 h-8 w-8 flex items-center justify-center rounded-md" :
+  "px-4 py-2 rounded-md text-sm font-medium";
 
   return (
     <button className={`${base} ${sizeCls} ${className}`} {...props}>
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 function RCInput({ className = "", ...props }) {
   return (
     <input
       className={`pl-9 pr-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:border-gray-400 text-sm w-full ${className}`}
-      {...props}
-    />
-  );
+      {...props} />);
+
+
 }
 
 function RCCard({ children, className = "" }) {
@@ -104,13 +104,13 @@ export default function HiredFreelancers() {
 
       // Save to Firestore
       const savedFreelancer = await ClientService.addHiredFreelancer(user.uid, newFreelancer);
-      
+
       setFreelancers((prev) => [savedFreelancer, ...prev]);
       setHireForm({ name: "", project: "", status: "In progress", completionDate: "", amount: "" });
       closeHire();
     } catch (error) {
       console.error("Error hiring freelancer:", error);
-      alert("Failed to hire freelancer. Please try again.");
+      alert(t("failed_to_hire_freelancer_please_try_again_87", "Failed to hire freelancer. Please try again."));
     }
   };
 
@@ -148,49 +148,49 @@ export default function HiredFreelancers() {
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
-              {freelancers.map((freelancer) => (
-                <RCTableRow key={freelancer.id}>
+              {freelancers.map((freelancer) =>
+              <RCTableRow key={freelancer.id}>
                   <RCTableCell className="font-medium">{freelancer.name}</RCTableCell>
                   <RCTableCell>{freelancer.project}</RCTableCell>
                   <RCTableCell>
                     <div
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                        }`}
-                    >
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid" ?
+                    "bg-green-100 text-green-800" :
+                    "bg-yellow-100 text-yellow-800"}`
+                    }>
+                    
                       <span
-                        className={`h-2 w-2 rounded-full ${freelancer.status === "Paid" ? "bg-green-500" : "bg-yellow-500"
-                          }`}
-                      />
+                      className={`h-2 w-2 rounded-full ${freelancer.status === "Paid" ? "bg-green-500" : "bg-yellow-500"}`
+                      } />
+                    
                       {freelancer.status}
                     </div>
                   </RCTableCell>
                   <RCTableCell>{freelancer.completionDate}</RCTableCell>
                   <RCTableCell>{freelancer.amount}</RCTableCell>
                 </RCTableRow>
-              ))}
+              )}
             </RCTableBody>
           </RCTable>
         </div>
 
         {/* Mobile Cards */}
         <div className="md:hidden space-y-4">
-          {freelancers.map((freelancer) => (
-            <div key={freelancer.id} className="border rounded-lg p-4 shadow-sm bg-white">
+          {freelancers.map((freelancer) =>
+          <div key={freelancer.id} className="border rounded-lg p-4 shadow-sm bg-white">
               <div className="font-medium text-gray-900">{freelancer.name}</div>
               <div className="text-gray-600 text-sm">{freelancer.project}</div>
               <div className="mt-2 flex items-center justify-between">
                 <span
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-yellow-100 text-yellow-800"
-                    }`}
-                >
+                className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${freelancer.status === "Paid" ?
+                "bg-green-100 text-green-800" :
+                "bg-yellow-100 text-yellow-800"}`
+                }>
+                
                   <span
-                    className={`h-2 w-2 rounded-full ${freelancer.status === "Paid" ? "bg-green-500" : "bg-yellow-500"
-                      }`}
-                  />
+                  className={`h-2 w-2 rounded-full ${freelancer.status === "Paid" ? "bg-green-500" : "bg-yellow-500"}`
+                  } />
+                
                   {freelancer.status}
                 </span>
                 <span className="text-sm text-gray-500">{freelancer.amount}</span>
@@ -199,7 +199,7 @@ export default function HiredFreelancers() {
                 {t('client_dashboard.hired_freelancers.table.completion_date')}: {freelancer.completionDate}
               </div>
             </div>
-          ))}
+          )}
         </div>
 
         {/* Pagination */}
@@ -210,8 +210,8 @@ export default function HiredFreelancers() {
         </div>
       </RCCard>
 
-      {showHireModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      {showHireModal &&
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
             <div className="p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold">{t('client_dashboard.hired_freelancers.modal.title')}</h3>
@@ -220,55 +220,55 @@ export default function HiredFreelancers() {
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.name_label')}</label>
                 <input
-                  value={hireForm.name}
-                  onChange={(e) => setHireForm({ ...hireForm, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder={t('client_dashboard.hired_freelancers.modal.name_placeholder')}
-                  required
-                />
+                value={hireForm.name}
+                onChange={(e) => setHireForm({ ...hireForm, name: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder={t('client_dashboard.hired_freelancers.modal.name_placeholder')}
+                required />
+              
               </div>
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.project_label')}</label>
                 <input
-                  value={hireForm.project}
-                  onChange={(e) => setHireForm({ ...hireForm, project: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  placeholder={t('client_dashboard.hired_freelancers.modal.project_placeholder')}
-                  required
-                />
+                value={hireForm.project}
+                onChange={(e) => setHireForm({ ...hireForm, project: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder={t('client_dashboard.hired_freelancers.modal.project_placeholder')}
+                required />
+              
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.status_label')}</label>
                   <select
-                    value={hireForm.status}
-                    onChange={(e) => setHireForm({ ...hireForm, status: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  >
-                    <option>In progress</option>
-                    <option>Paid</option>
+                  value={hireForm.status}
+                  onChange={(e) => setHireForm({ ...hireForm, status: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                  
+                    <option>{t("in_progress_245", "In progress")}</option>
+                    <option>{t("paid_397", "Paid")}</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.completion_label')}</label>
                   <input
-                    type="text"
-                    value={hireForm.completionDate}
-                    onChange={(e) => setHireForm({ ...hireForm, completionDate: e.target.value })}
-                    placeholder={t('client_dashboard.hired_freelancers.modal.completion_placeholder')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="text"
+                  value={hireForm.completionDate}
+                  onChange={(e) => setHireForm({ ...hireForm, completionDate: e.target.value })}
+                  placeholder={t('client_dashboard.hired_freelancers.modal.completion_placeholder')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
               </div>
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('client_dashboard.hired_freelancers.modal.amount_label')}</label>
                 <input
-                  type="text"
-                  value={hireForm.amount}
-                  onChange={(e) => setHireForm({ ...hireForm, amount: e.target.value })}
-                  placeholder={t('client_dashboard.hired_freelancers.modal.amount_placeholder')}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
+                type="text"
+                value={hireForm.amount}
+                onChange={(e) => setHireForm({ ...hireForm, amount: e.target.value })}
+                placeholder={t('client_dashboard.hired_freelancers.modal.amount_placeholder')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              
               </div>
               <div className="flex gap-2 pt-2">
                 <button type="submit" className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">{t('client_dashboard.hired_freelancers.modal.hire_btn')}</button>
@@ -278,7 +278,7 @@ export default function HiredFreelancers() {
             </form>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

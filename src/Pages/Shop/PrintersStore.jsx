@@ -3,38 +3,7 @@ import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useNavigate } from 'react-router-dom';
 
-const mockPrinters = [
-  {
-    id: 'pr-1',
-    name: 'HP LaserJet Pro MFP M428fdw',
-    brand: 'HP',
-    condition: 'Brand New',
-    price: 3500000,
-    vendor: 'Tech Solutions Hub',
-    image: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500&q=80',
-    description: 'Wireless monochrome laser printer with scanner and copier.'
-  },
-  {
-    id: 'pr-2',
-    name: 'Epson EcoTank L3250',
-    brand: 'Epson',
-    condition: 'Brand New',
-    price: 2800000,
-    vendor: 'GadgetZone Guinea',
-    image: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500&q=80',
-    description: 'Color ink tank printer with Wi-Fi.'
-  },
-  {
-    id: 'pr-3',
-    name: 'Canon PIXMA G3010',
-    brand: 'Canon',
-    condition: 'Used',
-    price: 1500000,
-    vendor: 'Vendor Alpha',
-    image: 'https://images.unsplash.com/photo-1612815154858-60aa4c59eaa6?w=500&q=80',
-    description: 'All-in-one wireless ink tank color printer.'
-  }
-];
+const mockPrinters = [];
 
 export default function PrintersStore() {
   const { addToCart } = useCart();

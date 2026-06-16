@@ -37,9 +37,9 @@ export default function Earnings() {
         setLoading(true);
         // Parallel fetch: profile (stats) + earnings history
         const [profile, history] = await Promise.all([
-          UserService.getUserProfile(FREELANCER_ID),
-          FreelancerService.getEarningsHistory(FREELANCER_ID)
-        ]);
+        UserService.getUserProfile(FREELANCER_ID),
+        FreelancerService.getEarningsHistory(FREELANCER_ID)]
+        );
 
         if (isMounted) {
           // Fallback if profile fields are missing
@@ -66,7 +66,7 @@ export default function Earnings() {
       }
     }
     fetchFinance();
-    return () => { isMounted = false; };
+    return () => {isMounted = false;};
   }, [FREELANCER_ID]);
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8 lg:p-10">
@@ -87,7 +87,7 @@ export default function Earnings() {
               <div className="pb-2">
                 <p className="text-sm sm:text-base">{t('earnings_page.available_funds.balance_desc')}</p>
                 <h3 className="text-2xl sm:text-4xl font-bold break-words">
-                  {finance.netEarnings?.toLocaleString()} GNF
+                  {finance.netEarnings?.toLocaleString()} {t("gnf_363", "GNF")}
                 </h3>
               </div>
               <button className="mt-auto w-full border border-gray-200 text-gray-600 hover:bg-gray-100 bg-transparent rounded-md py-2 text-sm sm:text-base">
@@ -124,7 +124,7 @@ export default function Earnings() {
             </h2>
             <div className="bg-white p-4 rounded-lg shadow-sm h-full flex flex-col">
               <span className="text-sm sm:text-base">{t('earnings_page.earnings_expenses.gross_desc')}</span>
-              <h3 className="text-2xl sm:text-4xl font-bold break-words">{finance.totalEarned?.toLocaleString()} GNF</h3>
+              <h3 className="text-2xl sm:text-4xl font-bold break-words">{finance.totalEarned?.toLocaleString()} {t("gnf_453", "GNF")}</h3>
               <div className="space-y-2 mt-2 text-sm text-gray-600">
                 <div className="pb-2 border-b border-gray-200">
                   <p className="text-xs text-gray-500">
@@ -134,12 +134,12 @@ export default function Earnings() {
                 <div className="flex items-center justify-between mt-2">
                   <span>{t('earnings_page.earnings_expenses.commission')} ({Math.round((finance.commissionRate || 0) * 100)}%)</span>
                   <span>
-                    {(Math.round((finance.totalEarned || 0) * (finance.commissionRate || 0))).toLocaleString()} GNF
+                    {Math.round((finance.totalEarned || 0) * (finance.commissionRate || 0)).toLocaleString()} {t("gnf_283", "GNF")}
                   </span>
                 </div>
                 <div className="flex items-center justify-between mt-1">
                   <span>{t('earnings_page.earnings_expenses.net_earnings')}</span>
-                  <span>{finance.netEarnings?.toLocaleString()} GNF</span>
+                  <span>{finance.netEarnings?.toLocaleString()} {t("gnf_938", "GNF")}</span>
                 </div>
               </div>
             </div>
@@ -155,25 +155,25 @@ export default function Earnings() {
               {(() => {
                 const cats = finance.earningsByCategory || {};
                 const series = [
-                  { key: 'it', label: 'IT', value: cats.it || 0 },
-                  { key: 'web', label: 'Web', value: cats.web || 0 },
-                  { key: 'design', label: 'Design', value: cats.design || 0 },
-                  { key: 'marketing', label: 'Marketing', value: cats.marketing || 0 },
-                  { key: 'facebookAds', label: 'Facebook Ads', value: cats.facebookAds || 0 },
-                ];
-                const max = Math.max(1, ...series.map(s => s.value));
-                return series.map((s) => (
-                  <div key={s.key} className="flex-1 flex flex-col items-center justify-end">
+                { key: 'it', label: 'IT', value: cats.it || 0 },
+                { key: 'web', label: 'Web', value: cats.web || 0 },
+                { key: 'design', label: 'Design', value: cats.design || 0 },
+                { key: 'marketing', label: 'Marketing', value: cats.marketing || 0 },
+                { key: 'facebookAds', label: 'Facebook Ads', value: cats.facebookAds || 0 }];
+
+                const max = Math.max(1, ...series.map((s) => s.value));
+                return series.map((s) =>
+                <div key={s.key} className="flex-1 flex flex-col items-center justify-end">
                     <div
-                      className="w-full bg-green-600/30 rounded"
-                      style={{ height: `${Math.round((s.value / max) * 100)}%` }}
-                    />
+                    className="w-full bg-green-600/30 rounded"
+                    style={{ height: `${Math.round(s.value / max * 100)}%` }} />
+                  
                     <div className="text-xs text-gray-600 mt-2 text-center">
                       <div className="font-medium">{s.label}</div>
-                      <div>{s.value.toLocaleString()} GNF</div>
+                      <div>{s.value.toLocaleString()} {t("gnf_915", "GNF")}</div>
                     </div>
                   </div>
-                ));
+                );
               })()}
             </div>
           </div>
@@ -181,16 +181,16 @@ export default function Earnings() {
           {/* Milestone Tracker */}
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <h2 className="text-base sm:text-lg font-bold mb-2 text-black">{t('earnings_page.milestone.title')}</h2>
-            <p className="text-sm text-gray-600 mb-3">{t('earnings_page.milestone.next')}: {finance.nextMilestone?.toLocaleString()} GNF</p>
+            <p className="text-sm text-gray-600 mb-3">{t('earnings_page.milestone.next')}: {finance.nextMilestone?.toLocaleString()} {t("gnf_367", "GNF")}</p>
             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full bg-green-600"
-                style={{ width: `${Math.min(100, Math.round(((finance.netEarnings || 0) / (finance.nextMilestone || 3000000)) * 100))}%` }}
-              />
+                style={{ width: `${Math.min(100, Math.round((finance.netEarnings || 0) / (finance.nextMilestone || 3000000) * 100))}%` }} />
+              
             </div>
             <div className="mt-2 text-xs text-gray-600 flex items-center justify-between">
-              <span>{finance.netEarnings?.toLocaleString()} GNF</span>
-              <span>{Math.min(100, Math.round(((finance.netEarnings || 0) / (finance.nextMilestone || 3000000)) * 100))}%</span>
+              <span>{finance.netEarnings?.toLocaleString()} {t("gnf_311", "GNF")}</span>
+              <span>{Math.min(100, Math.round((finance.netEarnings || 0) / (finance.nextMilestone || 3000000) * 100))}%</span>
             </div>
           </div>
         </div>
@@ -232,8 +232,8 @@ export default function Earnings() {
               </tr>
             </thead>
             <tbody>
-              {transactions.length === 0 ? (
-                <tr>
+              {transactions.length === 0 ?
+              <tr>
                   <td colSpan={6} className="h-60 text-center px-3">
                     <div className="flex flex-col items-center justify-center h-full">
                       <h3 className="text-base sm:text-lg font-bold mb-2">
@@ -244,19 +244,19 @@ export default function Earnings() {
                       </p>
                     </div>
                   </td>
-                </tr>
-              ) : (
-                transactions.map((tx) => (
-                  <tr key={tx.id}>
+                </tr> :
+
+              transactions.map((tx) =>
+              <tr key={tx.id}>
                     <td className="py-2 px-3">{tx.date?._seconds ? new Date(tx.date._seconds * 1000).toLocaleDateString() : new Date(tx.date).toLocaleDateString()}</td>
                     <td className="px-3">{t('earnings_page.table.items.payment') || 'Payment'}</td>
                     <td className="px-3">{tx.project}</td>
                     <td className="px-3">{tx.client}</td>
                     <td className="px-3">-</td>
-                    <td className="px-3 text-right">{tx.netAmount?.toLocaleString()} GNF</td>
+                    <td className="px-3 text-right">{tx.netAmount?.toLocaleString()} {t("gnf_286", "GNF")}</td>
                   </tr>
-                ))
-              )}
+              )
+              }
             </tbody>
           </table>
         </div>
@@ -269,8 +269,8 @@ export default function Earnings() {
               // In this view we already show all fetched transactions
               // This button is here for UX consistency or future navigation
               window.location.href = '/freelancer/dashboard/earnings';
-            }}
-          >
+            }}>
+            
             {t('earnings_page.actions.view_all')}
           </button>
           <button
@@ -278,12 +278,12 @@ export default function Earnings() {
             onClick={() => {
               // Simple PDF export via browser print to PDF
               window.print();
-            }}
-          >
+            }}>
+            
             {t('earnings_page.actions.export')}
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

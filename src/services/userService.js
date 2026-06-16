@@ -1,23 +1,27 @@
 import { db } from "../firebaseConfig";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { sanitizeUserUpdate } from "../utils/roleUtils";
+
+const ALLOWED_ROLES = ['Client', 'Freelancer', 'Company', 'Vendor', 'Seller', 'Admin'];
 
 export const UserService = {
-    // Create or overwrite a user profile
     async createUserProfile(uid, data) {
         try {
             if (!uid) throw new Error("User ID is required");
 
+            const role = ALLOWED_ROLES.includes(data.role) ? data.role : 'Client';
             const userRef = doc(db, "users", uid);
             const now = new Date();
 
             const userData = {
-                ...data,
+                ...sanitizeUserUpdate(data),
+                fullName: data.fullName || data.name || '',
+                avatar: data.avatar || data.profileImage || data.photoURL || null,
                 createdAt: now,
                 updatedAt: now,
-                // Default fields
-                avatar: data.avatar || null,
-                role: data.role || 'Client', // Default role if not specified
-                status: 'active'
+                role,
+                status: 'active',
+                isBanned: false,
             };
 
             await setDoc(userRef, userData, { merge: true });
@@ -28,7 +32,6 @@ export const UserService = {
         }
     },
 
-    // Get a user profile by ID
     async getUserProfile(uid) {
         try {
             if (!uid) return null;
@@ -36,7 +39,7 @@ export const UserService = {
             const docSnap = await getDoc(userRef);
 
             if (docSnap.exists()) {
-                return docSnap.data();
+                return { id: docSnap.id, ...docSnap.data() };
             }
             return null;
         } catch (error) {
@@ -45,15 +48,18 @@ export const UserService = {
         }
     },
 
-    // Update a user profile
     async updateUserProfile(uid, data) {
         try {
             if (!uid) throw new Error("User ID is required");
             const userRef = doc(db, "users", uid);
+            const safe = sanitizeUserUpdate(data);
+
+            if (safe.profileImage && !safe.avatar) safe.avatar = safe.profileImage;
+            if (safe.name && !safe.fullName) safe.fullName = safe.name;
 
             await updateDoc(userRef, {
-                ...data,
-                updatedAt: new Date()
+                ...safe,
+                updatedAt: new Date(),
             });
 
             return { success: true };
@@ -61,5 +67,17 @@ export const UserService = {
             console.error("Error updating user profile:", error);
             throw error;
         }
-    }
+    },
+
+    async deleteUserProfile(uid) {
+        try {
+            if (!uid) throw new Error("User ID is required");
+            const userRef = doc(db, "users", uid);
+            await updateDoc(userRef, { status: 'deleted', isBanned: true, updatedAt: new Date() });
+            return { success: true };
+        } catch (error) {
+            console.error("Error deleting user profile:", error);
+            throw error;
+        }
+    },
 };

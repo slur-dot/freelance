@@ -1,6 +1,6 @@
 import React from "react";
 import computerHero from "../assets/computerHero.jpg";
-import shopLaptop from "../assets/laptopdevice.png";
+import shopLaptop from '../assets/laptopdevice.png';
 import { useTranslation } from "react-i18next";
 
 const ComputerRentalHero = () => {

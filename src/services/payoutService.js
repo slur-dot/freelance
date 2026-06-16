@@ -27,6 +27,10 @@ export const PayoutService = {
             };
 
             const docRef = await addDoc(payoutsRef, newPayout);
+            const { SmsNotifications } = await import('./smsNotifications.js');
+            SmsNotifications.notifyPayoutRequested(payoutData.sellerId, {
+                amount: payoutData.amount,
+            }).catch(() => {});
             return { id: docRef.id, ...newPayout };
         } catch (error) {
             console.error("Error creating payout:", error);
@@ -35,11 +39,16 @@ export const PayoutService = {
     },
 
     // Update a payout
-    async updatePayout(payoutId, updates) {
+    async updatePayout(payoutId, updates, { isAdmin = false } = {}) {
         try {
+            const safe = { ...updates };
+            if (!isAdmin) {
+                delete safe.status;
+                delete safe.processedAt;
+            }
             const payoutRef = doc(db, "payouts", payoutId);
             await updateDoc(payoutRef, {
-                ...updates,
+                ...safe,
                 updatedAt: serverTimestamp()
             });
             return { success: true };
@@ -47,6 +56,10 @@ export const PayoutService = {
             console.error("Error updating payout:", error);
             throw error;
         }
+    },
+
+    async adminUpdatePayoutStatus(payoutId, status) {
+        return this.updatePayout(payoutId, { status, processedAt: serverTimestamp() }, { isAdmin: true });
     },
 
     // Delete a payout

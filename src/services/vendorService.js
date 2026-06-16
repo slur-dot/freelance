@@ -1,6 +1,11 @@
 import { db, storage } from "../firebaseConfig";
-import { doc, getDoc, updateDoc, deleteDoc, collection, query, where, getCountFromServer, getDocs } from "firebase/firestore";
+import {
+    doc, getDoc, updateDoc, deleteDoc, collection, query, where,
+    getCountFromServer, getDocs, addDoc, serverTimestamp, orderBy,
+} from "firebase/firestore";
+import { NotificationService } from "./notificationService";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { COMPANY_CONTACT } from "../config/companyContact";
 
 export const VendorService = {
     // --- Profile Management ---
@@ -33,16 +38,26 @@ export const VendorService = {
     async getAllVendors() {
         try {
             const usersRef = collection(db, "users");
-            const q = query(usersRef, where("role", "==", "Vendor"));
-            const querySnapshot = await getDocs(q);
+            const qVendor = query(usersRef, where("role", "==", "Vendor"));
+            const qSeller = query(usersRef, where("role", "==", "Seller"));
+            const [vendorSnap, sellerSnap] = await Promise.all([getDocs(qVendor), getDocs(qSeller)]);
+            const allDocs = [...vendorSnap.docs, ...sellerSnap.docs];
+            const seen = new Set();
 
-            return querySnapshot.docs.map(doc => {
+            return allDocs.filter((d) => {
+              if (seen.has(d.id)) return false;
+              seen.add(d.id);
+              const data = d.data();
+              if (data.isBanned === true || data.status === 'inactive') return false;
+              if (data.showOnVendorList === false) return false;
+              return true;
+            }).map(doc => {
                 const data = doc.data();
                 return {
                     id: doc.id,
                     ...data,
-                    businessName: data.businessName || data.displayName || "Vendor",
-                    city: data.city || "Conakry, Guinea", // Default for demo
+                    businessName: data.businessName || data.fullName || data.displayName || data.name || "Vendor",
+                    city: data.city || data.region || "Conakry, Guinea",
                     // Mock coordinates roughly around Conakry if not present
                     coordinates: data.coordinates || {
                         lat: 9.5092 + (Math.random() - 0.5) * 0.1,
@@ -140,6 +155,60 @@ export const VendorService = {
         } catch (error) {
             console.error("Error fetching vendor reviews:", error);
             return []; // Return empty array on error to safely fail
+        }
+    },
+
+    async postJob(vendorId, jobData) {
+        try {
+            let companyName = "Vendor";
+            const userDoc = await getDoc(doc(db, "users", vendorId));
+            if (userDoc.exists()) {
+                const u = userDoc.data();
+                companyName = u.businessName || u.fullName || u.name || u.displayName || "Vendor";
+            }
+
+            const docRef = await addDoc(collection(db, "projects"), {
+                ...jobData,
+                type: "job_posting",
+                vendorId,
+                companyId: vendorId,
+                clientId: vendorId,
+                companyName,
+                posterRole: "Vendor",
+                status: jobData.status || "open",
+                applicants: jobData.applicants ?? 0,
+                notifyEmail: COMPANY_CONTACT.vendor,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+            });
+
+            await NotificationService.createNotification(
+                vendorId,
+                "Job posted",
+                `Your job "${jobData.title}" is live on the job board.`,
+                { type: "job_post", link: "/job-board", sourceId: docRef.id, sourceType: "job" }
+            );
+
+            return { id: docRef.id, companyId: vendorId, companyName, ...jobData };
+        } catch (error) {
+            console.error("Error posting vendor job:", error);
+            throw error;
+        }
+    },
+
+    async getVendorJobs(vendorId) {
+        try {
+            const jobsRef = collection(db, "projects");
+            const q = query(
+                jobsRef,
+                where("type", "==", "job_posting"),
+                where("vendorId", "==", vendorId)
+            );
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+        } catch (error) {
+            console.error("Error fetching vendor jobs:", error);
+            return [];
         }
     },
 

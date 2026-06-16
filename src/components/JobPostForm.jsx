@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
+import { VendorService } from "../services/vendorService";
+import { canPostJobs } from "../utils/roleUtils";
 import { db } from "../firebaseConfig";
-import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 import EmilyImage from "../assets/Emily.jpg";
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
@@ -17,7 +19,7 @@ export default function JobPostForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { clearCart, addToCart } = useCart();
-  const { currentUser } = useAuth();
+  const { currentUser, userRole, loading: authLoading } = useAuth();
   const [skills, setSkills] = useState(["Cyber Security", "SAP", "IT Support Specialist"]);
   const [showLiveChat, setShowLiveChat] = useState(false);
   const [posting, setPosting] = useState(false);
@@ -91,7 +93,11 @@ export default function JobPostForm() {
 
   const handlePostJob = async () => {
     if (!currentUser) {
-      navigate("/login");
+      navigate("/login", { state: { from: { pathname: "/hire-freelancers/info/job-post" } } });
+      return;
+    }
+    if (!canPostJobs(userRole)) {
+      alert(t('job_post.vendor_only_message'));
       return;
     }
     if (!jobTitle.trim()) {
@@ -119,7 +125,6 @@ export default function JobPostForm() {
       deadlineDate.setDate(deadlineDate.getDate() + (Number(deadline) || 10));
 
       const jobData = {
-        type: "job_posting",
         title: jobTitle.trim(),
         description: jobDescription.trim(),
         skills: skills,
@@ -132,17 +137,11 @@ export default function JobPostForm() {
                   skills.includes("UI/UX Design") ? "Design & Creative" :
                   skills.includes("Cloud Computing") || skills.includes("AWS") ? "Cloud & Infrastructure" :
                   skills.includes("Data Analysis") ? "Data & Analytics" : "Software Development",
-        companyId: currentUser.uid,
-        clientId: currentUser.uid,
-        companyName,
         assignTo: assignTo.trim() || null,
         status: "open",
-        applicants: 0,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "projects"), jobData);
+      await VendorService.postJob(currentUser.uid, jobData);
       alert(t('job_post.form.success', 'Job posted successfully! It will appear on the Job Board.'));
       navigate("/job-board");
     } catch (err) {
@@ -152,6 +151,30 @@ export default function JobPostForm() {
       setPosting(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="flex justify-center py-24">
+        <div className="animate-spin h-10 w-10 border-2 border-green-600 rounded-full border-t-transparent" />
+      </div>
+    );
+  }
+
+  if (currentUser && !canPostJobs(userRole)) {
+    return (
+      <div className="max-w-lg mx-auto py-16 px-6 text-center">
+        <h1 className="text-2xl font-bold mb-3">{t('job_post.vendor_only_title')}</h1>
+        <p className="text-gray-600 mb-6">{t('job_post.vendor_only_message')}</p>
+        <button
+          type="button"
+          onClick={() => navigate('/job-board')}
+          className="bg-green-600 text-white px-6 py-2 rounded-full"
+        >
+          {t('job_post.browse_board')}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6 lg:px-16">

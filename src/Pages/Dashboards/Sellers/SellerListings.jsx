@@ -8,20 +8,20 @@ import { useTranslation } from "react-i18next";
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -51,7 +51,7 @@ function EditListingModal({ listing, onClose, onUpdate }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -77,12 +77,12 @@ function EditListingModal({ listing, onClose, onUpdate }) {
         image: formData.image
       }, imageFile);
 
-      alert('Listing updated successfully!');
+      alert(t("listing_updated_successfully_698", "Listing updated successfully!"));
       onUpdate();
       onClose();
     } catch (error) {
       console.error('Error updating listing:', error);
-      alert('Failed to update listing. Please try again.');
+      alert(t("failed_to_update_listing_please_try_again_640", "Failed to update listing. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -102,8 +102,8 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               value={formData.productName}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
+              required />
+            
           </div>
 
           <div>
@@ -113,15 +113,15 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               value={formData.category}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            >
+              required>
+              
               <option value="">{t('seller_dashboard.listings.modal.select_category')}</option>
-              <option value="Phones">Phones</option>
-              <option value="Laptops">Laptops</option>
-              <option value="Printers">Printers</option>
-              <option value="Tablets">Tablets</option>
-              <option value="Audio">Audio</option>
-              <option value="Cameras">Cameras</option>
+              <option value="Phones">{t("phones_494", "Phones")}</option>
+              <option value="Laptops">{t("laptops_842", "Laptops")}</option>
+              <option value="Printers">{t("printers_794", "Printers")}</option>
+              <option value="Tablets">{t("tablets_570", "Tablets")}</option>
+              <option value="Audio">{t("audio_239", "Audio")}</option>
+              <option value="Cameras">{t("cameras_228", "Cameras")}</option>
             </select>
           </div>
 
@@ -134,8 +134,8 @@ function EditListingModal({ listing, onClose, onUpdate }) {
                 value={formData.purchasePrice}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
@@ -146,8 +146,8 @@ function EditListingModal({ listing, onClose, onUpdate }) {
                 value={formData.stock}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -159,8 +159,8 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               onChange={handleInputChange}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
+              required />
+            
           </div>
 
           <div>
@@ -168,16 +168,16 @@ function EditListingModal({ listing, onClose, onUpdate }) {
             <input
               type="file"
               onChange={handleFileChange}
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" />
+            
           </div>
 
           <div className="flex gap-2 pt-4">
             <Button
               type="submit"
               className="flex-1"
-              disabled={loading}
-            >
+              disabled={loading}>
+              
 
               {loading ? t('seller_dashboard.listings.modal.updating') : t('seller_dashboard.listings.modal.update')}
             </Button>
@@ -186,15 +186,15 @@ function EditListingModal({ listing, onClose, onUpdate }) {
               variant="outline"
               className="flex-1"
               onClick={onClose}
-              disabled={loading}
-            >
+              disabled={loading}>
+              
               {t('seller_dashboard.listings.modal.cancel')}
             </Button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 // Create Listing Modal
@@ -212,7 +212,7 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -236,12 +236,12 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
         sellerId: sellerId // Pass sellerId
       }, imageFile);
 
-      alert('Listing created successfully!');
+      alert(t("listing_created_successfully_714", "Listing created successfully!"));
       onUpdate();
       onClose();
     } catch (error) {
       console.error('Error creating listing:', error);
-      alert('Failed to create listing. Please try again.');
+      alert(t("failed_to_create_listing_please_try_again_482", "Failed to create listing. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -261,8 +261,8 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               value={formData.productName}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
+              required />
+            
           </div>
 
           <div>
@@ -272,15 +272,15 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               value={formData.category}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            >
+              required>
+              
               <option value="">{t('seller_dashboard.listings.modal.select_category')}</option>
-              <option value="Phones">Phones</option>
-              <option value="Laptops">Laptops</option>
-              <option value="Printers">Printers</option>
-              <option value="Tablets">Tablets</option>
-              <option value="Audio">Audio</option>
-              <option value="Cameras">Cameras</option>
+              <option value="Phones">{t("phones_85", "Phones")}</option>
+              <option value="Laptops">{t("laptops_910", "Laptops")}</option>
+              <option value="Printers">{t("printers_152", "Printers")}</option>
+              <option value="Tablets">{t("tablets_930", "Tablets")}</option>
+              <option value="Audio">{t("audio_252", "Audio")}</option>
+              <option value="Cameras">{t("cameras_425", "Cameras")}</option>
             </select>
           </div>
 
@@ -293,8 +293,8 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
                 value={formData.purchasePrice}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
@@ -305,8 +305,8 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
                 value={formData.stock}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -318,8 +318,8 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               onChange={handleInputChange}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
+              required />
+            
           </div>
 
           <div>
@@ -327,16 +327,16 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
             <input
               type="file"
               onChange={handleFileChange}
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
+              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" />
+            
           </div>
 
           <div className="flex gap-2 pt-4">
             <Button
               type="submit"
               className="flex-1"
-              disabled={loading}
-            >
+              disabled={loading}>
+              
 
               {loading ? t('seller_dashboard.listings.modal.creating') : t('seller_dashboard.listings.modal.create')}
             </Button>
@@ -345,15 +345,15 @@ function CreateListingModal({ onClose, onUpdate, sellerId }) {
               variant="outline"
               className="flex-1"
               onClick={onClose}
-              disabled={loading}
-            >
+              disabled={loading}>
+              
               {t('seller_dashboard.listings.modal.cancel')}
             </Button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function SellerListings() {
@@ -397,12 +397,12 @@ export default function SellerListings() {
   // Client-side stats calculation
   const stats = {
     total: listings.length,
-    active: listings.filter(l => l.status === 'Active').length,
+    active: listings.filter((l) => l.status === 'Active').length,
     totalViews: listings.reduce((acc, curr) => acc + (curr.views || 0), 0),
     totalStock: listings.reduce((acc, curr) => acc + (curr.stock || 0), 0)
   };
 
-  const filteredListings = listings.filter(listing => {
+  const filteredListings = listings.filter((listing) => {
     if (filter === 'all') return true;
     if (filter === 'active') return listing.status === 'Active';
     if (filter === 'pending') return listing.status === 'Pending Review';
@@ -413,11 +413,11 @@ export default function SellerListings() {
     if (window.confirm('Are you sure you want to delete this listing?')) {
       try {
         await ProductService.deleteProduct(id);
-        alert('Listing deleted successfully!');
-        setListings(prev => prev.filter(l => l.id !== id));
+        alert(t("listing_deleted_successfully_936", "Listing deleted successfully!"));
+        setListings((prev) => prev.filter((l) => l.id !== id));
       } catch (error) {
         console.error('Error deleting listing:', error);
-        alert('Failed to delete listing. Please try again.');
+        alert(t("failed_to_delete_listing_please_try_again_828", "Failed to delete listing. Please try again."));
       }
     }
   };
@@ -429,11 +429,11 @@ export default function SellerListings() {
   const handleActivateListing = async (listing) => {
     try {
       await ProductService.updateProduct(listing.id, { status: 'Active' });
-      alert('Listing activated successfully!');
+      alert(t("listing_activated_successfully_659", "Listing activated successfully!"));
       fetchListings();
     } catch (error) {
       console.error('Error activating listing:', error);
-      alert('Failed to activate listing. Please try again.');
+      alert(t("failed_to_activate_listing_please_try_again_283", "Failed to activate listing. Please try again."));
     }
   };
 
@@ -453,11 +453,11 @@ export default function SellerListings() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            <span className="ml-2 text-gray-600">Loading listings...</span>
+            <span className="ml-2 text-gray-600">{t("loading_listings_92", "Loading listings...")}</span>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -476,13 +476,13 @@ export default function SellerListings() {
             </Button>
           </div>
 
-          {error && (
-            <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
+          {error &&
+          <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-md p-4">
               <p className="text-yellow-700 text-sm">
                 ⚠️ {error}
               </p>
             </div>
-          )}
+          }
         </div>
 
         {/* Stats Cards */}
@@ -541,21 +541,21 @@ export default function SellerListings() {
           <div className="flex space-x-2">
             <Button
               variant={filter === 'all' ? 'default' : 'outline'}
-              onClick={() => setFilter('all')}
-            >
+              onClick={() => setFilter('all')}>
+              
               {t('seller_dashboard.listings.filters.all')} ({listings.length})
             </Button>
             <Button
               variant={filter === 'active' ? 'default' : 'outline'}
-              onClick={() => setFilter('active')}
-            >
-              {t('seller_dashboard.listings.filters.active')} ({listings.filter(l => l.status === 'Active').length})
+              onClick={() => setFilter('active')}>
+              
+              {t('seller_dashboard.listings.filters.active')} ({listings.filter((l) => l.status === 'Active').length})
             </Button>
             <Button
               variant={filter === 'pending' ? 'default' : 'outline'}
-              onClick={() => setFilter('pending')}
-            >
-              {t('seller_dashboard.listings.filters.pending')} ({listings.filter(l => l.status === 'Pending Review').length})
+              onClick={() => setFilter('pending')}>
+              
+              {t('seller_dashboard.listings.filters.pending')} ({listings.filter((l) => l.status === 'Pending Review').length})
             </Button>
           </div>
         </div>
@@ -563,7 +563,7 @@ export default function SellerListings() {
         {/* Listings Table */}
         <Card>
           <CardHeader>
-            <h3 className="text-lg font-semibold">Product Listings</h3>
+            <h3 className="text-lg font-semibold">{t("product_listings_777", "Product Listings")}</h3>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -594,8 +594,8 @@ export default function SellerListings() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredListings.map((listing) => (
-                    <tr key={listing.id} className="hover:bg-gray-50">
+                  {filteredListings.map((listing) =>
+                  <tr key={listing.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           {listing.image && <img src={listing.image} alt={listing.productName} className="h-10 w-10 rounded-full mr-3 object-cover" />}
@@ -615,7 +615,7 @@ export default function SellerListings() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {(listing.purchasePrice || 0).toLocaleString()} GNF
+                        {(listing.purchasePrice || 0).toLocaleString()} {t("gnf_530", "GNF")}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {listing.stock} units
@@ -624,50 +624,50 @@ export default function SellerListings() {
                         {listing.views || 0}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${listing.status === 'Active'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                          }`}>
+                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${listing.status === 'Active' ?
+                      'bg-green-100 text-green-800' :
+                      'bg-yellow-100 text-yellow-800'}`
+                      }>
                           {listing.status}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2 justify-end">
                           <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEditListing(listing)}
-                            className="text-blue-600 hover:bg-blue-50"
-                            title="Edit Listing"
-                          >
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEditListing(listing)}
+                          className="text-blue-600 hover:bg-blue-50"
+                          title="Edit Listing">
+                          
                             <Edit className="h-3 w-3" />
                           </Button>
                           <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDeleteListing(listing.id)}
-                            className="text-red-600 hover:bg-red-50"
-                            title="Delete Listing"
-                          >
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDeleteListing(listing.id)}
+                          className="text-red-600 hover:bg-red-50"
+                          title="Delete Listing">
+                          
                             <Trash2 className="h-3 w-3" />
                           </Button>
 
                           {/* Show activate button for pending listings */}
-                          {listing.status === 'Pending Review' && (
-                            <Button
-                              variant="default"
-                              size="sm"
-                              onClick={() => handleActivateListing(listing)}
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              title="Activate Listing"
-                            >
-                              Activate
-                            </Button>
-                          )}
+                          {listing.status === 'Pending Review' &&
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => handleActivateListing(listing)}
+                          className="bg-green-600 hover:bg-green-700 text-white"
+                          title="Activate Listing">
+                              {t("activate_966", "Activate")}
+                            
+                        </Button>
+                        }
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -675,23 +675,23 @@ export default function SellerListings() {
         </Card>
 
         {/* Create Listing Modal */}
-        {showCreateModal && user && (
-          <CreateListingModal
-            onClose={() => setShowCreateModal(false)}
-            onUpdate={handleUpdateListing}
-            sellerId={user.uid}
-          />
-        )}
+        {showCreateModal && user &&
+        <CreateListingModal
+          onClose={() => setShowCreateModal(false)}
+          onUpdate={handleUpdateListing}
+          sellerId={user.uid} />
+
+        }
 
         {/* Edit Listing Modal */}
-        {showEditModal && editingListing && (
-          <EditListingModal
-            listing={editingListing}
-            onClose={handleCloseEditModal}
-            onUpdate={handleUpdateListing}
-          />
-        )}
+        {showEditModal && editingListing &&
+        <EditListingModal
+          listing={editingListing}
+          onClose={handleCloseEditModal}
+          onUpdate={handleUpdateListing} />
+
+        }
       </div>
-    </div>
-  );
+    </div>);
+
 }

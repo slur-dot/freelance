@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { adminApi } from "../../../lib/adminApi";
+import { AdminService } from "../../../services/adminService";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
@@ -9,7 +9,7 @@ export default function Productform({ onContinue }) {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
-    price: "",
+    price: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,18 +17,18 @@ export default function Productform({ onContinue }) {
   const navigate = useNavigate();
 
   const categories = [
-    { value: "Smartphones", label: t('admin_dashboard.listings.product.form_page.categories.smartphones') },
-    { value: "Laptops", label: t('admin_dashboard.listings.product.form_page.categories.laptops') },
-    { value: "Tablets", label: t('admin_dashboard.listings.product.form_page.categories.tablets') },
-    { value: "Accessories", label: t('admin_dashboard.listings.product.form_page.categories.accessories') },
-    { value: "Wearables", label: t('admin_dashboard.listings.product.form_page.categories.wearables') },
-    { value: "Others", label: t('admin_dashboard.listings.product.form_page.categories.others') },
-  ];
+  { value: "Smartphones", label: t('admin_dashboard.listings.product.form_page.categories.smartphones') },
+  { value: "Laptops", label: t('admin_dashboard.listings.product.form_page.categories.laptops') },
+  { value: "Tablets", label: t('admin_dashboard.listings.product.form_page.categories.tablets') },
+  { value: "Accessories", label: t('admin_dashboard.listings.product.form_page.categories.accessories') },
+  { value: "Wearables", label: t('admin_dashboard.listings.product.form_page.categories.wearables') },
+  { value: "Others", label: t('admin_dashboard.listings.product.form_page.categories.others') }];
+
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -41,18 +41,15 @@ export default function Productform({ onContinue }) {
       // Map form fields to backend schema
       const productData = {
         name: formData.name,
-        sku: `SKU-${Date.now()}`, // Generate unique SKU
-        description: "", // Default empty description
+        sku: `SKU-${Date.now()}`,
+        description: formData.description || "",
         price: parseFloat(formData.price) || 0,
-        stock: 0, // Default stock
+        stock: parseInt(formData.stock, 10) || 0,
         category: formData.category,
-        listed: false, // Default to unlisted
+        listed: true
       };
 
-      console.log("Creating product with data:", productData);
-
-      const result = await adminApi.create("products", productData);
-      console.log("Product created successfully:", result);
+      const result = await AdminService.createProduct(productData);
 
       // Navigate back to product listing
       navigate("/admin/dashboard/product-listing");
@@ -79,19 +76,19 @@ export default function Productform({ onContinue }) {
           </div>
           <button
             onClick={() => navigate("/admin/dashboard/product-listing")}
-            className="text-gray-400 hover:text-gray-600 transition"
-          >
+            className="text-gray-400 hover:text-gray-600 transition">
+            
             <X size={24} />
           </button>
         </div>
 
         <form className="grid gap-6" onSubmit={handleSubmit}>
           {/* Error Message */}
-          {error && (
-            <div className="col-span-full rounded-md bg-red-50 p-3 text-red-600 text-sm">
+          {error &&
+          <div className="col-span-full rounded-md bg-red-50 p-3 text-red-600 text-sm">
               {error}
             </div>
-          )}
+          }
 
           {/* Name */}
           <div className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4">
@@ -105,8 +102,8 @@ export default function Productform({ onContinue }) {
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              required />
+            
           </div>
 
           {/* Category */}
@@ -119,14 +116,14 @@ export default function Productform({ onContinue }) {
               value={formData.category}
               onChange={(e) => handleInputChange("category", e.target.value)}
               className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              required
-            >
+              required>
+              
               <option value="">{t('admin_dashboard.listings.product.form_page.placeholders.select_category')}</option>
-              {categories.map((cat, index) => (
-                <option key={index} value={cat.value}>
+              {categories.map((cat, index) =>
+              <option key={index} value={cat.value}>
                   {cat.label}
                 </option>
-              ))}
+              )}
             </select>
           </div>
 
@@ -143,9 +140,9 @@ export default function Productform({ onContinue }) {
                 value={formData.price}
                 onChange={(e) => handleInputChange("price", e.target.value)}
                 className="w-1/2 rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <span className="text-sm font-medium text-gray-700">GNF</span>
+                required />
+              
+              <span className="text-sm font-medium text-gray-700">{t("gnf_657", "GNF")}</span>
             </div>
           </div>
 
@@ -154,20 +151,20 @@ export default function Productform({ onContinue }) {
             <button
               type="button"
               onClick={() => navigate("/admin/dashboard/product-listing")}
-              className="w-full max-w-[250px] rounded-3xl border border-gray-300 px-6 py-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-            >
+              className="w-full max-w-[250px] rounded-3xl border border-gray-300 px-6 py-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+              
               {t('common.cancel') || 'Cancel'}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="w-full max-w-[250px] rounded-3xl bg-green-600 px-6 py-4 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              className="w-full max-w-[250px] rounded-3xl bg-green-600 px-6 py-4 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+              
               {loading ? t('admin_dashboard.listings.product.form_page.buttons.submitting') : t('admin_dashboard.listings.product.form_page.buttons.submit')}
             </button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -43,7 +43,8 @@ export const CartProvider = ({ children }) => {
                         : item
                 );
             }
-            return [...prev, { ...product, quantity: 1 }];
+            const qty = Math.max(1, product.quantity || 1);
+            return [...prev, { ...product, quantity: qty }];
         });
         showToast(product.name);
     };
@@ -73,7 +74,11 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         clearCart,
-        subtotal: cartItems.reduce((sum, item) => sum + (item.currentPrice || item.price) * item.quantity, 0)
+        subtotal: cartItems.reduce((sum, item) => {
+            const price = Number(item.currentPrice ?? item.price ?? 0) || 0;
+            const qty = Number(item.quantity) || 1;
+            return sum + price * qty;
+        }, 0)
     };
 
     return (

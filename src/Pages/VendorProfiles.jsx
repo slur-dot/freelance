@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ChevronDown,
@@ -9,90 +9,7 @@ import {
 } from "lucide-react";
 import HireFreelanceImage from "../assets/HireFreelanceImage.png";
 import { useNavigate } from "react-router-dom";
-
-/* ---------------- Dummy Vendor Data ---------------- */
-const mockFreelancers = [
-  {
-    id: "freelancer-1",
-    name: "John Doe",
-    company: "Conakry",
-    rating: 4.9,
-    reviews: 7,
-    image: HireFreelanceImage,
-    category: "Mobile",
-    premium: true,
-  },
-  {
-    id: "freelancer-2",
-    name: "Jane Smith",
-    company: "Abidjan",
-    rating: 3.8,
-    reviews: 12,
-    image: HireFreelanceImage,
-    category: "Laptop",
-    premium: false,
-  },
-  {
-    id: "freelancer-3",
-    name: "Alex Brown",
-    company: "Dakar",
-    rating: 5,
-    reviews: 20,
-    image: HireFreelanceImage,
-    category: "Tablet",
-    premium: true,
-  },
-  {
-    id: "freelancer-4",
-    name: "Emily Green",
-    company: "Lagos",
-    rating: 2.5,
-    reviews: 3,
-    image: HireFreelanceImage,
-    category: "Smartwatch",
-    premium: false,
-  },
-  {
-    id: "freelancer-5",
-    name: "Michael Johnson",
-    company: "Accra",
-    rating: 4.2,
-    reviews: 15,
-    image: HireFreelanceImage,
-    category: "Mobile",
-    premium: true,
-  },
-  {
-    id: "freelancer-6",
-    name: "Sophia Lee",
-    company: "Nairobi",
-    rating: 3.5,
-    reviews: 8,
-    image: HireFreelanceImage,
-    category: "Laptop",
-    premium: false,
-  },
-  {
-    id: "freelancer-7",
-    name: "Daniel Kim",
-    company: "Cape Town",
-    rating: 4.7,
-    reviews: 18,
-    image: HireFreelanceImage,
-    category: "Tablet",
-    premium: true,
-  },
-  {
-    id: "freelancer-8",
-    name: "Olivia Wilson",
-    company: "Johannesburg",
-    rating: 3.9,
-    reviews: 10,
-    image: HireFreelanceImage,
-    category: "Smartwatch",
-    premium: false,
-  },
-];
+import { VendorService } from "../services/vendorService";
 
 
 /* ---------------- Loader ---------------- */
@@ -243,7 +160,7 @@ function FreelancerCard({ freelancer }) {
           </button>
         </div>
         <button
-          onClick={() => navigate("/vendor-profiles/info")}
+          onClick={() => navigate(`/vendor-profiles/info?vendorId=${freelancer.id}`)}
           className="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-md"
         >
           {t('vendor_profiles_page.card.view_devices') || 'View Devices →'}
@@ -267,8 +184,10 @@ function FreelancerList({ freelancers }) {
 /* ---------------- Main Page ---------------- */
 export default function VendorProfiles() {
   const { t } = useTranslation();
+  const [vendors, setVendors] = useState([]);
+  const [loadingVendors, setLoadingVendors] = useState(true);
   const [sortOpen, setSortOpen] = useState(false);
-  const [sortValue, setSortValue] = useState("Most Popular");
+  const [sortValue, setSortValue] = useState(t('vendor_profiles_page.sort.options.popular'));
   const [filters, setFilters] = useState({
     category: [],
     premium: [],
@@ -276,14 +195,38 @@ export default function VendorProfiles() {
   });
   const [appliedFilters, setAppliedFilters] = useState(filters);
 
-  const sortOptions = ["Most Popular", "Highest Rated", "Lowest Rated", "Newest"];
+  const sortOptions = [
+    t('vendor_profiles_page.sort.options.popular'),
+    t('vendor_profiles_page.sort.options.highest_rated'),
+    t('vendor_profiles_page.sort.options.lowest_rated'),
+    t('vendor_profiles_page.sort.options.newest'),
+  ];
+
+  useEffect(() => {
+    VendorService.getAllVendors()
+      .then((list) => {
+        const mapped = list.map((v) => ({
+          id: v.id,
+          name: v.businessName || v.fullName || v.name || t('vendor_profiles_page.card.unnamed', 'Vendor'),
+          company: v.city || v.region || v.prefecture || "Guinea",
+          rating: Number(v.status?.rating ?? v.rating ?? 0) || 0,
+          reviews: Number(v.reviewCount ?? v.reviews ?? 0) || 0,
+          image: v.avatar || v.profileImage || HireFreelanceImage,
+          category: v.vendorCategory || v.category || "Mobile",
+          premium: v.premium === true || v.verified === true,
+        }));
+        setVendors(mapped);
+      })
+      .catch(console.error)
+      .finally(() => setLoadingVendors(false));
+  }, [t]);
 
   const applyFilters = () => {
     setAppliedFilters(filters);
   };
 
   // Apply filters
-  const filteredFreelancers = mockFreelancers.filter((f) => {
+  const filteredFreelancers = vendors.filter((f) => {
     const categoryMatch =
       appliedFilters.category.length === 0 ||
       appliedFilters.category.includes(f.category);
@@ -306,10 +249,10 @@ export default function VendorProfiles() {
 
   // Apply sorting
   const sortedFreelancers = [...filteredFreelancers].sort((a, b) => {
-    if (sortValue === "Highest Rated") return b.rating - a.rating;
-    if (sortValue === "Lowest Rated") return a.rating - b.rating;
-    if (sortValue === "Newest") return b.id.localeCompare(a.id);
-    return b.reviews - a.reviews; // default = Most Popular
+    if (sortValue === t('vendor_profiles_page.sort.options.highest_rated')) return b.rating - a.rating;
+    if (sortValue === t('vendor_profiles_page.sort.options.lowest_rated')) return a.rating - b.rating;
+    if (sortValue === t('vendor_profiles_page.sort.options.newest')) return b.id.localeCompare(a.id);
+    return b.reviews - a.reviews;
   });
 
   return (
@@ -345,7 +288,7 @@ export default function VendorProfiles() {
               <div className="flex flex-col sm:flex-row justify-end items-start sm:items-center mb-4 sm:mb-5 gap-3 sm:gap-4 relative">
                 <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-600">
                   <p>
-                    {t('vendor_profiles_page.sort.showing_x_of_y', { visible: sortedFreelancers.length, total: mockFreelancers.length }) || `Showing ${sortedFreelancers.length} of ${mockFreelancers.length} Freelancers`}
+                    {t('vendor_profiles_page.sort.showing_x_of_y', { visible: sortedFreelancers.length, total: vendors.length })}
                   </p>
                   <span>{t('vendor_profiles_page.sort.sort_by') || 'Sort by:'}</span>
                   <div className="relative">
@@ -376,9 +319,15 @@ export default function VendorProfiles() {
               </div>
 
               {/* Freelancer Cards */}
-              <Suspense fallback={<Loading />}>
-                <FreelancerList freelancers={sortedFreelancers} />
-              </Suspense>
+              {loadingVendors ? (
+                <Loading />
+              ) : sortedFreelancers.length === 0 ? (
+                <p className="text-gray-500 text-center py-12">{t('vendor_profiles_page.empty', 'No vendors listed yet. Vendors appear here after they complete registration.')}</p>
+              ) : (
+                <Suspense fallback={<Loading />}>
+                  <FreelancerList freelancers={sortedFreelancers} />
+                </Suspense>
+              )}
             </div>
           </div>
         </div>

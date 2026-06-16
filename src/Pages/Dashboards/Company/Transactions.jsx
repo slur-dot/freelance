@@ -22,8 +22,8 @@ export default function Transactions() {
           // Calculate stats
           const total = transactionData.reduce((sum, p) => {
             let val = 0;
-            if (typeof p.amount === 'number') val = p.amount;
-            else if (typeof p.amount === 'string') val = parseFloat(p.amount.replace(/[^0-9.-]+/g, "")) || 0;
+            if (typeof p.amount === 'number') val = p.amount;else
+            if (typeof p.amount === 'string') val = parseFloat(p.amount.replace(/[^0-9.-]+/g, "")) || 0;
             return sum + val;
           }, 0);
 
@@ -72,7 +72,7 @@ export default function Transactions() {
           <div className="bg-white p-4 rounded-lg shadow-sm h-full">
             <span className="text-sm sm:text-base">{t('company_dashboard.amount', 'Amount')}</span>
             <h3 className="text-2xl sm:text-3xl font-bold pt-3 pb-2 border-b border-gray-200">
-              {stats.totalAmount.toLocaleString()} GNF
+              {stats.totalAmount.toLocaleString()} {t("gnf_161", "GNF")}
             </h3>
           </div>
         </div>
@@ -87,10 +87,10 @@ export default function Transactions() {
         </div>
 
         <div className="flex gap-2">
-          <button 
+          <button
             className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700"
-            onClick={handleExportPDF}
-          >
+            onClick={handleExportPDF}>
+            
             <Download className="h-4 w-4" />
             {t('company_dashboard.export_pdf', 'Export PDF')}
           </button>
@@ -111,39 +111,39 @@ export default function Transactions() {
             </tr>
           </thead>
           <tbody>
-            {transactions.length > 0 ? (
-              transactions.map((transaction) => {
-                let dateStr = "N/A";
-                if (transaction.date) {
-                  const d = typeof transaction.date === 'object' && transaction.date.seconds 
-                    ? new Date(transaction.date.seconds * 1000) 
-                    : new Date(transaction.date);
-                  dateStr = d.toLocaleDateString();
-                }
+            {transactions.length > 0 ?
+            transactions.map((transaction) => {
+              let dateStr = "N/A";
+              if (transaction.date) {
+                const d = typeof transaction.date === 'object' && transaction.date.seconds ?
+                new Date(transaction.date.seconds * 1000) :
+                new Date(transaction.date);
+                dateStr = d.toLocaleDateString();
+              }
 
-                return (
-                  <tr key={transaction.id || Math.random()} className="border-b border-gray-100 hover:bg-gray-50">
+              return (
+                <tr key={transaction.id || Math.random()} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="py-2 px-2 sm:px-4">{dateStr}</td>
                     <td className="px-2 sm:px-4 font-medium">{transaction.product || transaction.service || 'N/A'}</td>
                     <td className="px-2 sm:px-4 text-gray-600">{transaction.freelancer || transaction.provider || 'N/A'}</td>
                     <td className="px-2 sm:px-4 text-gray-600">{transaction.paymentMethod || 'N/A'}</td>
                     <td className="px-2 sm:px-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${
-                        transaction.status === 'completed' ? 'bg-green-100 text-green-700' :
-                        transaction.status === 'active' ? 'bg-blue-100 text-blue-700' :
-                        'bg-gray-100 text-gray-700'
-                      }`}>
+                    transaction.status === 'completed' ? 'bg-green-100 text-green-700' :
+                    transaction.status === 'active' ? 'bg-blue-100 text-blue-700' :
+                    'bg-gray-100 text-gray-700'}`
+                    }>
                         {transaction.status || 'pending'}
                       </span>
                     </td>
                     <td className="text-right px-2 sm:px-4 font-semibold text-green-600">
-                      {typeof transaction.amount === 'number' ? transaction.amount.toLocaleString() : transaction.amount} GNF
+                      {typeof transaction.amount === 'number' ? transaction.amount.toLocaleString() : transaction.amount} {t("gnf_554", "GNF")}
                     </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
+                  </tr>);
+
+            }) :
+
+            <tr>
                 <td colSpan={6} className="h-60 text-center">
                   <div className="flex flex-col items-center justify-center h-full">
                     <h3 className="text-lg font-bold mb-2">
@@ -152,10 +152,10 @@ export default function Transactions() {
                   </div>
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -8,20 +8,20 @@ import { useTranslation } from "react-i18next";
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -91,11 +91,11 @@ export default function SellerSettings() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       setCurrentUser(user);
       if (user) {
-        setProfileData(prev => ({ ...prev, email: user.email }));
+        setProfileData((prev) => ({ ...prev, email: user.email }));
         try {
           const profile = await UserService.getUserProfile(user.uid);
           if (profile) {
-            setProfileData(prev => ({
+            setProfileData((prev) => ({
               ...prev,
               name: profile.name || '',
               businessName: profile.businessName || '',
@@ -123,13 +123,13 @@ export default function SellerSettings() {
     setLoading(true);
     try {
       await UserService.updateUserProfile(currentUser.uid, {
-        ...profileData,
+        ...profileData
         // Also save other settings tabs implicitly or handle them separately (Doing separate save for tabs is better UX usually, but simplified here if needed)
       });
-      alert('Profile updated successfully!');
+      alert(t("profile_updated_successfully_702", "Profile updated successfully!"));
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert('Error updating profile');
+      alert(t("error_updating_profile_422", "Error updating profile"));
     } finally {
       setLoading(false);
     }
@@ -144,17 +144,17 @@ export default function SellerSettings() {
       alert(t('settings_saved_successfully')); // You might want to add a generic key for this or use hardcoded if not critical
     } catch (error) {
       console.error(`Error saving ${settingsType}:`, error);
-      alert('Error saving settings');
+      alert(t("error_saving_settings_416", "Error saving settings"));
     }
   };
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('New passwords do not match');
+      alert(t("new_passwords_do_not_match_156", "New passwords do not match"));
       return;
     }
     if (passwordData.newPassword.length < 6) {
-      alert('Password must be at least 6 characters long');
+      alert(t("password_must_be_at_least_6_characters_long_872", "Password must be at least 6 characters long"));
       return;
     }
 
@@ -169,7 +169,7 @@ export default function SellerSettings() {
       // Update password
       await updatePassword(user, passwordData.newPassword);
 
-      alert('Password changed successfully!');
+      alert(t("password_changed_successfully_232", "Password changed successfully!"));
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error) {
       console.error("Error changing password:", error);
@@ -180,12 +180,12 @@ export default function SellerSettings() {
   };
 
   const tabs = [
-    { id: 'profile', label: t('seller_dashboard.settings.tabs.profile'), icon: User },
-    { id: 'security', label: t('seller_dashboard.settings.tabs.security'), icon: Shield },
-    { id: 'notifications', label: t('seller_dashboard.settings.tabs.notifications'), icon: Bell },
-    { id: 'privacy', label: t('seller_dashboard.settings.tabs.privacy'), icon: Globe },
-    { id: 'payment', label: t('seller_dashboard.settings.tabs.payment'), icon: CreditCard }
-  ];
+  { id: 'profile', label: t('seller_dashboard.settings.tabs.profile'), icon: User },
+  { id: 'security', label: t('seller_dashboard.settings.tabs.security'), icon: Shield },
+  { id: 'notifications', label: t('seller_dashboard.settings.tabs.notifications'), icon: Bell },
+  { id: 'privacy', label: t('seller_dashboard.settings.tabs.privacy'), icon: Globe },
+  { id: 'payment', label: t('seller_dashboard.settings.tabs.payment'), icon: CreditCard }];
+
 
   return (
     <div className="space-y-6">
@@ -207,15 +207,15 @@ export default function SellerSettings() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm font-medium transition ${activeTab === tab.id
-                        ? 'bg-green-50 text-green-700 border-r-2 border-green-600'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                        }`}
-                    >
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-left text-sm font-medium transition ${activeTab === tab.id ?
+                      'bg-green-50 text-green-700 border-r-2 border-green-600' :
+                      'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}`
+                      }>
+                      
                       <IconComponent className="h-4 w-4" />
                       {tab.label}
-                    </button>
-                  );
+                    </button>);
+
                 })}
               </nav>
             </CardContent>
@@ -225,8 +225,8 @@ export default function SellerSettings() {
         {/* Main Content */}
         <div className="flex-1">
           {/* Profile Settings */}
-          {activeTab === 'profile' && (
-            <Card>
+          {activeTab === 'profile' &&
+          <Card>
               <CardHeader>
                 <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.profile.title')}</h2>
                 <p className="text-sm text-gray-600">{t('seller_dashboard.settings.profile.subtitle')}</p>
@@ -238,66 +238,66 @@ export default function SellerSettings() {
                       {t('seller_dashboard.settings.profile.business_name')}
                     </label>
                     <input
-                      type="text"
-                      value={profileData.businessName}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, businessName: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="text"
+                    value={profileData.businessName}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, businessName: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.profile.contact_name')}
                     </label>
                     <input
-                      type="text"
-                      value={profileData.name}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, name: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="text"
+                    value={profileData.name}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, name: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.profile.location')}
                     </label>
                     <input
-                      type="text"
-                      value={profileData.location}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, location: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="text"
+                    value={profileData.location}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, location: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.profile.email')}
                     </label>
                     <input
-                      type="email"
-                      value={profileData.email}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="email"
+                    value={profileData.email}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.profile.phone')}
                     </label>
                     <input
-                      type="tel"
-                      value={profileData.phone}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, phone: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="tel"
+                    value={profileData.phone}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, phone: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.profile.website')}
                     </label>
                     <input
-                      type="url"
-                      value={profileData.website}
-                      onChange={(e) => setProfileData(prev => ({ ...prev, website: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="url"
+                    value={profileData.website}
+                    onChange={(e) => setProfileData((prev) => ({ ...prev, website: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                 </div>
                 <div className="flex justify-end">
@@ -307,11 +307,11 @@ export default function SellerSettings() {
                 </div>
               </CardContent>
             </Card>
-          )}
+          }
 
           {/* Security Settings */}
-          {activeTab === 'security' && (
-            <Card>
+          {activeTab === 'security' &&
+          <Card>
               <CardHeader>
                 <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.security.title')}</h2>
                 <p className="text-sm text-gray-600">{t('seller_dashboard.settings.security.subtitle')}</p>
@@ -323,16 +323,16 @@ export default function SellerSettings() {
                   </label>
                   <div className="relative">
                     <input
-                      type={showPassword ? "text" : "password"}
-                      value={passwordData.currentPassword}
-                      onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10"
-                    />
+                    type={showPassword ? "text" : "password"}
+                    value={passwordData.currentPassword}
+                    onChange={(e) => setPasswordData((prev) => ({ ...prev, currentPassword: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 pr-10" />
+                  
                     <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
-                    >
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600">
+                    
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </button>
                   </div>
@@ -342,22 +342,22 @@ export default function SellerSettings() {
                     {t('seller_dashboard.settings.security.new_password')}
                   </label>
                   <input
-                    type="password"
-                    value={passwordData.newPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="password"
+                  value={passwordData.newPassword}
+                  onChange={(e) => setPasswordData((prev) => ({ ...prev, newPassword: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     {t('seller_dashboard.settings.security.confirm_password')}
                   </label>
                   <input
-                    type="password"
-                    value={passwordData.confirmPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  type="password"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) => setPasswordData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                
                 </div>
                 <div className="flex justify-end">
                   <Button onClick={handleChangePassword} disabled={loading}>
@@ -366,11 +366,11 @@ export default function SellerSettings() {
                 </div>
               </CardContent>
             </Card>
-          )}
+          }
 
           {/* Notification Settings */}
-          {activeTab === 'notifications' && (
-            <Card>
+          {activeTab === 'notifications' &&
+          <Card>
               <CardHeader>
                 <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.notifications.title')}</h2>
                 <p className="text-sm text-gray-600">{t('seller_dashboard.settings.notifications.subtitle')}</p>
@@ -384,11 +384,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.emailNotifications}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, emailNotifications: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.emailNotifications}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, emailNotifications: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -399,11 +399,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.smsNotifications}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, smsNotifications: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.smsNotifications}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, smsNotifications: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -414,11 +414,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.pushNotifications}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, pushNotifications: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.pushNotifications}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, pushNotifications: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -429,11 +429,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.orderNotifications}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, orderNotifications: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.orderNotifications}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, orderNotifications: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -444,11 +444,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.payoutNotifications}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, payoutNotifications: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.payoutNotifications}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, payoutNotifications: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -459,27 +459,27 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={notificationSettings.stockAlerts}
-                        onChange={(e) => setNotificationSettings(prev => ({ ...prev, stockAlerts: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={notificationSettings.stockAlerts}
+                      onChange={(e) => setNotificationSettings((prev) => ({ ...prev, stockAlerts: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
                 </div>
                 <div className="flex justify-end">
                   <Button onClick={() => handleSaveSettings('notificationSettings', notificationSettings)}>
-                    Save Settings
+                    {t("save_settings_789", "Save Settings")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
-          )}
+          }
 
           {/* Privacy Settings */}
-          {activeTab === 'privacy' && (
-            <Card>
+          {activeTab === 'privacy' &&
+          <Card>
               <CardHeader>
                 <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.privacy.title')}</h2>
                 <p className="text-sm text-gray-600">{t('seller_dashboard.settings.privacy.subtitle')}</p>
@@ -493,11 +493,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={privacySettings.showEmail}
-                        onChange={(e) => setPrivacySettings(prev => ({ ...prev, showEmail: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={privacySettings.showEmail}
+                      onChange={(e) => setPrivacySettings((prev) => ({ ...prev, showEmail: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -508,11 +508,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={privacySettings.showPhone}
-                        onChange={(e) => setPrivacySettings(prev => ({ ...prev, showPhone: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={privacySettings.showPhone}
+                      onChange={(e) => setPrivacySettings((prev) => ({ ...prev, showPhone: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -523,11 +523,11 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={privacySettings.showSocialLinks}
-                        onChange={(e) => setPrivacySettings(prev => ({ ...prev, showSocialLinks: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={privacySettings.showSocialLinks}
+                      onChange={(e) => setPrivacySettings((prev) => ({ ...prev, showSocialLinks: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -538,27 +538,27 @@ export default function SellerSettings() {
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
-                        type="checkbox"
-                        checked={privacySettings.showBusinessInfo}
-                        onChange={(e) => setPrivacySettings(prev => ({ ...prev, showBusinessInfo: e.target.checked }))}
-                        className="sr-only peer"
-                      />
+                      type="checkbox"
+                      checked={privacySettings.showBusinessInfo}
+                      onChange={(e) => setPrivacySettings((prev) => ({ ...prev, showBusinessInfo: e.target.checked }))}
+                      className="sr-only peer" />
+                    
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
                 </div>
                 <div className="flex justify-end">
                   <Button onClick={() => handleSaveSettings('privacySettings', privacySettings)}>
-                    Save Settings
+                    {t("save_settings_688", "Save Settings")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
-          )}
+          }
 
           {/* Payment Settings */}
-          {activeTab === 'payment' && (
-            <Card>
+          {activeTab === 'payment' &&
+          <Card>
               <CardHeader>
                 <h2 className="text-lg font-semibold">{t('seller_dashboard.settings.payment.title')}</h2>
                 <p className="text-sm text-gray-600">{t('seller_dashboard.settings.payment.subtitle')}</p>
@@ -570,13 +570,13 @@ export default function SellerSettings() {
                       {t('seller_dashboard.settings.payment.method')}
                     </label>
                     <select
-                      value={paymentSettings.paymentMethod}
-                      onChange={(e) => setPaymentSettings(prev => ({ ...prev, paymentMethod: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
-                      <option value="OM">Orange Money</option>
-                      <option value="MoMo">MTN MoMo</option>
-                      <option value="Bank">Bank Transfer</option>
+                    value={paymentSettings.paymentMethod}
+                    onChange={(e) => setPaymentSettings((prev) => ({ ...prev, paymentMethod: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                    
+                      <option value="OM">{t("orange_money_815", "Orange Money")}</option>
+                      <option value="MoMo">{t("mtn_momo_789", "MTN MoMo")}</option>
+                      <option value="Bank">{t("bank_transfer_145", "Bank Transfer")}</option>
                     </select>
                   </div>
                   <div>
@@ -584,22 +584,22 @@ export default function SellerSettings() {
                       {t('seller_dashboard.settings.payment.number')}
                     </label>
                     <input
-                      type="tel"
-                      value={paymentSettings.paymentNumber}
-                      onChange={(e) => setPaymentSettings(prev => ({ ...prev, paymentNumber: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="tel"
+                    value={paymentSettings.paymentNumber}
+                    onChange={(e) => setPaymentSettings((prev) => ({ ...prev, paymentNumber: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       {t('seller_dashboard.settings.payment.threshold')}
                     </label>
                     <input
-                      type="number"
-                      value={paymentSettings.payoutThreshold}
-                      onChange={(e) => setPaymentSettings(prev => ({ ...prev, payoutThreshold: parseInt(e.target.value) }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                    />
+                    type="number"
+                    value={paymentSettings.payoutThreshold}
+                    onChange={(e) => setPaymentSettings((prev) => ({ ...prev, payoutThreshold: parseInt(e.target.value) }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+                  
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -609,24 +609,24 @@ export default function SellerSettings() {
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
-                      type="checkbox"
-                      checked={paymentSettings.autoPayout}
-                      onChange={(e) => setPaymentSettings(prev => ({ ...prev, autoPayout: e.target.checked }))}
-                      className="sr-only peer"
-                    />
+                    type="checkbox"
+                    checked={paymentSettings.autoPayout}
+                    onChange={(e) => setPaymentSettings((prev) => ({ ...prev, autoPayout: e.target.checked }))}
+                    className="sr-only peer" />
+                  
                     <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
                 <div className="flex justify-end">
                   <Button onClick={() => handleSaveSettings('paymentSettings', paymentSettings)}>
-                    Save Settings
+                    {t("save_settings_291", "Save Settings")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
-          )}
+          }
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

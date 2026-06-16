@@ -18,10 +18,10 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
 
   const handleSubmit = async () => {
     if (!form.title || !form.amount) {
-      alert("Please enter a title and amount.");
+      alert(t("please_enter_a_title_and_amount_893", "Please enter a title and amount."));
       return;
     }
-    
+
     try {
       setSaving(true);
       const payload = {
@@ -30,7 +30,7 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
         amount: Number(form.amount) || 0,
         status: form.status,
         client: form.client || user?.displayName || "Self",
-        freelancerId: user?.uid 
+        freelancerId: user?.uid
       };
 
       await ProjectService.createProject(payload, user.uid);
@@ -39,7 +39,7 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
       alert(t('freelancer_dashboard.modals.post_project.success', 'Project posted successfully!'));
     } catch (err) {
       console.error("Post project error:", err);
-      alert('Failed to save project. Please check inputs.');
+      alert(t("failed_to_save_project_please_check_inputs_721", "Failed to save project. Please check inputs."));
     } finally {
       setSaving(false);
     }
@@ -50,10 +50,10 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden border border-gray-100 transform transition-all animate-in zoom-in-95 duration-300">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-10 text-white relative">
-          <button 
+          <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all"
-          >
+            className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all">
+            
             <X className="w-5 h-5" />
           </button>
           <div className="flex items-start sm:items-center gap-4 pr-12">
@@ -71,23 +71,23 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
           <div className="space-y-4">
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('freelancer_dashboard.modals.post_project.form.title', 'Service Title')}</label>
-              <input 
-                className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium" 
-                placeholder="e.g. Professional Web Development"
-                value={form.title} 
-                onChange={(e) => setForm({ ...form, title: e.target.value })} 
-              />
+              <input
+                className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium"
+                placeholder={t("eg_professional_web_development_203", "e.g. Professional Web Development")}
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })} />
+              
             </div>
             
             <div className="space-y-2">
               <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('freelancer_dashboard.modals.post_project.form.description', 'Description')}</label>
-              <textarea 
-                className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium resize-none" 
-                rows={3} 
-                placeholder="Briefly describe what you're offering..."
-                value={form.description} 
-                onChange={(e) => setForm({ ...form, description: e.target.value })} 
-              />
+              <textarea
+                className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-medium resize-none"
+                rows={3}
+                placeholder={t("briefly_describe_what_youre_offering_578", "Briefly describe what you're offering...")}
+                value={form.description}
+                onChange={(e) => setForm({ ...form, description: e.target.value })} />
+              
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -95,47 +95,47 @@ export default function ProjectModal({ isOpen, onClose, user, onSave }) {
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('freelancer_dashboard.modals.post_project.form.budget', 'Rate / Budget (GNF)')}</label>
                 <div className="relative">
                    <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                   <input 
-                    type="number" 
-                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-10 pr-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-bold" 
+                   <input
+                    type="number"
+                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl pl-10 pr-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-bold"
                     placeholder="0.00"
-                    value={form.amount} 
-                    onChange={(e) => setForm({ ...form, amount: e.target.value })} 
-                  />
+                    value={form.amount}
+                    onChange={(e) => setForm({ ...form, amount: e.target.value })} />
+                  
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t('freelancer_dashboard.modals.post_project.form.status', 'Initial Status')}</label>
-                <select 
-                  className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-bold appearance-none cursor-pointer" 
-                  value={form.status} 
-                  onChange={(e) => setForm({ ...form, status: e.target.value })}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="completed">Completed</option>
+                <select
+                  className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all font-bold appearance-none cursor-pointer"
+                  value={form.status}
+                  onChange={(e) => setForm({ ...form, status: e.target.value })}>
+                  
+                  <option value="pending">{t("pending_739", "Pending")}</option>
+                  <option value="in_progress">{t("in_progress_444", "In Progress")}</option>
+                  <option value="completed">{t("completed_113", "Completed")}</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3 pt-4">
-            <button 
+            <button
               onClick={onClose}
-              className="flex-1 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors text-center"
-            >
+              className="flex-1 px-4 sm:px-8 py-3 sm:py-4 rounded-2xl text-sm font-bold text-gray-500 hover:bg-gray-100 transition-colors text-center">
+              
               {t('freelancer_dashboard.modals.post_project.cancel', 'Cancel')}
             </button>
-            <button 
+            <button
               disabled={saving}
               onClick={handleSubmit}
-              className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-2xl shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 disabled:bg-blue-300 disabled:translate-y-0 text-center"
-            >
+              className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-2xl shadow-xl shadow-blue-600/20 transition-all hover:-translate-y-1 active:scale-95 disabled:bg-blue-300 disabled:translate-y-0 text-center">
+              
               {saving ? t('freelancer_dashboard.modals.post_project.saving', 'Posting...') : t('freelancer_dashboard.modals.post_project.save', 'Post Service')}
             </button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

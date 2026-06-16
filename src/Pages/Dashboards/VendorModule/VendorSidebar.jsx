@@ -75,6 +75,11 @@ export default function VendorSidebar() {
         },
 
         {
+          title: t('vendor_dashboard.sidebar.job_post', 'Post a Job'),
+          url: "/vendor/dashboard/job-post",
+          icon: <Briefcase className="h-5 w-5 text-gray-400" />
+        },
+        {
           title: t('vendor_dashboard.sidebar.ads'),
           url: "/vendor/dashboard/ads",
           icon: (

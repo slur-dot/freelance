@@ -3,6 +3,7 @@ import { Link, useLocation, Outlet } from 'react-router-dom';
 import { Menu, X, LogOut, ChevronLeft, ChevronRight, MessageSquare, Bell } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import EmailVerificationBanner from './EmailVerificationBanner';
 
 export default function DashboardLayout({ navItems, user, onLogout }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -199,6 +200,7 @@ export default function DashboardLayout({ navItems, user, onLogout }) {
         </header>
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+          <EmailVerificationBanner />
           <Outlet />
         </main>
       </div>

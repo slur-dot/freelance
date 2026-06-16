@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
-import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserService } from "../services/userService";
 import ChatPopup from "../components/ChatPopup";
 import { useCart } from "../contexts/CartContext";
 import FreelanceImage from "../assets/HireFreelanceImage.png";
@@ -12,42 +13,67 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function FreelancerInfo() {
+  const { id: profileId } = useParams();
   const navigate = useNavigate();
-  const { currentUser } = useAuth(); // Get authenticated user
+  const { currentUser } = useAuth();
   const { t } = useTranslation();
 
   const [showChat, setShowChat] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [loading, setLoading] = useState(!!profileId);
   const { clearCart, addToCart } = useCart();
 
   const [bidsWon] = useState(0);
 
   const [profile, setProfile] = useState({
-    ownerId: "freelancer123", // Mock Owner ID
+    ownerId: profileId || currentUser?.uid || "",
     avatarUrl: "",
-    name: "John Doe",
-    nickname: "Mamadou Dev",
-    bio: "Social Media & IT Support in Conakry",
-    city: "Conakry",
+    name: "",
+    nickname: "",
+    bio: "",
+    city: "",
     whatsapp: "",
-    skills: ["Social Media Ads", "IT Support", "API Integration"],
-    portfolio: {
-      title: "Built CRM API integration",
-      imageUrl: "",
-      github: "",
-      linkedin: "",
-    },
-    rating: 5,
-    review: {
-      name: "Emily Lewis",
-      location: "Conakry",
-      comment: "Great work, delivered on time!",
-    },
-    experience: "5+ Years",
-    level: "Pro",
-    completedProjects: "42",
-    successRate: "98%",
+    skills: [],
+    portfolio: { title: "", imageUrl: "", github: "", linkedin: "" },
+    rating: 0,
+    review: { name: "", location: "", comment: "" },
+    experience: "",
+    level: "",
+    completedProjects: "0",
+    successRate: "0%",
   });
+
+  useEffect(() => {
+    const uid = profileId || currentUser?.uid;
+    if (!uid) {
+      setLoading(false);
+      return;
+    }
+    UserService.getUserProfile(uid).then((data) => {
+      if (!data) {
+        setLoading(false);
+        return;
+      }
+      setProfile({
+        ownerId: uid,
+        avatarUrl: data.avatar || data.profileImage || data.photoURL || "",
+        name: data.fullName || data.name || "Freelancer",
+        nickname: data.nickname || "",
+        bio: data.bio || data.description || "",
+        city: data.city || data.region || "",
+        whatsapp: data.phone || "",
+        skills: data.skills || [],
+        portfolio: data.portfolio || { title: "", imageUrl: "", github: "", linkedin: "" },
+        rating: data.rating || 0,
+        review: data.review || { name: "", location: "", comment: "" },
+        experience: data.experience || "",
+        level: data.level || "",
+        completedProjects: String(data.completedProjects || data.stats?.completedJobs || 0),
+        successRate: data.successRate || "—",
+      });
+      setLoading(false);
+    }).catch(() => setLoading(false));
+  }, [profileId, currentUser?.uid]);
 
   const completionChecks = useMemo(() => {
     const checks = {

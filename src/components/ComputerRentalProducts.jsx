@@ -9,123 +9,8 @@ const ComputerRentalProducts = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Laptop Data with additional properties
-  const computers = [
-    {
-      id: 1,
-      name: t('computer_rental.products.items.basic_laptop.name'),
-      deviceType: 'laptop',
-      brand: 'HP',
-      category: 'Computers',
-      subCategory: 'Laptops',
-      priceValue: 250000,
-      weeklyPrice: "250,000 GNF",
-      monthlyPrice: "900,000 GNF",
-      image: LaptopImage,
-      specs: t('computer_rental.products.items.basic_laptop.specs')
-    },
-    {
-      id: 2,
-      name: t('computer_rental.products.items.standard_laptop.name'),
-      deviceType: 'laptop',
-      brand: 'Dell',
-      category: 'Computers',
-      subCategory: 'Laptops',
-      priceValue: 350000,
-      weeklyPrice: "350,000 GNF",
-      monthlyPrice: "1,200,000 GNF",
-      image: LaptopImage,
-      specs: t('computer_rental.products.items.standard_laptop.specs')
-    },
-    {
-      id: 3,
-      name: t('computer_rental.products.items.premium_laptop.name'),
-      deviceType: 'laptop',
-      brand: 'Apple',
-      category: 'Computers',
-      subCategory: 'Laptops',
-      priceValue: 500000,
-      weeklyPrice: "500,000 GNF",
-      monthlyPrice: "1,800,000 GNF",
-      image: LaptopImage,
-      specs: t('computer_rental.products.items.premium_laptop.specs')
-    },
-  ];
-
-  // Printer Data
-  const printers = [
-    {
-      id: 101,
-      name: t('computer_rental.products.items.laserjet.name'),
-      deviceType: 'printer',
-      brand: 'HP',
-      category: 'Printers',
-      subCategory: 'Laser Printers',
-      priceValue: 150000,
-      weeklyPrice: "150,000 GNF",
-      monthlyPrice: "500,000 GNF",
-      image: LaptopImage, // Placeholder
-      specs: t('computer_rental.products.items.laserjet.specs')
-    },
-    {
-      id: 102,
-      name: t('computer_rental.products.items.color_laserjet.name'),
-      deviceType: 'printer',
-      brand: 'Epson',
-      category: 'Printers',
-      subCategory: 'Laser Printers',
-      priceValue: 250000,
-      weeklyPrice: "250,000 GNF",
-      monthlyPrice: "850,000 GNF",
-      image: LaptopImage, // Placeholder
-      specs: t('computer_rental.products.items.color_laserjet.specs')
-    },
-    {
-      id: 103,
-      name: t('computer_rental.products.items.office_printer.name'),
-      deviceType: 'printer',
-      brand: 'Canon',
-      category: 'Printers',
-      subCategory: 'Multifunction Printers',
-      priceValue: 400000,
-      weeklyPrice: "400,000 GNF",
-      monthlyPrice: "1,400,000 GNF",
-      image: LaptopImage, // Placeholder
-      specs: t('computer_rental.products.items.office_printer.specs')
-    }
-  ];
-
-  // Mobile Devices Data
-  const mobileDevices = [
-    {
-      id: 201,
-      name: 'Samsung Galaxy Tab S8',
-      deviceType: 'tablet',
-      brand: 'Samsung',
-      category: 'Mobile Devices',
-      subCategory: 'Tablets',
-      priceValue: 100000,
-      weeklyPrice: "100,000 GNF",
-      monthlyPrice: "350,000 GNF",
-      image: LaptopImage, // Placeholder
-      specs: '11" Display, 128GB Storage'
-    },
-    {
-      id: 202,
-      name: 'iPhone 13 Pro',
-      deviceType: 'phone',
-      brand: 'Apple',
-      category: 'Mobile Devices',
-      subCategory: 'Smartphones',
-      priceValue: 150000,
-      weeklyPrice: "150,000 GNF",
-      monthlyPrice: "500,000 GNF",
-      image: LaptopImage, // Placeholder
-      specs: '6.1" OLED, 128GB'
-    }
-  ];
-
-  const allProducts = useMemo(() => [...computers, ...printers, ...mobileDevices], [t]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState("");
@@ -134,18 +19,35 @@ const ComputerRentalProducts = () => {
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [maxPrice, setMaxPrice] = useState(1000000);
 
+  useEffect(() => {
+    const fetchRentals = async () => {
+      try {
+        const { ProductService } = await import('../services/productService');
+        const products = await ProductService.getProducts();
+        // Filter those marked as rental or category 'Rental'
+        const rentalProducts = products.filter(p => p.isRental || p.type === 'rental' || p.category === 'Rental');
+        setAllProducts(rentalProducts);
+      } catch (error) {
+        console.error("Failed to fetch rentals:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRentals();
+  }, []);
+
   // Derived filter options
-  const brands = useMemo(() => [...new Set(allProducts.map(p => p.brand))], [allProducts]);
-  const categories = useMemo(() => [...new Set(allProducts.map(p => p.category))], [allProducts]);
+  const brands = useMemo(() => [...new Set(allProducts.map(p => p.brand).filter(Boolean))], [allProducts]);
+  const categories = useMemo(() => [...new Set(allProducts.map(p => p.category).filter(Boolean))], [allProducts]);
   const subCategories = useMemo(() => {
-    if (!selectedCategory) return [...new Set(allProducts.map(p => p.subCategory))];
-    return [...new Set(allProducts.filter(p => p.category === selectedCategory).map(p => p.subCategory))];
+    if (!selectedCategory) return [...new Set(allProducts.map(p => p.subCategory).filter(Boolean))];
+    return [...new Set(allProducts.filter(p => p.category === selectedCategory).map(p => p.subCategory).filter(Boolean))];
   }, [allProducts, selectedCategory]);
 
   const filteredProducts = useMemo(() => {
     return allProducts.filter(product => {
-      const matchSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          product.brand.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchSearch = product.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          product.brand?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchBrand = selectedBrand ? product.brand === selectedBrand : true;
       const matchCategory = selectedCategory ? product.category === selectedCategory : true;
       const matchSubCategory = selectedSubCategory ? product.subCategory === selectedSubCategory : true;

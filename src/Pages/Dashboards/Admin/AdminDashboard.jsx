@@ -378,7 +378,7 @@ export default function AdminDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-7xl mx-auto mb-8">
             {/* Manage Companies Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-blue-200" onClick={() => {
-              navigate("/company/dashboard");
+              navigate("/admin/dashboard/users", { state: { roleFilter: "company" } });
             }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_companies.title')}</h3>
@@ -403,7 +403,7 @@ export default function AdminDashboard() {
 
             {/* Manage Freelancers Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-green-200" onClick={() => {
-              navigate("/freelancer/dashboard");
+              navigate("/admin/dashboard/users", { state: { roleFilter: "freelancer" } });
             }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_freelancers.title')}</h3>
@@ -428,7 +428,7 @@ export default function AdminDashboard() {
 
             {/* Manage Sellers Card */}
             <Card className="p-6 hover:shadow-lg hover:scale-105 transition-all duration-200 cursor-pointer border-2 border-transparent hover:border-orange-200" onClick={() => {
-              navigate("/seller/dashboard");
+              navigate("/admin/dashboard/users", { state: { roleFilter: "seller" } });
             }}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.manage_sellers.title')}</h3>
@@ -466,115 +466,6 @@ export default function AdminDashboard() {
                 <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_approval')}</span>
                 <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_tracking')}</span>
                 <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.manage_leasing.tag_delivery')}</span>
-              </div>
-            </Card>
-
-
-            {/* Monitor Chats Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.monitor_chats.title')}</h3>
-                <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.monitor_chats.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_filter')}</span>
-                <span className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_limits')}</span>
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{t('admin_dashboard.main.cards.monitor_chats.tag_moderation')}</span>
-              </div>
-            </Card>
-
-            {/* Sponsorships Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.sponsorships.title')}</h3>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.sponsorships.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_approval')}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_carousel')}</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.sponsorships.tag_revenue')}</span>
-              </div>
-            </Card>
-
-            {/* Transactions Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.transactions.title')}</h3>
-                <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.transactions.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-emerald-100 text-emerald-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_history')}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_commission')}</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.transactions.tag_export')}</span>
-              </div>
-            </Card>
-
-            {/* Gamification Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.gamification.title')}</h3>
-                <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.gamification.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_training')}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_sales')}</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.gamification.tag_badges')}</span>
-              </div>
-            </Card>
-
-            {/* Portfolio & Ads Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.portfolio_ads.title')}</h3>
-                <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.portfolio_ads.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-rose-100 text-rose-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_approval')}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_management')}</span>
-                <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">{t('admin_dashboard.main.cards.portfolio_ads.tag_moderation')}</span>
-              </div>
-            </Card>
-
-            {/* Deleted Accounts Card */}
-            <Card className="p-6 transition-shadow">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">{t('admin_dashboard.main.cards.deleted_accounts.title')}</h3>
-                <div className="w-12 h-12 bg-slate-100 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-              </div>
-              <p className="text-gray-600 text-sm mb-4">{t('admin_dashboard.main.cards.deleted_accounts.desc')}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 bg-slate-100 text-slate-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_accounts')}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_logs')}</span>
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">{t('admin_dashboard.main.cards.deleted_accounts.tag_alerts')}</span>
               </div>
             </Card>
           </div>

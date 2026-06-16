@@ -24,3 +24,14 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Deploy scripts with credentials (use env vars instead)
+deploy_vps.py
+deploy_vps2.py
+frontend_hardcoded_secrets.txt
+test-djomy.js

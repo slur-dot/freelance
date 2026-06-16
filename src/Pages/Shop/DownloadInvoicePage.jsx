@@ -90,7 +90,7 @@ export default function DownloadInvoicePage() {
     );
   }
 
-  if (authError || (orderId && !order)) {
+  if (authError || !order) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center space-y-4">
@@ -118,27 +118,8 @@ export default function DownloadInvoicePage() {
     );
   }
 
-  // Fallback demo data if visited directly without an orderId
-  const displayOrder = order || {
-    id: "DEMO-" + Math.floor(Math.random() * 1000000),
-    createdAt: new Date(),
-    paymentMethod: "Not Specified",
-    totalAmount: 0,
-    shippingDetails: {
-      method: "Pickup/Delivery",
-      details: "No address provided"
-    },
-    items: [
-      {
-        name: "Demo Item",
-        quantity: 1,
-        price: 0,
-        serials: ["F224-DEMO1234-ABCD"]
-      }
-    ]
-  };
-
-  const subtotal = displayOrder.totalAmount; // Assuming totalAmount is without tax for simplicity, or inclusive
+  const displayOrder = order;
+  const subtotal = displayOrder.totalAmount;
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 px-4 sm:px-6 lg:px-8">

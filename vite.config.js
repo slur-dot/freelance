@@ -7,17 +7,26 @@ export default defineConfig({
   plugins: [react(),tailwindcss()],
   server: {
     proxy: {
-      '/api/djomy': {
-        target: 'https://sandbox-api.djomy.africa',
+      '/api/nimba-sms': {
+        target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/djomy/, ''),
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            proxyReq.removeHeader('Origin');
-            proxyReq.removeHeader('Referer');
-          });
-        }
-      }
+      },
+      '/api/djomy-gateway': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/api/djomy-status': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/api/djomy-confirm': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/api/djomy-webhook': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
     }
   }
 })

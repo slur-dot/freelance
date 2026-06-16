@@ -9,99 +9,7 @@ import { db } from "../firebaseConfig";
 import { collection, query, where, getDocs, limit, addDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 
-// Fallback jobs shown when Firestore has none yet
-const fallbackJobs = [
-  {
-    id: "demo-1",
-    title: "Senior React Developer",
-    description: "Build a modern SaaS dashboard with real-time data visualization. Must have experience with React, TypeScript, and Firebase.",
-    category: "Software Development",
-    location: "Conakry / Remote",
-    budget: 2500000,
-    deadline: "2026-07-30",
-    status: "open",
-    createdAt: "2026-05-01",
-    applicants: 5,
-    skills: ["React", "TypeScript", "Node.js", "Firebase"],
-    companyName: "TechGuinee Solutions",
-    isFallback: true,
-  },
-  {
-    id: "demo-2",
-    title: "Cloud Infrastructure Engineer",
-    description: "Set up and manage AWS infrastructure for a growing logistics platform serving West Africa.",
-    category: "Cloud & Infrastructure",
-    location: "Remote",
-    budget: 3000000,
-    deadline: "2026-08-15",
-    status: "open",
-    createdAt: "2026-05-02",
-    applicants: 3,
-    skills: ["AWS", "Docker", "Kubernetes", "Terraform"],
-    companyName: "LogiTech GN",
-    isFallback: true,
-  },
-  {
-    id: "demo-3",
-    title: "UI/UX Designer for Mobile App",
-    description: "Design an intuitive mobile experience for a fintech app targeting users across Guinea.",
-    category: "Design & Creative",
-    location: "Conakry",
-    budget: 1500000,
-    deadline: "2026-06-30",
-    status: "open",
-    createdAt: "2026-04-28",
-    applicants: 8,
-    skills: ["Figma", "UI Design", "Prototyping", "Mobile Design"],
-    companyName: "FinGN Payments",
-    isFallback: true,
-  },
-  {
-    id: "demo-4",
-    title: "SAP ERP Consultant",
-    description: "Implement and customize SAP modules for a mining company. Must have at least 3 years SAP experience.",
-    category: "SAP",
-    location: "Conakry",
-    budget: 5000000,
-    deadline: "2026-09-01",
-    status: "open",
-    createdAt: "2026-05-03",
-    applicants: 2,
-    skills: ["SAP", "ERP", "ABAP", "Business Process"],
-    companyName: "Guinea Mining Corp",
-    isFallback: true,
-  },
-  {
-    id: "demo-5",
-    title: "Cybersecurity Analyst",
-    description: "Conduct security audits and implement protection protocols for an NGO operating across multiple prefectures.",
-    category: "Cyber Security",
-    location: "Conakry / Labé",
-    budget: 3500000,
-    deadline: "2026-07-15",
-    status: "open",
-    createdAt: "2026-05-01",
-    applicants: 4,
-    skills: ["Penetration Testing", "Network Security", "SIEM", "Compliance"],
-    companyName: "West Africa Health Initiative",
-    isFallback: true,
-  },
-  {
-    id: "demo-6",
-    title: "Data Analyst — Market Research",
-    description: "Analyze market data for agricultural products across Guinea. Build dashboards and reports for stakeholders.",
-    category: "Data & Analytics",
-    location: "Remote",
-    budget: 1800000,
-    deadline: "2026-06-15",
-    status: "open",
-    createdAt: "2026-04-25",
-    applicants: 6,
-    skills: ["Python", "SQL", "Power BI", "Data Visualization"],
-    companyName: "AgriData GN",
-    isFallback: true,
-  },
-];
+
 
 const categories = [
   "All",
@@ -143,7 +51,7 @@ export default function JobBoard() {
     async function load() {
       setLoading(true);
       const data = await fetchPublicJobs();
-      setJobs(data && data.length > 0 ? data : fallbackJobs);
+      setJobs(data && data.length > 0 ? data : []);
       setLoading(false);
     }
     load();
@@ -174,7 +82,6 @@ export default function JobBoard() {
   const handleSave = async (e, job) => {
     e.stopPropagation();
     if (!currentUser) { navigate("/login"); return; }
-    if (job.isFallback) return;
     try {
       await addDoc(collection(db, "users", currentUser.uid, "savedJobs"), {
         jobId: job.id, jobTitle: job.title, companyName: job.companyName || "", type: "saved", createdAt: serverTimestamp(),
@@ -186,7 +93,6 @@ export default function JobBoard() {
   const handleFavorite = async (e, job) => {
     e.stopPropagation();
     if (!currentUser) { navigate("/login"); return; }
-    if (job.isFallback) return;
     try {
       await addDoc(collection(db, "users", currentUser.uid, "savedJobs"), {
         jobId: job.id, jobTitle: job.title, companyName: job.companyName || "", type: "favorite", createdAt: serverTimestamp(),
@@ -196,11 +102,6 @@ export default function JobBoard() {
   };
 
   const handleCardClick = (job) => {
-    if (job.isFallback) {
-      // Pass the fallback job data to the detail page so it can render without fetching from Firestore
-      navigate(`/job-board/${job.id}`, { state: { fallbackJob: job } });
-      return;
-    }
     navigate(`/job-board/${job.id}`);
   };
 
@@ -217,7 +118,7 @@ export default function JobBoard() {
             {t("job_board.title", "Find Your Next Project")}
           </h1>
           <p className="text-blue-100 text-lg max-w-2xl mx-auto mb-8">
-            {t("job_board.subtitle", "Browse job opportunities posted by companies, clients, and organizations across Guinea.")}
+            {t("job_board.subtitle", "Browse job opportunities posted by verified vendors across Guinea.")}
           </p>
           <div className="max-w-2xl mx-auto relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -256,7 +157,7 @@ export default function JobBoard() {
           <p className="text-sm text-gray-500">
             {t("job_board.showing", "Showing")} <span className="font-bold text-gray-900">{filteredJobs.length}</span> {t("job_board.jobs", "jobs")}
           </p>
-          {currentUser && userRole && ['Company', 'company', 'Client', 'client', 'Admin', 'admin'].includes(userRole) && (
+          {currentUser && userRole && ['Vendor', 'Seller'].includes(userRole) && (
             <button
               onClick={() => navigate("/hire-freelancers/info/job-post")}
               className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow-lg shadow-green-600/20 hover:-translate-y-0.5"
@@ -369,14 +270,7 @@ export default function JobBoard() {
                   </div>
                 </div>
 
-                {/* Fallback indicator */}
-                {job.isFallback && (
-                  <div className="bg-amber-50 border-t border-amber-100 px-6 py-2 text-center">
-                    <p className="text-xs text-amber-600 font-medium">
-                      {t("job_board.example_badge", "✦ Example listing — real jobs from companies will appear here")}
-                    </p>
-                  </div>
-                )}
+
               </div>
             ))}
           </div>

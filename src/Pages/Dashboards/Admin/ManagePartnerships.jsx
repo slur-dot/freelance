@@ -16,24 +16,24 @@ function RCButton({
 
   if (variant === "outline") {
     base =
-      "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
+    "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
   } else if (variant === "default") {
     base =
-      "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
+    "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
   } else if (variant === "custom") {
     base = ""; // allow full customization
   }
 
   const sizeCls =
-    size === "icon"
-      ? "p-2 h-8 w-8 flex items-center justify-center rounded-md"
-      : "px-3 md:px-4 py-2 rounded-md text-sm font-medium";
+  size === "icon" ?
+  "p-2 h-8 w-8 flex items-center justify-center rounded-md" :
+  "px-3 md:px-4 py-2 rounded-md text-sm font-medium";
 
   return (
     <button className={`${base} ${sizeCls} ${className}`} {...props}>
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Input
@@ -41,9 +41,9 @@ function RCInput({ className = "", ...props }) {
   return (
     <input
       className={`pl-9 pr-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:border-gray-400 text-sm w-full ${className}`}
-      {...props}
-    />
-  );
+      {...props} />);
+
+
 }
 
 // Card
@@ -56,8 +56,8 @@ function RCTable({ children }) {
   return (
     <table className="hidden sm:table min-w-full text-xs sm:text-sm text-left divide-y divide-gray-200">
       {children}
-    </table>
-  );
+    </table>);
+
 }
 function RCTableHeader({ children }) {
   return <thead className="bg-gray-50">{children}</thead>;
@@ -71,18 +71,18 @@ function RCTableRow({ children }) {
 function RCTableHead({ children, className = "" }) {
   return (
     <th
-      className={`px-3 sm:px-6 py-3 font-medium text-gray-500 uppercase tracking-wider ${className}`}
-    >
+      className={`px-3 sm:px-6 py-3 font-medium text-gray-500 uppercase tracking-wider ${className}`}>
+      
       {children}
-    </th>
-  );
+    </th>);
+
 }
 function RCTableCell({ children, className = "" }) {
   return (
     <td className={`px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap ${className}`}>
       {children}
-    </td>
-  );
+    </td>);
+
 }
 
 export default function ManagePartnerships() {
@@ -92,14 +92,14 @@ export default function ManagePartnerships() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   const [viewingPartnership, setViewingPartnership] = useState(null);
 
   useEffect(() => {
     const q = query(collection(db, "partnerships"), orderBy("createdAt", "desc"));
-    
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(doc => ({
+      const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data()
       }));
@@ -121,10 +121,10 @@ export default function ManagePartnerships() {
       return;
     }
     const lowerQuery = searchQuery.toLowerCase();
-    const filtered = partnerships.filter(p => 
-      (p.name?.toLowerCase() || "").includes(lowerQuery) ||
-      (p.email?.toLowerCase() || "").includes(lowerQuery) ||
-      (p.partnershipType?.toLowerCase() || "").includes(lowerQuery)
+    const filtered = partnerships.filter((p) =>
+    (p.name?.toLowerCase() || "").includes(lowerQuery) ||
+    (p.email?.toLowerCase() || "").includes(lowerQuery) ||
+    (p.partnershipType?.toLowerCase() || "").includes(lowerQuery)
     );
     setFilteredPartnerships(filtered);
   }, [searchQuery, partnerships]);
@@ -137,7 +137,7 @@ export default function ManagePartnerships() {
     try {
       setLoading(true);
       await deleteDoc(doc(db, "partnerships", id));
-      setError(""); 
+      setError("");
     } catch (e) {
       console.error("Error deleting partnership:", e);
       setError("Failed to delete the application.");
@@ -154,7 +154,7 @@ export default function ManagePartnerships() {
       });
     } catch (e) {
       console.error("Error updating status:", e);
-      alert("Failed to update status.");
+      alert(t("failed_to_update_status_901", "Failed to update status."));
     }
   };
 
@@ -196,11 +196,11 @@ export default function ManagePartnerships() {
         <div className="relative mb-4">
           {error && <div className="mb-3 text-red-600 text-sm">{error}</div>}
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <RCInput 
-            placeholder={t('admin_dashboard.partnerships.search_placeholder', 'Search by name, email or type...')} 
+          <RCInput
+            placeholder={t('admin_dashboard.partnerships.search_placeholder', 'Search by name, email or type...')}
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+            onChange={(e) => setSearchQuery(e.target.value)} />
+          
         </div>
 
         {/* Table */}
@@ -217,21 +217,21 @@ export default function ManagePartnerships() {
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
-              {loading && filteredPartnerships.length === 0 ? (
-                <RCTableRow>
+              {loading && filteredPartnerships.length === 0 ?
+              <RCTableRow>
                   <RCTableCell colSpan="6" className="text-center py-8 text-gray-500">
                     {t('common.loading', 'Loading...')}
                   </RCTableCell>
-                </RCTableRow>
-              ) : filteredPartnerships.length === 0 ? (
-                <RCTableRow>
+                </RCTableRow> :
+              filteredPartnerships.length === 0 ?
+              <RCTableRow>
                   <RCTableCell colSpan="6" className="text-center py-8 text-gray-500">
                     {t('admin_dashboard.partnerships.no_data', 'No partnership applications found.')}
                   </RCTableCell>
-                </RCTableRow>
-              ) : (
-                filteredPartnerships.map((item) => (
-                  <RCTableRow key={item.id}>
+                </RCTableRow> :
+
+              filteredPartnerships.map((item) =>
+              <RCTableRow key={item.id}>
                     <RCTableCell className="text-gray-500">
                       {item.createdAt ? new Date(item.createdAt.seconds * 1000).toLocaleDateString() : 'N/A'}
                     </RCTableCell>
@@ -249,52 +249,52 @@ export default function ManagePartnerships() {
                     </RCTableCell>
                     <RCTableCell>
                       <select
-                        value={item.status || 'pending'}
-                        onChange={(e) => handleUpdateStatus(item.id, e.target.value)}
-                        className={`px-2 py-1 rounded-full text-xs font-semibold border-none cursor-pointer outline-none ${getStatusColor(item.status)}`}
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="contacted">Contacted</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="rejected">Rejected</option>
+                    value={item.status || 'pending'}
+                    onChange={(e) => handleUpdateStatus(item.id, e.target.value)}
+                    className={`px-2 py-1 rounded-full text-xs font-semibold border-none cursor-pointer outline-none ${getStatusColor(item.status)}`}>
+                    
+                        <option value="pending">{t("pending_679", "Pending")}</option>
+                        <option value="contacted">{t("contacted_503", "Contacted")}</option>
+                        <option value="accepted">{t("accepted_719", "Accepted")}</option>
+                        <option value="rejected">{t("rejected_615", "Rejected")}</option>
                       </select>
                     </RCTableCell>
                     <RCTableCell>
                       <div className="flex items-center gap-2">
                         <RCButton
-                          size="icon"
-                          onClick={() => handleView(item)}
-                          className="text-blue-600 hover:bg-blue-50"
-                          title="View Details"
-                        >
+                      size="icon"
+                      onClick={() => handleView(item)}
+                      className="text-blue-600 hover:bg-blue-50"
+                      title="View Details">
+                      
                           <Eye className="h-4 w-4" />
                         </RCButton>
                         <RCButton
-                          size="icon"
-                          onClick={() => handleDelete(item.id)}
-                          className="text-red-600 hover:bg-red-50"
-                          title="Delete Application"
-                        >
+                      size="icon"
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600 hover:bg-red-50"
+                      title="Delete Application">
+                      
                           <Trash2 className="h-4 w-4" />
                         </RCButton>
                       </div>
                     </RCTableCell>
                   </RCTableRow>
-                ))
-              )}
+              )
+              }
             </RCTableBody>
           </RCTable>
         </div>
 
         {/* Mobile Card Layout */}
         <div className="sm:hidden space-y-3 mt-4">
-          {loading && filteredPartnerships.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">{t('common.loading', 'Loading...')}</div>
-          ) : filteredPartnerships.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">{t('admin_dashboard.partnerships.no_data', 'No partnership applications found.')}</div>
-          ) : (
-            filteredPartnerships.map((item) => (
-              <div key={item.id} className="border rounded-md p-4 shadow-sm bg-white relative">
+          {loading && filteredPartnerships.length === 0 ?
+          <div className="text-center py-8 text-gray-500">{t('common.loading', 'Loading...')}</div> :
+          filteredPartnerships.length === 0 ?
+          <div className="text-center py-8 text-gray-500">{t('admin_dashboard.partnerships.no_data', 'No partnership applications found.')}</div> :
+
+          filteredPartnerships.map((item) =>
+          <div key={item.id} className="border rounded-md p-4 shadow-sm bg-white relative">
                 <div className="flex justify-between items-start mb-2">
                   <h2 className="font-bold text-gray-900">{item.name}</h2>
                   <span className="text-xs text-gray-500">
@@ -306,14 +306,14 @@ export default function ManagePartnerships() {
                 
                 <div className="flex justify-between items-center mt-4">
                   <select
-                    value={item.status || 'pending'}
-                    onChange={(e) => handleUpdateStatus(item.id, e.target.value)}
-                    className={`px-3 py-1.5 rounded-full text-xs font-semibold border-none ${getStatusColor(item.status)}`}
-                  >
-                    <option value="pending">Pending</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="accepted">Accepted</option>
-                    <option value="rejected">Rejected</option>
+                value={item.status || 'pending'}
+                onChange={(e) => handleUpdateStatus(item.id, e.target.value)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold border-none ${getStatusColor(item.status)}`}>
+                
+                    <option value="pending">{t("pending_21", "Pending")}</option>
+                    <option value="contacted">{t("contacted_180", "Contacted")}</option>
+                    <option value="accepted">{t("accepted_611", "Accepted")}</option>
+                    <option value="rejected">{t("rejected_144", "Rejected")}</option>
                   </select>
 
                   <div className="flex items-center gap-2">
@@ -326,17 +326,17 @@ export default function ManagePartnerships() {
                   </div>
                 </div>
               </div>
-            ))
-          )}
+          )
+          }
         </div>
       </RCCard>
 
       {/* View Details Modal */}
-      {viewingPartnership && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+      {viewingPartnership &&
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col overflow-hidden">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-              <h2 className="text-xl font-bold text-gray-800">Partnership Details</h2>
+              <h2 className="text-xl font-bold text-gray-800">{t("partnership_details_451", "Partnership Details")}</h2>
               <button onClick={handleCloseView} className="text-gray-400 hover:text-gray-700 text-2xl leading-none">&times;</button>
             </div>
 
@@ -348,61 +348,61 @@ export default function ManagePartnerships() {
                   <p className="text-base font-medium text-gray-900">{viewingPartnership.name}</p>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Partnership Type</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">{t("partnership_type_691", "Partnership Type")}</label>
                   <p className="text-base font-medium text-gray-900 capitalize">{viewingPartnership.partnershipType}</p>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Contact Email</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">{t("contact_email_513", "Contact Email")}</label>
                   <a href={`mailto:${viewingPartnership.email}`} className="text-base font-medium text-blue-600 hover:underline">{viewingPartnership.email}</a>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Phone Number</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">{t("phone_number_331", "Phone Number")}</label>
                   <a href={`tel:${viewingPartnership.phone}`} className="text-base font-medium text-blue-600 hover:underline">{viewingPartnership.phone}</a>
                 </div>
               </div>
 
               {/* Long Text Areas */}
               <div className="pt-4 border-t border-gray-100">
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Project Details</label>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t("project_details_488", "Project Details")}</label>
                 <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-800 whitespace-pre-wrap">
                   {viewingPartnership.projectDetails || 'No details provided.'}
                 </div>
               </div>
 
-              {viewingPartnership.comments && (
-                <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Additional Comments</label>
+              {viewingPartnership.comments &&
+            <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">{t("additional_comments_908", "Additional Comments")}</label>
                   <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-800 whitespace-pre-wrap">
                     {viewingPartnership.comments}
                   </div>
                 </div>
-              )}
+            }
 
               {/* Attachments */}
-              {viewingPartnership.fileUrl && (
-                <div className="pt-4 border-t border-gray-100">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Attached Document</label>
-                  <a 
-                    href={viewingPartnership.fileUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-3 bg-[#15803D]/10 text-[#15803D] hover:bg-[#15803D]/20 rounded-lg font-semibold transition-colors text-sm"
-                  >
+              {viewingPartnership.fileUrl &&
+            <div className="pt-4 border-t border-gray-100">
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t("attached_document_682", "Attached Document")}</label>
+                  <a
+                href={viewingPartnership.fileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-3 bg-[#15803D]/10 text-[#15803D] hover:bg-[#15803D]/20 rounded-lg font-semibold transition-colors text-sm">
+                
                     <FileDown className="w-5 h-5" />
-                    Download {viewingPartnership.fileName || 'Document'}
+                    {t("download_860", "Download")} {viewingPartnership.fileName || 'Document'}
                   </a>
                 </div>
-              )}
+            }
             </div>
             
             <div className="p-6 border-t border-gray-100 bg-gray-50 flex justify-end">
                <RCButton variant="custom" className="bg-gray-800 text-white hover:bg-gray-900 font-semibold px-6" onClick={handleCloseView}>
-                 Close
+                 {t("close_900", "Close")}
                </RCButton>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

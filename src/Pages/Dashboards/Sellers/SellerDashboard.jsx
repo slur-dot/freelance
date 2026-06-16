@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
-import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2, ExternalLink, TrendingUp, Package, DollarSign, Users } from "lucide-react";
+import { Info, Upload, Star, Loader2, Eye, EyeOff, Edit, Lock, Trash2, ExternalLink, TrendingUp, Package, DollarSign, Users, Bell } from "lucide-react";
 import LiveChatWidget from "../../../components/Support/LiveChatWidget";
 import { storage, auth } from "../../../firebaseConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -15,20 +15,20 @@ import { ChangePasswordModal, DeleteAccountModal } from "../../../components/Mod
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -65,7 +65,7 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -93,14 +93,14 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
         }
       };
 
-      await UserService.updateUserProfile(sellerData.id, updatePayload); 
+      await UserService.updateUserProfile(sellerData.id, updatePayload);
 
-      alert('Profile updated successfully!');
-      onUpdate(); 
+      alert(t("profile_updated_successfully_897", "Profile updated successfully!"));
+      onUpdate();
       onClose();
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      alert(t("failed_to_update_profile_please_try_again_535", "Failed to update profile. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -121,8 +121,8 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 value={formData.name}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
@@ -133,8 +133,8 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 value={formData.businessName}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
@@ -145,8 +145,8 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 value={formData.location}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
@@ -157,32 +157,32 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.phone')}</label>
               <PhoneInput
                 value={formData.phone}
-                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
+                onChange={(val) => setFormData((prev) => ({ ...prev, phone: val }))}
                 countryCode={phoneCountryCode}
                 onCountryCodeChange={setPhoneCountryCode}
                 className="rounded-md"
-                required
-              />
+                required />
+              
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('seller_dashboard.modal.payment_number')}</label>
               <PhoneInput
                 value={formData.paymentNumber}
-                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
+                onChange={(val) => setFormData((prev) => ({ ...prev, paymentNumber: val }))}
                 countryCode={paymentCountryCode}
                 onCountryCodeChange={setPaymentCountryCode}
                 className="rounded-md"
-                required
-              />
+                required />
+              
             </div>
           </div>
 
@@ -195,24 +195,24 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
                 value={formData.linkedin}
                 onChange={handleInputChange}
                 placeholder={t('seller_dashboard.modal.linkedin')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              
               <input
                 type="url"
                 name="facebook"
                 value={formData.facebook}
                 onChange={handleInputChange}
                 placeholder={t('seller_dashboard.modal.facebook')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              
               <input
                 type="url"
                 name="website"
                 value={formData.website}
                 onChange={handleInputChange}
                 placeholder={t('seller_dashboard.modal.website')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              
             </div>
           </div>
 
@@ -220,8 +220,8 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
             <Button
               type="submit"
               className="flex-1"
-              disabled={loading}
-            >
+              disabled={loading}>
+              
               {loading ? t('seller_dashboard.modal.updating_btn') : t('seller_dashboard.modal.update_btn')}
             </Button>
             <Button
@@ -229,15 +229,15 @@ function EditProfileModal({ sellerData, onClose, onUpdate }) {
               variant="outline"
               className="flex-1"
               onClick={onClose}
-              disabled={loading}
-            >
+              disabled={loading}>
+              
               {t('seller_dashboard.modal.cancel_btn')}
             </Button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 // Profile Card
@@ -264,17 +264,17 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-      alert("Please select an image file");
+      alert(t("please_select_an_image_file_230", "Please select an image file"));
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      alert("Image must be under 2MB");
+      alert(t("image_must_be_under_2mb_295", "Image must be under 2MB"));
       return;
     }
 
     if (!sellerData?.id) {
-      alert("Please select a seller first");
+      alert(t("please_select_a_seller_first_861", "Please select a seller first"));
       return;
     }
 
@@ -288,10 +288,10 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
       setAvatar(downloadURL);
       await UserService.updateUserProfile(sellerData.id, { avatar: downloadURL });
       if (onAvatarUpdate) onAvatarUpdate();
-      alert("Avatar updated successfully!");
+      alert(t("avatar_updated_successfully_844", "Avatar updated successfully!"));
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      alert("Failed to upload avatar. Please try again.");
+      alert(t("failed_to_upload_avatar_please_try_again_541", "Failed to upload avatar. Please try again."));
     } finally {
       setUploading(false);
     }
@@ -305,10 +305,10 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
         [field]: !sellerData.visibility?.[field]
       };
       await UserService.updateUserProfile(sellerData.id, { visibility: newVisibility });
-      onAvatarUpdate(); 
+      onAvatarUpdate();
     } catch (error) {
       console.error('Error updating visibility:', error);
-      alert('Failed to update visibility settings');
+      alert(t("failed_to_update_visibility_settings_95", "Failed to update visibility settings"));
     }
   };
 
@@ -321,8 +321,8 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
               src={avatar}
               alt="Avatar"
               className="w-full h-full object-cover"
-              onError={(e) => { e.target.src = DefaultAvatar; }}
-            />
+              onError={(e) => {e.target.src = DefaultAvatar;}} />
+            
             <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
               {uploading ? <Loader2 className="h-3.5 w-3.5 text-white animate-spin" /> : <Upload className="h-3.5 w-3.5 text-white" />}
               <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
@@ -338,16 +338,16 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
           <p className="text-sm text-gray-500">{sellerData?.businessName || "Loading..."}</p>
           <p className="text-sm text-gray-500">📍 {sellerData?.location || "Loading..."}</p>
 
-          {sellerData?.socialLinks && (
-            <div className="mt-2">
+          {sellerData?.socialLinks &&
+          <div className="mt-2">
               <p className="text-xs font-medium text-gray-600 mb-1">{t('seller_dashboard.profile.social_links')}</p>
               <div className="flex gap-2 text-xs flex-wrap">
-                {sellerData.socialLinks.linkedin && <a href={sellerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>}
-                {sellerData.socialLinks.facebook && <a href={sellerData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Facebook</a>}
-                {sellerData.socialLinks.website && <a href={sellerData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Website</a>}
+                {sellerData.socialLinks.linkedin && <a href={sellerData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("linkedin_190", "LinkedIn")}</a>}
+                {sellerData.socialLinks.facebook && <a href={sellerData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("facebook_469", "Facebook")}</a>}
+                {sellerData.socialLinks.website && <a href={sellerData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("website_104", "Website")}</a>}
               </div>
             </div>
-          )}
+          }
         </div>
       </div>
 
@@ -384,8 +384,8 @@ function ProfileCard({ onContact, sellerData, onAvatarUpdate, setShowPasswordMod
       </div>
 
       {showEditModal && <EditProfileModal sellerData={sellerData} onClose={() => setShowEditModal(false)} onUpdate={onAvatarUpdate} />}
-    </Card>
-  );
+    </Card>);
+
 }
 
 export default function SellerDashboard() {
@@ -416,11 +416,11 @@ export default function SellerDashboard() {
     try {
       setLoading(true);
       const [profile, products, orders, notifs] = await Promise.all([
-        UserService.getUserProfile(user.uid),
-        ProductService.getSellerProducts(user.uid),
-        OrderService.getSellerOrders(user.uid),
-        NotificationService.getUserNotifications(user.uid)
-      ]);
+      UserService.getUserProfile(user.uid),
+      ProductService.getSellerProducts(user.uid),
+      OrderService.getSellerOrders(user.uid),
+      NotificationService.getUserNotifications(user.uid)]
+      );
       if (profile) {
         const sellerProfile = {
           ...profile,
@@ -429,9 +429,9 @@ export default function SellerDashboard() {
             ...profile.status,
             activeListings: products.length,
             transactions: orders.length,
-            totalSales: orders
-              .filter(o => o.status === 'completed' || o.status === 'delivered')
-              .reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
+            totalSales: orders.
+            filter((o) => o.status === 'completed' || o.status === 'delivered').
+            reduce((sum, o) => sum + (Number(o.totalAmount) || 0), 0)
           }
         };
         setSelectedSeller(sellerProfile);
@@ -464,11 +464,11 @@ export default function SellerDashboard() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center h-64">
             <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-            <span className="ml-2 text-gray-600">Loading seller data...</span>
+            <span className="ml-2 text-gray-600">{t("loading_seller_data_220", "Loading seller data...")}</span>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   if (error && !selectedSeller) {
@@ -480,8 +480,8 @@ export default function SellerDashboard() {
             <p className="text-yellow-600 text-sm mt-1">{error}</p>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -502,13 +502,13 @@ export default function SellerDashboard() {
       </div>
 
       <div className="mb-6 max-w-7xl mx-auto">
-        {error && (
-          <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-md p-2">
+        {error &&
+        <div className="mt-2 bg-yellow-50 border border-yellow-200 rounded-md p-2">
             <p className="text-yellow-700 text-sm">
               ⚠️ {t('seller_dashboard.offline_mode')} - {error}
             </p>
           </div>
-        )}
+        }
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
@@ -516,8 +516,8 @@ export default function SellerDashboard() {
         <ProfileCard
           onContact={() => setShowChatWidget(true)}
           sellerData={selectedSeller}
-          onAvatarUpdate={handleAvatarUpdate}
-        />
+          onAvatarUpdate={handleAvatarUpdate} />
+        
 
         {/* Total Sales Card */}
         <div className="md:col-span-1">
@@ -530,8 +530,8 @@ export default function SellerDashboard() {
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">
                 {selectedSeller?.status?.totalSales ?
-                  (selectedSeller.status.totalSales * (selectedSeller.subscription?.plan === 'Premium' ? 0.9 : 0.85)).toLocaleString() :
-                  '0'} GNF
+                (selectedSeller.status.totalSales * (selectedSeller.subscription?.plan === 'Premium' ? 0.9 : 0.85)).toLocaleString() :
+                '0'} {t("gnf_702", "GNF")}
               </div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/analytics")}>
                 {t('seller_dashboard.cards.view_analytics')}
@@ -549,7 +549,7 @@ export default function SellerDashboard() {
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.activeListings || 0} Products</div>
+              <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.activeListings || 0} {t("products_446", "Products")}</div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/listings")}>
                 {t('seller_dashboard.cards.manage_listings')}
               </Button>
@@ -566,7 +566,7 @@ export default function SellerDashboard() {
               <Info className="h-4 w-4 text-gray-500" />
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
-              <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.transactions || 0} Orders</div>
+              <div className="text-3xl md:text-4xl font-bold">{selectedSeller?.status?.transactions || 0} {t("orders_121", "Orders")}</div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/orders")}>
                 {t('seller_dashboard.cards.view_orders')}
               </Button>
@@ -584,7 +584,7 @@ export default function SellerDashboard() {
             </div>
             <CardContent className="flex flex-col justify-between flex-grow">
               <div className="text-3xl md:text-4xl font-bold">
-                {selectedSeller?.status?.pendingPayouts?.toLocaleString() || '0'} GNF
+                {selectedSeller?.status?.pendingPayouts?.toLocaleString() || '0'} {t("gnf_768", "GNF")}
               </div>
               <Button className="mt-4 w-fit" onClick={() => navigate("/seller/dashboard/payouts")}>
                 {t('seller_dashboard.cards.view_payouts')}
@@ -599,10 +599,10 @@ export default function SellerDashboard() {
           <Card className="flex-grow">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
-                {recentOrders.length > 0 ? (
-                  <div className="space-y-2 p-4">
-                    {recentOrders.map((order) => (
-                      <div key={order.id} className="flex justify-between items-center text-sm border-b pb-2">
+                {recentOrders.length > 0 ?
+                <div className="space-y-2 p-4">
+                    {recentOrders.map((order) =>
+                  <div key={order.id} className="flex justify-between items-center text-sm border-b pb-2">
                         <div className="flex flex-col">
                           <span className="font-medium truncate max-w-[150px]">{order.product || `Order #${order.id.slice(0, 6)}`}</span>
                           <span className="text-xs text-gray-500">{order.buyerName}</span>
@@ -614,23 +614,23 @@ export default function SellerDashboard() {
                           </span>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="p-4 text-center text-gray-500">
+                  )}
+                  </div> :
+
+                <div className="p-4 text-center text-gray-500">
                     <h4 className="text-lg font-bold mb-2">{t('seller_dashboard.recent_activity.welcome_title')}</h4>
                     <p className="text-sm">
                       {t('seller_dashboard.recent_activity.welcome_desc')}
                     </p>
                   </div>
-                )}
+                }
               </div>
               <div className="p-4 border-t">
                 <Button
                   variant="ghost"
                   className="w-full"
-                  onClick={() => navigate("/seller/dashboard/listings")}
-                >
+                  onClick={() => navigate("/seller/dashboard/listings")}>
+                  
                   {t('seller_dashboard.recent_activity.create_listing')}
                 </Button>
               </div>
@@ -656,14 +656,14 @@ export default function SellerDashboard() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="text-left">
                     <p className="font-semibold">{t('seller_dashboard.performance.total_revenue')}</p>
-                    <p className="text-gray-600">{selectedSeller?.status?.totalSales?.toLocaleString() || '0'} GNF</p>
+                    <p className="text-gray-600">{selectedSeller?.status?.totalSales?.toLocaleString() || '0'} {t("gnf_225", "GNF")}</p>
                   </div>
                   <div className="text-left">
                     <p className="font-semibold">{t('seller_dashboard.performance.net_earnings')}</p>
                     <p className="text-gray-600">
                       {selectedSeller?.status?.totalSales ?
-                        (selectedSeller.status.totalSales * (selectedSeller.subscription?.plan === 'Premium' ? 0.9 : 0.85)).toLocaleString() :
-                        '0'} GNF
+                      (selectedSeller.status.totalSales * (selectedSeller.subscription?.plan === 'Premium' ? 0.9 : 0.85)).toLocaleString() :
+                      '0'} {t("gnf_325", "GNF")}
                     </p>
                   </div>
                   <div className="text-left">
@@ -681,14 +681,14 @@ export default function SellerDashboard() {
         </div>
         {/* Notifications Section */}
         <div className="md:col-span-3 flex flex-col w-full">
-          <h3 className="text-base md:text-lg font-semibold mb-2">Recent Notifications</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-2">{t("recent_notifications_311", "Recent Notifications")}</h3>
           <Card className="h-[300px]">
             <CardContent className="flex flex-col h-full p-0">
               <div className="flex-grow overflow-y-auto max-h-[300px] md:max-h-none">
                 <div className="space-y-3 p-4">
-                  {notifications.length > 0 ? (
-                    notifications.map((notification) => (
-                      <div key={notification.id} className="flex items-start gap-3 text-sm p-3 bg-gray-50 rounded-lg">
+                  {notifications.length > 0 ?
+                  notifications.map((notification) =>
+                  <div key={notification.id} className="flex items-start gap-3 text-sm p-3 bg-gray-50 rounded-lg">
                         <div className="p-2 bg-blue-100 text-blue-600 rounded-full">
                           <Bell className="w-4 h-4" />
                         </div>
@@ -700,24 +700,24 @@ export default function SellerDashboard() {
                           </p>
                         </div>
                       </div>
-                    ))
-                  ) : (
-                    <div className="p-6 text-center text-gray-500">
-                      <h4 className="text-lg font-bold mb-2">Welcome to Your Seller Dashboard!</h4>
+                  ) :
+
+                  <div className="p-6 text-center text-gray-500">
+                      <h4 className="text-lg font-bold mb-2">{t("welcome_to_your_seller_dashboard_395", "Welcome to Your Seller Dashboard!")}</h4>
                       <p className="text-sm mb-4">
-                        You'll receive notifications here for new orders, payouts, and important updates.
+                        {t("youll_receive_notifications_here_for_new_orders__843", "You'll receive notifications here for new orders, payouts, and important updates.")}
                       </p>
                     </div>
-                  )}
+                  }
                 </div>
               </div>
               <div className="p-4 border-t">
                 <Button
                   variant="ghost"
                   className="w-full"
-                  onClick={() => navigate("/seller/dashboard/notifications")}
-                >
-                  VIEW ALL NOTIFICATIONS
+                  onClick={() => navigate("/seller/dashboard/notifications")}>
+                  {t("view_all_notifications_790", "VIEW ALL NOTIFICATIONS")}
+                
                 </Button>
               </div>
             </CardContent>
@@ -726,6 +726,6 @@ export default function SellerDashboard() {
       </div>
 
       {showChatWidget && <LiveChatWidget forceOpen={true} />}
-    </div>
-  );
+    </div>);
+
 }

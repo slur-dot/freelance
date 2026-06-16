@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { auth, db } from "../firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -20,45 +20,60 @@ export function AuthProvider({ children }) {
     }
 
     useEffect(() => {
+        let unsubProfile = null;
+
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             setCurrentUser(user);
 
+            if (unsubProfile) {
+                unsubProfile();
+                unsubProfile = null;
+            }
+
             if (user) {
-                // Fetch user role from Firestore
-                try {
-                    const userDoc = await getDoc(doc(db, "users", user.uid));
-                    if (userDoc.exists()) {
-                        const data = userDoc.data();
-                        setUserRole(data.role);
-                        setUserData(data);
-                    } else {
-                        console.log("No user profile found in Firestore");
+                unsubProfile = onSnapshot(
+                    doc(db, "users", user.uid),
+                    (userDoc) => {
+                        if (userDoc.exists()) {
+                            const data = userDoc.data();
+                            setUserRole(data.role);
+                            setUserData(data);
+                        } else {
+                            setUserRole(null);
+                            setUserData(null);
+                        }
+                        setLoading(false);
+                    },
+                    (error) => {
+                        console.error("Error listening to user profile:", error);
                         setUserRole(null);
                         setUserData(null);
+                        setLoading(false);
                     }
-                } catch (error) {
-                    console.error("Error fetching user role:", error);
-                    setUserRole(null);
-                    setUserData(null);
-                }
+                );
             } else {
                 setUserRole(null);
                 setUserData(null);
+                setLoading(false);
             }
-
-            setLoading(false);
         });
 
-        return unsubscribe;
+        return () => {
+            unsubscribe();
+            if (unsubProfile) unsubProfile();
+        };
     }, []);
 
-    const value = {
-        currentUser,
-        userRole,
-        userData,
-        loading,
-        logout
-    };
+    const value = useMemo(
+        () => ({
+            currentUser,
+            userRole,
+            userData,
+            loading,
+            logout,
+        }),
+        [currentUser, userRole, userData, loading]
+    );
 
     return (
         <AuthContext.Provider value={value}>

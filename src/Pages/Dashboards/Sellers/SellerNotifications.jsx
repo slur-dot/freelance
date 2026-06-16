@@ -7,20 +7,20 @@ import { useTranslation } from "react-i18next";
 // Button Component
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Card Components
@@ -72,12 +72,12 @@ export default function SellerNotifications() {
   const markAsRead = async (id) => {
     try {
       await NotificationService.markAsRead(id);
-      setNotifications(prev =>
-        prev.map(notification =>
-          notification.id === id
-            ? { ...notification, read: true }
-            : notification
-        )
+      setNotifications((prev) =>
+      prev.map((notification) =>
+      notification.id === id ?
+      { ...notification, read: true } :
+      notification
+      )
       );
     } catch (err) {
       console.error('Error marking notification as read:', err);
@@ -88,8 +88,8 @@ export default function SellerNotifications() {
     if (!user) return;
     try {
       await NotificationService.markAllAsRead(user.uid);
-      setNotifications(prev =>
-        prev.map(notification => ({ ...notification, read: true }))
+      setNotifications((prev) =>
+      prev.map((notification) => ({ ...notification, read: true }))
       );
     } catch (err) {
       console.error('Error marking all notifications as read:', err);
@@ -141,17 +141,17 @@ export default function SellerNotifications() {
     }
   };
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-green-600 mx-auto mb-4" />
-          <p className="text-gray-500">Loading notifications...</p>
+          <p className="text-gray-500">{t("loading_notifications_119", "Loading notifications...")}</p>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   return (
@@ -163,70 +163,70 @@ export default function SellerNotifications() {
           <p className="text-gray-600">{t('seller_dashboard.notifications.subtitle')}</p>
         </div>
         <div className="flex items-center gap-3">
-          {unreadCount > 0 && (
-            <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+          {unreadCount > 0 &&
+          <span className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
               {unreadCount} unread
             </span>
-          )}
+          }
           <Button
             variant="outline"
             onClick={markAllAsRead}
-            disabled={unreadCount === 0}
-          >
+            disabled={unreadCount === 0}>
+            
             {t('seller_dashboard.notifications.mark_all_read')}
           </Button>
         </div>
       </div>
 
       {/* Error Message */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+      {error &&
+      <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
             <AlertCircle className="h-5 w-5 text-red-400" />
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Error</h3>
+              <h3 className="text-sm font-medium text-red-800">{t("error_816", "Error")}</h3>
               <div className="mt-2 text-sm text-red-700">
                 <p>{error}</p>
               </div>
             </div>
           </div>
         </div>
-      )}
+      }
 
       {/* Notifications List */}
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-gray-600" />
-            <h2 className="text-lg font-semibold">Recent Notifications</h2>
+            <h2 className="text-lg font-semibold">{t("recent_notifications_956", "Recent Notifications")}</h2>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          {notifications.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
+          {notifications.length === 0 ?
+          <div className="p-8 text-center text-gray-500">
               <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
               <h3 className="text-lg font-medium mb-2">{t('seller_dashboard.notifications.empty.title')}</h3>
               <p>{t('seller_dashboard.notifications.empty.desc')}</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-200">
+            </div> :
+
+          <div className="divide-y divide-gray-200">
               {notifications.map((notification) => {
-                const IconComponent = getNotificationIcon(notification.type);
-                const iconColor = getNotificationColor(notification.type);
-                return (
-                  <div
-                    key={notification.id}
-                    className={`p-4 hover:bg-gray-50 transition-colors ${!notification.read ? 'bg-blue-50 border-l-4 border-blue-500' : ''
-                      }`}
-                  >
+              const IconComponent = getNotificationIcon(notification.type);
+              const iconColor = getNotificationColor(notification.type);
+              return (
+                <div
+                  key={notification.id}
+                  className={`p-4 hover:bg-gray-50 transition-colors ${!notification.read ? 'bg-blue-50 border-l-4 border-blue-500' : ''}`
+                  }>
+                  
                     <div className="flex items-start gap-3">
                       <div className={`flex-shrink-0 ${iconColor}`}>
                         <IconComponent className="h-5 w-5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h3 className={`text-sm font-medium ${!notification.read ? 'text-gray-900' : 'text-gray-700'
-                            }`}>
+                          <h3 className={`text-sm font-medium ${!notification.read ? 'text-gray-900' : 'text-gray-700'}`
+                        }>
                             {notification.title}
                           </h3>
                           <div className="flex items-center gap-2">
@@ -234,14 +234,14 @@ export default function SellerNotifications() {
                               <Clock className="h-3 w-3" />
                               {getTimeAgo(notification.createdAt)}
                             </span>
-                            {!notification.read && (
-                              <button
-                                onClick={() => markAsRead(notification.id)}
-                                className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                              >
+                            {!notification.read &&
+                          <button
+                            onClick={() => markAsRead(notification.id)}
+                            className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                            
                                 {t('seller_dashboard.notifications.mark_read')}
                               </button>
-                            )}
+                          }
                           </div>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">
@@ -249,11 +249,11 @@ export default function SellerNotifications() {
                         </p>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  </div>);
+
+            })}
             </div>
-          )}
+          }
         </CardContent>
       </Card>
 
@@ -297,6 +297,6 @@ export default function SellerNotifications() {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>);
+
 }

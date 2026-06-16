@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { rolesMatch, getDashboardPathForRole } from '../utils/roleUtils';
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-    const { currentUser, userRole, loading } = useAuth();
+    const { currentUser, userRole, userData, loading } = useAuth();
     const location = useLocation();
 
     if (loading) {
@@ -15,13 +16,20 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     }
 
     if (!currentUser) {
-        // Redirect to login but save the current location to redirect back after login
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
-    if (requiredRole && userRole !== requiredRole) {
-        // If a role is required and user doesn't have it, redirect to home or unauthorized page
-        return <Navigate to="/" replace />;
+    if (!currentUser.emailVerified) {
+        return <Navigate to="/login/verifycode" state={{ email: currentUser.email, from: location }} replace />;
+    }
+
+    if (userData?.isBanned === true || userData?.status === 'inactive') {
+        return <Navigate to="/login" state={{ banned: true }} replace />;
+    }
+
+    if (requiredRole && !rolesMatch(userRole, requiredRole)) {
+        const home = getDashboardPathForRole(userRole);
+        return <Navigate to={home === '/' ? '/' : home} replace />;
     }
 
     return children;

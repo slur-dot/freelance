@@ -1,36 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import clientImage from "../assets/client_image.png";
-
 import { useTranslation } from "react-i18next";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const Testimonials = () => {
   const { t } = useTranslation();
-  const testimonials = [
-    {
-      id: 1,
-      quote: t('home.testimonials.t1_quote'),
-      company: "Conakry Tech Solutions",
-      role: "Local Startup",
-      avatar: clientImage,
-      quoteColor: "text-red-500",
-    },
-    {
-      id: 2,
-      quote: t('home.testimonials.t2_quote'),
-      company: "Guinea Digital Agency",
-      role: "Tech Company",
-      avatar: clientImage,
-      quoteColor: "text-yellow-500",
-    },
-    {
-      id: 3,
-      quote: t('home.testimonials.t3_quote'),
-      company: "Innovation Hub Guinea",
-      role: "Founder",
-      avatar: clientImage,
-      quoteColor: "text-green-500",
-    },
-  ];
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "testimonials"));
+        const fetchedTestimonials = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setTestimonials(fetchedTestimonials);
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  if (loading || testimonials.length === 0) {
+    return null; // Hide the section entirely if no real data is available
+  }
 
   return (
     <section className="py-10 sm:py-14 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">

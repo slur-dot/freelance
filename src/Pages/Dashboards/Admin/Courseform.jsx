@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { adminApi } from "../../../lib/adminApi";
+import { AdminService } from "../../../services/adminService";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
@@ -10,7 +10,7 @@ export default function Courseform({ onContinue }) {
     name: "",
     description: "",
     price: "",
-    videoFile: null,
+    videoFile: null
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +20,7 @@ export default function Courseform({ onContinue }) {
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value
     }));
   };
 
@@ -32,19 +32,17 @@ export default function Courseform({ onContinue }) {
     try {
       // Map form fields to backend schema
       const courseData = {
-        title: formData.name, // Map name to title
-        category: "General", // Default category
+        title: formData.name,
+        category: "General",
         description: formData.description,
         price: parseFloat(formData.price) || 0,
-        durationHours: 0, // Default duration
-        level: "Beginner", // Default level
-        published: false, // Default to unpublished
+        durationHours: 0,
+        level: "Beginner",
+        published: false,
+        videoUrl: formData.videoUrl || null
       };
 
-      console.log("Creating course with data:", courseData);
-
-      const result = await adminApi.create("courses", courseData);
-      console.log("Course created successfully:", result);
+      const result = await AdminService.createCourse(courseData);
 
       // Navigate back to course listing
       navigate("/admin/dashboard/course-listing");
@@ -71,19 +69,19 @@ export default function Courseform({ onContinue }) {
           </div>
           <button
             onClick={() => navigate("/admin/dashboard/course-listing")}
-            className="text-gray-400 hover:text-gray-600 transition"
-          >
+            className="text-gray-400 hover:text-gray-600 transition">
+            
             <X size={24} />
           </button>
         </div>
 
         <form className="grid gap-6" onSubmit={handleSubmit}>
           {/* Error Message */}
-          {error && (
-            <div className="col-span-full rounded-md bg-red-50 p-3 text-red-600 text-sm">
+          {error &&
+          <div className="col-span-full rounded-md bg-red-50 p-3 text-red-600 text-sm">
               {error}
             </div>
-          )}
+          }
 
           {/* Name */}
           <div className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-center sm:gap-4">
@@ -97,16 +95,16 @@ export default function Courseform({ onContinue }) {
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
               className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              required
-            />
+              required />
+            
           </div>
 
           {/* Description */}
           <div className="grid gap-2 sm:grid-cols-[1fr_2fr] sm:items-start sm:gap-4">
             <label
               htmlFor="description"
-              className="font-medium text-sm sm:text-base"
-            >
+              className="font-medium text-sm sm:text-base">
+              
               {t('admin_dashboard.listings.course.form_page.labels.description')} <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -116,8 +114,8 @@ export default function Courseform({ onContinue }) {
               onChange={(e) => handleInputChange("description", e.target.value)}
               className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
               rows={5}
-              required
-            />
+              required />
+            
           </div>
 
           {/* Price with GNF */}
@@ -133,9 +131,9 @@ export default function Courseform({ onContinue }) {
                 value={formData.price}
                 onChange={(e) => handleInputChange("price", e.target.value)}
                 className="w-1/2 rounded-md border border-gray-300 bg-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <span className="text-sm font-medium text-gray-700">GNF</span>
+                required />
+              
+              <span className="text-sm font-medium text-gray-700">{t("gnf_653", "GNF")}</span>
             </div>
           </div>
 
@@ -152,14 +150,14 @@ export default function Courseform({ onContinue }) {
                   id="videoFile"
                   accept="video/*"
                   onChange={(e) => handleInputChange("videoFile", e.target.files[0])}
-                  className="hidden"
-                />
+                  className="hidden" />
+                
                 <label htmlFor="videoFile" className="cursor-pointer">
                   <p className="text-sm font-medium text-gray-700">{t('admin_dashboard.listings.course.form_page.placeholders.video_upload', 'Click to upload or drag and drop')}</p>
-                  <p className="text-xs text-gray-500 mt-1">MP4, WebM up to 500MB</p>
-                  {formData.videoFile && (
-                    <p className="text-xs text-green-600 mt-2 font-medium">✓ {formData.videoFile.name}</p>
-                  )}
+                  <p className="text-xs text-gray-500 mt-1">{t("mp4_webm_up_to_500mb_907", "MP4, WebM up to 500MB")}</p>
+                  {formData.videoFile &&
+                  <p className="text-xs text-green-600 mt-2 font-medium">✓ {formData.videoFile.name}</p>
+                  }
                 </label>
               </div>
             </div>
@@ -170,20 +168,20 @@ export default function Courseform({ onContinue }) {
             <button
               type="button"
               onClick={() => navigate("/admin/dashboard/course-listing")}
-              className="w-full max-w-[250px] rounded-3xl border border-gray-300 px-6 py-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-            >
+              className="w-full max-w-[250px] rounded-3xl border border-gray-300 px-6 py-4 text-sm font-medium text-gray-700 transition hover:bg-gray-50">
+              
               {t('common.cancel') || 'Cancel'}
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="w-full max-w-[250px] rounded-3xl bg-green-600 px-6 py-4 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+              className="w-full max-w-[250px] rounded-3xl bg-green-600 px-6 py-4 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+              
               {loading ? t('admin_dashboard.listings.course.form_page.buttons.submitting') : t('admin_dashboard.listings.course.form_page.buttons.submit')}
             </button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -21,44 +21,7 @@ export default function CourseDetailPage() {
   const courseTitle = course?.title || t('training.courses.freelance.course_1.title');
   const courseDescription = course?.description || t('training.courses.freelance.course_1.description');
 
-  const rawLessons = [
-    {
-      id: 1,
-      title: t('training.detail_content.lessons.l1'),
-      videoUrl: "https://www.youtube.com/watch?v=qz0aGY077lh",
-      duration: "15:30",
-    },
-    {
-      id: 2,
-      title: t('training.detail_content.lessons.l2'),
-      videoUrl: "https://www.youtube.com/watch?v=1Rs2ND1ryYc",
-      duration: "18:45",
-    },
-    {
-      id: 3,
-      title: t('training.detail_content.lessons.l3'),
-      videoUrl: "https://www.youtube.com/watch?v=W6NZfCO5SIk",
-      duration: "22:10",
-    },
-    {
-      id: 4,
-      title: t('training.detail_content.lessons.l4'),
-      videoUrl: "https://www.youtube.com/watch?v=srvUrASGdCw",
-      duration: "20:15",
-    },
-    {
-      id: 5,
-      title: t('training.detail_content.lessons.l5'),
-      videoUrl: "https://www.youtube.com/watch?v=0pThnRneDjw",
-      duration: "25:30",
-    },
-    {
-      id: 6,
-      title: t('training.detail_content.lessons.l6'),
-      videoUrl: "https://www.youtube.com/watch?v=8Vq8KqJ8Q8Q",
-      duration: "30:45",
-    },
-  ];
+  const rawLessons = course?.lessons || [];
 
   const courseLessons = rawLessons.map((lesson, index) => {
     const isIntro = index < 2;

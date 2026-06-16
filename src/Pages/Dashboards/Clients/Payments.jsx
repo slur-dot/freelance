@@ -22,8 +22,8 @@ export default function Payments() {
           const total = paymentData.reduce((sum, p) => {
             // Clean string if needed
             let val = 0;
-            if (typeof p.amount === 'number') val = p.amount;
-            else if (typeof p.amount === 'string') val = parseFloat(p.amount.replace(/[^0-9.-]+/g, "")) || 0;
+            if (typeof p.amount === 'number') val = p.amount;else
+            if (typeof p.amount === 'string') val = parseFloat(p.amount.replace(/[^0-9.-]+/g, "")) || 0;
             return sum + val;
           }, 0);
 
@@ -56,7 +56,7 @@ export default function Payments() {
             <div className="pb-2">
               <p className="text-sm sm:text-base">{t('client_dashboard.payments.stats.completed')}</p>
               <h3 className="text-2xl sm:text-3xl font-bold pt-5">
-                {stats.totalAmount.toLocaleString()} GNF
+                {stats.totalAmount.toLocaleString()} {t("gnf_656", "GNF")}
               </h3>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function Payments() {
           <div className="bg-white p-4 rounded-lg shadow-sm h-full">
             <span className="text-sm sm:text-base">{t('client_dashboard.payments.stats.last_month_payments')}</span>
             <h3 className="text-2xl sm:text-3xl font-bold pt-3 pb-2 border-b border-gray-200">
-              0 GNF
+              {t("0_gnf_716", "0 GNF")}
             </h3>
             <div className="space-y-2 mt-2 text-sm text-gray-600">
               <p className="text-xs text-gray-500">{t('client_dashboard.payments.stats.last_month_desc')}</p>
@@ -128,9 +128,9 @@ export default function Payments() {
             </tr>
           </thead>
           <tbody>
-            {payments.length > 0 ? (
-              payments.map((payment) => (
-                <tr key={payment.id} className="border-b border-gray-100 hover:bg-gray-50">
+            {payments.length > 0 ?
+            payments.map((payment) =>
+            <tr key={payment.id} className="border-b border-gray-100 hover:bg-gray-50">
                   <td className="py-2 px-2 sm:px-4">{payment.date}</td>
                   <td className="px-2 sm:px-4">{payment.activity}</td>
                   <td className="px-2 sm:px-4 truncate max-w-[150px]">{payment.description}</td>
@@ -138,9 +138,9 @@ export default function Payments() {
                   <td className="px-2 sm:px-4">{payment.order}</td>
                   <td className="text-right px-2 sm:px-4 font-semibold">{typeof payment.amount === 'number' ? payment.amount.toLocaleString() + ' GNF' : payment.amount}</td>
                 </tr>
-              ))
-            ) : (
-              <tr>
+            ) :
+
+            <tr>
                 <td colSpan={6} className="h-60 text-center">
                   <div className="flex flex-col items-center justify-center h-full">
                     <h3 className="text-lg font-bold mb-2">
@@ -152,10 +152,10 @@ export default function Payments() {
                   </div>
                 </td>
               </tr>
-            )}
+            }
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    </div>);
+
 }

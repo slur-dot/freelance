@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import LoginImage from "../../assets/Login.jpg";
 import { Mail, Lock, UserRound } from "lucide-react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { getEmailVerificationSettings } from "../../utils/emailVerification";
 import { auth } from "../../firebaseConfig";
 import { UserService } from "../../services/userService";
 
@@ -17,7 +18,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agree, setAgree] = useState(false);
-  const [role, setRole] = useState(""); 
+  const [role, setRole] = useState("");
   const [countryCode, setCountryCode] = useState("+224");
   const [phone, setPhone] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
@@ -25,16 +26,16 @@ export default function SignUp() {
   const [selectedSubPrefecture, setSelectedSubPrefecture] = useState("");
 
   // Derived data for cascading dropdowns
-  const regionData = guineaCitiesByRegion.find(r => r.region === selectedRegion);
+  const regionData = guineaCitiesByRegion.find((r) => r.region === selectedRegion);
   const prefectures = regionData ? regionData.prefectures : [];
-  const prefectureData = prefectures.find(p => p.name === selectedPrefecture);
+  const prefectureData = prefectures.find((p) => p.name === selectedPrefecture);
   const subPrefectures = prefectureData ? prefectureData.subprefectures : [];
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) =>
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-      password
-    );
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(
+    password
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,11 +70,11 @@ export default function SignUp() {
 
     const nickname = e.target.nickname?.value.trim();
     const phoneDigits = phone.replace(/\D/g, '');
-    
+
     // Country specific length validation
     const { countryData } = await import("../../utils/countryData");
-    const selectedCountry = countryData.find(c => c.code === countryCode);
-    
+    const selectedCountry = countryData.find((c) => c.code === countryCode);
+
     if (!nickname) {
       alert(t('signup_page.alerts.enter_nickname') || "Please enter a nickname.");
       return;
@@ -92,6 +93,7 @@ export default function SignUp() {
       // Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      await sendEmailVerification(user, getEmailVerificationSettings());
 
       // Prepare user data for Firestore - sanitize phone (keep only code and digits)
       const userData = {
@@ -102,14 +104,14 @@ export default function SignUp() {
         role: userRole,
         region: selectedRegion || null,
         prefecture: selectedPrefecture || null,
-        subPrefecture: selectedSubPrefecture || null,
+        subPrefecture: selectedSubPrefecture || null
       };
 
       // Save user profile to Firestore via UserService
       await UserService.createUserProfile(user.uid, userData);
 
-      alert(t('signup_page.alerts.success') || "Sign up successful! Please login.");
-      navigate("/login");
+      alert(t('signup_page.alerts.success_verify'));
+      navigate('/login/verifycode', { state: { email } });
 
     } catch (error) {
       console.error("Signup error:", error);
@@ -126,14 +128,14 @@ export default function SignUp() {
       {/* Logo */}
       <div
         onClick={() => navigate("/")}
-        className="absolute top-4 left-4 z-10 flex items-center space-x-2 cursor-pointer"
-      >
+        className="absolute top-4 left-4 z-10 flex items-center space-x-2 cursor-pointer">
+        
         <img
           src="/logo.png"
           alt="Freelance Logo"
-          className="w-10 h-10 rounded-full object-contain"
-        />
-        <span className="text-xl font-semibold text-gray-900">Freelance</span>
+          className="w-10 h-10 rounded-full object-contain" />
+        
+        <span className="text-xl font-semibold text-gray-900">{t("freelance_79", "Freelance")}</span>
       </div>
 
       {/* Left Image */}
@@ -145,8 +147,8 @@ export default function SignUp() {
           <img
             src={LoginImage}
             alt="Freelance work"
-            className="w-full max-h-100 object-contain mx-auto"
-          />
+            className="w-full max-h-100 object-contain mx-auto" />
+          
         </div>
       </div>
 
@@ -174,8 +176,8 @@ export default function SignUp() {
                 name="username"
                 placeholder={t('signup_page.form.full_name') || "Full Name"}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             {/* Nickname */}
@@ -186,8 +188,8 @@ export default function SignUp() {
                 name="nickname"
                 placeholder={t('signup_page.form.nickname') || "Nickname"}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             {/* Email */}
@@ -198,8 +200,8 @@ export default function SignUp() {
                 name="email"
                 placeholder={t('signup_page.form.email') || "Email"}
                 className="w-full pl-10 pr-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
             </div>
 
             {/* Phone Number with Country Code */}
@@ -212,8 +214,8 @@ export default function SignUp() {
                 className="rounded-full border border-green-600 focus-within:ring-2 focus-within:ring-green-500"
                 selectClassName="bg-gray-50 border-none border-r border-green-300 pr-2 py-2 rounded-l-full"
                 inputClassName="bg-white border-none py-2 px-2 rounded-r-full"
-                required
-              />
+                required />
+              
             </div>
 
             {/* Role */}
@@ -225,8 +227,8 @@ export default function SignUp() {
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              >
+                required>
+                
                 <option value="">{t('signup_page.form.select_role') || "Select Role"}</option>
                 <option value="Freelancer">{t('signup_page.form.roles.freelancer') || "Freelancer"}</option>
                 <option value="Vendor">{t('signup_page.form.roles.vendor') || "Vendor"}</option>
@@ -243,9 +245,9 @@ export default function SignUp() {
               </label>
               <select
                 className="w-full px-3 py-2 border border-green-600 rounded-full bg-gray-100 text-gray-600 cursor-not-allowed focus:outline-none"
-                disabled
-              >
-                <option value="Guinea">Guinea</option>
+                disabled>
+                
+                <option value="Guinea">{t("guinea_50", "Guinea")}</option>
               </select>
             </div>
 
@@ -261,55 +263,55 @@ export default function SignUp() {
                   setSelectedPrefecture("");
                   setSelectedSubPrefecture("");
                 }}
-                className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
+                className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+                
                 <option value="">{t('signup_page.form.select_region') || "Select Region"}</option>
-                {guineaCitiesByRegion.map(r => (
-                  <option key={r.region} value={r.region}>{r.region}</option>
-                ))}
+                {guineaCitiesByRegion.map((r) =>
+                <option key={r.region} value={r.region}>{r.region}</option>
+                )}
               </select>
             </div>
 
             {/* Prefecture */}
-            {selectedRegion && (
-              <div>
+            {selectedRegion &&
+            <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
                   {t('signup_page.form.prefecture') || "Prefecture"}
                 </label>
                 <select
-                  value={selectedPrefecture}
-                  onChange={(e) => {
-                    setSelectedPrefecture(e.target.value);
-                    setSelectedSubPrefecture("");
-                  }}
-                  className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
+                value={selectedPrefecture}
+                onChange={(e) => {
+                  setSelectedPrefecture(e.target.value);
+                  setSelectedSubPrefecture("");
+                }}
+                className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+                
                   <option value="">{t('signup_page.form.select_prefecture') || "Select Prefecture"}</option>
-                  {prefectures.map(p => (
-                    <option key={p.name} value={p.name}>{p.name}</option>
-                  ))}
+                  {prefectures.map((p) =>
+                <option key={p.name} value={p.name}>{p.name}</option>
+                )}
                 </select>
               </div>
-            )}
+            }
 
             {/* Sub-Prefecture */}
-            {selectedPrefecture && (
-              <div>
+            {selectedPrefecture &&
+            <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1 pl-2">
                   {t('signup_page.form.sub_prefecture') || "Sub-Prefecture"}
                 </label>
                 <select
-                  value={selectedSubPrefecture}
-                  onChange={(e) => setSelectedSubPrefecture(e.target.value)}
-                  className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
+                value={selectedSubPrefecture}
+                onChange={(e) => setSelectedSubPrefecture(e.target.value)}
+                className="w-full px-3 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
+                
                   <option value="">{t('signup_page.form.select_sub_prefecture') || "Select Sub-Prefecture"}</option>
-                  {subPrefectures.map(sp => (
-                    <option key={sp} value={sp}>{sp}</option>
-                  ))}
+                  {subPrefectures.map((sp) =>
+                <option key={sp} value={sp}>{sp}</option>
+                )}
                 </select>
               </div>
-            )}
+            }
 
 
             {/* Password */}
@@ -320,12 +322,12 @@ export default function SignUp() {
                 name="password"
                 placeholder={t('signup_page.form.password') || "Password"}
                 className="w-full pl-10 pr-10 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
               <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
-                onClick={() => setShowPassword(!showPassword)}
-              >
+                onClick={() => setShowPassword(!showPassword)}>
+                
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </span>
             </div>
@@ -338,12 +340,12 @@ export default function SignUp() {
                 name="confirmPassword"
                 placeholder={t('signup_page.form.confirm_password') || "Confirm Password"}
                 className="w-full pl-10 pr-10 py-2 border border-green-600 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-              />
+                required />
+              
               <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                
                 {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
               </span>
             </div>
@@ -354,8 +356,8 @@ export default function SignUp() {
                 type="checkbox"
                 checked={agree}
                 onChange={() => setAgree(!agree)}
-                className="mt-1 h-4 w-4 text-white bg-green-600 border-green-600 rounded"
-              />
+                className="mt-1 h-4 w-4 text-white bg-green-600 border-green-600 rounded" />
+              
               <label className="text-gray-700">
                 {t('signup_page.form.terms.agree') || "I agree to the "}
                 <a href="/privacy" className="text-green-600 hover:underline">
@@ -373,8 +375,8 @@ export default function SignUp() {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="px-8 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-200"
-              >
+                className="px-8 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-full transition duration-200">
+                
                 {t('signup_page.form.submit') || "Sign Up"}
               </button>
             </div>
@@ -383,14 +385,14 @@ export default function SignUp() {
               {t('signup_page.form.already_have_account') || "Already have an account? "}
               <a
                 href="/login"
-                className="text-green-600 font-medium hover:underline"
-              >
+                className="text-green-600 font-medium hover:underline">
+                
                 {t('signup_page.form.login') || "Login"}
               </a>
             </div>
           </form>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

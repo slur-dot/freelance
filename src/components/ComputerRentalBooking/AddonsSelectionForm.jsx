@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import { useTranslation } from "react-i18next";import React, { useState } from "react";
 
 export default function AddonsSelectionForm({ onContinue, deviceData }) {
   const isMobile = deviceData?.deviceType === 'phone' || deviceData?.deviceType === 'tablet';
 
   // Paid Services with costs conditionally structured
   const paidServices = [
-    { name: "Insurance", cost: 200000 },
-    { name: "Carrying Bag", cost: 30000 },
-    ...(isMobile ? [
-      { name: "SIM Data Plan", cost: 50000 },
-      { name: "Mobile Back Cover", cost: 25000 },
-      { name: "Screen Protector", cost: 15000 },
-    ] : [
-      { name: "On Site Technical Support", cost: 150000 },
-      { name: "Replacement Guarantee", cost: 100000 },
-    ])
-  ];
+  { name: "Insurance", cost: 200000 },
+  { name: "Carrying Bag", cost: 30000 },
+  ...(isMobile ? [
+  { name: "SIM Data Plan", cost: 50000 },
+  { name: "Mobile Back Cover", cost: 25000 },
+  { name: "Screen Protector", cost: 15000 }] :
+  [
+  { name: "On Site Technical Support", cost: 150000 },
+  { name: "Replacement Guarantee", cost: 100000 }])];
+
+
 
   const includedItems = ["Charger"];
 
@@ -36,9 +36,9 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
     if (onContinue) {
       // Combine included items (cost 0) with selected paid services
       const allAddons = [
-        ...includedItems.map(item => ({ name: item, cost: 0, type: 'included' })),
-        ...selectedServices.map(item => ({ ...item, type: 'service' }))
-      ];
+      ...includedItems.map((item) => ({ name: item, cost: 0, type: 'included' })),
+      ...selectedServices.map((item) => ({ ...item, type: 'service' }))];
+
       onContinue(allAddons);
     }
   };
@@ -50,60 +50,60 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-8">
           <div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
-              Booking Form
+              {t("booking_form_480", "Booking Form")}
             </h1>
             <p className="text-black text-sm sm:text-base md:text-lg">
-              Complete the booking form to complete your booking
+              {t("complete_the_booking_form_to_complete_your_booking_275", "Complete the booking form to complete your booking")}
             </p>
           </div>
         </div>
 
         {/* Included Items Section */}
         <div className="mb-8">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4">Included Accessories</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">{t("included_accessories_634", "Included Accessories")}</h2>
           <div className="flex flex-wrap gap-4">
-            {includedItems.map((item) => (
-              <div
-                key={item}
-                className="px-6 py-2 rounded-lg bg-gray-100 text-gray-500 font-medium border border-gray-200 cursor-not-allowed flex items-center gap-2"
-              >
+            {includedItems.map((item) =>
+            <div
+              key={item}
+              className="px-6 py-2 rounded-lg bg-gray-100 text-gray-500 font-medium border border-gray-200 cursor-not-allowed flex items-center gap-2">
+              
                 <span>✓</span>
                 {item}
-                <span className="text-xs ml-1">(Included)</span>
+                <span className="text-xs ml-1">{t("included_307", "(Included)")}</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
         {/* Paid Services Section */}
         <div className="mb-8">
           <h2 className="text-xl sm:text-2xl font-bold mb-2">
-            Add-ons & Services
+            {t("addons_services_544", "Add-ons & Services")}
           </h2>
           <p className="text-gray-600 text-sm mb-4">
-            Select additional services to add to your purchase
+            {t("select_additional_services_to_add_to_your_purchase_802", "Select additional services to add to your purchase")}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {paidServices.map((service) => {
-              const isSelected = selectedServices.some(s => s.name === service.name);
+              const isSelected = selectedServices.some((s) => s.name === service.name);
               return (
                 <button
                   key={service.name}
                   onClick={() => toggleService(service)}
                   className={`flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-6 py-4 rounded-lg font-medium transition-all duration-200 border gap-2
-                    ${isSelected
-                      ? "bg-green-50 border-green-500 text-green-700 shadow-sm"
-                      : "bg-white border-gray-200 text-gray-700 hover:border-green-300 hover:bg-gray-50"
-                    }
-                  `}
-                >
+                    ${isSelected ?
+                  "bg-green-50 border-green-500 text-green-700 shadow-sm" :
+                  "bg-white border-gray-200 text-gray-700 hover:border-green-300 hover:bg-gray-50"}
+                  `
+                  }>
+                  
                   <span className="text-xs sm:text-base text-left break-words">{service.name}</span>
                   <span className={`text-[10px] sm:text-sm ${isSelected ? 'font-bold' : ''} whitespace-nowrap`}>
-                    {service.cost.toLocaleString()} GNF
+                    {service.cost.toLocaleString()} {t("gnf_487", "GNF")}
                   </span>
-                </button>
-              )
+                </button>);
+
             })}
           </div>
         </div>
@@ -112,12 +112,12 @@ export default function AddonsSelectionForm({ onContinue, deviceData }) {
         <div className="flex justify-center mt-10">
           <button
             onClick={handleSubmit}
-            className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg"
-          >
-            Continue
+            className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg">
+            {t("continue_701", "Continue")}
+          
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

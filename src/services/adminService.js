@@ -102,6 +102,51 @@ export const AdminService = {
         }
     },
 
+    createProduct: async (data) => {
+        try {
+            const docRef = await addDoc(collection(db, "products"), {
+                productName: data.name || data.productName,
+                name: data.name || data.productName,
+                sku: data.sku || `SKU-${Date.now()}`,
+                description: data.description || '',
+                price: Number(data.price) || 0,
+                stock: Number(data.stock) || 0,
+                category: data.category || 'Others',
+                listed: data.listed !== false,
+                status: 'active',
+                sellerId: data.sellerId || null,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            });
+            return { id: docRef.id };
+        } catch (e) {
+            console.error("Error creating product:", e);
+            throw e;
+        }
+    },
+
+    createCourse: async (data) => {
+        try {
+            const docRef = await addDoc(collection(db, "courses"), {
+                title: data.title || data.name,
+                description: data.description || '',
+                price: Number(data.price) || 0,
+                category: data.category || 'General',
+                level: data.level || 'Beginner',
+                durationHours: data.durationHours || 0,
+                videoUrl: data.videoUrl || null,
+                published: data.published === true,
+                trainerId: data.trainerId || null,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            });
+            return { id: docRef.id };
+        } catch (e) {
+            console.error("Error creating course:", e);
+            throw e;
+        }
+    },
+
     // --- ORDERS / BOOKINGS ---
     getAllBookings: async (lastDoc = null, pageSize = 50) => {
         try {

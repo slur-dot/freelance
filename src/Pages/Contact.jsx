@@ -4,10 +4,34 @@ import { FaWhatsapp } from "react-icons/fa";
 import LiveChatWidget from "../components/Support/LiveChatWidget";
 import SupportTickets from "../components/Support/SupportTickets";
 import { useTranslation } from "react-i18next";
+import { ContactService } from "../services/contactService";
 
 export default function ContactPage() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("contact");
+  const [contactForm, setContactForm] = useState({
+    fullName: "", company: "", jobTitle: "", email: "", message: "",
+  });
+  const [contactSubmitting, setContactSubmitting] = useState(false);
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    if (!contactForm.email || !contactForm.message) {
+      alert(t('contact_form.required'));
+      return;
+    }
+    setContactSubmitting(true);
+    try {
+      await ContactService.submitInquiry(contactForm);
+      alert(t('contact_form.success'));
+      setContactForm({ fullName: "", company: "", jobTitle: "", email: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      alert(t('contact_form.failed'));
+    } finally {
+      setContactSubmitting(false);
+    }
+  };
   const [showCalendar, setShowCalendar] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
@@ -68,7 +92,7 @@ export default function ContactPage() {
                     <p className="text-gray-600">{t('contact.subtitle')}</p>
                   </div>
                 </div>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleContactSubmit}>
                   <div className="grid grid-cols-1 gap-4">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                       <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 sm:w-32 flex-shrink-0">
@@ -78,6 +102,8 @@ export default function ContactPage() {
                         id="fullName"
                         type="text"
                         placeholder="John Doe"
+                        value={contactForm.fullName}
+                        onChange={(e) => setContactForm((f) => ({ ...f, fullName: e.target.value }))}
                         className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
                       />
                     </div>
@@ -140,6 +166,13 @@ export default function ContactPage() {
                     ></textarea>
                   </div>
                   <div className="flex flex-col gap-4 items-center">
+                    <button
+                      type="submit"
+                      disabled={contactSubmitting}
+                      className="w-fit px-8 bg-green-600 hover:bg-green-700 text-white py-2 rounded-full disabled:opacity-50"
+                    >
+                      {contactSubmitting ? "Sending…" : "Send Message"}
+                    </button>
                     <button
                       type="button"
                       onClick={() => {

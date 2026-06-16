@@ -1,8 +1,10 @@
 import { db } from "../firebaseConfig";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, serverTimestamp, orderBy, writeBatch } from "firebase/firestore";
+import {
+    collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where,
+    serverTimestamp, orderBy, writeBatch,
+} from "firebase/firestore";
 
 export const NotificationService = {
-    // Get notifications for a user
     async getUserNotifications(userId) {
         try {
             const notifRef = collection(db, "notifications");
@@ -12,20 +14,29 @@ export const NotificationService = {
                 orderBy("createdAt", "desc")
             );
             const snapshot = await getDocs(q);
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            return snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
         } catch (error) {
+            if (error.code === 'failed-precondition') {
+                const q = query(collection(db, "notifications"), where("userId", "==", userId));
+                const snapshot = await getDocs(q);
+                return snapshot.docs
+                    .map((d) => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => {
+                        const ta = a.createdAt?.toMillis?.() ?? 0;
+                        const tb = b.createdAt?.toMillis?.() ?? 0;
+                        return tb - ta;
+                    });
+            }
             console.error("Error fetching notifications:", error);
-            throw error;
+            return [];
         }
     },
 
-    // Mark notification as read
     async markAsRead(notificationId) {
         try {
-            const notifRef = doc(db, "notifications", notificationId);
-            await updateDoc(notifRef, {
+            await updateDoc(doc(db, "notifications", notificationId), {
                 read: true,
-                readAt: serverTimestamp()
+                readAt: serverTimestamp(),
             });
             return { success: true };
         } catch (error) {
@@ -34,18 +45,18 @@ export const NotificationService = {
         }
     },
 
-    // Mark all as read
     async markAllAsRead(userId) {
         try {
-            const notifRef = collection(db, "notifications");
-            const q = query(notifRef, where("userId", "==", userId), where("read", "==", false));
+            const q = query(
+                collection(db, "notifications"),
+                where("userId", "==", userId),
+                where("read", "==", false)
+            );
             const snapshot = await getDocs(q);
-
             const batch = writeBatch(db);
-            snapshot.docs.forEach(doc => {
-                batch.update(doc.ref, { read: true, readAt: serverTimestamp() });
+            snapshot.docs.forEach((d) => {
+                batch.update(d.ref, { read: true, readAt: serverTimestamp() });
             });
-
             await batch.commit();
             return { success: true };
         } catch (error) {
@@ -54,17 +65,20 @@ export const NotificationService = {
         }
     },
 
-    // Create notification (usually called by backend triggers, but useful for client-side actions too)
-    async createNotification(userId, title, message, type = "info") {
+    async createNotification(userId, title, message, options = {}) {
         try {
-            const notifRef = collection(db, "notifications");
-            await addDoc(notifRef, {
+            const { type = "info", link = null, sourceId = null, sourceType = null, actorId = null } = options;
+            await addDoc(collection(db, "notifications"), {
                 userId,
                 title,
                 message,
                 type,
+                link,
+                sourceId,
+                sourceType,
+                actorId,
                 read: false,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
             });
             return { success: true };
         } catch (error) {
@@ -81,5 +95,5 @@ export const NotificationService = {
             console.error("Error deleting notification:", error);
             throw error;
         }
-    }
+    },
 };

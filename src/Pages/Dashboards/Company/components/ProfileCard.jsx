@@ -9,20 +9,20 @@ import PhoneInput from "../../../../components/PhoneInput";
 
 function Button({ children, className = "", variant = "default", disabled, ...props }) {
   const baseStyles =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100"
-      : variant === "ghost"
-        ? "text-black hover:bg-gray-50"
-        : "bg-green-600 hover:bg-green-700 text-white";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-500 bg-transparent hover:bg-gray-100" :
+  variant === "ghost" ?
+  "text-black hover:bg-gray-50" :
+  "bg-green-600 hover:bg-green-700 text-white";
   return (
     <button
       className={`px-4 py-2 rounded-md text-sm font-medium transition ${baseStyles} ${className}`}
       disabled={disabled}
-      {...props}
-    >
+      {...props}>
+      
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 function Card({ children, className = "" }) {
@@ -56,7 +56,7 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -88,7 +88,7 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
       await CompanyService.updateCompanyProfile(companyData.id, updatedData);
 
       console.log('Profile update successful');
-      alert('Profile updated successfully!');
+      alert(t("profile_updated_successfully_450", "Profile updated successfully!"));
 
       // Call onUpdate to refresh the parent component data
       if (onUpdate) {
@@ -98,7 +98,7 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
       onClose();
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      alert(t("failed_to_update_profile_please_try_again_770", "Failed to update profile. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -130,31 +130,31 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.profile_phone')}</label>
               <PhoneInput
                 value={formData.phone}
-                onChange={(val) => setFormData(prev => ({ ...prev, phone: val }))}
+                onChange={(val) => setFormData((prev) => ({ ...prev, phone: val }))}
                 countryCode={phoneCountryCode}
                 onCountryCodeChange={setPhoneCountryCode}
                 className="rounded-md"
-                required
-              />
+                required />
+              
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">{t('company_dashboard.profile_payment_number')}</label>
               <PhoneInput
                 value={formData.paymentNumber}
-                onChange={(val) => setFormData(prev => ({ ...prev, paymentNumber: val }))}
+                onChange={(val) => setFormData((prev) => ({ ...prev, paymentNumber: val }))}
                 countryCode={paymentCountryCode}
                 onCountryCodeChange={setPaymentCountryCode}
                 className="rounded-md"
-                required
-              />
+                required />
+              
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">{t('company_dashboard.profile_social_links')}</label>
             <div className="space-y-2">
-              <input type="url" name="linkedin" value={formData.linkedin} onChange={handleInputChange} placeholder="LinkedIn URL" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
-              <input type="url" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder="Facebook URL" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
-              <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder="Website URL" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input type="url" name="linkedin" value={formData.linkedin} onChange={handleInputChange} placeholder={t("linkedin_url_800", "LinkedIn URL")} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input type="url" name="facebook" value={formData.facebook} onChange={handleInputChange} placeholder={t("facebook_url_894", "Facebook URL")} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
+              <input type="url" name="website" value={formData.website} onChange={handleInputChange} placeholder={t("website_url_693", "Website URL")} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
             </div>
           </div>
           <div className="flex gap-2 pt-4">
@@ -163,8 +163,8 @@ function EditProfileModal({ companyData, onClose, onUpdate }) {
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 function ChangePasswordModal({ companyData, onClose }) {
@@ -175,8 +175,8 @@ function ChangePasswordModal({ companyData, onClose }) {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const validatePassword = (password) => {
@@ -196,17 +196,17 @@ function ChangePasswordModal({ companyData, onClose }) {
     if (!formData.currentPassword) newErrors.currentPassword = 'Current password is required';
     if (!newPasswordValidation.isValid) newErrors.newPassword = 'Password must be at least 10 characters with 1 number and 1 special character';
     if (formData.newPassword !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
-    if (Object.keys(newErrors).length > 0) { setErrors(newErrors); setLoading(false); return; }
+    if (Object.keys(newErrors).length > 0) {setErrors(newErrors);setLoading(false);return;}
 
     try {
       const user = auth.currentUser;
       if (!user) throw new Error("No authenticated user found.");
-      
+
       const credential = EmailAuthProvider.credential(user.email, formData.currentPassword);
       await reauthenticateWithCredential(user, credential);
       await updatePassword(user, formData.newPassword);
 
-      alert('Password changed successfully!');
+      alert(t("password_changed_successfully_600", "Password changed successfully!"));
       onClose();
     } catch (error) {
       console.error('Error changing password:', error);
@@ -228,15 +228,15 @@ function ChangePasswordModal({ companyData, onClose }) {
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <input type="password" name="currentPassword" value={formData.currentPassword} onChange={handleInputChange} placeholder={t('company_dashboard.profile_current_password')} className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.currentPassword && (<p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>)}
+            {errors.currentPassword && <p className="text-red-500 text-xs mt-1">{errors.currentPassword}</p>}
           </div>
           <div>
             <input type="password" name="newPassword" value={formData.newPassword} onChange={handleInputChange} placeholder={t('company_dashboard.profile_new_password')} className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.newPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.newPassword && (<p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>)}
+            {errors.newPassword && <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>}
           </div>
           <div>
             <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} placeholder={t('company_dashboard.profile_confirm_password')} className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`} />
-            {errors.confirmPassword && (<p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>)}
+            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
           <div className="flex gap-2 mt-4">
             <Button type="submit" className="flex-1" disabled={loading}>{loading ? t('company_dashboard.profile_changing') : t('company_dashboard.profile_change_password_title')}</Button>
@@ -244,8 +244,8 @@ function ChangePasswordModal({ companyData, onClose }) {
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }
 
 export default function ProfileCard({ onContact, companyData, onAvatarUpdate, showActions = false }) {
@@ -267,9 +267,9 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
   const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) { alert("Please select an image file"); return; }
-    if (file.size > 2 * 1024 * 1024) { alert("Image must be under 2MB"); return; }
-    if (!companyData?.id) { alert("Please select a company first"); return; }
+    if (!file.type.startsWith('image/')) {alert(t("please_select_an_image_file_363", "Please select an image file"));return;}
+    if (file.size > 2 * 1024 * 1024) {alert(t("image_must_be_under_2mb_191", "Image must be under 2MB"));return;}
+    if (!companyData?.id) {alert(t("please_select_a_company_first_251", "Please select a company first"));return;}
 
     try {
       setUploading(true);
@@ -281,10 +281,10 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
       setAvatar(downloadURL);
       await CompanyService.updateCompanyProfile(companyData.id, { avatar: downloadURL });
       onAvatarUpdate && onAvatarUpdate();
-      alert("Avatar updated successfully!");
+      alert(t("avatar_updated_successfully_346", "Avatar updated successfully!"));
     } catch (error) {
       console.error('Error uploading avatar:', error);
-      alert("Failed to upload avatar. Please try again.");
+      alert(t("failed_to_upload_avatar_please_try_again_569", "Failed to upload avatar. Please try again."));
     } finally {
       setUploading(false);
     }
@@ -299,7 +299,7 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
       onAvatarUpdate && onAvatarUpdate();
     } catch (error) {
       console.error('Error updating visibility:', error);
-      alert('Failed to update visibility settings');
+      alert(t("failed_to_update_visibility_settings_351", "Failed to update visibility settings"));
     }
   };
 
@@ -308,9 +308,9 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
       <div className="flex items-start gap-4 flex-wrap sm:flex-nowrap">
         <div className="relative shrink-0 flex flex-col items-center">
           <div className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex items-center justify-center relative">
-            <img src={avatar} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.target.src = DefaultAvatar; }} />
+            <img src={avatar} alt="Avatar" className="w-full h-full object-cover" onError={(e) => {e.target.src = DefaultAvatar;}} />
             <label className={`absolute bottom-0 right-0 p-1.5 rounded-full shadow cursor-pointer transform translate-x-1/4 translate-y-1/4 transition-colors ${uploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}>
-              {uploading ? (<Loader2 className="h-3.5 w-3.5 text-white animate-spin" />) : (<Upload className="h-3.5 w-3.5 text-white" />)}
+              {uploading ? <Loader2 className="h-3.5 w-3.5 text-white animate-spin" /> : <Upload className="h-3.5 w-3.5 text-white" />}
               <input type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" disabled={uploading} />
             </label>
           </div>
@@ -324,16 +324,16 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
           <p className="text-sm text-gray-500">{companyData?.sector || t('company_dashboard.profile_sector_not_set')}</p>
           <p className="text-sm text-gray-500">📍 {companyData?.location || t('company_dashboard.profile_location_not_set')}</p>
 
-          {companyData?.socialLinks && (
-            <div className="mt-2">
+          {companyData?.socialLinks &&
+          <div className="mt-2">
               <p className="text-xs font-medium text-gray-600 mb-1">{t('company_dashboard.profile_social_links')}</p>
               <div className="flex gap-2 text-xs flex-wrap">
-                {companyData.socialLinks.linkedin && (<a href={companyData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">LinkedIn</a>)}
-                {companyData.socialLinks.facebook && (<a href={companyData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Facebook</a>)}
-                {companyData.socialLinks.website && (<a href={companyData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Website</a>)}
+                {companyData.socialLinks.linkedin && <a href={companyData.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("linkedin_848", "LinkedIn")}</a>}
+                {companyData.socialLinks.facebook && <a href={companyData.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("facebook_100", "Facebook")}</a>}
+                {companyData.socialLinks.website && <a href={companyData.socialLinks.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{t("website_364", "Website")}</a>}
               </div>
             </div>
-          )}
+          }
         </div>
       </div>
 
@@ -354,19 +354,19 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
           </div>
         </div>
 
-        {companyData?.paymentMethod && (
-          <div className="mt-2">
+        {companyData?.paymentMethod &&
+      <div className="mt-2">
             <p className="text-xs font-medium text-gray-600">{t('company_dashboard.profile_payment_method')}</p>
             <p className="text-sm text-gray-500">{companyData.paymentMethod.type}: {companyData.paymentMethod.number}{companyData.paymentMethod.verified && <span className="text-green-600 ml-1">✓ {t('company_dashboard.profile_verified')}</span>}</p>
           </div>
-        )}
+      }
 
-        {companyData?.rccmNif && companyData?.visibility?.rccmNif && (
-          <div className="mt-2">
+        {companyData?.rccmNif && companyData?.visibility?.rccmNif &&
+      <div className="mt-2">
             <p className="text-xs font-medium text-gray-600">{t('company_dashboard.profile_legal_info')}</p>
-            <p className="text-sm text-gray-500">RCCM: {companyData.rccmNif.rccm} | NIF: {companyData.rccmNif.nif}{companyData.rccmNif.verified && <span className="text-green-600 ml-1">✓ {t('company_dashboard.profile_verified')}</span>}</p>
+            <p className="text-sm text-gray-500">{t("rccm_701", "RCCM:")} {companyData.rccmNif.rccm} {t("_nif_471", "| NIF:")} {companyData.rccmNif.nif}{companyData.rccmNif.verified && <span className="text-green-600 ml-1">✓ {t('company_dashboard.profile_verified')}</span>}</p>
           </div>
-        )}
+      }
 
       <div className="mt-3">
         <div className="text-sm mb-1">{t('company_dashboard.profile_complete_pct', { pct: progress })}</div>
@@ -379,20 +379,20 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
         <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
           {companyData?.status?.verified ? t('company_dashboard.profile_verified_badge') : t('company_dashboard.profile_complete_badge')}
         </span>
-        {companyData?.status?.topClient && (<span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">{t('company_dashboard.profile_top_company')}</span>)}
-        {companyData?.status?.sme && (<span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('company_dashboard.profile_sme')}</span>)}
+        {companyData?.status?.topClient && <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded-full">{t('company_dashboard.profile_top_company')}</span>}
+        {companyData?.status?.sme && <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">{t('company_dashboard.profile_sme')}</span>}
       </div>
 
       <div className="flex items-center gap-1 mt-3 text-yellow-500">
-        {[...Array(5)].map((_, i) => (
-          <Star key={i} className={`w-4 h-4 ${i < Math.floor(companyData?.status?.rating || 0) ? 'fill-yellow-500' : 'text-gray-300'}`} />
-        ))}
+        {[...Array(5)].map((_, i) =>
+        <Star key={i} className={`w-4 h-4 ${i < Math.floor(companyData?.status?.rating || 0) ? 'fill-yellow-500' : 'text-gray-300'}`} />
+        )}
         <span className="ml-2 text-sm text-gray-600">({companyData?.status?.rating || 0} / 5)</span>
         <span className="ml-2 text-sm text-gray-500">• {companyData?.status?.transactions || 0} {t('company_dashboard.profile_transactions')}</span>
       </div>
 
-      {showActions && (
-        <div className="mt-4 space-y-2">
+      {showActions &&
+      <div className="mt-4 space-y-2">
           <div className="flex gap-2">
             <Button variant="outline" className="flex-1 text-xs" onClick={() => setShowEditModal(true)}>
               <Edit className="h-3 w-3 mr-1" />
@@ -409,28 +409,26 @@ export default function ProfileCard({ onContact, companyData, onAvatarUpdate, sh
             {t('company_dashboard.profile_delete_btn')}
           </Button>
         </div>
-      )}
+      }
 
-      {showEditModal && (
-        <EditProfileModal companyData={companyData} onClose={() => setShowEditModal(false)} onUpdate={onAvatarUpdate} />
-      )}
-      {showPasswordModal && (
-        <ChangePasswordModal companyData={companyData} onClose={() => setShowPasswordModal(false)} />
-      )}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {showEditModal &&
+      <EditProfileModal companyData={companyData} onClose={() => setShowEditModal(false)} onUpdate={onAvatarUpdate} />
+      }
+      {showPasswordModal &&
+      <ChangePasswordModal companyData={companyData} onClose={() => setShowPasswordModal(false)} />
+      }
+      {showDeleteModal &&
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold mb-4 text-red-600">{t('company_dashboard.profile_delete_title')}</h3>
             <p className="text-sm text-gray-600 mb-4">{t('company_dashboard.profile_delete_desc')}</p>
             <div className="flex gap-2">
-              <Button className="flex-1 bg-red-600 hover:bg-red-700" onClick={() => { setShowDeleteModal(false); alert('Delete Company Account functionality - Coming Soon!'); }}>{t('company_dashboard.profile_delete_btn')}</Button>
+              <Button className="flex-1 bg-red-600 hover:bg-red-700" onClick={() => {setShowDeleteModal(false);alert(t("delete_company_account_functionality_coming_soon_188", "Delete Company Account functionality - Coming Soon!"));}}>{t('company_dashboard.profile_delete_btn')}</Button>
               <Button variant="outline" className="flex-1" onClick={() => setShowDeleteModal(false)}>{t('company_dashboard.profile_cancel')}</Button>
             </div>
           </div>
         </div>
-      )}
-    </Card>
-  );
+      }
+    </Card>);
+
 }
-
-

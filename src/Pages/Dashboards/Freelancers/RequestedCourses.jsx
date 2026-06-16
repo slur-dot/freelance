@@ -6,22 +6,22 @@ import { auth } from "../../../firebaseConfig";
 
 function RCButton({ children, variant = "default", size = "md", className = "", ...props }) {
   const base =
-    variant === "outline"
-      ? "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50"
-      : variant === "ghost"
-        ? "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50"
-        : "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
+  variant === "outline" ?
+  "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50" :
+  variant === "ghost" ?
+  "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50" :
+  "border border-gray-300 text-gray-700 bg-transparent hover:bg-gray-50";
 
   const sizeCls =
-    size === "icon"
-      ? "p-2 h-8 w-8 flex items-center justify-center rounded-md"
-      : "px-4 py-2 rounded-md text-sm font-medium";
+  size === "icon" ?
+  "p-2 h-8 w-8 flex items-center justify-center rounded-md" :
+  "px-4 py-2 rounded-md text-sm font-medium";
 
   return (
     <button className={`${base} ${sizeCls} ${className}`} {...props}>
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 // Simple Input
@@ -29,9 +29,9 @@ function RCInput({ className = "", ...props }) {
   return (
     <input
       className={`pl-9 pr-4 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-gray-200 focus:border-gray-400 text-sm w-full  ${className}`}
-      {...props}
-    />
-  );
+      {...props} />);
+
+
 }
 
 // Simple Card
@@ -115,7 +115,7 @@ export default function RequestedCourses() {
       }
     }
     fetchRequested();
-    return () => { isMounted = false; };
+    return () => {isMounted = false;};
   }, [FREELANCER_ID]);
 
   // Note: persistCourses is replaced by direct service calls
@@ -123,7 +123,7 @@ export default function RequestedCourses() {
   const handleDelete = async (id) => {
     try {
       await FreelancerService.deleteRequestedCourse(FREELANCER_ID, id);
-      setCourses(prev => prev.filter((c) => c.id !== id));
+      setCourses((prev) => prev.filter((c) => c.id !== id));
     } catch (e) {
       setError('Failed to delete course');
       console.error(e);
@@ -133,7 +133,7 @@ export default function RequestedCourses() {
   const handleEdit = (id) => {
     const c = courses.find((x) => x.id === id);
     if (!c) return;
-    setEditForm({ id: c.id, title: c.title, price: c.price || 0, status: (c.rawStatus || 'pending') });
+    setEditForm({ id: c.id, title: c.title, price: c.price || 0, status: c.rawStatus || 'pending' });
     setEditOpen(true);
   };
 
@@ -141,11 +141,11 @@ export default function RequestedCourses() {
     <div className="p-4 md:p-6 lg:p-8">
       <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
         <h1 className="text-2xl md:text-3xl font-bold">{t('requested_courses_page.title')}</h1>
-        <RCButton 
+        <RCButton
           className="bg-blue-600 hover:bg-blue-700 text-white border-0"
-          onClick={() => setAddOpen(true)}
-        >
-          + Request New Course
+          onClick={() => setAddOpen(true)}>
+          {t("_request_new_course_450", "+ Request New Course")}
+        
         </RCButton>
       </div>
       <RCCard className="p-4 md:p-6">
@@ -174,21 +174,21 @@ export default function RequestedCourses() {
               </RCTableRow>
             </RCTableHeader>
             <RCTableBody>
-              {courses.map((course) => (
-                <RCTableRow key={course.id}>
+              {courses.map((course) =>
+              <RCTableRow key={course.id}>
                   <RCTableCell className="font-medium">{course.title}</RCTableCell>
                   <RCTableCell>{course.category}</RCTableCell>
                   <RCTableCell>
                     <div
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${(course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved'))
-                        ? "bg-green-100 text-green-800"
-                        : "bg-orange-100 text-orange-800"
-                        }`}
-                    >
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved') ?
+                    "bg-green-100 text-green-800" :
+                    "bg-orange-100 text-orange-800"}`
+                    }>
+                    
                       <span
-                        className={`h-2 w-2 rounded-full ${(course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved')) ? "bg-green-500" : "bg-orange-500"
-                          }`}
-                      />
+                      className={`h-2 w-2 rounded-full ${course.status === "Approved" || course.status === t('requested_courses_page.modals.edit.status_options.approved') ? "bg-green-500" : "bg-orange-500"}`
+                      } />
+                    
                       {course.status}
                     </div>
                   </RCTableCell>
@@ -204,7 +204,7 @@ export default function RequestedCourses() {
                     </div>
                   </RCTableCell>
                 </RCTableRow>
-              ))}
+              )}
             </RCTableBody>
           </RCTable>
         </div>
@@ -218,35 +218,35 @@ export default function RequestedCourses() {
       </RCCard>
 
       {/* Edit Modal */}
-      {editOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      {editOpen &&
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
             <h3 className="text-lg font-semibold mb-4">{t('requested_courses_page.modals.edit.title')}</h3>
             <div className="space-y-3">
               <div>
                 <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.course_title')}</label>
                 <input
-                  className="w-full border rounded-md px-3 py-2 mt-1"
-                  value={editForm.title}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={editForm.title}
+                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })} />
+              
               </div>
               <div>
                 <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.price')}</label>
                 <input
-                  type="number"
-                  className="w-full border rounded-md px-3 py-2 mt-1"
-                  value={editForm.price}
-                  onChange={(e) => setEditForm({ ...editForm, price: Number(e.target.value) })}
-                />
+                type="number"
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={editForm.price}
+                onChange={(e) => setEditForm({ ...editForm, price: Number(e.target.value) })} />
+              
               </div>
               <div>
                 <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.status')}</label>
                 <select
-                  className="w-full border rounded-md px-3 py-2 mt-1"
-                  value={editForm.status}
-                  onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
-                >
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={editForm.status}
+                onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}>
+                
                   <option value="pending">{t('requested_courses_page.modals.edit.status_options.pending') || 'Pending'}</option>
                   <option value="confirmed">{t('requested_courses_page.modals.edit.status_options.confirmed') || 'Confirmed'}</option>
                   <option value="rejected">{t('requested_courses_page.modals.edit.status_options.rejected') || 'Rejected'}</option>
@@ -256,101 +256,101 @@ export default function RequestedCourses() {
             <div className="mt-6 flex items-center justify-end gap-2">
               <RCButton variant="outline" onClick={() => setEditOpen(false)}>{t('requested_courses_page.modals.edit.cancel')}</RCButton>
               <RCButton
-                onClick={async () => {
-                  try {
-                    const updatedData = {
-                      title: editForm.title,
-                      category: editForm.title, // or strict category field
-                      price: editForm.price,
-                      status: editForm.status
-                    };
+              onClick={async () => {
+                try {
+                  const updatedData = {
+                    title: editForm.title,
+                    category: editForm.title, // or strict category field
+                    price: editForm.price,
+                    status: editForm.status
+                  };
 
-                    await FreelancerService.updateRequestedCourse(FREELANCER_ID, editForm.id, updatedData);
+                  await FreelancerService.updateRequestedCourse(FREELANCER_ID, editForm.id, updatedData);
 
-                    const next = courses.map((c) => c.id === editForm.id
-                      ? {
-                        ...c,
-                        ...updatedData,
-                        rawStatus: editForm.status,
-                        status: editForm.status === 'confirmed' ? (t('requested_courses_page.modals.edit.status_options.approved') || 'Approved') : (t('requested_courses_page.modals.edit.status_options.under_review') || 'Under Review')
-                      }
-                      : c
-                    );
-                    setCourses(next);
-                    setEditOpen(false);
-                  } catch (e) {
-                    setError('Failed to save changes');
-                    console.error(e);
-                  }
-                }}
-              >
+                  const next = courses.map((c) => c.id === editForm.id ?
+                  {
+                    ...c,
+                    ...updatedData,
+                    rawStatus: editForm.status,
+                    status: editForm.status === 'confirmed' ? t('requested_courses_page.modals.edit.status_options.approved') || 'Approved' : t('requested_courses_page.modals.edit.status_options.under_review') || 'Under Review'
+                  } :
+                  c
+                  );
+                  setCourses(next);
+                  setEditOpen(false);
+                } catch (e) {
+                  setError('Failed to save changes');
+                  console.error(e);
+                }
+              }}>
+              
                 {t('requested_courses_page.modals.edit.save')}
               </RCButton>
             </div>
           </div>
         </div>
-      )}
+      }
 
       {/* Add Modal */}
-      {addOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      {addOpen &&
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-            <h3 className="text-lg font-semibold mb-4">Request New Course</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("request_new_course_289", "Request New Course")}</h3>
             <div className="space-y-3">
               <div>
                 <label className="text-sm text-gray-600">{t('requested_courses_page.modals.edit.course_title')}</label>
                 <input
-                  className="w-full border rounded-md px-3 py-2 mt-1"
-                  value={addForm.title}
-                  onChange={(e) => setAddForm({ ...addForm, title: e.target.value })}
-                />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={addForm.title}
+                onChange={(e) => setAddForm({ ...addForm, title: e.target.value })} />
+              
               </div>
               <div>
-                <label className="text-sm text-gray-600">Category</label>
+                <label className="text-sm text-gray-600">{t("category_275", "Category")}</label>
                 <input
-                  className="w-full border rounded-md px-3 py-2 mt-1"
-                  value={addForm.category}
-                  onChange={(e) => setAddForm({ ...addForm, category: e.target.value })}
-                />
+                className="w-full border rounded-md px-3 py-2 mt-1"
+                value={addForm.category}
+                onChange={(e) => setAddForm({ ...addForm, category: e.target.value })} />
+              
               </div>
             </div>
             <div className="mt-6 flex items-center justify-end gap-2">
               <RCButton variant="outline" onClick={() => setAddOpen(false)}>{t('requested_courses_page.modals.edit.cancel')}</RCButton>
               <RCButton
-                className="bg-blue-600 text-white hover:bg-blue-700"
-                onClick={async () => {
-                  try {
-                    const newCourse = await FreelancerService.requestCourse(FREELANCER_ID, {
-                      title: addForm.title,
-                      category: addForm.category || addForm.title,
-                      price: 0
-                    });
-                    
-                    const mapped = {
-                      id: newCourse.id,
-                      title: newCourse.title,
-                      category: newCourse.category,
-                      rawStatus: newCourse.status,
-                      price: 0,
-                      status: 'Under Review',
-                      requestDate: new Date().toLocaleDateString()
-                    };
-                    
-                    setCourses([mapped, ...courses]);
-                    setAddOpen(false);
-                    setAddForm({ title: '', category: '', price: 0 });
-                  } catch (e) {
-                    setError('Failed to request course');
-                    console.error(e);
-                  }
-                }}
-              >
-                Submit Request
-              </RCButton>
+              className="bg-blue-600 text-white hover:bg-blue-700"
+              onClick={async () => {
+                try {
+                  const newCourse = await FreelancerService.requestCourse(FREELANCER_ID, {
+                    title: addForm.title,
+                    category: addForm.category || addForm.title,
+                    price: 0
+                  });
+
+                  const mapped = {
+                    id: newCourse.id,
+                    title: newCourse.title,
+                    category: newCourse.category,
+                    rawStatus: newCourse.status,
+                    price: 0,
+                    status: 'Under Review',
+                    requestDate: new Date().toLocaleDateString()
+                  };
+
+                  setCourses([mapped, ...courses]);
+                  setAddOpen(false);
+                  setAddForm({ title: '', category: '', price: 0 });
+                } catch (e) {
+                  setError('Failed to request course');
+                  console.error(e);
+                }
+              }}>
+                {t("submit_request_704", "Submit Request")}
+              
+            </RCButton>
             </div>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

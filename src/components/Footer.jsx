@@ -17,13 +17,25 @@ const Footer = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState("");
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
     if (email) {
-      // Here you would integrate with your email marketing service (e.g., Mailchimp)
-      console.log('Newsletter signup:', email);
-      alert(t('footer.newsletter_success'));
-      setEmail("");
+      try {
+        const { db } = await import('../firebaseConfig');
+        const { collection, addDoc, serverTimestamp } = await import('firebase/firestore');
+        const { COMPANY_CONTACT } = await import('../config/companyContact');
+        
+        await addDoc(collection(db, 'newsletter_subscriptions'), {
+          email,
+          notifyEmail: COMPANY_CONTACT.newsletter,
+          createdAt: serverTimestamp()
+        });
+        
+        alert(t('footer.newsletter_success'));
+        setEmail("");
+      } catch (error) {
+        console.error('Error subscribing to newsletter:', error);
+      }
     }
   };
 
@@ -107,11 +119,11 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:contact@freelance-224.com"
+                  href="mailto:freelance@freelance-224.com"
                   className="hover:text-white flex items-center justify-center md:justify-start gap-2"
                 >
                   <Mail className="w-4 h-4 text-[#15803D]" />
-                  contact@freelance-224.com
+                  freelance@freelance-224.com
                 </a>
               </li>
               <li>

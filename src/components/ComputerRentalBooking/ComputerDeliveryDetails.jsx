@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -9,7 +10,7 @@ delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png'
 });
 
 // Custom blue marker icon
@@ -34,12 +35,13 @@ const RecenterMap = ({ center }) => {
 };
 
 export default function ComputerDeliveryDetails({ onContinue }) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     deliveryAddress: "",
     deliveryDate: "",
     deliveryTime: "",
     deliveryType: "delivery",
-    pickupLocation: null,
+    pickupLocation: null
   });
 
   const [vendors, setVendors] = useState([]);
@@ -62,12 +64,12 @@ export default function ComputerDeliveryDetails({ onContinue }) {
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: value
     }));
   };
 
   const handlePickupSelect = (vendor) => {
-    setFormData(prev => ({ ...prev, pickupLocation: vendor }));
+    setFormData((prev) => ({ ...prev, pickupLocation: vendor }));
     const lat = vendor.coordinates.lat || vendor.coordinates[0];
     const lng = vendor.coordinates.lng || vendor.coordinates[1];
     setMapCenter([lat, lng]);
@@ -76,7 +78,7 @@ export default function ComputerDeliveryDetails({ onContinue }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.deliveryType === 'pickup' && !formData.pickupLocation) {
-      alert("Please select a pickup location.");
+      alert(t('booking_wizard.pickup_required', 'Please select a pickup location.'));
       return;
     }
     if (onContinue) onContinue(formData);
@@ -90,9 +92,9 @@ export default function ComputerDeliveryDetails({ onContinue }) {
       <div className="w-full max-w-4xl rounded-lg bg-white p-6 shadow-lg md:p-8 overflow-x-hidden">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold">Booking Form</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold">{t("booking_form_247", "Booking Form")}</h1>
           <p className="text-black text-sm sm:text-base">
-            Complete the booking form to complete your booking
+            {t("complete_the_booking_form_to_complete_your_booking_139", "Complete the booking form to complete your booking")}
           </p>
         </div>
 
@@ -100,181 +102,181 @@ export default function ComputerDeliveryDetails({ onContinue }) {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 border-b pb-4">
           <h2 className="text-lg sm:text-xl font-bold">Delivery / Pickup Details</h2>
           <div className="flex space-x-2 w-full sm:w-auto">
-            {["delivery", "pickup"].map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => handleInputChange("deliveryType", type)}
-                className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${formData.deliveryType === type
-                  ? "bg-green-600 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }`}
-              >
+            {["delivery", "pickup"].map((type) =>
+            <button
+              key={type}
+              type="button"
+              onClick={() => handleInputChange("deliveryType", type)}
+              className={`flex-1 sm:flex-none px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${formData.deliveryType === type ?
+              "bg-green-600 text-white" :
+              "bg-gray-200 text-gray-700 hover:bg-gray-300"}`
+              }>
+              
                 {type.charAt(0).toUpperCase() + type.slice(1)}
               </button>
-            ))}
+            )}
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
           {/* Delivery Logic */}
-          {formData.deliveryType === 'delivery' && (
-            <div className="space-y-6 animate-fadeIn">
+          {formData.deliveryType === 'delivery' &&
+          <div className="space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium mb-1">Delivery Address*</label>
+                  <label className="block text-sm font-medium mb-1">{t("delivery_address_49", "Delivery Address*")}</label>
                   <input
-                    type="text"
-                    value={formData.deliveryAddress}
-                    onChange={(e) => handleInputChange("deliveryAddress", e.target.value)}
-                    placeholder="e.g., 123 Street, Conakry"
-                    className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
-                    required
-                  />
+                  type="text"
+                  value={formData.deliveryAddress}
+                  onChange={(e) => handleInputChange("deliveryAddress", e.target.value)}
+                  placeholder={t("eg_123_street_conakry_776", "e.g., 123 Street, Conakry")}
+                  className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
+                  required />
+                
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium mb-1">Delivery Date*</label>
+                  <label className="block text-sm font-medium mb-1">{t("delivery_date_162", "Delivery Date*")}</label>
                   <input
-                    type="date"
-                    min={today}
-                    value={formData.deliveryDate}
-                    onChange={(e) => handleInputChange("deliveryDate", e.target.value)}
-                    className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
-                    required
-                  />
+                  type="date"
+                  min={today}
+                  value={formData.deliveryDate}
+                  onChange={(e) => handleInputChange("deliveryDate", e.target.value)}
+                  className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
+                  required />
+                
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium mb-1">Preferred Time*</label>
+                  <label className="block text-sm font-medium mb-1">{t("preferred_time_150", "Preferred Time*")}</label>
                   <select
-                    value={formData.deliveryTime}
-                    onChange={(e) => handleInputChange("deliveryTime", e.target.value)}
-                    className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
-                    required
-                  >
-                    <option value="">Select Time Slot</option>
-                    <option value="09:00 - 12:00">Morning (09:00 - 12:00)</option>
-                    <option value="12:00 - 15:00">Afternoon (12:00 - 15:00)</option>
-                    <option value="15:00 - 18:00">Evening (15:00 - 18:00)</option>
+                  value={formData.deliveryTime}
+                  onChange={(e) => handleInputChange("deliveryTime", e.target.value)}
+                  className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
+                  required>
+                  
+                    <option value="">{t("select_time_slot_745", "Select Time Slot")}</option>
+                    <option value="09:00 - 12:00">{t("morning_0900_1200_31", "Morning (09:00 - 12:00)")}</option>
+                    <option value="12:00 - 15:00">{t("afternoon_1200_1500_22", "Afternoon (12:00 - 15:00)")}</option>
+                    <option value="15:00 - 18:00">{t("evening_1500_1800_79", "Evening (15:00 - 18:00)")}</option>
                   </select>
                 </div>
               </div>
             </div>
-          )}
+          }
 
           {/* Pickup Logic */}
-          {formData.deliveryType === 'pickup' && (
-            <div className="space-y-6 animate-fadeIn">
+          {formData.deliveryType === 'pickup' &&
+          <div className="space-y-6 animate-fadeIn">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* List */}
                 <div className="lg:col-span-1 h-[300px] sm:h-[400px] overflow-y-auto border rounded-lg p-2 bg-gray-50 min-w-0">
-                  <h3 className="font-bold mb-2 sticky top-0 bg-gray-50 p-2 text-sm sm:text-base">Select a Pickup Point</h3>
+                  <h3 className="font-bold mb-2 sticky top-0 bg-gray-50 p-2 text-sm sm:text-base">{t("select_a_pickup_point_521", "Select a Pickup Point")}</h3>
                   <div className="space-y-2">
-                    {vendors.map(vendor => (
-                      <div
-                        key={vendor.id}
-                        onClick={() => handlePickupSelect(vendor)}
-                        className={`p-3 rounded-lg cursor-pointer border transition-all ${formData.pickupLocation?.id === vendor.id
-                          ? 'bg-green-50 border-green-500 shadow-sm'
-                          : 'bg-white border-gray-200 hover:border-green-300'
-                          }`}
-                      >
+                    {vendors.map((vendor) =>
+                  <div
+                    key={vendor.id}
+                    onClick={() => handlePickupSelect(vendor)}
+                    className={`p-3 rounded-lg cursor-pointer border transition-all ${formData.pickupLocation?.id === vendor.id ?
+                    'bg-green-50 border-green-500 shadow-sm' :
+                    'bg-white border-gray-200 hover:border-green-300'}`
+                    }>
+                    
                         <div className="font-semibold text-sm sm:text-base text-gray-800">{vendor.name}</div>
                         <div className="text-[10px] sm:text-xs text-gray-500">{vendor.address}</div>
                       </div>
-                    ))}
+                  )}
                   </div>
                 </div>
 
                 {/* Map */}
                 <div className="lg:col-span-2 h-[300px] sm:h-[400px] rounded-lg overflow-hidden border border-gray-300 relative z-0 min-w-0">
                   <MapContainer
-                    center={mapCenter}
-                    zoom={13}
-                    style={{ height: '100%', width: '100%' }}
-                  >
+                  center={mapCenter}
+                  zoom={13}
+                  style={{ height: '100%', width: '100%' }}>
+                  
                     <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' />
+                  
                     <RecenterMap center={mapCenter} />
-                    {vendors.map((vendor) => (
-                      <Marker
-                        key={vendor.id}
-                        position={[
-                          vendor.coordinates.lat || vendor.coordinates[0],
-                          vendor.coordinates.lng || vendor.coordinates[1]
-                        ]}
-                        icon={customIcon}
-                        eventHandlers={{
-                          click: () => handlePickupSelect(vendor),
-                        }}
-                      >
+                    {vendors.map((vendor) =>
+                  <Marker
+                    key={vendor.id}
+                    position={[
+                    vendor.coordinates.lat || vendor.coordinates[0],
+                    vendor.coordinates.lng || vendor.coordinates[1]]
+                    }
+                    icon={customIcon}
+                    eventHandlers={{
+                      click: () => handlePickupSelect(vendor)
+                    }}>
+                    
                         <Popup>
                           <div className="text-center">
                             <h3 className="font-bold">{vendor.name}</h3>
                             <p className="text-sm">{vendor.address}</p>
                             <button
-                              className="mt-2 bg-green-600 text-white px-3 py-1 rounded text-xs"
-                              onClick={(e) => {
-                                e.stopPropagation(); // prevent map click
-                                handlePickupSelect(vendor);
-                              }}
-                            >
-                              Select Location
-                            </button>
+                          className="mt-2 bg-green-600 text-white px-3 py-1 rounded text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent map click
+                            handlePickupSelect(vendor);
+                          }}>
+                              {t("select_location_216", "Select Location")}
+                            
+                        </button>
                           </div>
                         </Popup>
                       </Marker>
-                    ))}
+                  )}
                   </MapContainer>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1 min-w-0">
-                  <label className="block text-sm font-medium mb-1">Pickup Date*</label>
+                  <label className="block text-sm font-medium mb-1">{t("pickup_date_906", "Pickup Date*")}</label>
                   <input
-                    type="date"
-                    min={today}
-                    value={formData.deliveryDate}
-                    onChange={(e) => handleInputChange("deliveryDate", e.target.value)}
-                    className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
-                    required
-                  />
+                  type="date"
+                  min={today}
+                  value={formData.deliveryDate}
+                  onChange={(e) => handleInputChange("deliveryDate", e.target.value)}
+                  className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
+                  required />
+                
                 </div>
                 <div className="flex-1 min-w-0">
-                  <label className="block text-sm font-medium mb-1">Pickup Time*</label>
+                  <label className="block text-sm font-medium mb-1">{t("pickup_time_183", "Pickup Time*")}</label>
                   <select
-                    value={formData.deliveryTime}
-                    onChange={(e) => handleInputChange("deliveryTime", e.target.value)}
-                    className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
-                    required
-                  >
-                    <option value="">Select Time Slot</option>
-                    <option value="09:00 - 12:00">Morning (09:00 - 12:00)</option>
-                    <option value="12:00 - 15:00">Afternoon (12:00 - 15:00)</option>
-                    <option value="15:00 - 18:00">Evening (15:00 - 18:00)</option>
+                  value={formData.deliveryTime}
+                  onChange={(e) => handleInputChange("deliveryTime", e.target.value)}
+                  className="w-full px-4 py-3 rounded-md bg-gray-100 border border-gray-300 focus:ring-2 focus:ring-green-500 outline-none"
+                  required>
+                  
+                    <option value="">{t("select_time_slot_195", "Select Time Slot")}</option>
+                    <option value="09:00 - 12:00">{t("morning_0900_1200_796", "Morning (09:00 - 12:00)")}</option>
+                    <option value="12:00 - 15:00">{t("afternoon_1200_1500_427", "Afternoon (12:00 - 15:00)")}</option>
+                    <option value="15:00 - 18:00">{t("evening_1500_1800_768", "Evening (15:00 - 18:00)")}</option>
                   </select>
                 </div>
               </div>
             </div>
-          )}
+          }
 
           {/* Continue Button */}
           <div className="flex justify-center p-6">
             <button
               type="submit"
-              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg"
-            >
-              Continue
+              className="w-full max-w-[300px] bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-3xl font-medium text-lg">
+              {t("continue_541", "Continue")}
+            
             </button>
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -17,60 +17,7 @@ import { Search } from "lucide-react";
 import { db } from "../firebaseConfig";
 import { collection, query, where, getDocs, limit, orderBy } from "firebase/firestore";
 
-// Fallback data shown when no freelancers are registered yet
-const fallbackFreelancers = [
-  {
-    id: "f1",
-    name: "Ibrahim Diallo",
-    company: "TechGuinee Solutions",
-    skills: ["React", "Node.js", "Firebase"],
-    category: "Software Development",
-    rating: 4.8,
-    reviews: 15,
-    hourlyRate: "150,000 GNF",
-    quote: "Expert in building scalable web applications for local businesses.",
-    quoteAuthor: "Client",
-    image: HireFreelanceImage,
-    location: "Conakry",
-    experience: "5+ Years",
-    availability: "Available Now",
-    portfolio: "https://example.com"
-  },
-  {
-    id: "f2",
-    name: "Fatoumata Camara",
-    company: "Creative Conakry",
-    skills: ["UI/UX", "Figma", "Web Design"],
-    category: "Design",
-    rating: 4.9,
-    reviews: 24,
-    hourlyRate: "120,000 GNF",
-    quote: "Passionate about creating intuitive user experiences.",
-    quoteAuthor: "Previous Client",
-    image: HireFreelanceImage,
-    location: "Conakry",
-    experience: "3 Years",
-    availability: "Part Time",
-    portfolio: "https://example.com"
-  },
-  {
-    id: "f3",
-    name: "Amadou Barry",
-    company: "Data Insight GN",
-    skills: ["Python", "Data Analysis", "SQL"],
-    category: "Data Science",
-    rating: 4.7,
-    reviews: 8,
-    hourlyRate: "180,000 GNF",
-    quote: "Helping businesses make data-driven decisions.",
-    quoteAuthor: "NGO Partner",
-    image: HireFreelanceImage,
-    location: "Labé",
-    experience: "4 Years",
-    availability: "Available Now",
-    portfolio: "https://example.com"
-  }
-];
+
 
 
 async function fetchFreelancersFromFirebase() {
@@ -258,7 +205,7 @@ function FreelancerCard({ freelancer }) {
 
         <div className="flex gap-2">
           <button
-            onClick={() => navigate("/hire-freelancers/info/job-post")}
+            onClick={() => navigate("/job-board")}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium px-2 py-2 rounded-md transition-colors"
           >
             {t('freelancer.profile.actions.bid')}
@@ -304,7 +251,7 @@ export default function FreelancerProfile() {
     async function load() {
       setLoadingFreelancers(true);
       const firebaseData = await fetchFreelancersFromFirebase();
-      setFreelancers(firebaseData && firebaseData.length > 0 ? firebaseData : fallbackFreelancers);
+      setFreelancers(firebaseData && firebaseData.length > 0 ? firebaseData : []);
       setLoadingFreelancers(false);
     }
     load();

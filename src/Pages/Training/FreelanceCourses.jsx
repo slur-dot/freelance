@@ -1,38 +1,27 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SubscriptionPlan from "./SubscriptionPlan";
-import coursesImg from "../../assets/Courses_image.png";
+import { CourseService } from "../../services/courseService";
 
-const defaultFreelanceCourses = [
-  {
-    id: 1,
-    image: coursesImg,
-    videos: "10",
-    hours: "5",
-    price: "176,000 GNF",
-    priceUSD: "$20",
-  },
-  {
-    id: 2,
-    image: coursesImg,
-    videos: "8",
-    hours: "4",
-    price: "132,000 GNF",
-    priceUSD: "$15",
-  },
-  {
-    id: 3,
-    image: coursesImg,
-    videos: "12",
-    hours: "6",
-    price: "220,000 GNF",
-    priceUSD: "$25",
-  },
-];
+export default function FreelanceCourses() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function FreelanceCourses({ courses = defaultFreelanceCourses }) {
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const publishedCourses = await CourseService.getAllPublishedCourses();
+        setCourses(publishedCourses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
   const [sortOption, setSortOption] = useState("popular");
   const navigate = useNavigate();
   const { t } = useTranslation();

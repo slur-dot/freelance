@@ -204,7 +204,7 @@ export default function ShippingDetailsPage() {
         totalAmount: subtotal,
         shippingDetails: {
           method: shippingMethod === "deliver" ? "Delivery" : "Pickup",
-          details: selectedPickupLocation || paymentDetails.deliveryAddress
+          details: selectedPickupLocation || paymentDetails.deliveryAddress || "Not specified"
         },
         paymentMethod: selectedPaymentMethod,
         status: 'pending_payment'
@@ -227,18 +227,28 @@ export default function ShippingDetailsPage() {
       });
 
       if (result.success) {
-        clearCart();
-        
         if (result.redirectUrl) {
+          if (result.transactionId) {
+            await OrderService.updateOrder(orderRes.orderId, {
+              djomyTransactionId: result.transactionId,
+              paymentRef: result.transactionId,
+            });
+          }
+          clearCart();
           window.location.href = result.redirectUrl;
           return;
         }
+
+        clearCart();
         
         // Complete mock payment immediately
         await OrderService.updateOrderStatus(orderRes.orderId, 'paid');
-        navigate("/shop/payment-success?ref=" + orderRes.orderId);
+        navigate(`/checkout/success?orderId=${orderRes.orderId}&ref=${orderRes.orderId}`);
       } else {
         await OrderService.updateOrderStatus(orderRes.orderId, 'payment_failed');
+        import('../../services/smsNotifications.js').then(({ SmsNotifications }) => {
+          SmsNotifications.notifyPaymentFailed(currentUser.uid, { orderId: orderRes.orderId }).catch(() => {});
+        });
         setPaymentResult(result);
       }
     } catch (error) {

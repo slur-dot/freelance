@@ -22,29 +22,29 @@ export default function Receipts() {
       try {
         // Fetch real orders from OrderService
         const vendorOrders = await OrderService.getSellerOrders(user.uid);
-        
+
         // Filter for completed/delivered orders and map to receipt shape
-        const mappedReceipts = vendorOrders
-          .filter(order => order.status === 'completed' || order.status === 'delivered')
-          .map(order => ({
-            id: `RCP-${order.id.substring(0, 8).toUpperCase()}`,
-            orderId: order.id,
-            date: order.createdAt?.seconds ? new Date(order.createdAt.seconds * 1000).toISOString() : new Date().toISOString(),
-            customer: order.buyerName || 'Unknown Customer',
-            items: [
-              { 
-                name: order.product || 'Product', 
-                quantity: order.quantity || 1, 
-                price: parseFloat(order.totalAmount || 0) / (order.quantity || 1),
-                serials: order.assignedSerials || [] 
-              }
-            ],
-            amount: parseFloat(order.totalAmount || 0),
-            currency: 'GNF',
-            status: 'completed',
-            paymentMethod: order.paymentMethod || 'Online Payment'
-          }));
-          
+        const mappedReceipts = vendorOrders.
+        filter((order) => order.status === 'completed' || order.status === 'delivered').
+        map((order) => ({
+          id: `RCP-${order.id.substring(0, 8).toUpperCase()}`,
+          orderId: order.id,
+          date: order.createdAt?.seconds ? new Date(order.createdAt.seconds * 1000).toISOString() : new Date().toISOString(),
+          customer: order.buyerName || 'Unknown Customer',
+          items: [
+          {
+            name: order.product || 'Product',
+            quantity: order.quantity || 1,
+            price: parseFloat(order.totalAmount || 0) / (order.quantity || 1),
+            serials: order.assignedSerials || []
+          }],
+
+          amount: parseFloat(order.totalAmount || 0),
+          currency: 'GNF',
+          status: 'completed',
+          paymentMethod: order.paymentMethod || 'Online Payment'
+        }));
+
         setReceipts(mappedReceipts);
       } catch (err) {
         console.error("Error fetching receipts:", err);
@@ -52,14 +52,14 @@ export default function Receipts() {
         setIsLoading(false);
       }
     };
-    
+
     fetchReceipts();
   }, []);
 
-  const filteredReceipts = receipts.filter(receipt => 
-    receipt.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    receipt.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    receipt.orderId.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredReceipts = receipts.filter((receipt) =>
+  receipt.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  receipt.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  receipt.orderId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const downloadReceiptPDF = (receipt) => {
@@ -96,7 +96,7 @@ export default function Receipts() {
             </tr>
           </thead>
           <tbody>
-            ${receipt.items.map(item => `
+            ${receipt.items.map((item) => `
               <tr style="border-bottom: 1px solid #e2e8f0;">
                 <td style="padding: 12px;">${item.name}</td>
                 <td style="padding: 12px; font-size: 12px; color: #666;">${item.serials.join(', ')}</td>
@@ -150,13 +150,13 @@ export default function Receipts() {
         <div className="flex items-center gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input 
-              type="text" 
+            <input
+              type="text"
               placeholder={t('vendor_dashboard.receipts.search', 'Search receipts...')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64"
-            />
+              className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64" />
+            
           </div>
           <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
             <Filter className="w-4 h-4" />
@@ -179,24 +179,24 @@ export default function Receipts() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {isLoading ? (
-                <tr>
+              {isLoading ?
+              <tr>
                   <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                     <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-solid border-blue-600 border-r-transparent"></div>
-                    <p className="mt-2">Loading receipts...</p>
+                    <p className="mt-2">{t("loading_receipts_620", "Loading receipts...")}</p>
                   </td>
-                </tr>
-              ) : filteredReceipts.length === 0 ? (
-                <tr>
+                </tr> :
+              filteredReceipts.length === 0 ?
+              <tr>
                   <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
                     <FileText className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                     <p className="text-lg font-medium text-gray-900">{t('vendor_dashboard.receipts.no_receipts', 'No receipts found')}</p>
                     <p className="mt-1">{t('vendor_dashboard.receipts.try_different_search', 'Try adjusting your search terms.')}</p>
                   </td>
-                </tr>
-              ) : (
-                filteredReceipts.map((receipt) => (
-                  <tr key={receipt.id} className="hover:bg-gray-50/50 transition-colors">
+                </tr> :
+
+              filteredReceipts.map((receipt) =>
+              <tr key={receipt.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4 font-medium text-gray-900">
                       <div className="flex items-center gap-2">
                         <FileText className="w-4 h-4 text-blue-500" />
@@ -226,21 +226,21 @@ export default function Receipts() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button 
-                        onClick={() => downloadReceiptPDF(receipt)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium transition-colors text-xs"
-                      >
+                      <button
+                    onClick={() => downloadReceiptPDF(receipt)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium transition-colors text-xs">
+                    
                         <Download className="w-3.5 h-3.5" />
                         {t('common.download', 'Download')}
                       </button>
                     </td>
                   </tr>
-                ))
-              )}
+              )
+              }
             </tbody>
           </table>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

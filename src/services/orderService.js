@@ -1,11 +1,22 @@
 import { db } from "../firebaseConfig";
-import { collection, addDoc, serverTimestamp, query, where, getDocs, orderBy, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+    collection, addDoc, serverTimestamp, query, where, getDocs,
+    doc, updateDoc, deleteDoc, getDoc,
+} from "firebase/firestore";
+
+/** Canonical order statuses */
+export const ORDER_STATUS = {
+    PENDING_PAYMENT: 'pending_payment',
+    PAID: 'paid',
+    PROCESSING: 'processing',
+    SHIPPED: 'shipped',
+    DELIVERED: 'delivered',
+    CANCELLED: 'cancelled',
+    REFUNDED: 'refunded',
+    PAYMENT_FAILED: 'payment_failed',
+};
 
 export const OrderService = {
-    /**
-     * Helper to generate a unique serial number
-     * Format: F224-YYYYMMDD-XXXX
-     */
     generateSerialNumber() {
         const date = new Date();
         const year = date.getFullYear();
@@ -15,35 +26,88 @@ export const OrderService = {
         return `F224-${year}${month}${day}-${randomStr}`;
     },
 
-    // Create a new order
+    extractSellerIds(items = []) {
+        const ids = new Set();
+        items.forEach((item) => {
+            if (item.sellerId) ids.add(item.sellerId);
+        });
+        return Array.from(ids);
+    },
+
     async createOrder(userId, orderData) {
         try {
             if (!userId) throw new Error("User ID is required");
 
-            const orderRef = collection(db, "orders");
-            
-            // Add generated serial numbers to physical stock items like devices
-            const processedItems = orderData.items.map(item => {
+            const items = (orderData.items || []).map((item) => {
                 const serials = [];
                 const quantity = item.quantity || 1;
                 for (let i = 0; i < quantity; i++) {
                     serials.push(this.generateSerialNumber());
                 }
-                return { ...item, serials };
+                const price = Number(item.currentPrice ?? item.price ?? 0) || 0;
+                return {
+                    ...item,
+                    price,
+                    currentPrice: price,
+                    quantity,
+                    serials,
+                    sellerId: item.sellerId || null,
+                };
             });
+
+            const sellerIds = this.extractSellerIds(items);
+            const primarySellerId = sellerIds[0] || orderData.sellerId || null;
+            const totalAmount = Number(orderData.totalAmount) || 0;
+            const shippingCost = Number(orderData.shippingCost) || 0;
 
             const newOrder = {
                 userId,
-                items: processedItems,
-                totalAmount: orderData.totalAmount,
-                shippingDetails: orderData.shippingDetails,
-                paymentMethod: orderData.paymentMethod, // e.g., 'stripe', 'cod'
-                status: 'pending', // pending, processing, shipped, delivered, cancelled
+                buyerId: userId,
+                sellerId: primarySellerId,
+                sellerIds,
+                items,
+                totalAmount: totalAmount + shippingCost,
+                subtotal: totalAmount,
+                shippingCost,
+                buyerName: orderData.buyerName || '',
+                shippingDetails: orderData.shippingDetails || { method: 'Unknown', details: 'Not specified' },
+                paymentMethod: orderData.paymentMethod || 'unknown',
+                status: orderData.status || ORDER_STATUS.PENDING_PAYMENT,
+                paymentRef: orderData.paymentRef || null,
                 createdAt: serverTimestamp(),
-                updatedAt: serverTimestamp()
+                updatedAt: serverTimestamp(),
             };
 
-            const docRef = await addDoc(orderRef, newOrder);
+            // Deep clean undefined values to prevent Firestore errors
+            const cleanUndefined = (obj) => {
+                if (Array.isArray(obj)) {
+                    return obj.filter(item => item !== undefined).map(item => {
+                        if (item && typeof item === 'object' && !(item instanceof Date)) {
+                            return cleanUndefined(item);
+                        }
+                        return item;
+                    });
+                }
+                Object.keys(obj).forEach(key => {
+                    if (obj[key] === undefined) {
+                        delete obj[key];
+                    } else if (obj[key] && typeof obj[key] === 'object' && !(obj[key] instanceof Date) && key !== 'createdAt' && key !== 'updatedAt') {
+                        obj[key] = cleanUndefined(obj[key]);
+                    }
+                });
+                return obj;
+            };
+            cleanUndefined(newOrder);
+
+            const docRef = await addDoc(collection(db, "orders"), newOrder);
+
+            import('./smsNotifications.js').then(({ SmsNotifications }) => {
+                SmsNotifications.notifyOrderPlaced(userId, {
+                    orderId: docRef.id,
+                    totalAmount: newOrder.totalAmount,
+                }).catch(() => {});
+            });
+
             return { success: true, orderId: docRef.id };
         } catch (error) {
             console.error("Error creating order:", error);
@@ -51,12 +115,9 @@ export const OrderService = {
         }
     },
 
-    // Get order by ID
     async getOrderById(orderId) {
         try {
-            const { getDoc } = await import("firebase/firestore");
-            const orderRef = doc(db, "orders", orderId);
-            const orderSnap = await getDoc(orderRef);
+            const orderSnap = await getDoc(doc(db, "orders", orderId));
             if (orderSnap.exists()) {
                 return { id: orderSnap.id, ...orderSnap.data() };
             }
@@ -67,70 +128,54 @@ export const OrderService = {
         }
     },
 
-    // Get orders for a specific user (buyer)
     async getUserOrders(userId) {
         try {
             if (!userId) throw new Error("User ID is required");
 
             const ordersRef = collection(db, "orders");
-            // Query orders where 'userId' matches the client's ID
-            // Removed orderBy("createdAt", "desc") to prevent requiring a Firestore composite index
-            const q = query(ordersRef, where("userId", "==", userId));
-            const snapshot = await getDocs(q);
+            const qBuyer = query(ordersRef, where("buyerId", "==", userId));
+            const qUser = query(ordersRef, where("userId", "==", userId));
+            const [snapBuyer, snapUser] = await Promise.all([getDocs(qBuyer), getDocs(qUser)]);
 
-            const orders = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const byId = new Map();
+            [...snapBuyer.docs, ...snapUser.docs].forEach((d) => {
+                byId.set(d.id, { id: d.id, ...d.data() });
+            });
 
-            // Sort client-side descending by createdAt
-            return orders.sort((a, b) => {
+            return Array.from(byId.values()).sort((a, b) => {
                 const timeA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
                 const timeB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
                 return timeB - timeA;
             });
         } catch (error) {
             console.error("Error fetching user orders:", error);
-            // Fallback for missing index error
-            if (error.code === 'failed-precondition') {
-                console.warn("Missing index for user orders query. Please create index in Firebase Console.");
-            }
             return [];
         }
     },
 
-    // Get orders for a specific seller (assuming items contain sellerId or similar structure. For MVP, we might just query all orders and filter, or cleaner: query orders where 'sellerId' is present if orders are per-seller)
-    // IMPORTANT: If orders can contain items from multiple sellers, this logic needs to be more complex (e.g., separate orderItems collection).
-    // For now, assuming simplifed model where an order belongs to a seller or we query by 'sellerId' field on order.
     async getSellerOrders(sellerId) {
         try {
-            // Assuming 'sellerId' field exists on order. If not, we might need a composite index or changing schema.
-            // For now, let's assume we filter by 'sellerId' if we store it.
-            // If we don't store it, we might need to fetch all and filter client side (not scalable) or update createOrder to store it.
-            // Let's assume createOrder will be updated or we use a temporary solution.
-
             const ordersRef = collection(db, "orders");
-            const q = query(ordersRef, where("sellerId", "==", sellerId));
-            const snapshot = await getDocs(q);
+            const qSeller = query(ordersRef, where("sellerId", "==", sellerId));
+            const qIds = query(ordersRef, where("sellerIds", "array-contains", sellerId));
+            const [snapSeller, snapIds] = await Promise.all([getDocs(qSeller), getDocs(qIds)]);
 
-            return snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const byId = new Map();
+            [...snapSeller.docs, ...snapIds.docs].forEach((d) => {
+                byId.set(d.id, { id: d.id, ...d.data() });
+            });
+            return Array.from(byId.values());
         } catch (error) {
-            // Fallback if index missing or error
             console.error("Error fetching seller orders:", error);
             return [];
         }
     },
 
-    // Update order status
     async updateOrderStatus(orderId, status) {
         try {
-            const orderRef = doc(db, "orders", orderId);
-            await updateDoc(orderRef, {
-                status: status,
-                updatedAt: serverTimestamp()
+            await updateDoc(doc(db, "orders", orderId), {
+                status,
+                updatedAt: serverTimestamp(),
             });
             return { success: true };
         } catch (error) {
@@ -139,13 +184,14 @@ export const OrderService = {
         }
     },
 
-    // Generic update order
     async updateOrder(orderId, updates) {
         try {
-            const orderRef = doc(db, "orders", orderId);
-            await updateDoc(orderRef, {
-                ...updates,
-                updatedAt: serverTimestamp()
+            const blocked = ['buyerId', 'userId', 'sellerId', 'sellerIds', 'totalAmount', 'items'];
+            const safe = { ...updates };
+            blocked.forEach((k) => delete safe[k]);
+            await updateDoc(doc(db, "orders", orderId), {
+                ...safe,
+                updatedAt: serverTimestamp(),
             });
             return { success: true };
         } catch (error) {
@@ -154,15 +200,27 @@ export const OrderService = {
         }
     },
 
-    // Delete order
     async deleteOrder(orderId) {
         try {
-            // Note: In a real app, we might want to soft delete or check permissions
             await deleteDoc(doc(db, "orders", orderId));
             return { success: true };
         } catch (error) {
             console.error("Error deleting order:", error);
             throw error;
         }
-    }
+    },
+
+    async markOrderPaid(orderId, paymentRef) {
+        const order = await this.getOrderById(orderId);
+        await this.updateOrder(orderId, {
+            status: ORDER_STATUS.PAID,
+            paymentRef: paymentRef || null,
+            paidAt: serverTimestamp(),
+        });
+        const buyerId = order?.buyerId || order?.userId;
+        if (buyerId) {
+            const { SmsNotifications } = await import('./smsNotifications.js');
+            SmsNotifications.notifyPaymentSuccess(buyerId, { orderId, ref: paymentRef }).catch(() => {});
+        }
+    },
 };

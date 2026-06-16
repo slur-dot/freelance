@@ -6,6 +6,7 @@ import { db, storage } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import PartnerPhoneInput from '../components/PartnerPhoneInput';
+import { COMPANY_CONTACT } from '../config/companyContact';
 
 export default function Partnership() {
   const { t } = useTranslation();
@@ -56,6 +57,7 @@ export default function Partnership() {
         ...formData,
         fileUrl,
         fileName,
+        notifyEmail: COMPANY_CONTACT.partnerships,
         createdAt: serverTimestamp(),
         status: 'pending'
       });
@@ -132,7 +134,7 @@ export default function Partnership() {
               
               <div className="pt-6 border-t border-white/20">
                 <p className="text-gray-300 mb-2">{t('partnership_page.benefits.questions')}</p>
-                <a href="mailto:partners@freelance.com" className="text-white font-medium hover:text-blue-300 flex items-center gap-2">
+                <a href="mailto:partners@freelance-224.com" className="text-white font-medium hover:text-blue-300 flex items-center gap-2">
                   <Mail className="w-5 h-5" /> {t('partnership_page.benefits.email')}
                 </a>
               </div>

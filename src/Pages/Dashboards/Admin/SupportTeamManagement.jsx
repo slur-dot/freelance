@@ -58,20 +58,20 @@ export default function SupportTeamManagement() {
   };
 
   const availablePermissions = [
-    { id: 'manage_users', label: 'Manage Users' },
-    { id: 'manage_tickets', label: 'Manage Tickets' },
-    { id: 'manage_contracts', label: 'Manage Contracts' },
-    { id: 'system_settings', label: 'System Settings' }
-  ];
+  { id: 'manage_users', label: 'Manage Users' },
+  { id: 'manage_tickets', label: 'Manage Tickets' },
+  { id: 'manage_contracts', label: 'Manage Contracts' },
+  { id: 'system_settings', label: 'System Settings' }];
+
 
   const handleView = (id) => {
-    const member = supportMembers.find(m => m.id === id);
+    const member = supportMembers.find((m) => m.id === id);
     setViewingMember(member);
     setShowViewModal(true);
   };
 
   const handleEdit = (id) => {
-    const member = supportMembers.find(m => m.id === id);
+    const member = supportMembers.find((m) => m.id === id);
     setEditingMember(member);
     setEditFormData({
       name: member.memberName,
@@ -83,7 +83,7 @@ export default function SupportTeamManagement() {
   };
 
   const handleDelete = (id) => {
-    const member = supportMembers.find(m => m.id === id);
+    const member = supportMembers.find((m) => m.id === id);
     setDeletingMember(member);
     setShowDeleteModal(true);
   };
@@ -116,19 +116,19 @@ export default function SupportTeamManagement() {
   };
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleEditInputChange = (field, value) => {
-    setEditFormData(prev => ({ ...prev, [field]: value }));
+    setEditFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleRemoveRole = (index) => {
-    setSelectedRoles(prev => prev.filter((_, i) => i !== index));
+    setSelectedRoles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleRemoveEditRole = (index) => {
-    setEditSelectedRoles(prev => prev.filter((_, i) => i !== index));
+    setEditSelectedRoles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -178,7 +178,7 @@ export default function SupportTeamManagement() {
 
       await AdminService.updateSupportAgent(editingMember.id, updateData);
 
-      setSupportMembers((prev) => prev.map((member) => (member.id === editingMember.id ? { ...member, ...updateData } : member)));
+      setSupportMembers((prev) => prev.map((member) => member.id === editingMember.id ? { ...member, ...updateData } : member));
       setError(""); // Clear any previous errors
       handleCloseEditModal();
     } catch (e) {
@@ -209,14 +209,14 @@ export default function SupportTeamManagement() {
       // Create CSV content
       const headers = ['Member Name', 'Average Response Time', 'Average Resolution Time', 'Assigned Tickets'];
       const csvContent = [
-        headers.join(','),
-        ...supportMembers.map(member => [
-          `"${member.memberName || t('common.n_a')}"`,
-          `"${member.avgResponseTime || t('common.n_a')}"`,
-          `"${member.avgResolutionTime || t('common.n_a')}"`,
-          `"${(member.assignedTickets || []).map(ticket => ticket.label).join('; ')}"`
-        ].join(','))
-      ].join('\n');
+      headers.join(','),
+      ...supportMembers.map((member) => [
+      `"${member.memberName || t('common.n_a')}"`,
+      `"${member.avgResponseTime || t('common.n_a')}"`,
+      `"${member.avgResolutionTime || t('common.n_a')}"`,
+      `"${(member.assignedTickets || []).map((ticket) => ticket.label).join('; ')}"`].
+      join(','))].
+      join('\n');
 
       // Create and download file
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -237,10 +237,10 @@ export default function SupportTeamManagement() {
   const itemsPerPage = 9; // Show 9 items per page as shown in the screenshot
   const totalPages = Math.ceil(supportMembers.length / itemsPerPage);
 
-  const filteredMembers = supportMembers.filter(member =>
-    (member.memberName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (member.avgResponseTime || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (member.avgResolutionTime || '').toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMembers = supportMembers.filter((member) =>
+  (member.memberName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (member.avgResponseTime || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  (member.avgResolutionTime || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calculate pagination
@@ -257,8 +257,8 @@ export default function SupportTeamManagement() {
             <h1 className="text-4xl font-bold text-gray-800">{t('admin_dashboard.support_team_management.title')}</h1>
             <button
               onClick={handleAddMember}
-              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
-            >
+              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+              
               <Plus className="h-5 w-5" />
               {t('admin_dashboard.support_team_management.add_button')}
             </button>
@@ -287,8 +287,8 @@ export default function SupportTeamManagement() {
             <div className="flex items-center space-x-3">
               <button
                 onClick={handleViewReport}
-                className="text-gray-700 hover:text-gray-900 transition-colors flex items-center gap-2"
-              >
+                className="text-gray-700 hover:text-gray-900 transition-colors flex items-center gap-2">
+                
                 <FileText className="h-4 w-4" />
                 {t('admin_dashboard.support_team_management.report_button')}
               </button>
@@ -307,13 +307,13 @@ export default function SupportTeamManagement() {
                 <tr>
                   <th
                     className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort("displayName")}
-                  >
+                    onClick={() => handleSort("displayName")}>
+                    
                     <div className="flex items-center space-x-1">
                       <span>{t('admin_dashboard.support_team_management.table.headers.name')}</span>
-                      {sortField === "displayName" && (
-                        <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
-                      )}
+                      {sortField === "displayName" &&
+                      <ChevronDown className={`h-4 w-4 transform ${sortDirection === "desc" ? "rotate-180" : ""}`} />
+                      }
                     </div>
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wide">
@@ -331,8 +331,8 @@ export default function SupportTeamManagement() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {paginatedMembers.map((member) => (
-                  <tr key={member.id} className="hover:bg-gray-50">
+                {paginatedMembers.map((member) =>
+                <tr key={member.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-base font-bold text-gray-800">
                       {member.memberName || t('common.n_a')}
                     </td>
@@ -344,48 +344,48 @@ export default function SupportTeamManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       <div className="flex flex-wrap gap-1">
-                        {(member.assignedTickets || []).slice(0, 2).map((ticket, index) => (
-                          <span key={index} className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${ticket.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
+                        {(member.assignedTickets || []).slice(0, 2).map((ticket, index) =>
+                      <span key={index} className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${ticket.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`
+                      }>
                             {ticket.label}
                           </span>
-                        ))}
-                        {(member.assignedTickets || []).length > 2 && (
-                          <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
+                      )}
+                        {(member.assignedTickets || []).length > 2 &&
+                      <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">
                             {t('admin_dashboard.support_team_management.table.more', { count: (member.assignedTickets || []).length - 2 })}
                           </span>
-                        )}
+                      }
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       <div className="flex items-center space-x-3">
                         <button
-                          onClick={() => handleDelete(member.id)}
-                          disabled={loading}
-                          className="text-red-600 hover:text-red-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Delete Support Member"
-                        >
+                        onClick={() => handleDelete(member.id)}
+                        disabled={loading}
+                        className="text-red-600 hover:text-red-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete Support Member">
+                        
                           <Trash2 className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() => handleEdit(member.id)}
-                          disabled={loading}
-                          className="text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Edit Support Member"
-                        >
+                        onClick={() => handleEdit(member.id)}
+                        disabled={loading}
+                        className="text-blue-600 hover:text-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Edit Support Member">
+                        
                           <Edit className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() => handleView(member.id)}
-                          disabled={loading}
-                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
+                        onClick={() => handleView(member.id)}
+                        disabled={loading}
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        
                           {t('admin_dashboard.support_team_management.modals.view.title')}
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -396,8 +396,8 @@ export default function SupportTeamManagement() {
               <button
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                
                 {t('admin_dashboard.pagination.previous')}
               </button>
 
@@ -408,8 +408,8 @@ export default function SupportTeamManagement() {
               <button
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                
                 {t('admin_dashboard.pagination.next')}
               </button>
             </div>
@@ -418,8 +418,8 @@ export default function SupportTeamManagement() {
       </div>
 
       {/* Add Member Modal */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {showAddModal &&
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
@@ -433,13 +433,13 @@ export default function SupportTeamManagement() {
               <div className="flex items-center">
                 <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.support_team_management.modals.form.name')}</label>
                 <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
-                  className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  required
-                />
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleInputChange("name", e.target.value)}
+                placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
+                className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required />
+              
               </div>
 
               {/* Tickets Field */}
@@ -447,21 +447,21 @@ export default function SupportTeamManagement() {
                 <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.support_team_management.modals.form.tickets')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
-                    value=""
-                    onChange={(e) => {
-                      const selectedValue = e.target.value;
-                      if (selectedValue && selectedValue.trim() !== "") {
-                        setSelectedRoles(prev => [...prev, selectedValue]);
-                        e.target.value = "";
-                      }
-                    }}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
-                  >
+                  value=""
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    if (selectedValue && selectedValue.trim() !== "") {
+                      setSelectedRoles((prev) => [...prev, selectedValue]);
+                      e.target.value = "";
+                    }
+                  }}
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none">
+                  
                     <option value="">{t('admin_dashboard.support_team_management.modals.form.select_multiple')}</option>
-                    <option value="Ticket 1">Ticket 1</option>
-                    <option value="Ticket 2">Ticket 2</option>
-                    <option value="Ticket 3">Ticket 3</option>
-                    <option value="Ticket 4">Ticket 4</option>
+                    <option value="Ticket 1">{t("ticket_1_227", "Ticket 1")}</option>
+                    <option value="Ticket 2">{t("ticket_2_620", "Ticket 2")}</option>
+                    <option value="Ticket 3">{t("ticket_3_131", "Ticket 3")}</option>
+                    <option value="Ticket 4">{t("ticket_4_497", "Ticket 4")}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -470,53 +470,53 @@ export default function SupportTeamManagement() {
               {/* Selected Roles Tags */}
               <div className="ml-24">
                 <div className="flex flex-wrap gap-2">
-                  {selectedRoles.map((role, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md"
-                    >
+                  {selectedRoles.map((role, index) =>
+                <span
+                  key={index}
+                  className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md">
+                  
                       {role}
                       <button
-                        type="button"
-                        onClick={() => handleRemoveRole(index)}
-                        className="ml-2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
-                      >
+                    type="button"
+                    onClick={() => handleRemoveRole(index)}
+                    className="ml-2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                    
                         <X className="h-3 w-3" />
                       </button>
                     </span>
-                  ))}
+                )}
                 </div>
               </div>
               {/* Permissions Toggles */}
               <div className="flex flex-col mt-4">
-                <label className="text-sm font-medium text-gray-700 mb-2">System Permissions</label>
+                <label className="text-sm font-medium text-gray-700 mb-2">{t("system_permissions_803", "System Permissions")}</label>
                 <div className="grid grid-cols-2 gap-3 ml-4">
-                  {availablePermissions.map(perm => (
-                    <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={formData.permissions.includes(perm.id)} 
-                        onChange={(e) => {
-                          const newPerms = e.target.checked 
-                            ? [...formData.permissions, perm.id] 
-                            : formData.permissions.filter(p => p !== perm.id);
-                          handleInputChange('permissions', newPerms);
-                        }} 
-                        className="rounded text-green-600 focus:ring-green-500 w-4 h-4" 
-                      />
+                  {availablePermissions.map((perm) =>
+                <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                    type="checkbox"
+                    checked={formData.permissions.includes(perm.id)}
+                    onChange={(e) => {
+                      const newPerms = e.target.checked ?
+                      [...formData.permissions, perm.id] :
+                      formData.permissions.filter((p) => p !== perm.id);
+                      handleInputChange('permissions', newPerms);
+                    }}
+                    className="rounded text-green-600 focus:ring-green-500 w-4 h-4" />
+                  
                       <span className="text-sm text-gray-700">{perm.label}</span>
                     </label>
-                  ))}
+                )}
                 </div>
               </div>
 
               {/* Submit Button */}
               <div className="text-center pt-4">
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                
                   {loading ? t('admin_dashboard.support_team_management.modals.add.submitting') : t('admin_dashboard.support_team_management.modals.add.submit')}
                 </button>
               </div>
@@ -524,18 +524,18 @@ export default function SupportTeamManagement() {
 
             {/* Close Button */}
             <button
-              onClick={handleCloseAddModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-            >
+            onClick={handleCloseAddModal}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+            
               <X className="h-6 w-6" />
             </button>
           </div>
         </div>
-      )}
+      }
 
       {/* Edit Member Modal */}
-      {showEditModal && editingMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {showEditModal && editingMember &&
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
@@ -549,13 +549,13 @@ export default function SupportTeamManagement() {
               <div className="flex items-center">
                 <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.support_team_management.modals.form.name')}</label>
                 <input
-                  type="text"
-                  value={editFormData.name}
-                  onChange={(e) => handleEditInputChange("name", e.target.value)}
-                  placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
-                  className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  required
-                />
+                type="text"
+                value={editFormData.name}
+                onChange={(e) => handleEditInputChange("name", e.target.value)}
+                placeholder={t('admin_dashboard.support_team_management.modals.form.placeholders.name')}
+                className="flex-1 ml-4 px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                required />
+              
               </div>
 
               {/* Tickets Field */}
@@ -563,21 +563,21 @@ export default function SupportTeamManagement() {
                 <label className="w-20 text-sm font-medium text-gray-700">{t('admin_dashboard.support_team_management.modals.form.tickets')}</label>
                 <div className="flex-1 ml-4 relative">
                   <select
-                    value=""
-                    onChange={(e) => {
-                      const selectedValue = e.target.value;
-                      if (selectedValue && selectedValue.trim() !== "") {
-                        setEditSelectedRoles(prev => [...prev, selectedValue]);
-                        e.target.value = "";
-                      }
-                    }}
-                    className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none"
-                  >
+                  value=""
+                  onChange={(e) => {
+                    const selectedValue = e.target.value;
+                    if (selectedValue && selectedValue.trim() !== "") {
+                      setEditSelectedRoles((prev) => [...prev, selectedValue]);
+                      e.target.value = "";
+                    }
+                  }}
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none">
+                  
                     <option value="">{t('admin_dashboard.support_team_management.modals.form.select_multiple')}</option>
-                    <option value="Ticket 1">Ticket 1</option>
-                    <option value="Ticket 2">Ticket 2</option>
-                    <option value="Ticket 3">Ticket 3</option>
-                    <option value="Ticket 4">Ticket 4</option>
+                    <option value="Ticket 1">{t("ticket_1_281", "Ticket 1")}</option>
+                    <option value="Ticket 2">{t("ticket_2_818", "Ticket 2")}</option>
+                    <option value="Ticket 3">{t("ticket_3_520", "Ticket 3")}</option>
+                    <option value="Ticket 4">{t("ticket_4_171", "Ticket 4")}</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 pointer-events-none" />
                 </div>
@@ -586,54 +586,54 @@ export default function SupportTeamManagement() {
               {/* Selected Roles Tags */}
               <div className="ml-24">
                 <div className="flex flex-wrap gap-2">
-                  {editSelectedRoles.map((role, index) => (
-                    <span
-                      key={index}
-                      className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md"
-                    >
+                  {editSelectedRoles.map((role, index) =>
+                <span
+                  key={index}
+                  className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-md">
+                  
                       {role}
                       <button
-                        type="button"
-                        onClick={() => handleRemoveEditRole(index)}
-                        className="ml-2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
-                      >
+                    type="button"
+                    onClick={() => handleRemoveEditRole(index)}
+                    className="ml-2 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                    
                         <X className="h-3 w-3" />
                       </button>
                     </span>
-                  ))}
+                )}
                 </div>
               </div>
 
               {/* Permissions Toggles */}
               <div className="flex flex-col mt-4">
-                <label className="text-sm font-medium text-gray-700 mb-2">System Permissions</label>
+                <label className="text-sm font-medium text-gray-700 mb-2">{t("system_permissions_270", "System Permissions")}</label>
                 <div className="grid grid-cols-2 gap-3 ml-4">
-                  {availablePermissions.map(perm => (
-                    <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
-                      <input 
-                        type="checkbox" 
-                        checked={editFormData.permissions.includes(perm.id)} 
-                        onChange={(e) => {
-                          const newPerms = e.target.checked 
-                            ? [...editFormData.permissions, perm.id] 
-                            : editFormData.permissions.filter(p => p !== perm.id);
-                          handleEditInputChange('permissions', newPerms);
-                        }} 
-                        className="rounded text-green-600 focus:ring-green-500 w-4 h-4" 
-                      />
+                  {availablePermissions.map((perm) =>
+                <label key={perm.id} className="flex items-center space-x-2 cursor-pointer">
+                      <input
+                    type="checkbox"
+                    checked={editFormData.permissions.includes(perm.id)}
+                    onChange={(e) => {
+                      const newPerms = e.target.checked ?
+                      [...editFormData.permissions, perm.id] :
+                      editFormData.permissions.filter((p) => p !== perm.id);
+                      handleEditInputChange('permissions', newPerms);
+                    }}
+                    className="rounded text-green-600 focus:ring-green-500 w-4 h-4" />
+                  
                       <span className="text-sm text-gray-700">{perm.label}</span>
                     </label>
-                  ))}
+                )}
                 </div>
               </div>
 
               {/* Submit Button */}
               <div className="text-center pt-4">
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                type="submit"
+                disabled={loading}
+                className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                
                   {loading ? t('admin_dashboard.support_team_management.modals.edit.submitting') : t('admin_dashboard.support_team_management.modals.edit.submit')}
                 </button>
               </div>
@@ -641,18 +641,18 @@ export default function SupportTeamManagement() {
 
             {/* Close Button */}
             <button
-              onClick={handleCloseEditModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-            >
+            onClick={handleCloseEditModal}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+            
               <X className="h-6 w-6" />
             </button>
           </div>
         </div>
-      )}
+      }
 
       {/* Delete Confirmation Modal */}
-      {showDeleteModal && deletingMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {showDeleteModal && deletingMember &&
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
@@ -669,26 +669,26 @@ export default function SupportTeamManagement() {
             {/* Action Buttons */}
             <div className="flex space-x-3">
               <button
-                onClick={handleCloseDeleteModal}
-                className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors"
-              >
+              onClick={handleCloseDeleteModal}
+              className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors">
+              
                 {t('admin_dashboard.support_team_management.modals.delete.cancel')}
               </button>
               <button
-                onClick={handleConfirmDelete}
-                disabled={loading}
-                className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              onClick={handleConfirmDelete}
+              disabled={loading}
+              className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              
                 {loading ? t('admin_dashboard.support_team_management.modals.delete.deleting') : t('admin_dashboard.support_team_management.modals.delete.confirm')}
               </button>
             </div>
           </div>
         </div>
-      )}
+      }
 
       {/* View Member Modal */}
-      {showViewModal && viewingMember && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {showViewModal && viewingMember &&
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
             {/* Modal Header */}
             <div className="text-center mb-6">
@@ -716,19 +716,19 @@ export default function SupportTeamManagement() {
               <div className="flex items-start">
                 <label className="w-32 text-sm font-medium text-gray-700 mt-2">{t('admin_dashboard.support_team_management.modals.view.assigned_tickets')}</label>
                 <div className="flex flex-wrap gap-2">
-                  {viewingMember.assignedTickets.map((ticket, index) => (
-                    <span
-                      key={index}
-                      className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${ticket.status === "active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                        }`}
-                    >
-                      <div className={`w-2 h-2 rounded-full mr-2 ${ticket.status === "active" ? "bg-green-500" : "bg-red-500"
-                        }`}></div>
+                  {viewingMember.assignedTickets.map((ticket, index) =>
+                <span
+                  key={index}
+                  className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full ${ticket.status === "active" ?
+                  "bg-green-100 text-green-800" :
+                  "bg-red-100 text-red-800"}`
+                  }>
+                  
+                      <div className={`w-2 h-2 rounded-full mr-2 ${ticket.status === "active" ? "bg-green-500" : "bg-red-500"}`
+                  }></div>
                       {ticket.label}
                     </span>
-                  ))}
+                )}
                 </div>
               </div>
             </div>
@@ -736,23 +736,23 @@ export default function SupportTeamManagement() {
             {/* Close Button */}
             <div className="text-center pt-6">
               <button
-                onClick={handleCloseViewModal}
-                className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors"
-              >
+              onClick={handleCloseViewModal}
+              className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-md transition-colors">
+              
                 {t('admin_dashboard.support_team_management.modals.view.close')}
               </button>
             </div>
 
             {/* Close Button icon */}
             <button
-              onClick={handleCloseViewModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-            >
+            onClick={handleCloseViewModal}
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
+            
               <X className="h-6 w-6" />
             </button>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

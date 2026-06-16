@@ -9,6 +9,7 @@ import {
 import { db } from "../firebaseConfig";
 import { doc, getDoc, collection, addDoc, serverTimestamp, query, where, getDocs, updateDoc, increment } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
+import { NotificationService } from "../services/notificationService";
 
 export default function JobDetailPage() {
   const { id } = useParams();
@@ -31,12 +32,7 @@ export default function JobDetailPage() {
     async function loadJob() {
       setLoading(true);
       try {
-        // If it's a demo/fallback job passed from the board, use it directly
-        if (location.state?.fallbackJob) {
-          setJob(location.state.fallbackJob);
-          setLoading(false);
-          return;
-        }
+
 
         const jobDoc = await getDoc(doc(db, "projects", id));
         if (jobDoc.exists()) {
@@ -100,6 +96,7 @@ export default function JobDetailPage() {
     if (!currentUser) { navigate("/login"); return; }
     try {
       setApplying(true);
+      const jobClientId = job.clientId || job.companyId;
       await addDoc(collection(db, "projects"), {
         type: "job_application",
         jobId: id,
@@ -109,9 +106,18 @@ export default function JobDetailPage() {
         message: applicationMessage,
         budget: job.budget || 0,
         status: "pending",
-        clientId: currentUser.uid,
+        jobClientId,
+        clientId: jobClientId,
         createdAt: serverTimestamp(),
       });
+      if (jobClientId) {
+        await NotificationService.createNotification(
+          jobClientId,
+          "New job application",
+          `${userData?.fullName || "A freelancer"} applied to "${job.title || "your job"}"`,
+          { type: "job_application", link: `/job-board/${id}`, sourceId: id, sourceType: "job" }
+        );
+      }
       // Increment applicants count
       try {
         await updateDoc(doc(db, "projects", id), { applicants: increment(1) });

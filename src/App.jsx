@@ -9,6 +9,9 @@ import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import SmartphoneStore from './Pages/Shop/SmartphoneStore';
 import IPhoneProductPage from './Pages/Shop/IPhoneProductPage';
+import ProductDetailPage from './Pages/Shop/ProductDetailPage';
+import DashboardNotifications from './components/Dashboard/DashboardNotifications';
+import DashboardMessages from './components/Dashboard/DashboardMessages';
 import CartPage from './Pages/Shop/CartPage';
 import Shop from './Pages/Shop/Shop';
 import Footer from './components/Footer';
@@ -144,7 +147,8 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/product/:id" element={<IPhoneProductPage />} />
+          <Route path="/shop/product/:id" element={<ProductDetailPage />} />
+          <Route path="/shop/product/iphone-14" element={<IPhoneProductPage />} />
           <Route path="/shop/cart" element={<CartPage />} />
           <Route path="/shipping-details" element={<ShippingDetailsPage />} />
           <Route path="/checkout/success" element={<PaymentSuccess />} />
@@ -169,6 +173,7 @@ function AppContent() {
           <Route path="/job-board/:id" element={<JobDetailPage />} />
           <Route path="/hire-freelancers" element={<HireFreelancer />} />
           <Route path="/hire-freelancers/info" element={<FreelancerInfo />} />
+          <Route path="/hire-freelancers/info/:id" element={<FreelancerInfo />} />
           <Route path="/hire-freelancers/info/job-post" element={<JobPostForm />} />
           <Route path="/vendor-profiles" element={<VendorProfiles />} />
           <Route path="/company-history" element={<CompanyHistory />} />
@@ -187,7 +192,7 @@ function AppContent() {
 
           {/* Freelancer Dashboard */}
 
-          <Route path="/freelancer/dashboard" element={<ProtectedRoute><FreelancerSidebar /></ProtectedRoute>}>
+          <Route path="/freelancer/dashboard" element={<ProtectedRoute requiredRole="Freelancer"><FreelancerSidebar /></ProtectedRoute>}>
             <Route index element={<FreelancerDashboard />} />
             <Route path="training-progress" element={<TrainingProgress />} />
             <Route path="requested-courses" element={<RequestedCourses />} />
@@ -195,10 +200,12 @@ function AppContent() {
             <Route path="work-management" element={<WorkManagement />} />
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<FreelancerProfile />} />
+            <Route path="notifications" element={<DashboardNotifications />} />
+            <Route path="messages" element={<DashboardMessages />} />
           </Route>
 
           {/* Client Dashboard */}
-          <Route path="/Clients/dashboard" element={<ProtectedRoute><ClientSidebar /></ProtectedRoute>}>
+          <Route path="/Clients/dashboard" element={<ProtectedRoute requiredRole="Client"><ClientSidebar /></ProtectedRoute>}>
             <Route index element={<ClientDashboard />} />
             <Route path="Hired-Freelancers" element={<HiredFreelancers />} />
             <Route path="Project-List" element={<ProjectList />} />
@@ -211,9 +218,12 @@ function AppContent() {
 
 
           {/* Company Dashboard  */}
-          <Route path="/company/dashboard" element={<ProtectedRoute><CompanySidebar /></ProtectedRoute>}>
+          <Route path="/company/dashboard" element={<ProtectedRoute requiredRole="Company"><CompanySidebar /></ProtectedRoute>}>
             <Route index element={<CompanyDashboard />} />
             <Route path="emplolyee-list" element={<EmployeeList />} />
+            <Route path="employee-list" element={<EmployeeList />} />
+            <Route path="notifications" element={<DashboardNotifications />} />
+            <Route path="messages" element={<DashboardMessages />} />
             <Route path="training-progress" element={<CompanyTrainingProgress />} />
             <Route path="training-quotes" element={<TrainingQuotes />} />
             <Route path="contracts" element={<ContractManagement />} />
@@ -226,33 +236,42 @@ function AppContent() {
           </Route>
 
           {/* Vendor Dashboard  */}
-          <Route path="/vendor/dashboard" element={<ProtectedRoute><VendorSidebar /></ProtectedRoute>}>
+          <Route path="/vendor/dashboard" element={<ProtectedRoute requiredRole="Vendor"><VendorSidebar /></ProtectedRoute>}>
             <Route index element={<VendorDashboard />} />
             <Route path="listings" element={<Listings />}></Route>
             <Route path="receipts" element={<Receipts />}></Route>
             <Route path="orders" element={<Orders />}></Route>
             <Route path="payouts" element={<Payouts />}></Route>
             <Route path="ads" element={<AdsManagement />}></Route>
+            <Route path="job-post" element={<JobPostForm />} />
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<VendorProfile />}></Route>
+            <Route path="notifications" element={<DashboardNotifications />} />
+            <Route path="messages" element={<DashboardMessages />} />
           </Route>
 
           {/* Seller Dashboard  */}
-          <Route path="/seller/dashboard" element={<ProtectedRoute><SellerSidebar /></ProtectedRoute>}>
+          <Route path="/seller/dashboard" element={<ProtectedRoute requiredRole="Seller"><SellerSidebar /></ProtectedRoute>}>
             <Route index element={<SellerDashboard />} />
             <Route path="listings" element={<SellerListings />}></Route>
             <Route path="orders" element={<SellerOrders />}></Route>
             <Route path="payouts" element={<SellerPayouts />}></Route>
             <Route path="ads" element={<SellerAds />}></Route>
-            <Route path="notifications" element={<SellerNotifications />}></Route>
+            <Route path="notifications" element={<DashboardNotifications />} />
+            <Route path="messages" element={<DashboardMessages />} />
+            <Route path="analytics" element={<SellerDashboard />} />
             <Route path="settings" element={<SellerSettings />}></Route>
             <Route path="referrals" element={<ReferralSystem />} />
             <Route path="profile" element={<SellerProfile />}></Route>
           </Route>
 
           {/* Admin Dashboard  */}
-          <Route path="/admin/dashboard" element={<ProtectedRoute><AdminSidebar /></ProtectedRoute>}>
+          <Route path="/admin/dashboard" element={<ProtectedRoute requiredRole="admin"><AdminSidebar /></ProtectedRoute>}>
             <Route index element={<AdminDashboard />} />
+            <Route path="notifications" element={<DashboardNotifications />} />
+            <Route path="messages" element={<DashboardMessages />} />
+            <Route path="rentals" element={<ManageBookings />} />
+            <Route path="manage-faq" element={<Faq />} />
             <Route path="course-listing" element={<CourseListing />} />
             <Route path="product-listing" element={<ProductListing />} />
             <Route path="ticket-listing" element={<TicketListing />} />

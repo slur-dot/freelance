@@ -46,10 +46,10 @@ export default function Payouts() {
     if (!window.confirm(t('vendor_dashboard.payouts.delete_confirm'))) return;
     try {
       await PayoutService.deletePayout(payoutId);
-      setPayouts(prev => prev.filter(p => p.id !== payoutId));
+      setPayouts((prev) => prev.filter((p) => p.id !== payoutId));
     } catch (e) {
       setError(e.message);
-      alert("Failed to delete payout");
+      alert(t("failed_to_delete_payout_195", "Failed to delete payout"));
     }
   };
 
@@ -61,11 +61,11 @@ export default function Payouts() {
         amount: Number(editPayout.amount || 0),
         method: editPayout.method
       });
-      setPayouts(prev => prev.map(p => p.id === editPayout.id ? { ...p, ...editPayout, amount: Number(editPayout.amount) } : p));
+      setPayouts((prev) => prev.map((p) => p.id === editPayout.id ? { ...p, ...editPayout, amount: Number(editPayout.amount) } : p));
       setEditPayout(null);
     } catch (e) {
       setError(e.message);
-      alert("Failed to update payout");
+      alert(t("failed_to_update_payout_6", "Failed to update payout"));
     }
   };
 
@@ -78,10 +78,10 @@ export default function Payouts() {
     }
   };
 
-  const filteredPayouts = payouts.filter(p =>
-    String(p.amount || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    String(p.method || p.paymentMethod || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    String(p.status || '').toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPayouts = payouts.filter((p) =>
+  String(p.amount || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  String(p.method || p.paymentMethod || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+  String(p.status || '').toLowerCase().includes(searchTerm.toLowerCase())
   ).sort((a, b) => {
     const aVal = a[sortField];
     const bVal = b[sortField];
@@ -101,7 +101,7 @@ export default function Payouts() {
   const totalPages = Math.ceil(filteredPayouts.length / itemsPerPage);
   const paginatedPayouts = filteredPayouts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
-  if (loading) return <div className="min-h-screen bg-gray-100 p-6">Loading...</div>;
+  if (loading) return <div className="min-h-screen bg-gray-100 p-6">{t("loading_807", "Loading...")}</div>;
   if (error) return <div className="min-h-screen bg-gray-100 p-6 text-red-600">{error}</div>;
 
   return (
@@ -118,8 +118,8 @@ export default function Payouts() {
               placeholder={t('vendor_dashboard.payouts.search_placeholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400"
-            />
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-400" />
+            
           </div>
         </div>
 
@@ -147,8 +147,8 @@ export default function Payouts() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {paginatedPayouts.map((payout) => (
-                  <tr key={payout.id} className="hover:bg-gray-50">
+                {paginatedPayouts.map((payout) =>
+                <tr key={payout.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-base text-gray-800">
                       {payout.amount ? `${payout.amount} GNF` : '-'}
                     </td>
@@ -172,10 +172,10 @@ export default function Payouts() {
                       </div>
                     </td>
                   </tr>
-                ))}
-                {paginatedPayouts.length === 0 && (
-                  <tr><td colSpan={5} className="text-center p-4 text-gray-500">{t('vendor_dashboard.payouts.no_payouts')}</td></tr>
                 )}
+                {paginatedPayouts.length === 0 &&
+                <tr><td colSpan={5} className="text-center p-4 text-gray-500">{t('vendor_dashboard.payouts.no_payouts')}</td></tr>
+                }
               </tbody>
             </table>
           </div>
@@ -184,46 +184,46 @@ export default function Payouts() {
           <div className="bg-white px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-center space-x-4">
               <button
-                onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
+                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                
                 {t('vendor_dashboard.payouts.pagination.previous')}
               </button>
               <span className="text-sm font-medium text-gray-700">
                 {t('vendor_dashboard.payouts.pagination.page_of', { current: currentPage, total: totalPages || 1 })}
               </span>
               <button
-                onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages || totalPages === 0}
-                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
+                className="px-4 py-2 text-sm font-medium text-gray-500 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                
                 {t('vendor_dashboard.payouts.pagination.next')}
               </button>
             </div>
           </div>
         </div>
       </div>
-      {editPayout && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+      {editPayout &&
+      <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-xl font-semibold mb-4">{t('vendor_dashboard.payouts.edit_modal.title')}</h2>
             <form onSubmit={savePayout} className="space-y-4">
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.status')}</label>
-                <select className="w-full border rounded px-3 py-2" value={editPayout.status} onChange={e => setEditPayout({ ...editPayout, status: e.target.value })}>
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
+                <select className="w-full border rounded px-3 py-2" value={editPayout.status} onChange={(e) => setEditPayout({ ...editPayout, status: e.target.value })}>
+                  <option value="pending">{t("pending_150", "Pending")}</option>
+                  <option value="completed">{t("completed_431", "Completed")}</option>
+                  <option value="cancelled">{t("cancelled_327", "Cancelled")}</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.amount')}</label>
-                <input type="number" className="w-full border rounded px-3 py-2" value={editPayout.amount || 0} onChange={e => setEditPayout({ ...editPayout, amount: e.target.value })} />
+                <input type="number" className="w-full border rounded px-3 py-2" value={editPayout.amount || 0} onChange={(e) => setEditPayout({ ...editPayout, amount: e.target.value })} />
               </div>
               <div>
                 <label className="block text-sm text-gray-700 mb-1">{t('vendor_dashboard.payouts.edit_modal.method')}</label>
-                <input className="w-full border rounded px-3 py-2" value={editPayout.method || ''} onChange={e => setEditPayout({ ...editPayout, method: e.target.value })} />
+                <input className="w-full border rounded px-3 py-2" value={editPayout.method || ''} onChange={(e) => setEditPayout({ ...editPayout, method: e.target.value })} />
               </div>
               <div className="flex justify-end gap-2">
                 <button type="button" className="px-4 py-2 border rounded" onClick={() => setEditPayout(null)}>{t('vendor_dashboard.payouts.edit_modal.cancel')}</button>
@@ -232,7 +232,7 @@ export default function Payouts() {
             </form>
           </div>
         </div>
-      )}
-    </div>
-  );
+      }
+    </div>);
+
 }

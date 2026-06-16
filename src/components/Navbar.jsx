@@ -11,7 +11,7 @@ import { auth } from "../firebaseConfig";
 import { signOut } from "firebase/auth";
 import { useAuth } from "../contexts/AuthContext";
 import { useCart } from "../contexts/CartContext";
-import ITSupportLogo from "../assets/ITSupport.png";
+
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -75,8 +75,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16 gap-3 xl:gap-6 w-full">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
-            <img src={current.startsWith("/tech-services") ? ITSupportLogo : "/logo.png"} alt="Logo" className="w-10 h-10 rounded-full object-cover" />
-            <span className="ml-2 text-xl font-bold text-gray-900">{current.startsWith("/tech-services") ? "Tech Services" : "Freelance"}</span>
+            <img src="/logo.png" alt="Logo" className="w-8 h-8 sm:w-10 sm:h-10 min-w-[32px] sm:min-w-[40px] shrink-0 object-contain" />
+            <span className="ml-2 text-lg sm:text-xl font-bold text-gray-900">Freelance</span>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -241,8 +241,8 @@ export default function Navbar() {
                 {/* Drawer Header */}
                 <div className="flex items-center justify-between px-5 py-4 border-b">
                   <div className="flex items-center space-x-2">
-                    <img src={current.startsWith("/tech-services") ? ITSupportLogo : "/logo.png"} className="w-8 h-8 rounded-full" />
-                    <span className="font-bold text-gray-800 text-lg">{current.startsWith("/tech-services") ? "Tech Services" : "Freelance"}</span>
+                    <img src="/logo.png" className="w-8 h-8 object-contain" />
+                    <span className="font-bold text-gray-800 text-lg">Freelance</span>
                   </div>
 
                   <div className="flex items-center space-x-4">

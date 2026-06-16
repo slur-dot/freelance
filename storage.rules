@@ -1,48 +1,68 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    
-    // Helper function
+
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // Avatars: Public read, Authenticated write
-    // Fixed: Cannot match partial segments like {userId}_{fileName}. 
-    // Using simple {fileName} match instead.
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function isUnder5MB() {
+      return request.resource.size < 5 * 1024 * 1024;
+    }
+
     match /avatars/{fileName} {
       allow read: if true;
-      allow write: if isAuthenticated();
-    }
-    
-    // Profile Images: Public read, Owner write
-    match /profile_images/{userId} {
-      allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && isImage() && isUnder5MB() &&
+        fileName.matches('.*' + request.auth.uid + '.*');
     }
 
-    // Ads: Public read, Authenticated write
+    match /profile_images/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId &&
+        isImage() && isUnder5MB();
+    }
+
+    match /ads/avatars/{fileName} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder5MB() &&
+        fileName.matches('.*' + request.auth.uid + '.*');
+    }
+
     match /ads/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if isAuthenticated() && isImage() && isUnder5MB();
     }
 
-    // Company Avatars: Public read, Owner write
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && isImage() && isUnder5MB();
+    }
+
     match /company-avatars/{companyId}/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == companyId;
+      allow write: if isAuthenticated() && request.auth.uid == companyId &&
+        isImage() && isUnder5MB();
     }
 
-    // Client Avatars: Public read, Owner write
     match /client-avatars/{clientId}/{allPaths=**} {
       allow read: if true;
-      allow write: if isAuthenticated() && request.auth.uid == clientId;
+      allow write: if isAuthenticated() && request.auth.uid == clientId &&
+        isImage() && isUnder5MB();
     }
 
-    // Partnerships: Public create (unauthenticated applications), Authenticated read
     match /partnerships/{allPaths=**} {
-      allow create: if true;
-      allow read, update, delete: if isAuthenticated();
+      allow create: if isAuthenticated() && isUnder5MB();
+      allow read: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    match /courses/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.resource.size < 500 * 1024 * 1024;
     }
   }
 }

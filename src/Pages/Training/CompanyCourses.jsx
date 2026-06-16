@@ -1,50 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaArrowRight, FaUsers } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SubscriptionPlan from "./SubscriptionPlan";
-import coursesImg from "../../assets/Courses_image.png";
+import { CourseService } from "../../services/courseService";
 
-const defaultCompanyCourses = [
-  {
-    id: 1,
-    image: coursesImg,
-    videos: "15",
-    hours: "8",
-    price: "440,000 GNF",
-    priceUSD: "$50",
-    pricePer: "/user",
-    bulkPrice: "3,520,000 GNF",
-    bulkPriceUSD: "$400",
-    bulkUsers: "10",
-  },
-  {
-    id: 2,
-    image: coursesImg,
-    videos: "10",
-    hours: "5",
-    price: "352,000 GNF",
-    priceUSD: "$40",
-    pricePer: "/user",
-    bulkPrice: "2,816,000 GNF",
-    bulkPriceUSD: "$320",
-    bulkUsers: "10",
-  },
-  {
-    id: 3,
-    image: coursesImg,
-    videos: "12",
-    hours: "6",
-    price: "396,000 GNF",
-    priceUSD: "$45",
-    pricePer: "/user",
-    bulkPrice: "3,168,000 GNF",
-    bulkPriceUSD: "$360",
-    bulkUsers: "10",
-  },
-];
+export default function CompanyCourses() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function CompanyCourses({ courses = defaultCompanyCourses }) {
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const publishedCourses = await CourseService.getAllPublishedCourses();
+        setCourses(publishedCourses);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [sortOption, setSortOption] = useState("popular");

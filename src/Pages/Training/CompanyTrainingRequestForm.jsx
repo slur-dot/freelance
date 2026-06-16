@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PhoneInput from "../../components/PhoneInput";
+import { db } from "../../firebaseConfig";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useAuth } from "../../contexts/AuthContext";
+import { COMPANY_CONTACT } from "../../config/companyContact";
 
 export default function CompanyTrainingRequestForm() {
   const { t } = useTranslation();
+  const { currentUser } = useAuth();
   const [formData, setFormData] = useState({
     companyName: "",
     phoneNumber: "",
@@ -31,8 +36,22 @@ export default function CompanyTrainingRequestForm() {
       return;
     }
 
-    console.log("Custom Training Request Submitted:", formData);
-    alert("Request submitted! We'll contact you soon.");
+    await addDoc(collection(db, "training_requests"), {
+      userId: currentUser?.uid || null,
+      clientName: formData.companyName,
+      companyName: formData.companyName,
+      phone: `${formData.countryCode}${phoneDigits}`,
+      description: formData.lookingFor,
+      lookingFor: formData.lookingFor,
+      numEmployees: formData.numEmployees,
+      preferredDuration: formData.preferredDuration,
+      amount: 0,
+      biddingDate: new Date().toISOString(),
+      status: "pending",
+      notifyEmail: COMPANY_CONTACT.talents,
+      createdAt: serverTimestamp(),
+    });
+    alert(t('training.forms.request.success', "Request submitted! We'll contact you soon."));
   };
 
   return (
